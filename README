@@ -9,3 +9,17 @@ npm init (para inicializar mode)
 npm i (para instalar package json)
 
 npm i ejs (para instalar ejs, libreria que nos permite usar html con javascript inyectado)
+
+
+PARA TRAER LA VERSIÓN MAS ACTUALIZADA DEL REPO
+
+git pull
+
+PARA SUBIR LOS CAMBIOS 
+
+git add .
+
+git commit -m "aca escribo lo que cambie/agregué" 
+
+git push -u origin main
+
