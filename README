@@ -4,7 +4,7 @@ git clone https://github.com/Valentinaadle/BookLoop.git
 
 despues:
 
-npm init (para inicializar mode)
+npm init (para inicializar node)
 
 npm i (para instalar package json)
 
