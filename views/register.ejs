@@ -1,18 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="es">
+<head>
     <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="" />
-    <link rel="stylesheet" href="" />
-    
-  </head>
-
+    <link rel="stylesheet" href="/public/css/register.css" />
+</head>
 <body>
-  <%- include('../partials/header.ejs') %>
-  
+    <%- include('../partials/header.ejs') %>
 
-  <%- include('../partials/footer.ejs') %>
+    <div class="form-container">
+        <h2>Registrarse en BookLoop</h2>
+        <form action="/register" method="POST">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="apellido" placeholder="Apellido" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña (8 dígitos)" pattern=".{8,}" title="La contraseña debe tener al menos 8 caracteres" required>
 
+            <div class="terms">
+                <input type="checkbox" name="terminos" required> Acepto los términos y condiciones
+            </div>
+
+            <button type="submit">Registrarse</button>
+
+            <div class="small-text">
+                <a href="/login">¿Ya tienes cuenta? Inicia sesión</a>
+            </div>
+        </form>
+    </div>
+
+    <%- include('../partials/footer.ejs') %>
 </body>
-
 </html>
