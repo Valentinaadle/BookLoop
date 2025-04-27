@@ -1,18 +1,234 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <%- include('../partials/head.ejs') %>
-    <link rel="stylesheet" href="" />
-    <link rel="stylesheet" href="" />
-    
-  </head>
-
+<html lang="esp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookshop</title>
+  <link rel="stylesheet" href="/css/home.css">
+</head>
 <body>
-  <%- include('../partials/header.ejs') %>
-  
 
-  <%- include('../partials/footer.ejs') %>
+  <!-- Navbar -->
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <a href="#"><img src="/icons/libro.png" class="icon" alt="icon"></a>
+      <h1>BOOKSHOP</h1>
+    </div>
+    <div class="search-bar">
+      <i class="fa fa-search"><img src="/icons/lupa.png" class="icon" alt=""></i>
+      <input type="text" placeholder="Buscar libros...">
+    </div>
+    <div class="header-actions">
+      <div class="user-actions">
+        <a href="#"><img src="/icons/usuario.png" class="icon" alt="usuario"></a>
+        <a href="#"><img src="/icons/carrito.png" class="icon" alt="Cart"></a>
+      </div>
+    </div>
+  </div>
+  <div class="header-bottom">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#">Categorias</a></li>
+        <li><a href="#">Recomendados</a></li>
+        <li><a href="#">Como vender</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Books Grid -->
+<section class="books-grid">
+  <div class="book-card">
+    <a href="#"><img src="/images/book1.webp" alt="Título del libro">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"><img src="/images/book2.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"><img src="/images/book3.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"><img src="/images/book4.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"><img src="/images/book5.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"><img src="/images/book6.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"> <img src="/images/book7.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"> <img src="/images/book8.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"> <img src="/images/book9.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"> <img src="/images/book10.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"> <img src="/images/book11.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  <div class="book-card">
+    <a href="#"> <img src="/images/book12.webp" alt="Otro título">
+    <div class="book-card-content">
+      <h3>Título del Libro</h3>
+      <p>Autor del Libro</p>
+      <div class="price-container">
+        <p class="price">$999.00</p>
+        <button class="buy-button">Comprar</button>
+      </div>
+    </a>
+    </div>
+  </div>
+  
+</section>
+
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <h3>GET SPECIAL OFFER IN YOUR INBOX</h3>
+    <form action="/subscribe" method="POST">
+      <input type="email" name="email" placeholder="Enter your email address">
+      <button type="submit">SUBSCRIBE</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-section">
+      <div class="about">
+        <h4>BOOKSHOP</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+      <div class="office">
+        <h4>OUR MAIN OFFICE</h4>
+        <p>San Francisco, California, USA</p>
+        <p>Phone: +1 195 550 555</p>
+        <p>Email: admin@bookshop.com</p>
+      </div>
+      <div class="socials">
+        <h4>KEEP IN TOUCH WITH US</h4>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">Google Plus</a>
+      </div>
+      <div class="info-links">
+        <h4>INFORMATIONS</h4>
+        <a href="#">About Us</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Contact Us</a>
+        <a href="#">My Account</a>
+        <a href="#">Blog</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <p class="copyright">
+      © 2016 Bookshop Pty Ltd. ALL RIGHTS RESERVED
+    </p>
+  </footer>
 
 </body>
-
 </html>

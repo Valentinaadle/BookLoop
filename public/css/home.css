@@ -1,0 +1,302 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Navbar Styles */
+header {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 15px 0;
+  font-family: Arial, sans-serif;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  margin: 0;
+}
+
+nav {
+  flex-grow: 1;
+  margin: 0 30px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+
+.nav-links li:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.nav-links li a:hover {
+  color: #004679;
+  transition: color 0.3s;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-bar input {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 7.5px;
+  font-size: 14px;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.login {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.icon {
+  height: 25px;
+  width: auto;
+}
+
+.logo:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s;
+}
+
+.header-bottom {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.search-bar {
+  position: relative;
+  width: 750px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 8px;
+  top: 55%;
+  transform: translateY(-50%);
+  color: gray;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+}
+
+
+/* Books-Grid */
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 50px 0 50px 0;
+  margin: 0 auto;
+  max-width: 55%;
+  gap: 10px;
+}
+
+.book-card {
+  border-radius: 8px;
+  padding-top: 15px;
+  text-align: center;
+  margin: 0;
+}
+
+.book-card img {
+  width: 75%;
+  height: 175px;
+  object-fit: inherit;
+  border-radius: 4px;
+}
+
+
+.book-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.1s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.book-card img:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.price {
+  font-weight: bold;
+}
+
+.book-card{
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  a:visited {
+    color: black;
+  }
+}
+
+.price-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.buy-button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  margin: 15px;
+  padding: 7.5px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.buy-button:hover {
+  background-color: #013e7a;
+  transform: scale(1.1);
+  transition: 0.2s;
+}
+
+/* Newsletter */
+
+.newsletter {
+  background-color: #0077cc;
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 40px;
+}
+
+.newsletter form {
+  margin-top: 15px;
+}
+
+.newsletter input[type="email"] {
+  padding: 10px;
+  width: 300px;
+  max-width: 90%;
+  border: none;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+
+.newsletter button {
+  padding: 10px 20px;
+  border: none;
+  background: #005fa3;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.newsletter button:hover {
+  background: #004080;
+}
+
+/* Footer */
+footer {
+  background-color: #222;
+  color: #ccc;
+  padding: 40px 20px;
+  font-size: 14px;
+}
+
+.footer-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section h4 {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer-section a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+}
+
+.about p, .office p {
+  font-size: 14px;
+}
+
+footer p.copyright {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 12px;
+  color: #555;
+}
