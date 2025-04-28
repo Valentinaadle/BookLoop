@@ -1,13 +1,29 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const PORT = 3000;
 
-// Configuraciones
-app.set('view engine', 'ejs');
+// Configuración de la carpeta de vistas y el motor EJS
 app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// Configuración de carpeta pública
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ruta principal
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
+// Rutas
+app.get('/', (req, res) => {
+  res.render('home');
+});
+
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// Levantar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor funcionando en http://localhost:${PORT}`);
 });
