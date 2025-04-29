@@ -11,19 +11,23 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
+app.get('/', (req, res) => {
+res.redirect('/home');
+});
+
 app.get('/home', (req, res) => {
-  res.render('home');
+res.render('home');
 });
 
 app.get('/register', (req, res) => {
-  res.render('register');
+res.render('register');
 });
 
 app.get('/login', (req, res) => {
-  res.render('login');
+res.render('login');
 });
 
 // Levantar el servidor
 app.listen(PORT, () => {
-  console.log(`Servidor funcionando en http://localhost:${PORT}`);
+console.log(`Servidor funcionando en http://localhost:${PORT}`);
 });
