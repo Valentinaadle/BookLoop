@@ -27,6 +27,10 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
+app.get('/bookDetails', (req, res) => {
+  res.render('bookDetails');
+});
+
 // Levantar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor funcionando en http://localhost:${PORT}`);
