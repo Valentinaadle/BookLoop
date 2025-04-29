@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detalle del Libro - El Principito</title>
@@ -177,9 +179,9 @@
 </head>
 
 <body>
+  <%- include('partials/header') %>
 
-  <!-- Título principal de la página -->
-  <div class="main-title">📚 BookLoop</div>
+  
 
   <!-- Header separado solo para botones -->
   <header class="header">
@@ -237,6 +239,6 @@
       alert("Aquí se mostrarán los detalles del ISBN ingresado (cuando lo conectemos a la base de datos).");
     }
   </script>
-
+<%- include('partials/footer') %>
 </body>
 </html>
