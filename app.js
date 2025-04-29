@@ -27,6 +27,7 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
+<<<<<<< HEAD
 app.get('/bookDetails', (req, res) => {
   res.render('bookDetails');
 });
@@ -34,4 +35,9 @@ app.get('/bookDetails', (req, res) => {
 // Levantar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor funcionando en http://localhost:${PORT}`);
+=======
+// Levantar el servidor
+app.listen(PORT, () => {
+  console.log('Servidor funcionando en http://localhost:${PORT}');
+>>>>>>> 164bb5455161455401219b9013e67a8bea62eafc
 });
