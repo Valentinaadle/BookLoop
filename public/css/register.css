@@ -38,7 +38,7 @@
   .form-container button {
     width: 100%;
     padding: 12px;
-    background-color: #4CAF50;
+    background-color: #2a8ef2;
     border: none;
     color: white;
     font-size: 16px;
@@ -47,7 +47,8 @@
   }
   
   .form-container button:hover {
-    background-color: #45a049;
+    background-color:#2981d9;
+    ;
   }
   
   .form-container .small-text {
