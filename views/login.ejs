@@ -6,8 +6,13 @@
     <title>BookLoop - Iniciar Sesión</title>
     <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
+<%- include('partials/header.ejs') %>
+
+<main>
+
     <div class="login-container">
         <div class="login-form">
             <h2>Iniciar Sesión</h2>
@@ -31,5 +36,7 @@
         </div>
     </div>
     <script src="js/login.js"></script>
+</main>
+<%- include('partials/footer.ejs') %>
 </body>
 </html>
