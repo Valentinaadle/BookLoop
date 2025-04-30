@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookLoop - Iniciar Sesión</title>
     <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
 </head>
 <body>
+
+    <%- include('partials/header') %>
+
+    <main class="login-wrapper">
+    <div class="login">
     <div class="login-container">
         <div class="login-form">
             <h2>Iniciar Sesión</h2>
@@ -30,6 +36,10 @@
             </form>
         </div>
     </div>
+    </div>
+</main>
     <script src="js/login.js"></script>
+    <%- include('partials/footer') %>
+    
 </body>
 </html>
