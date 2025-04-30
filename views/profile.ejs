@@ -1,16 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link rel="stylesheet" href="" />
-    <link rel="stylesheet" href="" />
-    
-  </head>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="/css/profile.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+</head>
 
 <body>
-  <%- include('/partials/header.') %>
+  <%- include('partials/header') %>
   
-
-  <%- include('/partials/footer.') %>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/styles/profile.css">
+  </head>
+  <body>
+    <div class="profile-card">
+      <div class="header-background"></div>
+      
+      <div class="profile-top">
+        <div class="avatar-circle">J</div>
+        <div class="info">
+          <h2>Lucas Luna <button class="verify-btn">Get Verified</button></h2>
+          <p>Universidad Santo Tomás De Aquino</p>
+          <p>Argentina, Tucumán, Yerba Buena  • <a href="#">Contact Info</a></p>
+        </div>
+        <div class="school-logo">
+          <div class="profile-actions">
+          <button>Seguir</button>
+          </div>  
+        </div>
+      </div>
+  
+      <div class="profile-actions">
+        <button>Seguir</button>
+        <button>Mensaje</button>
+        <button>Editar perfil</button>
+        <button>Ver publicaciones</button>
+      </div>
+  
+      <div class="promo-cards">
+        <div class="card">
+          <p><strong>¿Buscas recomendaciones?</strong></p>
+          <p>Controla los géneros y temas que te interesan para recibir sugerencias personalizadas.</p>
+          <br>
+          <a href="#" class="b"> Configurar intereses</a>
+        </div>
+        <div class="card">
+          <p><strong> ¿Eres autor o editor?</strong></p>
+          <p>Publica tus libros o gestiona tu catálogo desde tu perfil.</p>
+          <br>
+          <a href="#" class="b"> Subir un libro / Gestionar publicaciones</a>
+        </div>
+      </div>
+  
+      <div class="suggestions">
+        <h3>Sugerencias • Solo para ti</h3>
+        <div class="suggestion-row">
+          <div class="suggestion-box">
+            <p><strong>¿Qué géneros te gustan?</strong></p>
+            <p>Los perfiles con géneros preferidos obtienen mejores recomendaciones.</p>
+            <button> Agregar géneros</button>
+          </div>
+          <div class="suggestion-box">
+            <p><strong>Agrega una biografía lectora</strong></p>
+            <p>Compartir tu historia como lector aumenta la interacción.</p>
+            <button> Agregar biografía</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%- include('partials/footer') %>
 
 </body>
 
