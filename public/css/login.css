@@ -3,24 +3,30 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    
 }
 
 .login {
-    
+
+    font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     padding-top: 50px;
+    min-height: 600px;
     
+}
+
+body {
+    background: #f3f2ef;
 }
 
 
 .login-container {
     width: 100%;
-    max-width: 500px;
-    padding: 50px;
+    max-width: 490px;
+    padding: 45px;
     
 }
 
@@ -30,13 +36,18 @@
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
-    margin-bottom: 200px;
+    margin-bottom: 185px;
+    min-height: 420px;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 .login-form h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #333;
+    color: #000000;
+    font-size: 25px;
+    font-weight: 700;
 }
 
 .form-group {
@@ -55,7 +66,7 @@
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px;
     transition: border-color 0.3s;
 }
 
@@ -71,8 +82,7 @@
     color: white;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 17px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -82,20 +92,28 @@
 }
 
 .form-links {
-    margin-top: 20px;
+    margin-top: 15px;
     text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    font-size: 14px;
+    
 }
 
 .form-links a {
     color: #2a8ef2;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: normal;
 }
 
 .form-links a:hover {
     text-decoration: underline;
 }
 
+
+
+footer {
+    margin-top: -95px; /* o el valor que necesites */
+}
