@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #f5f5f5;
+    background: #f3f2ef;
     display: flex;
     flex-direction: column; /* Asegura que header, main y footer se apilen verticalmente */
     min-height: 100vh;

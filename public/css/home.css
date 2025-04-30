@@ -1,4 +1,3 @@
-/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +6,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #ffffff;
+  background: #f3f2ef;
   color: #333;
   line-height: 1.6;
 }
@@ -18,7 +17,10 @@ body {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   padding: 50px 0 75px 0;
-  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
   max-width: 65%;
   gap: 10px;
 }
@@ -28,6 +30,8 @@ body {
   padding-top: 15px;
   text-align: center;
   margin: 0;
+  border: 1px solid #00000028;
+  background: #ffffffbe;
 }
 
 .book-card img {

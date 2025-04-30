@@ -5,6 +5,15 @@
   box-sizing: border-box;
 }
 
+body{
+  font-family: Arial, sans-serif;
+  background: #f3f2ef;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column; /* Asegura que header, main y footer se apilen verticalmente */
+  min-height: 100vh;
+}
+
 .form-container {
     width: 100%;
     max-width: 400px;

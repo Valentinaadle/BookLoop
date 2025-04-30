@@ -1,16 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link rel="stylesheet" href="" />
-    <link rel="stylesheet" href="" />
-    
-  </head>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="/css/profile.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+</head>
 
 <body>
-  <%- include('/partials/header.') %>
+  <%- include('partials/header') %>
   
-
-  <%- include('/partials/footer.') %>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/styles/profile.css">
+  </head>
+  <body>
+    <div class="profile-card">
+      <div class="header-background"></div>
+      
+      <div class="profile-top">
+        <div class="avatar-circle">J</div>
+        <div class="info">
+          <h2>Lucas Luna <button class="verify-btn">Get Verified</button></h2>
+          <p>Universidad Santo Tomás De Aquino</p>
+          <p>Argentina, Tucumán, Yerba Buena  • <a href="#">Contact Info</a></p>
+        </div>
+        <div class="school-logo"></div>
+      </div>
+  
+      <div class="profile-actions">
+        <button>Open to</button>
+        <button>Add section</button>
+        <button>Edit profile</button>
+        <button>Resources</button>
+      </div>
+  
+      <div class="promo-cards">
+        <div class="card">
+          <p><strong>Let recruiters know you’re open</strong></p>
+          <p>Control who sees you're looking for a job</p>
+          <a href="#" class="b">Get started</a>
+        </div>
+        <div class="card">
+          <p><strong>Hiring?</strong></p>
+          <p>Post a job and find qualified candidates</p>
+          <a href="#" class="b">Get started</a>
+        </div>
+      </div>
+  
+      <div class="suggestions">
+        <h3>Suggestions • Only for you</h3>
+        <div class="suggestion-row">
+          <div class="suggestion-box">
+            <p><strong>What industry are you in?</strong></p>
+            <p>Profiles with industry info get 2.5x more views</p>
+            <button>Add Industry</button>
+          </div>
+          <div class="suggestion-box">
+            <p><strong>Write a summary</strong></p>
+            <p>Summaries increase visibility by 3.9x</p>
+            <button>Add Summary</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%- include('partials/footer') %>
 
 </body>
 
