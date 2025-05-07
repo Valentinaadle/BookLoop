@@ -25,10 +25,9 @@ export default function Header() {
       <div className="header-bottom">
         <nav>
           <ul className="nav-links">
-            <li><Link to="#">Categorias</Link></li>
-            <li><Link to="#">Recomendados</Link></li>
-            <li><Link to="#">Como vender</Link></li>
-            <li><Link to="/bookDetails">Código ISBN</Link></li>
+            <li><Link to="/">Inicio</Link></li>
+            <li><Link to="#">Quiero vender</Link></li>
+            <li><Link to="/bookDetails">Quiero comprar</Link></li>
             <li><Link to="/register">Registrarse</Link></li>
           </ul>
         </nav>
