@@ -7,7 +7,7 @@ export default function Header() {
         <div className="logo">
           
           <Link to="/"><img src="/icons/libro.png" className="icon" alt="icon" /></Link>
-          <Link to="/"><h1>BOOKSHOP</h1></Link>
+          <Link to="/"><h1>BOOKLOOP</h1></Link>
         </div>
         <div className="search-bar">
           <i className="fa fa-search">
