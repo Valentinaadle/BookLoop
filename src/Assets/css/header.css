@@ -1,0 +1,135 @@
+/* Navbar */
+header {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 4px 50px rgba(0, 0, 0, 0.15);
+    padding: 15px 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .logo{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .logo a {
+    text-decoration: none;
+  }
+  
+  .logo h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    margin: 0;
+  }
+  
+  nav {
+    flex-grow: 1;
+    margin: 0 30px;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  
+  .nav-links li:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+  
+  .nav-links li a:hover {
+    color: #004679;
+    transition: color 0.3s;
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .search-bar input {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 7.5px;
+    font-size: 14px;
+  }
+  
+  .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .login {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .icon {
+    height: 25px;
+    width: auto;
+  }
+  
+  .logo:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+  
+  .icon:hover {
+    transform: scale(1.2);
+    transition: transform 0.2s;
+  }
+  
+  .header-bottom {
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
+  
+  .search-bar {
+    position: relative;
+    width: 90vh;
+    right: 30px;
+  }
+  
+  .search-bar i {
+    position: absolute;
+    left: 8px;
+    top: 55%;
+    transform: translateY(-50%);
+    color: gray;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+  }
