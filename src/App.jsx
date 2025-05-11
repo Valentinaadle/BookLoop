@@ -4,11 +4,13 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import BookDetails from './pages/BookDetails';
+import Portada from './pages/Portada';
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/portada" element={<Portada />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />

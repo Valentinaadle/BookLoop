@@ -17,6 +17,7 @@ export default function Header() {
         </div>
         <div className="header-actions">
           <div className="user-actions">
+            <Link to="favoritos"><img src="/icons/favorito.png" className="icon" alt="favorito"/></Link>
             <Link to="/profile"><img src="/icons/usuario.png" className="icon" alt="usuario" /></Link>
             <Link to="#"><img src="/icons/carrito.png" className="icon" alt="Cart" /></Link>
           </div>
@@ -25,7 +26,7 @@ export default function Header() {
       <div className="header-bottom">
         <nav>
           <ul className="nav-links">
-            <li><Link to="/">Inicio</Link></li>
+            <li><Link to="/portada">Inicio</Link></li>
             <li><Link to="#">Quiero vender</Link></li>
             <li><Link to="/bookDetails">Quiero comprar</Link></li>
             <li><Link to="/register">Registrarse</Link></li>
