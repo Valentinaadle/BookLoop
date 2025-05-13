@@ -4,11 +4,10 @@ import { FaShoppingCart, FaBookOpen } from 'react-icons/fa';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import book12 from '../Assets/book12.webp';
-import book5 from "../Assets/book5.webp";
+import book5 from "../Assets/book11.webp";
 import book6 from "../Assets/book6.webp";
-import book7 from "../Assets/book7.webp";
-import book8 from "../Assets/book8.webp";
 import book9 from "../Assets/book9.webp";
+import book3 from "../Assets/book3.webp";
 
 export default function Portada() {
   return (
@@ -36,39 +35,34 @@ export default function Portada() {
           <div className="product-grid">
             <div className="product-card">
               <span className="discount">-30%</span>
-              <img src={book12} alt="El Principito" />
-              <h3>El Principito</h3>
-              <p>de Antoine de Saint-Exupéry</p>
+              <img src={book12} alt="La Fortuna" />
+              <h3>La Fortuna</h3>
+              <p>de Michael McDowell</p>
             </div>
             <div className="product-card">
               <span className="discount">-50%</span>
-              <img src={book9} alt="El León de Ale" />
-              <h3>El León de Ale</h3>
-              <p>de Alejandro R.</p>
+              <img src={book9} alt="El Dique" />
+              <h3>El Dique</h3>
+              <p>de Michael McDowell</p>
             </div>
             <div className="product-card">
               <span className="discount">-30%</span>
-              <img src={book5} alt="Pepe el Grillo" />
-              <h3>Pepe El Grillo</h3>
-              <p>de Andres B.</p>
+              <img src={book5} alt="La Casa" />
+              <h3>La Casa</h3>
+              <p>de Michael McDowell</p>
             </div>
             <div className="product-card">
               <span className="discount">-10%</span>
-              <img src={book6} alt="Pepe el Grillo" />
-              <h3>Pepe El Grillo</h3>
-              <p>de Andres B.</p>
+              <img src={book6} alt="La riada" />
+              <h3>La riada</h3>
+              <p>de Michael McDowell</p>
             </div>
-            <div className="product-card">
-              <span className="discount">-20%</span>
-              <img src={book7} alt="Pepe el Grillo" />
-              <h3>Pepe El Grillo</h3>
-              <p>de Andres B.</p>
-            </div>
+    
             <div className="product-card">
               <span className="discount">-40%</span>
-              <img src={book8} alt="Pepe el Grillo" />
-              <h3>Pepe El Grillo</h3>
-              <p>de Andres B.</p>
+              <img src={book3} alt="Lluvia" />
+              <h3>Lluvia</h3>
+              <p>de Michael McDowell</p>
             </div>
           
           </div>
