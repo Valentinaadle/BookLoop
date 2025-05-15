@@ -15,29 +15,25 @@ const Book = sequelize.define('Book', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  description: {
-    type: DataTypes.TEXT
-  },
   isbn: {
     type: DataTypes.STRING,
     unique: true
   },
-  publishedYear: {
+  quantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1
+  },
+  description: {
+    type: DataTypes.TEXT
+  },
+  publishedDate: {
+    type: DataTypes.DATE
+  },
+  pageCount: {
     type: DataTypes.INTEGER
   },
-  genre: {
-    type: DataTypes.STRING
-  },
-  coverImage: {
-    type: DataTypes.STRING
-  },
-  stock: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  available: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+  imageUrl: {
+    type: DataTypes.STRING(1000)
   }
 }, {
   timestamps: true

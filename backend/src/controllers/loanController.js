@@ -1,17 +1,20 @@
-const { Loan, Book, User } = require('../models');
+const Loan = require('../models/Loan');
+const Book = require('../models/Book');
+const User = require('../models/User');
 
 // Obtener todos los préstamos
 const getLoans = async (req, res) => {
   try {
     const loans = await Loan.findAll({
       include: [
-        { model: User, attributes: ['id', 'username', 'email'] },
-        { model: Book, attributes: ['id', 'title', 'author'] }
+        { model: Book },
+        { model: User }
       ]
     });
     res.json(loans);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al obtener préstamos:', error);
+    res.status(500).json({ message: 'Error al obtener préstamos' });
   }
 };
 
@@ -20,46 +23,29 @@ const getLoanById = async (req, res) => {
   try {
     const loan = await Loan.findByPk(req.params.id, {
       include: [
-        { model: User, attributes: ['id', 'username', 'email'] },
-        { model: Book, attributes: ['id', 'title', 'author'] }
+        { model: Book },
+        { model: User }
       ]
     });
-    if (!loan) {
-      return res.status(404).json({ message: 'Préstamo no encontrado' });
+    if (loan) {
+      res.json(loan);
+    } else {
+      res.status(404).json({ message: 'Préstamo no encontrado' });
     }
-    res.json(loan);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al obtener préstamo:', error);
+    res.status(500).json({ message: 'Error al obtener préstamo' });
   }
 };
 
 // Crear un nuevo préstamo
 const createLoan = async (req, res) => {
   try {
-    const book = await Book.findByPk(req.body.bookId);
-    if (!book) {
-      return res.status(404).json({ message: 'Libro no encontrado' });
-    }
-    if (!book.available || book.stock <= 0) {
-      return res.status(400).json({ message: 'Libro no disponible para préstamo' });
-    }
-
     const loan = await Loan.create(req.body);
-    await book.update({
-      stock: book.stock - 1,
-      available: book.stock - 1 > 0
-    });
-
-    const loanWithDetails = await Loan.findByPk(loan.id, {
-      include: [
-        { model: User, attributes: ['id', 'username', 'email'] },
-        { model: Book, attributes: ['id', 'title', 'author'] }
-      ]
-    });
-
-    res.status(201).json(loanWithDetails);
+    res.status(201).json(loan);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error al crear préstamo:', error);
+    res.status(500).json({ message: 'Error al crear préstamo' });
   }
 };
 
@@ -106,10 +92,42 @@ const getLoansByUser = async (req, res) => {
   }
 };
 
+const updateLoan = async (req, res) => {
+  try {
+    const loan = await Loan.findByPk(req.params.id);
+    if (loan) {
+      await loan.update(req.body);
+      res.json(loan);
+    } else {
+      res.status(404).json({ message: 'Préstamo no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al actualizar préstamo:', error);
+    res.status(500).json({ message: 'Error al actualizar préstamo' });
+  }
+};
+
+const deleteLoan = async (req, res) => {
+  try {
+    const loan = await Loan.findByPk(req.params.id);
+    if (loan) {
+      await loan.destroy();
+      res.json({ message: 'Préstamo eliminado' });
+    } else {
+      res.status(404).json({ message: 'Préstamo no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al eliminar préstamo:', error);
+    res.status(500).json({ message: 'Error al eliminar préstamo' });
+  }
+};
+
 module.exports = {
   getLoans,
   getLoanById,
   createLoan,
   returnBook,
-  getLoansByUser
+  getLoansByUser,
+  updateLoan,
+  deleteLoan
 }; 

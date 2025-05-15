@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -24,7 +25,7 @@ const connectDB = async () => {
     console.log('Conexión a MySQL establecida correctamente.');
   } catch (error) {
     console.error('Error al conectar con la base de datos:', error);
-    process.exit(1);
+    throw error;
   }
 };
 

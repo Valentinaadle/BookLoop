@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# BookLoop - Sistema de Gestión de Biblioteca
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto es un sistema de gestión de biblioteca que permite administrar libros, préstamos y usuarios.
 
-## Available Scripts
+## Estructura del Proyecto
 
-In the project directory, you can run:
+El proyecto está dividido en dos partes principales:
 
-### `npm start`
+### Backend (/backend)
+- API REST construida con Node.js y Express
+- Base de datos MySQL con Sequelize ORM
+- Autenticación de usuarios
+- Integración con Google Books API
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Frontend (/frontend)
+- Interfaz de usuario construida con React
+- Diseño responsive
+- Gestión de estado con React Hooks
+- Integración con la API del backend
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Requisitos
 
-### `npm test`
+- Node.js v14 o superior
+- MySQL 8.0
+- npm o yarn
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Configuración
 
-### `npm run build`
+1. Backend:
+```bash
+cd backend
+npm install
+# Crear archivo .env con las variables de entorno necesarias
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Frontend:
+```bash
+cd frontend
+npm install
+# Crear archivo .env con las variables de entorno necesarias
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Variables de Entorno
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend (.env)
+```
+DB_NAME=bookloop
+DB_USER=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_HOST=localhost
+DB_PORT=3306
+PORT=5000
+```
 
-### `npm run eject`
+### Frontend (.env)
+```
+REACT_APP_API_URL=http://localhost:5000
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Características
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Búsqueda de libros usando Google Books API
+- Gestión de inventario de libros
+- Sistema de préstamos
+- Autenticación de usuarios
+- Interfaz intuitiva y responsive
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Desarrollo
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+El proyecto usa:
+- ESLint para linting
+- Prettier para formateo de código
+- Husky para hooks de git
 
-## Learn More
+## Licencia
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
