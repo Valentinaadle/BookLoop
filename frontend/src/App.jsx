@@ -1,6 +1,5 @@
 import React from 'react';
-import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
@@ -12,18 +11,18 @@ import Books from './pages/Books';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/books" element={<Books />} />
+        <Route path="/" element={<Navigate to="/books" replace />} />
         <Route path="/portada" element={<Portada />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/bookdetails" element={<BookDetails />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/books" element={<Books />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
