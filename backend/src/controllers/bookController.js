@@ -1,4 +1,4 @@
-const { Book } = require('../models');
+const Book = require('../models/Book');
 
 // Obtener todos los libros
 const getBooks = async (req, res) => {
@@ -6,7 +6,8 @@ const getBooks = async (req, res) => {
     const books = await Book.findAll();
     res.json(books);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al obtener libros:', error);
+    res.status(500).json({ message: 'Error al obtener libros' });
   }
 };
 
@@ -14,12 +15,14 @@ const getBooks = async (req, res) => {
 const getBookById = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
-    if (!book) {
-      return res.status(404).json({ message: 'Libro no encontrado' });
+    if (book) {
+      res.json(book);
+    } else {
+      res.status(404).json({ message: 'Libro no encontrado' });
     }
-    res.json(book);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al obtener libro:', error);
+    res.status(500).json({ message: 'Error al obtener libro' });
   }
 };
 
@@ -29,7 +32,8 @@ const createBook = async (req, res) => {
     const book = await Book.create(req.body);
     res.status(201).json(book);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error al crear libro:', error);
+    res.status(500).json({ message: 'Error al crear libro' });
   }
 };
 
@@ -37,13 +41,15 @@ const createBook = async (req, res) => {
 const updateBook = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
-    if (!book) {
-      return res.status(404).json({ message: 'Libro no encontrado' });
+    if (book) {
+      await book.update(req.body);
+      res.json(book);
+    } else {
+      res.status(404).json({ message: 'Libro no encontrado' });
     }
-    await book.update(req.body);
-    res.json(book);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error al actualizar libro:', error);
+    res.status(500).json({ message: 'Error al actualizar libro' });
   }
 };
 
@@ -51,13 +57,15 @@ const updateBook = async (req, res) => {
 const deleteBook = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
-    if (!book) {
-      return res.status(404).json({ message: 'Libro no encontrado' });
+    if (book) {
+      await book.destroy();
+      res.json({ message: 'Libro eliminado' });
+    } else {
+      res.status(404).json({ message: 'Libro no encontrado' });
     }
-    await book.destroy();
-    res.json({ message: 'Libro eliminado correctamente' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al eliminar libro:', error);
+    res.status(500).json({ message: 'Error al eliminar libro' });
   }
 };
 
