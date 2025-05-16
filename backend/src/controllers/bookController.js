@@ -1,4 +1,8 @@
-const Book = require('../models/Book');
+const axios = require('axios');
+const { Book } = require('../models');
+const { Op } = require('sequelize');
+
+const GOOGLE_BOOKS_API_URL = 'https://www.googleapis.com/books/v1/volumes';
 
 // Obtener todos los libros
 const getBooks = async (req, res) => {
@@ -69,10 +73,108 @@ const deleteBook = async (req, res) => {
   }
 };
 
+const searchBooks = async (req, res) => {
+    try {
+        const { query } = req.query;
+        const response = await axios.get(GOOGLE_BOOKS_API_URL, {
+            params: {
+                q: query,
+                maxResults: 20
+            }
+        });
+
+        const books = response.data.items.map(item => ({
+            googleBooksId: item.id,
+            title: item.volumeInfo.title,
+            author: item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Autor desconocido',
+            description: item.volumeInfo.description,
+            publishedDate: item.volumeInfo.publishedDate,
+            isbn: item.volumeInfo.industryIdentifiers ? 
+                  item.volumeInfo.industryIdentifiers[0].identifier : null,
+            pageCount: item.volumeInfo.pageCount,
+            imageUrl: item.volumeInfo.imageLinks ? 
+                     item.volumeInfo.imageLinks.thumbnail : null,
+            categories: item.volumeInfo.categories ? 
+                       item.volumeInfo.categories.join(', ') : null,
+            language: item.volumeInfo.language,
+            averageRating: item.volumeInfo.averageRating
+        }));
+
+        res.json(books);
+    } catch (error) {
+        console.error('Error al buscar libros:', error);
+        res.status(500).json({ error: 'Error al buscar libros en Google Books' });
+    }
+};
+
+const addBookToLibrary = async (req, res) => {
+    try {
+        const { googleBooksId } = req.body;
+        
+        // Verificar si el libro ya existe
+        const existingBook = await Book.findOne({
+            where: { googleBooksId }
+        });
+
+        if (existingBook) {
+            // Si el libro existe, incrementar la cantidad
+            await existingBook.increment('quantity');
+            await existingBook.reload();
+            return res.json(existingBook);
+        }
+
+        // Si el libro no existe, obtener detalles de Google Books
+        const response = await axios.get(`${GOOGLE_BOOKS_API_URL}/${googleBooksId}`);
+        const bookData = response.data.volumeInfo;
+
+        // Crear nuevo libro en la base de datos
+        const newBook = await Book.create({
+            googleBooksId,
+            title: bookData.title,
+            author: bookData.authors ? bookData.authors.join(', ') : 'Autor desconocido',
+            description: bookData.description,
+            publishedDate: bookData.publishedDate,
+            isbn: bookData.industryIdentifiers ? 
+                  bookData.industryIdentifiers[0].identifier : null,
+            pageCount: bookData.pageCount,
+            imageUrl: bookData.imageLinks ? bookData.imageLinks.thumbnail : null,
+            categories: bookData.categories ? bookData.categories.join(', ') : null,
+            language: bookData.language,
+            averageRating: bookData.averageRating,
+            quantity: 1,
+            available: true
+        });
+
+        res.status(201).json(newBook);
+    } catch (error) {
+        console.error('Error al agregar libro:', error);
+        res.status(500).json({ error: 'Error al agregar libro a la biblioteca' });
+    }
+};
+
+const getLibraryBooks = async (req, res) => {
+    try {
+        const books = await Book.findAll({
+            where: {
+                quantity: {
+                    [Op.gt]: 0
+                }
+            }
+        });
+        res.json(books);
+    } catch (error) {
+        console.error('Error al obtener libros:', error);
+        res.status(500).json({ error: 'Error al obtener libros de la biblioteca' });
+    }
+};
+
 module.exports = {
   getBooks,
   getBookById,
   createBook,
   updateBook,
-  deleteBook
+  deleteBook,
+  searchBooks,
+  addBookToLibrary,
+  getLibraryBooks
 }; 

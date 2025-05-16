@@ -1,11 +1,16 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const { bookDB } = require('../config/db');
 
-const Book = sequelize.define('Book', {
+const Book = bookDB.define('Book', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
+  },
+  googleBooksId: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false
   },
   title: {
     type: DataTypes.STRING,
@@ -34,6 +39,19 @@ const Book = sequelize.define('Book', {
   },
   imageUrl: {
     type: DataTypes.STRING(1000)
+  },
+  categories: {
+    type: DataTypes.STRING
+  },
+  language: {
+    type: DataTypes.STRING(10)
+  },
+  averageRating: {
+    type: DataTypes.FLOAT
+  },
+  available: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
 }, {
   timestamps: true

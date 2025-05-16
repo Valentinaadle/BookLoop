@@ -1,16 +1,11 @@
 const User = require('./User');
-const Book = require('./Book');
-const Loan = require('./Loan');
+const Profile = require('./Profile');
 
-// Relaciones
-User.hasMany(Loan, { foreignKey: 'userId' });
-Loan.belongsTo(User, { foreignKey: 'userId' });
-
-Book.hasMany(Loan, { foreignKey: 'bookId' });
-Loan.belongsTo(Book, { foreignKey: 'bookId' });
+// Establecer relaciones
+User.hasOne(Profile, { foreignKey: 'UserId' });
+Profile.belongsTo(User, { foreignKey: 'UserId' });
 
 module.exports = {
-  User,
-  Book,
-  Loan
+    User,
+    Profile
 }; 

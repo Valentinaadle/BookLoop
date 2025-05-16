@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const { bookDB } = require('../config/db');
 
-const Loan = sequelize.define('Loan', {
+const Loan = bookDB.define('Loan', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -9,11 +9,7 @@ const Loan = sequelize.define('Loan', {
   },
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id'
-    }
+    allowNull: false
   },
   bookId: {
     type: DataTypes.INTEGER,
@@ -40,7 +36,27 @@ const Loan = sequelize.define('Loan', {
     defaultValue: 'active'
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  hooks: {
+    beforeCreate: async (loan) => {
+      // Actualizar el estado del libro a no disponible
+      const Book = require('./Book');
+      await Book.update(
+        { available: false },
+        { where: { id: loan.bookId } }
+      );
+    },
+    afterUpdate: async (loan) => {
+      // Si el préstamo se marca como devuelto, actualizar el libro a disponible
+      if (loan.status === 'returned') {
+        const Book = require('./Book');
+        await Book.update(
+          { available: true },
+          { where: { id: loan.bookId } }
+        );
+      }
+    }
+  }
 });
 
 module.exports = Loan; 

@@ -1,21 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser
-} = require('../controllers/userController');
 const { User, Profile } = require('../models');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
-router.get('/', getUsers);
-router.get('/:id', getUserById);
-router.post('/', createUser);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+// Ruta para obtener todos los usuarios (temporal para debug)
+router.get('/usuarios', async (req, res) => {
+    try {
+        const usuarios = await User.findAll({
+            include: [{
+                model: Profile,
+                attributes: ['foto_perfil', 'biografia', 'fecha_nacimiento', 'telefono', 'direccion']
+            }],
+            attributes: { exclude: ['password'] }
+        });
+
+        if (!usuarios || usuarios.length === 0) {
+            return res.status(404).json({ message: 'No hay usuarios registrados' });
+        }
+
+        res.json(usuarios);
+    } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).json({ error: 'Error al obtener usuarios' });
+    }
+});
 
 // Ruta para registro
 router.post('/registro', async (req, res) => {
@@ -65,7 +74,7 @@ router.post('/registro', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error detallado en el registro:', error);
+        console.error('Error en el registro:', error);
         res.status(500).json({ error: 'Error al registrar usuario' });
     }
 });
@@ -90,7 +99,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Verificar contraseña
-        const isValidPassword = await user.validPassword(password);
+        const isValidPassword = await bcrypt.compare(password, user.password);
 
         if (!isValidPassword) {
             return res.status(401).json({ error: 'Contraseña incorrecta' });
@@ -108,24 +117,6 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error en el login:', error);
         res.status(500).json({ error: 'Error al iniciar sesión' });
-    }
-});
-
-// Ruta para obtener todos los usuarios
-router.get('/usuarios', async (req, res) => {
-    try {
-        const usuarios = await User.findAll({
-            include: [{
-                model: Profile,
-                attributes: ['foto_perfil', 'biografia', 'fecha_nacimiento', 'telefono', 'direccion']
-            }],
-            attributes: { exclude: ['password'] } // No enviar las contraseñas
-        });
-
-        res.json(usuarios);
-    } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-        res.status(500).json({ error: 'Error al obtener usuarios' });
     }
 });
 

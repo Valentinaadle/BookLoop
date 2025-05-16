@@ -5,9 +5,12 @@ const {
   getBookById,
   createBook,
   updateBook,
-  deleteBook
+  deleteBook,
+  searchBooks,
+  addBookToLibrary,
+  getLibraryBooks
 } = require('../controllers/bookController');
-const { searchBooks, addBookFromGoogle } = require('../controllers/googleBooksController');
+const { addBookFromGoogle } = require('../controllers/googleBooksController');
 
 // Rutas de Google Books
 router.get('/search', searchBooks);
@@ -19,5 +22,11 @@ router.get('/:id', getBookById);
 router.post('/', createBook);
 router.put('/:id', updateBook);
 router.delete('/:id', deleteBook);
+
+// Agregar libro de Google Books a la biblioteca
+router.post('/add', addBookToLibrary);
+
+// Obtener todos los libros de la biblioteca
+router.get('/library', getLibraryBooks);
 
 module.exports = router; 

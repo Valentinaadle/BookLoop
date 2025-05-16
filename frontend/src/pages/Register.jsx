@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/register.css';
@@ -7,10 +8,13 @@ import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 
 function Register() {
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     email: '',
+    username: '',
     password: '',
     terminos: false
   });
@@ -23,10 +27,27 @@ function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica de registro aquí
-    console.log(formData);
+    if (!formData.terminos) {
+      setError('Debes aceptar los términos y condiciones');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/registro', {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        username: formData.email, // Usando el email como username por defecto
+        password: formData.password
+      });
+
+      console.log('Registro exitoso:', response.data);
+      navigate('/login');
+    } catch (error) {
+      setError(error.response?.data?.error || 'Error al registrar usuario');
+    }
   };
 
   return (
@@ -35,6 +56,7 @@ function Register() {
       <main>
         <div className="form-container">
           <h2>Registrarse en BookLoop</h2>
+          {error && <div className="error-message">{error}</div>}
           <form onSubmit={handleSubmit}>
             <input 
               type="text" 
