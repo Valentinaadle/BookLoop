@@ -1,11 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
 const { connectDB } = require('./config/db');
-
-const authRoutes = require('./routes/auth.routes');
-const profileRoutes = require('./routes/profile.routes');
 const bookRoutes = require('./routes/bookRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -14,23 +12,23 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas
-app.use('/api/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
 app.use('/api/books', bookRoutes);
+app.use('/api/users', userRoutes);
 
+// Puerto
 const PORT = process.env.PORT || 5000;
 
-// Conectar a las bases de datos y luego iniciar el servidor
+// Conectar a la base de datos y iniciar el servidor
 const startServer = async () => {
-    try {
-        await connectDB();
-        app.listen(PORT, () => {
-            console.log(`Servidor corriendo en el puerto ${PORT}`);
-        });
-    } catch (error) {
-        console.error('Error al iniciar el servidor:', error);
-        process.exit(1);
-    }
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en el puerto ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Error al iniciar el servidor:', error);
+    process.exit(1);
+  }
 };
 
 startServer(); 

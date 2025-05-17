@@ -1,27 +1,42 @@
 const { DataTypes } = require('sequelize');
-const { userDB } = require('../config/db');
+const { sequelize } = require('../config/db');
 
-const Profile = userDB.define('Profile', {
-    foto_perfil: {
+const Profile = sequelize.define('Profile', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    direccion: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    biografia: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
-    fecha_nacimiento: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
     telefono: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING,
         allowNull: true
     },
-    direccion: {
-        type: DataTypes.TEXT,
+    ciudad: {
+        type: DataTypes.STRING,
         allowNull: true
+    },
+    pais: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    codigoPostal: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    UserId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     }
+}, {
+    timestamps: true
 });
 
 module.exports = Profile; 

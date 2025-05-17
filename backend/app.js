@@ -145,6 +145,84 @@ app.put('/perfil/:userId', async (req, res) => {
     }
 });
 
+// Rutas de libros
+app.get('/api/books', async (req, res) => {
+    try {
+        const [books] = await pool.query('SELECT * FROM books');
+        res.json(books);
+    } catch (error) {
+        console.error('Error al obtener libros:', error);
+        res.status(500).json({ error: 'Error al obtener libros' });
+    }
+});
+
+app.get('/api/books/:id', async (req, res) => {
+    try {
+        const [books] = await pool.query(
+            'SELECT * FROM books WHERE id = ?',
+            [req.params.id]
+        );
+
+        if (books.length === 0) {
+            return res.status(404).json({ error: 'Libro no encontrado' });
+        }
+
+        res.json(books[0]);
+    } catch (error) {
+        console.error('Error al obtener libro:', error);
+        res.status(500).json({ error: 'Error al obtener libro' });
+    }
+});
+
+app.post('/api/books', async (req, res) => {
+    try {
+        const { title, author, description, imageUrl, price, stock, details, authorBio, language, pages, publishYear } = req.body;
+        
+        const [result] = await pool.query(
+            `INSERT INTO books (title, author, description, imageUrl, price, stock, details, authorBio, language, pages, publishYear) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [title, author, description, imageUrl, price, stock, details, authorBio, language, pages, publishYear]
+        );
+
+        res.status(201).json({ 
+            id: result.insertId,
+            ...req.body
+        });
+    } catch (error) {
+        console.error('Error al crear libro:', error);
+        res.status(500).json({ error: 'Error al crear libro' });
+    }
+});
+
+app.put('/api/books/:id', async (req, res) => {
+    try {
+        const { title, author, description, imageUrl, price, stock, details, authorBio, language, pages, publishYear } = req.body;
+        
+        await pool.query(
+            `UPDATE books 
+             SET title = ?, author = ?, description = ?, imageUrl = ?, price = ?, 
+                 stock = ?, details = ?, authorBio = ?, language = ?, pages = ?, publishYear = ?
+             WHERE id = ?`,
+            [title, author, description, imageUrl, price, stock, details, authorBio, language, pages, publishYear, req.params.id]
+        );
+
+        res.json({ mensaje: 'Libro actualizado exitosamente' });
+    } catch (error) {
+        console.error('Error al actualizar libro:', error);
+        res.status(500).json({ error: 'Error al actualizar libro' });
+    }
+});
+
+app.delete('/api/books/:id', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM books WHERE id = ?', [req.params.id]);
+        res.json({ mensaje: 'Libro eliminado exitosamente' });
+    } catch (error) {
+        console.error('Error al eliminar libro:', error);
+        res.status(500).json({ error: 'Error al eliminar libro' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);

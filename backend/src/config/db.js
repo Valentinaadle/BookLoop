@@ -1,74 +1,29 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
 
-// Conexión inicial a MySQL sin base de datos específica
-const initDB = new Sequelize('mysql', 'root', '123', {
-    host: 'localhost',
-    dialect: 'mysql'
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: process.env.DB_HOST || 'localhost',
+  username: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'bookshop',
+  logging: false
 });
 
-// Base de datos para usuarios y perfiles
-const userDB = new Sequelize(
-    'bookloop_users_db',
-    'root',
-    '123',
-    {
-        host: 'localhost',
-        dialect: 'mysql',
-        logging: console.log,
-        pool: {
-            max: 5,
-            min: 0,
-            acquire: 30000,
-            idle: 10000
-        }
-    }
-);
-
-// Base de datos para libros y préstamos
-const bookDB = new Sequelize(
-    'bookloop_books_db',
-    'root',
-    '123',
-    {
-        host: 'localhost',
-        dialect: 'mysql',
-        logging: console.log,
-        pool: {
-            max: 5,
-            min: 0,
-            acquire: 30000,
-            idle: 10000
-        }
-    }
-);
-
 const connectDB = async () => {
-    try {
-        // Crear las bases de datos si no existen
-        await initDB.query('CREATE DATABASE IF NOT EXISTS bookloop_users_db;');
-        await initDB.query('CREATE DATABASE IF NOT EXISTS bookloop_books_db;');
-        console.log('Bases de datos creadas o verificadas');
-
-        // Conectar a la base de datos de usuarios
-        await userDB.authenticate();
-        console.log('Conexión a base de datos de usuarios establecida correctamente.');
-        await userDB.sync({ alter: true });
-        console.log('Modelos de usuarios sincronizados con la base de datos.');
-
-        // Conectar a la base de datos de libros
-        await bookDB.authenticate();
-        console.log('Conexión a base de datos de libros establecida correctamente.');
-        await bookDB.sync({ alter: true });
-        console.log('Modelos de libros sincronizados con la base de datos.');
-
-    } catch (error) {
-        console.error('Error al conectar con las bases de datos:', error);
-        throw error;
-    } finally {
-        // Cerrar la conexión inicial
-        await initDB.close();
-    }
+  try {
+    await sequelize.authenticate();
+    console.log('Conexión a la base de datos establecida correctamente.');
+    
+    // Sincronizar los modelos con la base de datos
+    await sequelize.sync({ alter: true });
+    console.log('Base de datos sincronizada.');
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
+    throw error;
+  }
 };
 
-module.exports = { userDB, bookDB, connectDB }; 
+module.exports = {
+  sequelize,
+  connectDB
+}; 
