@@ -13,10 +13,7 @@ body {
   .profile-card {
     background: white;
     max-width: 900px;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    margin-left: 57.5vh;
-    margin-right: auto;
+    margin: 50px auto;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -188,3 +185,89 @@ body {
     transform: scale(1.1);
     transition: transform 0.1s;
   }
+
+/* Media Queries para hacer el diseño responsive */
+@media screen and (max-width: 1024px) {
+    .profile-card {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profile-card {
+        margin: 20px auto;
+        width: 95%;
+    }
+
+    .profile-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .avatar-circle {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .school-logo {
+        margin: 15px auto 0;
+    }
+
+    .info {
+        text-align: center;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .profile-card {
+        margin: 10px auto;
+        width: 98%;
+    }
+
+    .header-background {
+        height: 80px;
+    }
+
+    .profile-top {
+        padding: 0 10px 10px;
+    }
+
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 28px;
+    }
+
+    .info h2 {
+        font-size: 18px;
+    }
+
+    .profile-actions {
+        padding: 10px;
+    }
+
+    .profile-actions button {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .promo-cards {
+        padding: 10px;
+    }
+
+    .card {
+        min-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .suggestions {
+        padding: 10px;
+    }
+
+    .suggestion-box {
+        min-width: 100%;
+        margin-bottom: 10px;
+    }
+}

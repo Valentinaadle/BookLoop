@@ -1,48 +1,50 @@
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import BookCard from "../components/BookCard";
 import "../Assets/css/home.css";
 import "../Assets/css/header.css";
 import "../Assets/css/footer.css";
 import "../Assets/css/filtro.css";
-import book1 from "../Assets/book1.webp";
-import book2 from "../Assets/book2.webp";
-import book3 from "../Assets/book3.webp";
-import book4 from "../Assets/book4.webp";
-import book5 from "../Assets/book5.webp";
-import book6 from "../Assets/book6.webp";
-import book7 from "../Assets/book7.webp";
-import book8 from "../Assets/book8.webp";
-import book9 from "../Assets/book9.webp";
-import book10 from "../Assets/book10.webp";
-import book11 from "../Assets/book11.webp";
-import book12 from "../Assets/book12.webp";
+import "../Assets/css/bookcard.css";
 
-const booksData = [
-  { id: 1, image: book1, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 2, image: book2, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 3, image: book3, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 4, image: book4, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 5, image: book5, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 6, image: book6, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 7, image: book7, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 8, image: book8, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 9, image: book9, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 10, image: book10, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 11, image: book11, title: "Título", author: "Autor", price: "$99.99" },
-  { id: 12, image: book12, title: "Título", author: "Autor", price: "$99.99" },
-];
-
-export default function Home() {
+const Home = () => {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [collapsed, setCollapsed] = useState({
-    genero: false,
-    idioma: false,
-    estado: false,
+    genero: true,
+    idioma: true
   });
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  const fetchBooks = async () => {
+    try {
+      setError(null);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`);
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setBooks(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      setError('Error al cargar los libros. Por favor, intenta de nuevo más tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggle = (key) => {
     setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
   return (
@@ -81,34 +83,57 @@ export default function Home() {
               ))}
             </div>
           </div>
-
-          <div className="filter-group">
-            <div className="filter-header" onClick={() => toggle("estado")}>
-              Estado <span>{collapsed.estado ? "-" : "+"}</span>
-            </div>
-            <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
-              {["Nuevo", "Usado"].map((state) => (
-                <label key={state}>
-                  <input type="checkbox" /> {state}
-                </label>
-              ))}
-            </div>
-          </div>
         </aside>
 
-        <section className="books-grid">
-          {booksData.map((book) => (
-            <BookCard
-              key={book.id}
-              image={book.image}
-              title={book.title}
-              author={book.author}
-              price={book.price}
-            />
-          ))}
+        <section className="main-content">
+          {error && (
+            <div className="error-message">
+              {error}
+              <button onClick={() => setError(null)} className="close-error">×</button>
+            </div>
+          )}
+
+          {loading ? (
+            <div className="loading">Cargando libros...</div>
+          ) : (
+            <div className="books-grid">
+              {books.length > 0 ? (
+                books.map((book) => (
+                  <div key={book.id} className="book-card">
+                    <Link to="/bookdetails" state={{ book }}>
+                      <img
+                        src={book.imageLinks?.thumbnail || '/placeholder-book.png'}
+                        alt={book.title}
+                        onError={(e) => {
+                          e.target.src = '/placeholder-book.png';
+                        }}
+                      />
+                      <div className="book-card-content">
+                        <h3 title={book.title}>{truncateText(book.title, 70)}</h3>
+                        <p>{Array.isArray(book.authors) ? book.authors.join(', ') : book.authors}</p>
+                        <div className="price-container">
+                          <span className="price">$99.99</span>
+                          <button className="buy-button">Comprar</button>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                ))
+              ) : (
+                <div className="no-books">
+                  <p>No hay libros disponibles.</p>
+                  <Link to="/search" className="add-book-link">
+                    Agregar libros
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </main>
       <Footer />
     </>
   );
-}
+};
+
+export default Home;

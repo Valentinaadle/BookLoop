@@ -1,239 +1,285 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 
 function BookDetails() {
-  const [showDetails, setShowDetails] = useState(false);
+  const { id } = useParams();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const mostrarDetalles = () => {
-    setShowDetails(true);
-    alert("Aquí se mostrarán los detalles del ISBN ingresado (cuando lo conectemos a la base de datos).");
-  };
+  useEffect(() => {
+    const fetchBookDetails = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('Fetching book with ID:', id); // Para debugging
+        const response = await fetch(`http://localhost:5000/api/books/${id}`);
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Book data received:', data); // Para debugging
+        setBook(data);
+      } catch (err) {
+        console.error('Error fetching book:', err);
+        setError('No se pudo cargar el libro. ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchBookDetails();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="loading">Cargando detalles del libro...</div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div className="error">{error}</div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!book) {
+    return (
+      <>
+        <Header />
+        <div className="error">No se encontró el libro</div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
       <Header />
-      
-      {/* Header separado solo para botones */}
-      <header className="header">
-        <nav className="nav">
-          <button className="isbn-btn" onClick={mostrarDetalles}>
-            Código ISBN
-          </button>
-        </nav>
-      </header>
-
       <main className="main">
-        <h1 className="main-title">Detalle del Libro</h1>
+        <div className="breadcrumb">
+          <span>Inicio / Libros / {book.category || 'Categoría'}</span>
+        </div>
         
         <section className="book-info">
-          {/* Portada */}
-          <div className="book-cover">
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/en/0/05/Littleprince.JPG" 
-              alt="Portada El Principito" 
-            />
+          <div className="book-header">
+            {book.isNew && <span className="new-badge">Novedad</span>}
+            <h1 className="book-title">{book.title}</h1>
+            <p className="book-subtitle">{book.subtitle}</p>
+            <p className="book-author">{book.author || book.authors?.join(', ') || 'Autor desconocido'}</p>
           </div>
 
-          {/* Detalles del libro */}
-          <div className="book-details">
-            <h1 className="book-title">El Principito</h1>
-            <p className="book-author">Antoine de Saint-Exupéry</p>
-            <p className="book-description">
-              Una obra clásica de la literatura mundial, "El Principito" es una reflexión sobre la amistad, 
-              el amor y la esencia de lo verdaderamente importante en la vida.
-            </p>
-            <p className="book-price">€14.99</p>
-            <p className="book-availability">Disponible</p>
-            <button className="add-cart-btn">Agregar al carrito</button>
-          </div>
+          <div className="book-content">
+            <div className="book-left-column">
+              <div className="book-cover">
+                <img 
+                  src={book.imageUrl || book.imageLinks?.thumbnail || '/placeholder-book.png'} 
+                  alt={`Portada ${book.title}`}
+                  onError={(e) => {
+                    e.target.src = '/placeholder-book.png';
+                    e.target.onerror = null;
+                  }}
+                />
+              </div>
+            </div>
 
-          {/* Sección de extras */}
-          <aside className="book-extra">
-            <div className="extra-section">
-              <h3>Detalles del Producto</h3>
-              <p>Edición especial con ilustraciones originales. Tapa dura.</p>
+            <div className="book-right-column">
+              <div className="book-details">
+                <h3>Detalles del libro:</h3>
+                <div className="details-grid">
+                  <div className="detail-item">
+                    <span>Editorial:</span>
+                    <span>{book.publisher || 'No especificado'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span>Temática:</span>
+                    <span>{book.category || 'No especificado'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <span>Número de páginas:</span>
+                    <span>{book.pages || 'No especificado'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="book-synopsis">
+                <h3>Sinopsis de {book.title}:</h3>
+                <p className="book-description">{book.description || 'Sin descripción disponible'}</p>
+                <button className="read-more">Leer más</button>
+              </div>
             </div>
-            <div className="extra-section">
-              <h3>Sobre el Autor</h3>
-              <p>Antoine de Saint-Exupéry fue un aviador y escritor francés, célebre por su estilo poético y filosófico.</p>
-            </div>
-            <div className="extra-section">
-              <h3>Especificaciones</h3>
-              <p>Idioma: Español<br />Páginas: 96</p>
-            </div>
-            <div className="extra-section">
-              <h3>Publicación</h3>
-              <p>Año: 1943</p>
-            </div>
-          </aside>
+          </div>
         </section>
       </main>
 
       <Footer />
 
       <style jsx>{`
-        body {
-          margin: 0;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background: #f9f9f9;
-        }
-
-        .main-title {
-          text-align: left;
-          font-size: 32px;
-          font-weight: bold;
-          color: #333;
-          padding: 20px 40px 0px 40px;
-        }
-
-        .header {
-          background: white;
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          padding: 10px 40px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-          position: sticky;
-          top: 0;
-          z-index: 10;
-        }
-
-        .nav {
-          display: flex;
-          gap: 20px;
-        }
-
-        .isbn-btn {
-          background-color: #0052cc;
-          color: white;
-          border: none;
-          padding: 10px 18px;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        .isbn-btn:hover {
-          background-color: #003d99;
-        }
-
         .main {
           max-width: 1200px;
-          margin: 20px auto;
+          margin: 0 auto;
           padding: 20px;
-          display: flex;
-          flex-direction: column;
         }
 
-        .book-info {
+        .breadcrumb {
+          color: #666;
+          font-size: 14px;
+          margin-bottom: 20px;
+        }
+
+        .book-header {
+          margin-bottom: 30px;
+          padding: 0 40px;
+        }
+
+        .new-badge {
+          background: #4CAF50;
+          color: white;
+          padding: 4px 12px;
+          border-radius: 4px;
+          font-size: 14px;
+          display: inline-block;
+          margin-bottom: 10px;
+        }
+
+        .book-title {
+          font-size: 32px;
+          color: #333;
+          margin: 0 0 10px 0;
+        }
+
+        .book-subtitle {
+          font-size: 18px;
+          color: #666;
+          margin: 0 0 10px 0;
+        }
+
+        .book-author {
+          font-size: 18px;
+          color: #0066cc;
+          margin: 0;
+        }
+
+        .book-content {
           display: flex;
-          flex-wrap: wrap;
-          gap: 30px;
-          margin-top: 20px;
+          gap: 40px;
+          padding: 0 40px;
+        }
+
+        .book-left-column {
+          width: 300px;
+          flex-shrink: 0;
+        }
+
+        .book-right-column {
+          flex-grow: 1;
         }
 
         .book-cover {
-          flex: 1;
           background: white;
-          border-radius: 8px;
-          padding: 20px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-          min-width: 250px;
+          width: 250px;
+          height: 350px;
         }
 
         .book-cover img {
           width: 100%;
-          height: auto;
-          border-radius: 8px;
+          height: 100%;
+          border-radius: 4px;
+          object-fit: inherit;
+          border-bottom: 1px solid #eee;
+          transition: transform 0.2s;
         }
 
         .book-details {
-          flex: 2;
           background: white;
-          padding: 20px;
           border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-          min-width: 300px;
+          padding: 20px;
+          margin-bottom: 20px;
         }
 
-        .book-title {
-          margin: 0 0 10px;
-          font-size: 28px;
-          color: #222;
+        .book-details h3 {
+          margin: 0 0 15px 0;
+          color: #333;
         }
 
-        .book-author {
-          margin: 0 0 20px;
-          font-size: 18px;
+        .details-grid {
+          display: grid;
+          gap: 10px;
+        }
+
+        .detail-item {
+          display: grid;
+          grid-template-columns: 150px 1fr;
+          gap: 10px;
+        }
+
+        .detail-item span:first-child {
           color: #666;
         }
 
-        .book-description {
-          font-size: 16px;
-          color: #444;
-          margin: 15px 0;
-        }
-
-        .book-price {
-          font-size: 24px;
-          color: #e60023;
-          margin: 0 0 10px;
-        }
-
-        .book-availability {
-          font-size: 16px;
-          color: #4CAF50;
-          margin: 0 0 20px;
-        }
-
-        .add-cart-btn {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          font-size: 16px;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-
-        .add-cart-btn:hover {
-          background-color: #3e8e41;
-        }
-
-        .book-extra {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-          min-width: 250px;
-        }
-
-        .extra-section {
+        .book-synopsis {
           background: white;
-          padding: 15px;
           border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+          padding: 20px;
         }
 
-        .extra-section h3 {
-          margin-top: 0;
-          font-size: 18px;
-          color: #0052cc;
+        .book-synopsis h3 {
+          margin: 0 0 15px 0;
+          color: #333;
         }
 
-        .extra-section p {
-          margin: 10px 0 0;
+        .book-description {
+          color: #444;
+          line-height: 1.6;
+          margin-bottom: 15px;
+        }
+
+        .read-more {
+          background: none;
+          border: none;
+          color: #0066cc;
+          padding: 0;
+          cursor: pointer;
           font-size: 14px;
-          color: #555;
+        }
+
+        .read-more:hover {
+          text-decoration: underline;
         }
 
         @media (max-width: 768px) {
-          .book-info {
+          .book-content {
             flex-direction: column;
-            align-items: center;
+            padding: 0 20px;
+          }
+
+          .book-header {
+            padding: 0 20px;
+          }
+
+          .book-left-column {
+            width: 100%;
+          }
+
+          .book-cover img {
+            max-height: 500px;
+            object-position: top;
           }
         }
       `}</style>
