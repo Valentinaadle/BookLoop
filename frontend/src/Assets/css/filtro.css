@@ -52,3 +52,27 @@
 .filter-options.collapsed {
   display: none;
 }
+.price-range input[type="number"] {
+  border: 1.5px solid #bdbdbd;
+  border-radius: 18px;
+  padding: 7px 14px;
+  width: 70px;
+  margin: 0 5px;
+  font-size: 0.98rem;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.price-range input[type="number"]:focus {
+  border-color: #6c63ff;
+  background: #fff;
+}
+
+.price-range {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}

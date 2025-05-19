@@ -14,8 +14,12 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [collapsed, setCollapsed] = useState({
     genero: true,
-    idioma: true
+    idioma: true,
+    estado: true,
+    precio: true
   });
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [sortBy, setSortBy] = useState('default');
 
   useEffect(() => {
     fetchBooks();
@@ -83,9 +87,57 @@ const Home = () => {
               ))}
             </div>
           </div>
+
+          <div className="filter-group">
+            <div className="filter-header" onClick={() => toggle("estado")}>
+              Estado <span>{collapsed.estado ? "-" : "+"}</span>
+            </div>
+            <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
+              {["Nuevo", "Usado"].map((state) => (
+                <label key={state}>
+                  <input type="checkbox" /> {state}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-header" onClick={() => toggle("precio")}>
+              Rango de Precio <span>{collapsed.precio ? "-" : "+"}</span>
+            </div>
+            <div className={`filter-options ${collapsed.precio ? "" : "collapsed"}`}>
+              <div className="price-range">
+                <input
+                  type="number"
+                  placeholder="Desde"
+                  value={priceRange.min}
+                  onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                />
+                <input
+                  type="number"
+                  placeholder="Hasta"
+                  value={priceRange.max}
+                  onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                />
+              </div>
+            </div>
+          </div>
         </aside>
 
         <section className="main-content">
+          <div className="sort-container">
+            <select 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value)}
+              className="sort-select"
+            >
+              <option value="default">Ordenar por</option>
+              <option value="price-asc">Menor precio</option>
+              <option value="price-desc">Mayor precio</option>
+              <option value="most-sold">Más vendidos</option>
+            </select>
+          </div>
+
           {error && (
             <div className="error-message">
               {error}

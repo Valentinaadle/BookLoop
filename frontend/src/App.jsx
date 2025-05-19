@@ -8,6 +8,7 @@ import BookDetails from './pages/BookDetails';
 import Portada from './pages/Portada';
 import Search from './pages/Search';
 import Books from './pages/Books';
+// import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
