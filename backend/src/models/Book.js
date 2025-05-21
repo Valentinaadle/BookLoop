@@ -7,12 +7,17 @@ const Book = sequelize.define('Book', {
     primaryKey: true,
     autoIncrement: true
   },
+  googleBooksId: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: true
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: false
   },
   authors: {
-    type: DataTypes.JSON,  // Almacenará el array de autores
+    type: DataTypes.JSON,
     allowNull: false,
     defaultValue: []
   },
@@ -20,10 +25,47 @@ const Book = sequelize.define('Book', {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  imageLinks: {
-    type: DataTypes.JSON,  // Almacenará el objeto con las URLs de las imágenes
+  publishedDate: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  isbn: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  pageCount: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  imageUrl: {
+    type: DataTypes.STRING(1000),
+    allowNull: true
+  },
+  categories: {
+    type: DataTypes.JSON,
     allowNull: true,
-    defaultValue: { thumbnail: '' }
+    defaultValue: []
+  },
+  language: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  averageRating: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1
+  },
+  available: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  price: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    defaultValue: 99.99
   }
 }, {
   timestamps: true

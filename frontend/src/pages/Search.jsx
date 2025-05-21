@@ -10,26 +10,14 @@ const Search = () => {
   const handleBookSelect = async (book) => {
     try {
       setError(null);
-      // Transformar el libro al formato esperado por el backend
-      const bookData = {
-        title: book.title,
-        authors: Array.isArray(book.author) ? book.author : [book.author],
-        description: book.description,
-        imageLinks: {
-          thumbnail: book.imageUrl
-        },
-        publishedDate: book.publishedDate,
-        pageCount: book.pageCount,
-        categories: book.categories ? book.categories.split(', ') : [],
-        language: book.language
-      };
-
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bookData),
+        body: JSON.stringify({
+          googleBooksId: book.googleBooksId
+        }),
       });
 
       if (!response.ok) {
@@ -39,7 +27,6 @@ const Search = () => {
       const addedBook = await response.json();
       console.log('Libro agregado:', addedBook);
       
-      // Redirigir a /books después de agregar exitosamente
       navigate('/books');
     } catch (error) {
       console.error('Error:', error);

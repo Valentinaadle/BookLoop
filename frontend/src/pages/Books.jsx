@@ -87,6 +87,12 @@ const Books = () => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
+  const formatPrice = (price) => {
+    if (!price) return 'Precio no disponible';
+    const numPrice = parseFloat(price);
+    return isNaN(numPrice) ? 'Precio no disponible' : `€${numPrice.toFixed(2)}`;
+  };
+
   if (loading) {
     return <div className="loading">Cargando libros...</div>;
   }
@@ -111,7 +117,7 @@ const Books = () => {
         {books.map((book) => (
           <div key={book.id} className="book-card">
             <img
-              src={book.imageLinks?.thumbnail || '/placeholder-book.png'}
+              src={book.imageUrl || '/placeholder-book.png'}
               alt={book.title}
               className="book-cover"
               onError={(e) => {
@@ -161,7 +167,7 @@ const Books = () => {
               <div className="book-info">
                 <h3 title={book.title}>{truncateText(book.title, 100)}</h3>
                 <p>{Array.isArray(book.authors) ? book.authors.join(', ') : book.authors}</p>
-                <p className="book-price">€{book.price || 'Precio no disponible'}</p>
+                <p className="book-price">{formatPrice(book.price)}</p>
                 <div className="book-actions">
                   <Link 
                     to={`/book/${book.id}`} 

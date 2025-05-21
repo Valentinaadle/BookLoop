@@ -88,11 +88,9 @@ const updateBook = async (req, res) => {
 const deleteBook = async (req, res) => {
   try {
     const book = await Book.findByPk(req.params.id);
-    
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
-
     await book.destroy();
     res.json({ message: 'Libro eliminado correctamente' });
   } catch (error) {
@@ -114,7 +112,7 @@ const searchBooks = async (req, res) => {
         const books = response.data.items.map(item => ({
             googleBooksId: item.id,
             title: item.volumeInfo.title,
-            author: item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Autor desconocido',
+            authors: item.volumeInfo.authors || ['Autor desconocido'],
             description: item.volumeInfo.description,
             publishedDate: item.volumeInfo.publishedDate,
             isbn: item.volumeInfo.industryIdentifiers ? 
@@ -155,45 +153,52 @@ const addBookToLibrary = async (req, res) => {
         const response = await axios.get(`${GOOGLE_BOOKS_API_URL}/${googleBooksId}`);
         const bookData = response.data.volumeInfo;
 
+        // Procesar la URL de la imagen para hacerla más corta
+        let imageUrl = null;
+        if (bookData.imageLinks && bookData.imageLinks.thumbnail) {
+            // Remover parámetros innecesarios de la URL
+            imageUrl = bookData.imageLinks.thumbnail.split('&edge=')[0];
+        }
+
         // Crear nuevo libro en la base de datos
         const newBook = await Book.create({
             googleBooksId,
-            title: bookData.title,
-            author: bookData.authors ? bookData.authors.join(', ') : 'Autor desconocido',
-            description: bookData.description,
-            publishedDate: bookData.publishedDate,
+            title: bookData.title || 'Sin título',
+            authors: bookData.authors || ['Autor desconocido'],
+            description: bookData.description || '',
+            publishedDate: bookData.publishedDate || null,
             isbn: bookData.industryIdentifiers ? 
                   bookData.industryIdentifiers[0].identifier : null,
-            pageCount: bookData.pageCount,
-            imageUrl: bookData.imageLinks ? bookData.imageLinks.thumbnail : null,
-            categories: bookData.categories ? bookData.categories.join(', ') : null,
-            language: bookData.language,
-            averageRating: bookData.averageRating,
+            pageCount: bookData.pageCount || null,
+            imageUrl: imageUrl,
+            categories: bookData.categories || [],
+            language: bookData.language || null,
+            averageRating: bookData.averageRating || null,
             quantity: 1,
-            available: true
+            available: true,
+            price: 99.99 // Precio por defecto
         });
 
         res.status(201).json(newBook);
     } catch (error) {
-        console.error('Error al agregar libro:', error);
-        res.status(500).json({ error: 'Error al agregar libro a la biblioteca' });
+        console.error('Error detallado al agregar libro:', error);
+        console.error('Stack trace:', error.stack);
+        res.status(500).json({ 
+            error: 'Error al agregar libro a la biblioteca',
+            details: error.message,
+            stack: error.stack
+        });
     }
 };
 
 const getLibraryBooks = async (req, res) => {
-    try {
-        const books = await Book.findAll({
-            where: {
-                quantity: {
-                    [Op.gt]: 0
-                }
-            }
-        });
-        res.json(books);
-    } catch (error) {
-        console.error('Error al obtener libros:', error);
-        res.status(500).json({ error: 'Error al obtener libros de la biblioteca' });
-    }
+  try {
+    const books = await Book.findAll();
+    res.json(books);
+  } catch (error) {
+    console.error('Error al obtener libros de la biblioteca:', error);
+    res.status(500).json({ error: 'Error al obtener libros de la biblioteca' });
+  }
 };
 
 module.exports = {

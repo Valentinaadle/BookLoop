@@ -152,9 +152,9 @@ const Home = () => {
               {books.length > 0 ? (
                 books.map((book) => (
                   <div key={book.id} className="book-card">
-                    <Link to="/bookdetails" state={{ book }}>
+                    <Link to={`/book/${book.id}`}>
                       <img
-                        src={book.imageLinks?.thumbnail || '/placeholder-book.png'}
+                        src={book.imageUrl || '/placeholder-book.png'}
                         alt={book.title}
                         onError={(e) => {
                           e.target.src = '/placeholder-book.png';
