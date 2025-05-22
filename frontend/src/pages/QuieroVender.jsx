@@ -33,6 +33,7 @@ export default function QuieroVender() {
     autor: '',
     idioma: '',
     estado: '',
+    categoria: '',
     precio: ''
   });
 
@@ -142,8 +143,54 @@ export default function QuieroVender() {
                 <option value="Otro">Otro</option>
             </select>
             </div>
-
             <div className="form-group">
+        <label htmlFor="categoria">Categoría</label>
+        <select
+          id="categoria"
+          name="categoria"
+          value={formData.categoria}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Seleccionar categoría</option>
+          <option value="Novela">Novela</option>
+          <option value="Cuento">Cuento</option>
+          <option value="Poesía">Poesía</option>
+          <option value="Drama">Drama</option>
+          <option value="Ciencia ficción">Ciencia ficción</option>
+          <option value="Fantasía">Fantasía</option>
+          <option value="Misterio">Misterio</option>
+          <option value="Terror">Terror</option>
+          <option value="Romance">Romance</option>
+          <option value="Deportes">Deportes</option>
+          <option value="Realistas">Realistas</option>
+          <option value="Salud">Salud</option>
+          <option value="Tecnología">Tecnología</option>
+        </select>
+        </div>
+
+           
+        </div>
+
+        {/* Estado solo */}
+       <div className="form-row">
+      <div className="form-group">
+        <label htmlFor="estado">Estado</label>
+        <select
+          id="estado"
+          name="estado"
+          value={formData.estado}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Seleccionar estado</option>
+          <option value="Nuevo">Nuevo</option>
+          <option value="Como nuevo">Como nuevo</option>
+          <option value="Buen estado">Buen estado</option>
+          <option value="Usado">Usado</option>
+        </select>
+      </div>
+       <div className="form-group">
             <label htmlFor="precio">Precio</label>
             <input
                 type="number"
@@ -155,26 +202,9 @@ export default function QuieroVender() {
                 required
             />
             </div>
-        </div>
 
-        {/* Estado solo */}
-        <div className="form-group">
-            <label htmlFor="estado">Estado</label>
-            <select
-            id="estado"
-            name="estado"
-            value={formData.estado}
-            onChange={handleChange}
-            required
-            >
-            <option value="">Seleccionar estado</option>
-            <option value="Nuevo">Nuevo</option>
-            <option value="Como nuevo">Como nuevo</option>
-            <option value="Buen estado">Buen estado</option>
-            <option value="Usado">Usado</option>
-            <option value="Dañado">Dañado</option>
-            </select>
-        </div>
+      
+    </div>
 
         <button className="submit-btn" type="submit">
             Publicar libro
