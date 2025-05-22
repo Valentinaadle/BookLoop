@@ -29,7 +29,7 @@ header {
   .logo h1 {
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: #394B60;
     text-decoration: none;
     margin: 0;
   }
@@ -50,10 +50,11 @@ header {
   
   .nav-links li a {
     text-decoration: none;
-    color: #333;
+    color: #394B60;
     font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
+    transition: color 0.3s ease;
   }
   
   
@@ -64,7 +65,7 @@ header {
   }
   
   .nav-links li a:hover {
-    color: #004679;
+    color: #567C8D;
     transition: color 0.3s;
   }
   
@@ -89,7 +90,7 @@ header {
   
   .login {
     text-decoration: none;
-    color: #333;
+    color: #394B60;
     font-size: 14px;
     font-weight: bold;
   }
@@ -132,4 +133,12 @@ header {
   .search-bar input {
     width: 100%;
     padding: 10px 10px 10px 35px;
+  }
+
+  .burger-menu .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #394B60;
+    margin: 4px 0;
+    transition: 0.4s;
   }

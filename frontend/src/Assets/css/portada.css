@@ -67,33 +67,34 @@
 }
 
 .btn-orange {
-  background-color: #ff7a00;
-  color: white;
+  background-color: #394B60;
+  color: #FFFFFF;
 }
 
 .btn-orange:hover {
-  background-color: #e76c00;
+  background-color: #2f3c4d;
 }
 
 .btn-white {
-  background-color: white;
-  color: #333;
+  background-color: #CBd9E6;
+  color: #394B60;
 }
 
 .btn-white:hover {
-  background-color: #f1f1f1;
+  background-color: #b9c7d4;
 }
 
 /* Secciones de productos */
 .ofertas {
   padding: 3rem 2rem;
-  background-color: #dedede;
+  background-color: #F5EFEB;
   text-align: center;
 }
 
 .ofertas h2 {
   font-size: 2rem;
   margin-bottom: 2rem;
+  color: #394B60;
 }
 
 .product-grid {
@@ -125,8 +126,8 @@
 }
 
 .discount {
-  background: red;
-  color: white;
+  background: #394B60;
+  color: #FFFFFF;
   padding: 0.3rem 0.6rem;
   border-radius: 5px;
   font-weight: bold;
@@ -139,7 +140,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: white;
+  background: #FFFFFF;
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -158,7 +159,7 @@
 }
 
 .favorite-btn svg {
-  color: #ff4444;
+  color: #394B60;
   font-size: 1.2rem;
 }
 
@@ -173,12 +174,12 @@
 .price {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333;
+  color: #394B60;
 }
 
 .buy-btn {
-  background: #ff7a00;
-  color: white;
+  background: #394B60;
+  color: #FFFFFF;
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1rem;
@@ -192,7 +193,7 @@
 }
 
 .buy-btn:hover {
-  background: #e76c00;
+  background: #2f3c4d;
 }
 
 .buy-btn svg {
@@ -273,13 +274,13 @@
 
 .categorias-destacadas {
   padding: 2.5rem 2rem 3rem 2rem;
-  background: #f7f7f7;
+  background: #F5EFEB;
   text-align: center;
 }
 .categorias-destacadas h2 {
   font-size: 1.7rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #394B60;
 }
 .categorias-grid {
   display: grid;
@@ -302,17 +303,18 @@
   border: 1.5px solid #ececec;
 }
 .categoria-card:hover {
-  box-shadow: 0 6px 18px rgba(108,99,255,0.13);
+  box-shadow: 0 6px 18px rgba(57,75,96,0.13);
   transform: translateY(-4px) scale(1.04);
-  border-color: #bdbdbd;
+  border-color: #567C8D;
 }
 .categoria-icon {
   font-size: 2.2rem;
   margin-bottom: 0.5rem;
+  color: #394B60;
 }
 .categoria-nombre {
   font-size: 1.08rem;
-  color: #444;
+  color: #394B60;
   font-weight: 500;
 }
 @media (max-width: 700px) {
@@ -407,5 +409,5 @@
 }
 
 .ofertas.separado {
-  background: #f7f7f7;
+  background: #F5EFEB;
 }
