@@ -47,7 +47,8 @@ export default function Header() {
     <header>
       <div className="header-top">
         <div className="logo">
-          <Link to="/"><img src="/icons/libro.png" className="icon" alt="icon" /></Link>
+          <Link to="/"><img src="/icons/icono.png" className="icon" alt="icon" /></Link>
+
           <Link to="/"><h1>BOOKLOOP</h1></Link>
         </div>
         <div className="search-bar">
@@ -104,7 +105,7 @@ export default function Header() {
         <nav>
           <ul className="nav-links">
             <li><Link to="/home">Inicio</Link></li>
-            <li><Link to="#">Quiero vender</Link></li>
+            <li><Link to="/vender-page">Quiero vender</Link></li>
             <li><Link to="/">Quiero comprar</Link></li>
             <li><Link to="/register">Registrarse</Link></li>
           </ul>

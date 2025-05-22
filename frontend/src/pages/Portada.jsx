@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Assets/css/portada.css';
+import { Link } from 'react-router-dom';
+
 import { FaShoppingCart, FaBookOpen, FaChevronLeft, FaChevronRight, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -96,8 +98,12 @@ export default function Portada() {
             <div className="hero-content">
               <h1>Vende o dona tus libros de forma fácil y segura</h1>
               <div className="hero-buttons">
-                <button className="btn-orange"><FaShoppingCart /> Quiero Comprar</button>
-                <button className="btn-white"><FaBookOpen /> Quiero Vender</button>
+                  <Link to="/" className="btn-orange">
+                      <FaShoppingCart /> Quiero Comprar
+                  </Link>
+                  <Link to="/vender-page" className="btn-white">
+                      <FaBookOpen /> Quiero Vender
+                  </Link>
               </div>
             </div>
           </div>
