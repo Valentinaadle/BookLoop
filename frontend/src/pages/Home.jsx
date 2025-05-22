@@ -93,7 +93,7 @@ const Home = () => {
               Estado <span>{collapsed.estado ? "-" : "+"}</span>
             </div>
             <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
-              {["Nuevo", "Usado"].map((state) => (
+              {["Nuevo","Como Nuevo","Buen Estado", "Usado"].map((state) => (
                 <label key={state}>
                   <input type="checkbox" /> {state}
                 </label>
