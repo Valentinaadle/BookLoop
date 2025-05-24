@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
@@ -10,21 +10,62 @@ import Search from './pages/Search';
 import Books from './pages/Books';
 import QuieroVender from './pages/QuieroVender';
 
+// Componente para rutas protegidas
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Portada />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/book/:id" element={<BookDetails />} />
-        <Route path="/vender-page" element={<QuieroVender />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Portada />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/comprar" element={
+            <ProtectedRoute>
+              <Books />
+            </ProtectedRoute>
+          } />
+          <Route path="/search" element={
+            <ProtectedRoute>
+              <Search />
+            </ProtectedRoute>
+          } />
+          <Route path="/books" element={
+            <ProtectedRoute>
+              <Books />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/book/:id" element={
+            <ProtectedRoute>
+              <BookDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="/vender-page" element={
+            <ProtectedRoute>
+              <QuieroVender />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

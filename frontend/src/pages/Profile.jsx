@@ -1,88 +1,250 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/profile.css';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
+import { useAuth } from '../context/AuthContext';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+// Lista predefinida de intereses
+const INTERESES_PREDEFINIDOS = [
+  "Novela", "Poesía", "Ciencia Ficción", "Fantasía", "Misterio", 
+  "Romance", "Historia", "Biografía", "Ciencia", "Filosofía",
+  "Arte", "Música", "Cine", "Teatro", "Cómic"
+];
 
 function Profile() {
-  const [isVerified, setIsVerified] = useState(false);
+  const { user } = useAuth();
+  const [form, setForm] = useState({ 
+    nombre: '', 
+    apellido: '', 
+    email: '', 
+    username: '',
+    intereses: [] 
+  });
+  const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState(null);
+  const publishedBooks = 1; // Valor estático temporal
+  const [nuevoInteres, setNuevoInteres] = useState('');
 
-  const handleVerify = () => {
-    setIsVerified(true);
-    // Aquí iría la lógica real de verificación
+  useEffect(() => {
+    if (user && user.id) {
+      fetch(`${API_URL}/api/users/${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          setForm({
+            nombre: data.nombre || '',
+            apellido: data.apellido || '',
+            email: data.email || '',
+            username: data.username || '',
+            intereses: data.intereses || []
+          });
+          setLoading(false);
+        })
+        .catch(() => {
+          setError('No se pudo cargar el perfil');
+          setLoading(false);
+        });
+
+      // fetch(`${API_URL}/api/books/user/${user.id}`)
+      //   .then(res => res.json())
+      //   .then(data => {
+      //     setPublishedBooks(Array.isArray(data) ? data.length : 0);
+      //   })
+      //   .catch(err => console.error('Error al cargar libros:', err));
+    }
+  }, [user]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
   };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess(null);
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: form.nombre,
+          apellido: form.apellido,
+          email: form.email,
+          username: form.username
+        })
+      });
+      if (!res.ok) throw new Error('Error al actualizar el perfil');
+      setSuccess('Perfil actualizado correctamente');
+      setEditMode(false);
+    } catch (err) {
+      setError('Error al actualizar el perfil');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const agregarInteres = () => {
+    if (nuevoInteres && !form.intereses.includes(nuevoInteres)) {
+      setForm(prev => ({
+        ...prev,
+        intereses: [...prev.intereses, nuevoInteres]
+      }));
+      setNuevoInteres('');
+    }
+  };
+
+  const eliminarInteres = (interes) => {
+    setForm(prev => ({
+      ...prev,
+      intereses: prev.intereses.filter(i => i !== interes)
+    }));
+  };
+
+  if (loading) return <div>Cargando perfil...</div>;
 
   return (
     <>
       <Header />
-      
       <div className="profile-container">
         <div className="profile-card">
           <div className="header-background"></div>
-          
           <div className="profile-top">
-            <div className="avatar-circle">J</div>
+            <div className="avatar-circle">{form.nombre?.[0] || 'U'}</div>
             <div className="info">
               <h2>
-                Lucas Luna 
-                {!isVerified && (
-                  <button className="verify-btn" onClick={handleVerify}>
-                    Get Verified
-                  </button>
-                )}
-                {isVerified && <span className="verified-badge">✓ Verificado</span>}
+                {form.nombre} {form.apellido}
               </h2>
-              <p>Universidad Santo Tomás De Aquino</p>
-              <p>Argentina, Tucumán, Yerba Buena • <a href="#">Contact Info</a></p>
-            </div>
-            <div className="school-logo">
-              <div className="profile-actions">
-                <button>Seguir</button>
-              </div>  
+              <p>{form.username}</p>
+              <p>{form.email}</p>
+              <div className="stats">
+                <span className="stat-item">
+                  <i className="fas fa-book"></i> {publishedBooks} libros publicados
+                </span>
+              </div>
+              <div className="intereses-container">
+                {form.intereses.map((interes, index) => (
+                  <span key={index} className="interes-tag">
+                    {interes}
+                    {editMode && (
+                      <button 
+                        onClick={() => eliminarInteres(interes)}
+                        className="eliminar-interes"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-      
           <div className="profile-actions">
-            <button>Seguir</button>
-            <button>Mensaje</button>
-            <button>Editar perfil</button>
-            <button>Ver publicaciones</button>
+            <button onClick={() => setEditMode(true)} className="edit-button">
+              <i className="fas fa-edit"></i> Editar perfil
+            </button>
           </div>
-      
-          <div className="promo-cards">
-            <div className="card">
-              <p><strong>¿Buscas recomendaciones?</strong></p>
-              <p>Controla los géneros y temas que te interesan para recibir sugerencias personalizadas.</p>
-              <br />
-              <a href="#" className="b">Configurar intereses</a>
-            </div>
-            <div className="card">
-              <p><strong>¿Eres autor o editor?</strong></p>
-              <p>Publica tus libros o gestiona tu catálogo desde tu perfil.</p>
-              <br />
-              <a href="#" className="b">Subir un libro / Gestionar publicaciones</a>
-            </div>
-          </div>
-      
-          <div className="suggestions">
-            <h3>Sugerencias • Solo para ti</h3>
-            <div className="suggestion-row">
-              <div className="suggestion-box">
-                <p><strong>¿Qué géneros te gustan?</strong></p>
-                <p>Los perfiles con géneros preferidos obtienen mejores recomendaciones.</p>
-                <button>Agregar géneros</button>
+          {editMode && (
+            <form className="edit-profile-form" onSubmit={handleSave}>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-user"></i> Nombre
+                  <input 
+                    type="text" 
+                    name="nombre" 
+                    value={form.nombre} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input"
+                  />
+                </label>
               </div>
-              <div className="suggestion-box">
-                <p><strong>Agrega una biografía lectora</strong></p>
-                <p>Compartir tu historia como lector aumenta la interacción.</p>
-                <button>Agregar biografía</button>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-user"></i> Apellido
+                  <input 
+                    type="text" 
+                    name="apellido" 
+                    value={form.apellido} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input"
+                  />
+                </label>
               </div>
-            </div>
-          </div>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-envelope"></i> Email
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={form.email} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input"
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-at"></i> Username
+                  <input 
+                    type="text" 
+                    name="username" 
+                    value={form.username} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input"
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-heart"></i> Intereses
+                  <div className="intereses-input">
+                    <input 
+                      type="text" 
+                      value={nuevoInteres}
+                      onChange={(e) => setNuevoInteres(e.target.value)}
+                      placeholder="Agregar un interés"
+                      className="form-input"
+                      list="intereses-sugeridos"
+                    />
+                    <datalist id="intereses-sugeridos">
+                      {INTERESES_PREDEFINIDOS.map((interes, index) => (
+                        <option key={index} value={interes} />
+                      ))}
+                    </datalist>
+                    <button 
+                      type="button" 
+                      onClick={agregarInteres}
+                      className="agregar-interes"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </label>
+              </div>
+              <div className="edit-buttons">
+                <button type="submit" className="save-button">
+                  <i className="fas fa-save"></i> Guardar
+                </button>
+                <button type="button" onClick={() => setEditMode(false)} className="cancel-button">
+                  <i className="fas fa-times"></i> Cancelar
+                </button>
+              </div>
+            </form>
+          )}
+          {success && <div className="success-message">{success}</div>}
+          {error && <div className="error-message">{error}</div>}
         </div>
       </div>
-      
       <Footer />
     </>
   );

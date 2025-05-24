@@ -10,6 +10,8 @@ function BookDetails() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeImage, setActiveImage] = useState(0);
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -69,6 +71,11 @@ function BookDetails() {
     );
   }
 
+  // Obtener las imágenes del libro (de la relación Images)
+  const bookImages = Array.isArray(book.Images) && book.Images.length > 0
+    ? book.Images.map(img => img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`).filter(Boolean)
+    : [];
+
   return (
     <>
       <Header />
@@ -81,21 +88,80 @@ function BookDetails() {
           <div className="book-header">
             {book.isNew && <span className="new-badge">Novedad</span>}
             <h1 className="book-title">{book.title}</h1>
-            <p className="book-subtitle">{book.subtitle}</p>
-            <p className="book-author">{book.author || book.authors?.join(', ') || 'Autor desconocido'}</p>
+            <p className="book-author">
+              <b>Autor:</b> {(() => {
+                if (Array.isArray(book.authors)) {
+                  return book.authors.join(', ');
+                } else if (typeof book.authors === 'string') {
+                  try {
+                    const parsed = JSON.parse(book.authors);
+                    if (Array.isArray(parsed)) {
+                      return parsed.join(', ');
+                    }
+                    return parsed;
+                  } catch {
+                    return book.authors;
+                  }
+                } else if (book.author) {
+                  return book.author;
+                } else {
+                  return 'No especificado';
+                }
+              })()}
+            </p>
+            <p className="book-seller">
+              <b>Vendido por:</b> {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
+            </p>
           </div>
 
           <div className="book-content">
             <div className="book-left-column">
               <div className="book-cover">
-                <img 
-                  src={book.imageUrl || book.imageLinks?.thumbnail || '/placeholder-book.png'} 
-                  alt={`Portada ${book.title}`}
-                  onError={(e) => {
-                    e.target.src = '/placeholder-book.png';
-                    e.target.onerror = null;
-                  }}
-                />
+                {bookImages.length > 0 ? (
+                  <div className="carousel">
+                    <button
+                      className="carousel-arrow left"
+                      onClick={() => setActiveImage((prev) => (prev === 0 ? bookImages.length - 1 : prev - 1))}
+                      aria-label="Anterior"
+                    >&#8592;</button>
+                    <img
+                      src={bookImages[activeImage]}
+                      alt={`Imagen ${activeImage + 1} de ${book.title}`}
+                      className="carousel-image"
+                      onError={(e) => {
+                        e.target.src = '/placeholder-book.png';
+                        e.target.onerror = null;
+                      }}
+                    />
+                    <button
+                      className="carousel-arrow right"
+                      onClick={() => setActiveImage((prev) => (prev === bookImages.length - 1 ? 0 : prev + 1))}
+                      aria-label="Siguiente"
+                    >&#8594;</button>
+                    <div className="carousel-indicators">
+                      {bookImages.map((img, idx) => (
+                        <span
+                          key={idx}
+                          className={`indicator-dot${activeImage === idx ? ' active' : ''}`}
+                          onClick={() => setActiveImage(idx)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={book.imageUrl && !book.imageUrl.startsWith('http') ? `${API_URL}${book.imageUrl}` : (book.imageUrl || book.imagen || book.imageLinks?.thumbnail || '/placeholder-book.png')}
+                    alt={`Portada ${book.title}`}
+                    onError={(e) => {
+                      e.target.src = '/placeholder-book.png';
+                      e.target.onerror = null;
+                    }}
+                  />
+                )}
+              </div>
+              <div className="book-actions">
+                <button className="buy-button-detail">Comprar</button>
+                <button className="contact-button-detail">Contactar vendedor</button>
               </div>
             </div>
 
@@ -103,25 +169,19 @@ function BookDetails() {
               <div className="book-details">
                 <h3>Detalles del libro:</h3>
                 <div className="details-grid">
-                  <div className="detail-item">
-                    <span>Editorial:</span>
-                    <span>{book.publisher || 'No especificado'}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span>Temática:</span>
-                    <span>{book.category || 'No especificado'}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span>Número de páginas:</span>
-                    <span>{book.pages || 'No especificado'}</span>
-                  </div>
+                  <div className="detail-item"><span>Editorial:</span><span>{book.publisher || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Temática:</span><span>{book.Category?.category_name || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Número de páginas:</span><span>{book.pageCount || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Año de publicación:</span><span>{book.publication_date || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Idioma:</span><span>{book.language || book.idioma || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Estado:</span><span>{book.estado || book.condition || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Precio:</span><span>{book.price ? `$${book.price}` : 'No especificado'}</span></div>
                 </div>
               </div>
 
               <div className="book-synopsis">
                 <h3>Sinopsis de {book.title}:</h3>
                 <p className="book-description">{book.description || 'Sin descripción disponible'}</p>
-                <button className="read-more">Leer más</button>
               </div>
             </div>
           </div>
@@ -164,16 +224,10 @@ function BookDetails() {
           margin: 0 0 10px 0;
         }
 
-        .book-subtitle {
+        .book-author, .book-seller {
           font-size: 18px;
-          color: #666;
-          margin: 0 0 10px 0;
-        }
-
-        .book-author {
-          font-size: 18px;
-          color: #0066cc;
-          margin: 0;
+          color: #394B60;
+          margin: 0 0 5px 0;
         }
 
         .book-content {
@@ -185,25 +239,69 @@ function BookDetails() {
         .book-left-column {
           width: 300px;
           flex-shrink: 0;
-        }
-
-        .book-right-column {
-          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
         .book-cover {
           background: white;
           width: 250px;
           height: 350px;
+          margin-bottom: 20px;
         }
 
         .book-cover img {
           width: 100%;
           height: 100%;
           border-radius: 4px;
-          object-fit: inherit;
+          object-fit: cover;
           border-bottom: 1px solid #eee;
           transition: transform 0.2s;
+        }
+
+        .book-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+        }
+
+        .buy-button-detail, .contact-button-detail {
+          width: 100%;
+          padding: 12px;
+          border-radius: 6px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          border: none;
+          transition: background 0.2s, color 0.2s;
+        }
+
+        .buy-button-detail {
+          background: #2a8ef2;
+          color: white;
+          margin-bottom: 4px;
+        }
+
+        .buy-button-detail:hover {
+          background: #2477ca;
+        }
+
+        .contact-button-detail {
+          background: #f5f6fa;
+          color: #394B60;
+          border: 1px solid #ccc;
+        }
+
+        .contact-button-detail:hover {
+          background: #e6eaf1;
+          color: #2a8ef2;
+          border: 1px solid #2a8ef2;
+        }
+
+        .book-right-column {
+          flex-grow: 1;
         }
 
         .book-details {
@@ -250,19 +348,6 @@ function BookDetails() {
           margin-bottom: 15px;
         }
 
-        .read-more {
-          background: none;
-          border: none;
-          color: #0066cc;
-          padding: 0;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        .read-more:hover {
-          text-decoration: underline;
-        }
-
         @media (max-width: 768px) {
           .book-content {
             flex-direction: column;
@@ -281,6 +366,64 @@ function BookDetails() {
             max-height: 500px;
             object-position: top;
           }
+        }
+
+        .carousel {
+          position: relative;
+          width: 250px;
+          height: 350px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .carousel-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 4px;
+          border-bottom: 1px solid #eee;
+        }
+        .carousel-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(255,255,255,0.7);
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          z-index: 2;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .carousel-arrow.left {
+          left: -18px;
+        }
+        .carousel-arrow.right {
+          right: -18px;
+        }
+        .carousel-indicators {
+          position: absolute;
+          bottom: 10px;
+          left: 0;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          gap: 6px;
+        }
+        .indicator-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #ccc;
+          display: inline-block;
+          cursor: pointer;
+        }
+        .indicator-dot.active {
+          background: #2a8ef2;
         }
       `}</style>
     </>

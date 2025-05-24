@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import BookSearch from '../components/BookSearch';
 import '../Assets/css/Search.css';
 
 const Search = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState(null);
+  const [initialQuery, setInitialQuery] = useState('');
+
+  // Leer el query de la URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q') || '';
+    setInitialQuery(q);
+  }, [location.search]);
 
   const handleBookSelect = async (book) => {
     try {
@@ -46,7 +55,7 @@ const Search = () => {
           <button onClick={() => setError(null)} className="close-error">×</button>
         </div>
       )}
-      <BookSearch onBookSelect={handleBookSelect} />
+      <BookSearch onBookSelect={handleBookSelect} initialQuery={initialQuery} />
     </div>
   );
 };

@@ -10,12 +10,14 @@ import '../Assets/css/footer.css';
 function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     email: '',
     username: '',
     password: '',
+    confirmPassword: '',
     terminos: false
   });
 
@@ -27,26 +29,48 @@ function Register() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validateForm = () => {
     if (!formData.terminos) {
       setError('Debes aceptar los términos y condiciones');
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return false;
+    }
+    if (formData.password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!validateForm()) {
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/registro', {
         nombre: formData.nombre,
         apellido: formData.apellido,
         email: formData.email,
-        username: formData.email, // Usando el email como username por defecto
+        username: formData.username,
         password: formData.password
       });
 
       console.log('Registro exitoso:', response.data);
       navigate('/login');
     } catch (error) {
-      setError(error.response?.data?.error || 'Error al registrar usuario');
+      console.error('Error en registro:', error);
+      setError(error.response?.data?.error || 'Error al registrar usuario. Por favor, intenta de nuevo.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,6 +89,7 @@ function Register() {
               required
               value={formData.nombre}
               onChange={handleChange}
+              disabled={loading}
             />
             <input 
               type="text" 
@@ -73,6 +98,7 @@ function Register() {
               required
               value={formData.apellido}
               onChange={handleChange}
+              disabled={loading}
             />
             <input 
               type="email" 
@@ -81,16 +107,34 @@ function Register() {
               required
               value={formData.email}
               onChange={handleChange}
+              disabled={loading}
+            />
+            <input 
+              type="text" 
+              name="username" 
+              placeholder="Nombre de usuario" 
+              required
+              value={formData.username}
+              onChange={handleChange}
+              disabled={loading}
             />
             <input 
               type="password" 
               name="password" 
-              placeholder="Contraseña (8 dígitos)" 
-              pattern=".{8,}"
-              title="La contraseña debe tener al menos 8 caracteres"
+              placeholder="Contraseña (mínimo 8 caracteres)" 
               required
               value={formData.password}
               onChange={handleChange}
+              disabled={loading}
+            />
+            <input 
+              type="password" 
+              name="confirmPassword" 
+              placeholder="Confirmar contraseña" 
+              required
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              disabled={loading}
             />
 
             <div className="terms">
@@ -100,11 +144,17 @@ function Register() {
                 required
                 checked={formData.terminos}
                 onChange={handleChange}
+                disabled={loading}
               /> 
               <span>Acepto los términos y condiciones</span>
             </div>
 
-            <button type="submit">Registrarse</button>
+            <button 
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'Registrando...' : 'Registrarse'}
+            </button>
 
             <div className="small-text">
               <Link to="/login">¿Ya tienes cuenta? Inicia sesión</Link>

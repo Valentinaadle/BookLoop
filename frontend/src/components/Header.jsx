@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../Assets/css/SearchModal.css';
+import '../Assets/css/header.css';
 
 export default function Header() {
   const [query, setQuery] = useState('');
@@ -8,6 +10,7 @@ export default function Header() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const searchBooks = async (searchQuery) => {
     if (!searchQuery.trim()) {
@@ -30,84 +33,75 @@ export default function Header() {
   };
 
   const handleInputChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-    setShowModal(value.length > 0);
-    searchBooks(value);
+    setQuery(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
   };
 
   const handleBookClick = (book) => {
-    // Aquí puedes manejar la navegación al detalle del libro
     setShowModal(false);
     setQuery('');
     navigate('/bookdetails', { state: { book } });
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <header>
-      <div className="header-top">
+      <div className="header-top improved-header-top">
         <div className="logo">
-          <Link to="/"><img src="/icons/icono.png" className="icon" alt="icon" /></Link>
-
-          <Link to="/"><h1>BOOKLOOP</h1></Link>
+          <Link to="/">
+            <img src="/icons/icono.png" className="icon logo-icon" alt="icon" />
+            <h1>BOOKLOOP</h1>
+          </Link>
         </div>
-        <div className="search-bar">
-          <i className="fa fa-search">
-            <img src="/icons/lupa.png" className="icon" alt="Buscar" />
-          </i>
-          <input 
-            type="text" 
-            placeholder="Buscar libros..." 
+        <form className="search-bar improved-search-bar" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="Buscar libros..."
             value={query}
             onChange={handleInputChange}
           />
-          {showModal && (
-            <div className="search-modal">
-              {loading ? (
-                <div className="loading">Buscando...</div>
-              ) : books.length > 0 ? (
-                <div className="search-results">
-                  {books.map((book) => (
-                    <div 
-                      key={book.id} 
-                      className="search-result-item"
-                      onClick={() => handleBookClick(book)}
-                    >
-                      <img 
-                        src={book.volumeInfo?.imageLinks?.thumbnail || '/placeholder-book.png'} 
-                        alt={book.volumeInfo?.title}
-                        className="result-book-cover"
-                      />
-                      <div className="result-book-info">
-                        <h4>{book.volumeInfo?.title}</h4>
-                        <p>{book.volumeInfo?.authors?.join(', ') || 'Autor desconocido'}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="no-results">
-                  {query ? 'No se encontraron libros' : 'Ingresa un término de búsqueda'}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="header-actions">
-          <div className="user-actions">
-            <Link to="favoritos"><img src="/icons/favorito.png" className="icon" alt="favorito"/></Link>
-            <Link to="/profile"><img src="/icons/usuario.png" className="icon" alt="usuario" /></Link>
-            <Link to="#"><img src="/icons/carrito.png" className="icon" alt="Cart" /></Link>
+          <button type="submit" className="search-btn">
+            <img src="/icons/lupa.png" alt="Buscar" className="search-icon" />
+          </button>
+        </form>
+        <div className="header-actions improved-header-actions">
+          <div className="user-actions improved-user-actions">
+            {isAuthenticated ? (
+              <>
+                <Link to="/favoritos" title="Favoritos"><img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/></Link>
+                <Link to="/profile" title="Perfil"><img src="/icons/usuario.png" className="icon action-icon" alt="usuario" /></Link>
+                <Link to="/carrito" title="Carrito"><img src="/icons/carrito.png" className="icon action-icon" alt="Cart" /></Link>
+                <button onClick={handleLogout} className="logout-button improved-logout">Cerrar sesión</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="login-button">Iniciar sesión</Link>
+                <Link to="/register" className="register-button">Registrarse</Link>
+              </>
+            )}
           </div>
         </div>
       </div>
-      <div className="header-bottom">
+      <div className="header-bottom improved-header-bottom">
         <nav>
           <ul className="nav-links">
-            <li><Link to="/home">Inicio</Link></li>
-            <li><Link to="/vender-page">Quiero vender</Link></li>
-            <li><Link to="/">Quiero comprar</Link></li>
-            <li><Link to="/register">Registrarse</Link></li>
+            {/* <li><Link to="/home">Inicio</Link></li> */}
+            {isAuthenticated && (
+              <>
+                <li><Link to="/vender-page">Quiero vender</Link></li>
+                <li><Link to="/comprar">Quiero comprar</Link></li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

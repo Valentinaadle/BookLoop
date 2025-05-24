@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../Assets/css/Books.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import "../Assets/css/home.css";
+import "../Assets/css/header.css";
+import "../Assets/css/footer.css";
+import "../Assets/css/filtro.css";
+import "../Assets/css/bookcard.css";
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBook, setEditingBook] = useState(null);
+  const [collapsed, setCollapsed] = useState({
+    genero: true,
+    idioma: true,
+    estado: true,
+    precio: true
+  });
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [sortBy, setSortBy] = useState('default');
 
   useEffect(() => {
     fetchBooks();
@@ -15,7 +31,7 @@ const Books = () => {
   const fetchBooks = async () => {
     try {
       setError(null);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`);
+      const response = await fetch(`${API_URL}/api/books`);
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
@@ -30,11 +46,26 @@ const Books = () => {
     }
   };
 
+  const toggle = (key) => {
+    setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
+
+  const formatPrice = (price) => {
+    if (!price) return 'Precio no disponible';
+    const numPrice = parseFloat(price);
+    return isNaN(numPrice) ? 'Precio no disponible' : `€${numPrice.toFixed(2)}`;
+  };
+
   const handleUpdateBook = async (e) => {
     e.preventDefault();
     try {
       setError(null);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${editingBook.id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${editingBook.book_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +84,7 @@ const Books = () => {
 
       const updatedBook = await response.json();
       setBooks(prevBooks => prevBooks.map(book => 
-        book.id === updatedBook.id ? updatedBook : book
+        book.book_id === updatedBook.book_id ? updatedBook : book
       ));
       setEditingBook(null);
     } catch (error) {
@@ -74,7 +105,7 @@ const Books = () => {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
-        setBooks(prevBooks => prevBooks.filter(book => book.id !== id));
+        setBooks(prevBooks => prevBooks.filter(book => book.book_id !== id));
       } catch (error) {
         console.error('Error deleting book:', error);
         setError('Error al eliminar el libro. Por favor, intenta de nuevo.');
@@ -82,118 +113,123 @@ const Books = () => {
     }
   };
 
-  const truncateText = (text, maxLength) => {
-    if (!text) return '';
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  // Función para limpiar caracteres extraños al final del base64
+  const cleanBase64 = (str) => {
+    return typeof str === 'string' ? str.replace(/:1$/, '').trim() : str;
   };
-
-  const formatPrice = (price) => {
-    if (!price) return 'Precio no disponible';
-    const numPrice = parseFloat(price);
-    return isNaN(numPrice) ? 'Precio no disponible' : `€${numPrice.toFixed(2)}`;
-  };
-
-  if (loading) {
-    return <div className="loading">Cargando libros...</div>;
-  }
 
   return (
-    <div className="books-page">
-      {error && (
-        <div className="error-message">
-          {error}
-          <button onClick={() => setError(null)} className="close-error">×</button>
-        </div>
-      )}
-
-      <div className="books-header">
-        <h1>Mi Biblioteca</h1>
-        <Link to="/search" className="add-book-button">
-          Agregar Libros
-        </Link>
-      </div>
-
-      <div className="books-grid">
-        {books.map((book) => (
-          <div key={book.id} className="book-card">
-            <img
-              src={book.imageUrl || '/placeholder-book.png'}
-              alt={book.title}
-              className="book-cover"
-              onError={(e) => {
-                e.target.src = '/placeholder-book.png';
-              }}
-            />
-            {editingBook?.id === book.id ? (
-              <form onSubmit={handleUpdateBook} className="edit-form">
-                <input
-                  type="text"
-                  value={editingBook.title}
-                  onChange={(e) => setEditingBook({ 
-                    ...editingBook, 
-                    title: e.target.value 
-                  })}
-                  required
-                />
-                <input
-                  type="text"
-                  value={Array.isArray(editingBook.authors) 
-                    ? editingBook.authors.join(', ') 
-                    : editingBook.authors}
-                  onChange={(e) => setEditingBook({ 
-                    ...editingBook, 
-                    authors: e.target.value 
-                  })}
-                  required
-                />
-                <textarea
-                  value={editingBook.description}
-                  onChange={(e) => setEditingBook({ 
-                    ...editingBook, 
-                    description: e.target.value 
-                  })}
-                />
-                <div className="edit-buttons">
-                  <button type="submit">Guardar</button>
-                  <button 
-                    type="button" 
-                    onClick={() => setEditingBook(null)}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="book-info">
-                <h3 title={book.title}>{truncateText(book.title, 100)}</h3>
-                <p>{Array.isArray(book.authors) ? book.authors.join(', ') : book.authors}</p>
-                <p className="book-price">{formatPrice(book.price)}</p>
-                <div className="book-actions">
-                  <Link 
-                    to={`/book/${book.id}`} 
-                    className="view-details-button"
-                  >
-                    Ver Detalles
-                  </Link>
-                  <button 
-                    onClick={() => setEditingBook(book)}
-                    className="edit-button"
-                  >
-                    Editar
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(book.id)}
-                    className="delete-button"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </div>
-            )}
+    <>
+      <Header />
+      <main className="home-container">
+        <aside className="sidebar">
+          <h3 className="sidebar-title">Filtrar</h3>
+          <div className="filter-group">
+            <div className="filter-header" onClick={() => toggle("genero")}>Género <span>{collapsed.genero ? "-" : "+"}</span></div>
+            <div className={`filter-options ${collapsed.genero ? "" : "collapsed"}`}>
+              {["Novela", "Cuento", "Poesía", "Drama", "Ciencia ficción", "Fantasía", "Misterio", "Terror", "Romance", "Deportes", "Realistas", "Salud", "Tecnología"].map((genre) => (
+                <label key={genre}>
+                  <input type="checkbox" /> {genre}
+                </label>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
+          <div className="filter-group">
+            <div className="filter-header" onClick={() => toggle("idioma")}>Idioma <span>{collapsed.idioma ? "-" : "+"}</span></div>
+            <div className={`filter-options ${collapsed.idioma ? "" : "collapsed"}`}>
+              {["Español", "Inglés", "Francés"].map((lang) => (
+                <label key={lang}>
+                  <input type="checkbox" /> {lang}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="filter-group">
+            <div className="filter-header" onClick={() => toggle("estado")}>Estado <span>{collapsed.estado ? "-" : "+"}</span></div>
+            <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
+              {["Nuevo","Como Nuevo","Buen Estado", "Usado"].map((state) => (
+                <label key={state}>
+                  <input type="checkbox" /> {state}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="filter-group">
+            <div className="filter-header" onClick={() => toggle("precio")}>Rango de Precio <span>{collapsed.precio ? "-" : "+"}</span></div>
+            <div className={`filter-options ${collapsed.precio ? "" : "collapsed"}`}>
+              <div className="price-range">
+                <input type="number" placeholder="Desde" value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} />
+                <input type="number" placeholder="Hasta" value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} />
+              </div>
+            </div>
+          </div>
+        </aside>
+        <section className="main-content">
+          <div className="sort-container">
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sort-select">
+              <option value="default">Ordenar por</option>
+              <option value="price-asc">Menor precio</option>
+              <option value="price-desc">Mayor precio</option>
+              <option value="most-sold">Más vendidos</option>
+            </select>
+          </div>
+          {error && (
+            <div className="error-message">
+              {error}
+              <button onClick={() => setError(null)} className="close-error">×</button>
+            </div>
+          )}
+          {loading ? (
+            <div className="loading">Cargando libros...</div>
+          ) : (
+            <div className="books-grid">
+              {books.length > 0 ? (
+                books.map((book) => {
+                  let imageUrl = (book.Images && book.Images.length > 0)
+                    ? (book.Images[0].image_url.startsWith('http')
+                        ? book.Images[0].image_url
+                        : `${API_URL}${book.Images[0].image_url}`)
+                    : (book.imageUrl || '/placeholder-book.png');
+                  // Simulación de descuento (puedes cambiar esto por un campo real)
+                  const descuento = book.descuento || '-30%';
+                  return (
+                    <div key={book.book_id} className="book-card" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '0', margin: '10px', width: '250px', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      {/* Badge de descuento */}
+                      {descuento && (
+                        <span style={{ position: 'absolute', top: 12, left: 12, background: '#394B60', color: '#fff', borderRadius: '6px', padding: '4px 12px', fontWeight: 'bold', fontSize: '1rem', zIndex: 2 }}>{descuento}</span>
+                      )}
+                      {/* Ícono de favorito */}
+                      <button style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', cursor: 'pointer', zIndex: 2 }} aria-label="Favorito">
+                        <span style={{ fontSize: '1.5rem', color: '#394B60' }}>&#9825;</span>
+                      </button>
+                      <Link to={`/book/${book.book_id}`} style={{ textDecoration: 'none', color: 'inherit', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <img src={imageUrl} alt={book.title} style={{ width: '90%', height: '270px', objectFit: 'cover', borderRadius: '8px', marginTop: '32px' }} onError={e => { e.target.src = '/placeholder-book.png'; }} />
+                        <div className="book-card-content" style={{ padding: '16px', textAlign: 'center', width: '100%' }}>
+                          <h3 style={{ fontWeight: 'bold', fontSize: '1.1rem', margin: '10px 0 4px 0', color: '#333' }}>{book.title}</h3>
+                          <p style={{ color: '#666', fontSize: '0.95rem', margin: 0 }}>de {Array.isArray(book.authors) ? book.authors.join(', ') : book.authors}</p>
+                          <p style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#394B60', margin: '12px 0 8px 0' }}>{formatPrice(book.price)}</p>
+                        </div>
+                      </Link>
+                      <button className="buy-button" style={{ background: '#394B60', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 0', width: '90%', fontWeight: 'bold', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '16px' }}>
+                        <span style={{ fontSize: '1.2rem' }}>&#128722;</span> Comprar
+                      </button>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="no-books">
+                  <p>No hay libros disponibles.</p>
+                  <Link to="/search" className="add-book-link">
+                    Agregar libros
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      </main>
+      <Footer />
+    </>
   );
 };
 

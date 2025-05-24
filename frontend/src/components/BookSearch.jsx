@@ -1,31 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Assets/css/BookSearch.css';
+import BookCard from './BookCard';
 
-const BookSearch = ({ onBookSelect }) => {
-  const [query, setQuery] = useState('');
+const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
+  const [query, setQuery] = useState(initialQuery);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const searchBooks = async (e) => {
-    e.preventDefault();
-    if (!query.trim()) return;
+  useEffect(() => {
+    if (initialQuery && initialQuery !== query) {
+      setQuery(initialQuery);
+      buscar(initialQuery);
+    } else if (initialQuery && books.length === 0) {
+      buscar(initialQuery);
+    }
+    // eslint-disable-next-line
+  }, [initialQuery]);
 
+  const buscar = async (q) => {
+    if (!q.trim()) return;
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/search-db?query=${encodeURIComponent(q)}`);
       if (!response.ok) {
         throw new Error('Error en la búsqueda');
       }
       const data = await response.json();
-      console.log('Datos recibidos:', data);
       setBooks(data);
     } catch (error) {
-      console.error('Error searching books:', error);
       setError('Error al buscar libros. Por favor, intenta de nuevo.');
     }
     setLoading(false);
+  };
+
+  const searchBooks = async (e) => {
+    e.preventDefault();
+    buscar(query);
   };
 
   const formatPrice = (price) => {
@@ -55,26 +67,7 @@ const BookSearch = ({ onBookSelect }) => {
       <div className="books-grid">
         {books && books.length > 0 ? (
           books.map((book) => (
-            <div key={book.googleBooksId} className="book-card" onClick={() => onBookSelect(book)}>
-              <img
-                src={book.imageUrl || '/placeholder-book.png'}
-                alt={book.title}
-                className="book-cover"
-                onError={(e) => {
-                  e.target.src = '/placeholder-book.png';
-                }}
-              />
-              <div className="book-info">
-                <h3 className="book-title">{book.title}</h3>
-                <p className="book-author">{Array.isArray(book.authors) ? book.authors.join(', ') : book.author}</p>
-                {book.description && (
-                  <p className="book-description">
-                    {book.description.substring(0, 150)}...
-                  </p>
-                )}
-                <p className="book-price">{formatPrice(book.price)}</p>
-              </div>
-            </div>
+            <BookCard key={book.book_id || book.id} book={book} onClick={() => onBookSelect(book)} />
           ))
         ) : !loading && (
           <div className="no-results">

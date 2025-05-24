@@ -2,10 +2,34 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
 const Book = sequelize.define('Book', {
-  id: {
+  book_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
+  },
+  seller_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  category_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  images_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  isbn_code: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  condition: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  publication_date: {
+    type: DataTypes.STRING,
+    allowNull: true
   },
   googleBooksId: {
     type: DataTypes.STRING,
@@ -66,6 +90,10 @@ const Book = sequelize.define('Book', {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
     defaultValue: 99.99
+  },
+  publisher: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
   timestamps: true

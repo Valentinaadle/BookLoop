@@ -2,11 +2,13 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { sequelize, connectDB } = require('./config/db');
+const Category = require('./models/Category');
 
 // Importar rutas
 const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
-const loanRoutes = require('./routes/loanRoutes');
+const authRoutes = require('./routes/auth.routes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const app = express();
 
@@ -18,9 +20,10 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 // Rutas
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-app.use('/api/loans', loanRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Ruta básica
 app.get('/', (req, res) => {
@@ -37,7 +40,9 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   try {
     await connectDB();
+    await Category.seedCategories();
     await sequelize.sync({ alter: true });
+    app.use('/uploads', express.static(__dirname + '/../uploads'));
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en el puerto ${PORT}`);
     });
@@ -47,4 +52,4 @@ const startServer = async () => {
   }
 };
 
-startServer(); 
+startServer();

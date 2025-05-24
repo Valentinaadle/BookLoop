@@ -7,9 +7,6 @@ const {
   updateUser,
   deleteUser
 } = require('../controllers/userController');
-const { User, Profile } = require('../models');
-const bcrypt = require('bcryptjs');
-const { Op } = require('sequelize');
 
 router.get('/', getUsers);
 router.get('/:id', getUserById);
@@ -17,116 +14,7 @@ router.post('/', createUser);
 router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
-// Ruta para registro
-router.post('/registro', async (req, res) => {
-    try {
-        console.log('Datos recibidos:', req.body);
-        const { nombre, apellido, email, username, password } = req.body;
-
-        // Verificar si el usuario ya existe
-        const existingUser = await User.findOne({
-            where: {
-                [Op.or]: [{ email }, { username }]
-            }
-        });
-
-        if (existingUser) {
-            console.log('Usuario ya existe');
-            return res.status(400).json({ 
-                error: 'El email o nombre de usuario ya está registrado' 
-            });
-        }
-
-        // Crear usuario
-        console.log('Intentando crear usuario...');
-        const user = await User.create({
-            nombre,
-            apellido,
-            email,
-            username,
-            password // El hash se hace automáticamente en el hook beforeCreate
-        });
-        console.log('Usuario creado:', user.toJSON());
-
-        // Crear perfil básico
-        console.log('Creando perfil...');
-        await Profile.create({
-            UserId: user.id
-        });
-        console.log('Perfil creado');
-
-        // No enviar la contraseña en la respuesta
-        const userWithoutPassword = { ...user.toJSON() };
-        delete userWithoutPassword.password;
-
-        res.status(201).json({ 
-            mensaje: 'Usuario registrado exitosamente',
-            usuario: userWithoutPassword
-        });
-
-    } catch (error) {
-        console.error('Error detallado en el registro:', error);
-        res.status(500).json({ error: 'Error al registrar usuario' });
-    }
-});
-
-// Ruta para login
-router.post('/login', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-
-        // Buscar usuario
-        const user = await User.findOne({
-            where: {
-                [Op.or]: [
-                    { username },
-                    { email: username } // Permitir login con email también
-                ]
-            }
-        });
-
-        if (!user) {
-            return res.status(401).json({ error: 'Usuario no encontrado' });
-        }
-
-        // Verificar contraseña
-        const isValidPassword = await user.validPassword(password);
-
-        if (!isValidPassword) {
-            return res.status(401).json({ error: 'Contraseña incorrecta' });
-        }
-
-        // No enviar la contraseña en la respuesta
-        const userWithoutPassword = { ...user.toJSON() };
-        delete userWithoutPassword.password;
-
-        res.json({ 
-            mensaje: 'Login exitoso',
-            usuario: userWithoutPassword
-        });
-
-    } catch (error) {
-        console.error('Error en el login:', error);
-        res.status(500).json({ error: 'Error al iniciar sesión' });
-    }
-});
-
 // Ruta para obtener todos los usuarios
-router.get('/usuarios', async (req, res) => {
-    try {
-        const usuarios = await User.findAll({
-            include: [{
-                model: Profile,
-                attributes: ['foto_perfil', 'biografia', 'fecha_nacimiento', 'telefono', 'direccion']
-            }],
-            attributes: { exclude: ['password'] } // No enviar las contraseñas
-        });
-
-        res.json(usuarios);
-    } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-        res.status(500).json({ error: 'Error al obtener usuarios' });
-    }
-});
+// (puedes dejarla si la usas en el admin o debug)
 
 module.exports = router; 

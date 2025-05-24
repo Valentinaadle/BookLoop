@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/quierovender.css';
+import { useAuth } from '../context/AuthContext';
 
 const pasos = [
   {
@@ -29,13 +30,25 @@ const pasos = [
 export default function QuieroVender() {
   const [formData, setFormData] = useState({
     isbn: '',
-    nombre: '',
+    titulo: '',
     autor: '',
     idioma: '',
     estado: '',
     categoria: '',
-    precio: ''
+    precio: '',
+    descripcion: '',
+    imagen: '',
+    paginas: '',
+    publicacion: '',
+    editorial: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const { user } = useAuth();
+  const [categories, setCategories] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,22 +58,113 @@ export default function QuieroVender() {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files);
+    // Previsualización
+    const previews = files.map(file => URL.createObjectURL(file));
+    setImagePreviews(previews);
+  };
+
+  // Buscar datos del libro por ISBN en Google Books
   const handleISBNBlur = async () => {
-    // Simular llamada a API con ISBN
     if (formData.isbn.length > 5) {
-      // Aquí deberías hacer la llamada real
-      setFormData(prev => ({
-        ...prev,
-        nombre: 'Libro de Ejemplo',
-        autor: 'Autor de Prueba'
-      }));
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/search-isbn?isbn=${formData.isbn}`);
+        if (!response.ok) {
+          const data = await response.json();
+          setError(data.error || 'No se encontró información para ese ISBN.');
+          setLoading(false);
+          return;
+        }
+        const info = await response.json();
+        console.log('Respuesta de Google Books desde endpoint:', info);
+        setFormData(prev => ({
+          ...prev,
+          titulo: info.titulo || '',
+          autor: info.autor || '',
+          idioma: info.idioma || '',
+          descripcion: info.descripcion || '',
+          imagen: info.imagen || '',
+          paginas: info.paginas || '',
+          publicacion: info.publicacion || ''
+        }));
+      } catch (err) {
+        setError('Error al buscar el libro por ISBN.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Cargar categorías desde la API
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/categories`);
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        setCategories([]);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Enviar datos al backend para crear el libro
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Enviando datos del libro:', formData);
-    // Aquí podrías enviar los datos al backend
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      // Subir imágenes al backend y obtener las URLs
+      const imageUrls = [];
+      for (const file of images) {
+        const formDataImg = new FormData();
+        formDataImg.append('image', file);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/books/upload-image`, {
+          method: 'POST',
+          body: formDataImg
+        });
+        if (!res.ok) throw new Error('Error al subir la imagen');
+        const data = await res.json();
+        imageUrls.push(data.imageUrl);
+      }
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.titulo,
+          authors: formData.autor.split(',').map(a => a.trim()),
+          description: formData.descripcion,
+          imageUrl: imageUrls[0] || '',
+          images: imageUrls,
+          isbn_code: formData.isbn,
+          language: formData.idioma,
+          pageCount: formData.paginas,
+          publication_date: formData.publicacion,
+          price: formData.precio,
+          condition: formData.estado,
+          category_id: formData.categoria,
+          seller_id: user?.id,
+          publisher: formData.editorial
+        })
+      });
+      if (!response.ok) throw new Error('Error al crear el libro');
+      setSuccess('¡Libro publicado correctamente!');
+      setFormData({
+        isbn: '', titulo: '', autor: '', idioma: '', estado: '', categoria: '', precio: '', descripcion: '', imagen: '', paginas: '', publicacion: '', editorial: ''
+      });
+      setImages([]);
+      setImagePreviews([]);
+    } catch (err) {
+      setError('Error al publicar el libro.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,138 +185,204 @@ export default function QuieroVender() {
 
         <div className="form-container">
           <h2>Formulario de venta</h2>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
           <form className="sell-form" onSubmit={handleSubmit}>
-        {/* ISBN solo */}
-        <div className="form-group">
-            <label htmlFor="isbn">ISBN</label>
-            <input
-            type="text"
-            id="isbn"
-            name="isbn"
-            placeholder="Ej: 978-950-07-1234-5"
-            value={formData.isbn}
-            onChange={handleChange}
-            required
-            />
-        </div>
-
-        {/* Autor y Título juntos */}
-        <div className="form-row">
             <div className="form-group">
-            <label htmlFor="autor">Autor</label>
-            <input
+              <label htmlFor="isbn">ISBN</label>
+              <input
                 type="text"
-                id="autor"
-                name="autor"
-                placeholder="Ej: Gabriel García Márquez"
-                value={formData.autor}
+                id="isbn"
+                name="isbn"
+                placeholder="Ej: 978-950-07-1234-5"
+                value={formData.isbn}
                 onChange={handleChange}
+                onBlur={handleISBNBlur}
                 required
-            />
+              />
             </div>
-
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="autor">Autor</label>
+                <input
+                  type="text"
+                  id="autor"
+                  name="autor"
+                  placeholder="Ej: Gabriel García Márquez"
+                  value={formData.autor}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="titulo">Título</label>
+                <input
+                  type="text"
+                  id="titulo"
+                  name="titulo"
+                  placeholder="Ej: Cien años de soledad"
+                  value={formData.titulo}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="idioma">Idioma</label>
+                <input
+                  type="text"
+                  id="idioma"
+                  name="idioma"
+                  placeholder="Ej: Español"
+                  value={formData.idioma}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="editorial">Editorial</label>
+                <input
+                  type="text"
+                  id="editorial"
+                  name="editorial"
+                  placeholder="Ej: Planeta"
+                  value={formData.editorial}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="estado">Estado</label>
+                <select
+                  id="estado"
+                  name="estado"
+                  value={formData.estado}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecciona un estado</option>
+                  <option value="Nuevo">Nuevo</option>
+                  <option value="Como nuevo">Como nuevo</option>
+                  <option value="Muy bueno">Muy bueno</option>
+                  <option value="Bueno">Bueno</option>
+                  <option value="Aceptable">Aceptable</option>
+                  <option value="Usado">Usado</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="precio">Precio</label>
+                <input
+                  type="number"
+                  id="precio"
+                  name="precio"
+                  placeholder="Ej: 3500"
+                  value={formData.precio}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
             <div className="form-group">
-            <label htmlFor="titulo">Título</label>
-            <input
+              <label htmlFor="descripcion">Descripción</label>
+              <textarea
+                id="descripcion"
+                name="descripcion"
+                placeholder="Descripción del libro"
+                value={formData.descripcion}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="paginas">Páginas</label>
+                <input
+                  type="number"
+                  id="paginas"
+                  name="paginas"
+                  placeholder="Ej: 300"
+                  value={formData.paginas}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="publicacion">Año de publicación</label>
+                <input
+                  type="text"
+                  id="publicacion"
+                  name="publicacion"
+                  placeholder="Ej: 2010"
+                  value={formData.publicacion}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="imagen">URL de la imagen</label>
+              <input
                 type="text"
-                id="titulo"
-                name="titulo"
-                placeholder="Ej: Cien años de soledad"
-                value={formData.titulo}
+                id="imagen"
+                name="imagen"
+                placeholder="URL de la portada"
+                value={formData.imagen}
                 onChange={handleChange}
-                required
-            />
-            </div>
-        </div>
-
-        {/* Idioma (select) y Precio */}
-        <div className="form-row">
-            <div className="form-group">
-            <label htmlFor="idioma">Idioma</label>
-            <select
-                id="idioma"
-                name="idioma"
-                value={formData.idioma}
-                onChange={handleChange}
-                required
-            >
-                <option value="">Seleccionar idioma</option>
-                <option value="Español">Español</option>
-                <option value="Inglés">Inglés</option>
-                <option value="Francés">Francés</option>
-                <option value="Otro">Otro</option>
-            </select>
+              />
             </div>
             <div className="form-group">
-        <label htmlFor="categoria">Categoría</label>
-        <select
-          id="categoria"
-          name="categoria"
-          value={formData.categoria}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccionar categoría</option>
-          <option value="Novela">Novela</option>
-          <option value="Cuento">Cuento</option>
-          <option value="Poesía">Poesía</option>
-          <option value="Drama">Drama</option>
-          <option value="Ciencia ficción">Ciencia ficción</option>
-          <option value="Fantasía">Fantasía</option>
-          <option value="Misterio">Misterio</option>
-          <option value="Terror">Terror</option>
-          <option value="Romance">Romance</option>
-          <option value="Deportes">Deportes</option>
-          <option value="Realistas">Realistas</option>
-          <option value="Salud">Salud</option>
-          <option value="Tecnología">Tecnología</option>
-        </select>
-        </div>
-
-           
-        </div>
-
-        {/* Estado solo */}
-       <div className="form-row">
-      <div className="form-group">
-        <label htmlFor="estado">Estado</label>
-        <select
-          id="estado"
-          name="estado"
-          value={formData.estado}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccionar estado</option>
-          <option value="Nuevo">Nuevo</option>
-          <option value="Como nuevo">Como nuevo</option>
-          <option value="Buen estado">Buen estado</option>
-          <option value="Usado">Usado</option>
-        </select>
-      </div>
-       <div className="form-group">
-            <label htmlFor="precio">Precio</label>
-            <input
-                type="number"
-                id="precio"
-                name="precio"
-                placeholder="Ej: 3500"
-                value={formData.precio}
-                onChange={handleChange}
-                required
-            />
+              <label htmlFor="imagenes">Imágenes del libro</label>
+              <input
+                type="file"
+                id="imagenes"
+                name="imagenes"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+              />
+              <div className="image-preview-group">
+                {imagePreviews.map((src, idx) => (
+                  <img key={idx} src={src} alt={`preview-${idx}`} className="image-preview" />
+                ))}
+              </div>
             </div>
-
-      
-    </div>
-
-        <button className="submit-btn" type="submit">
-            Publicar libro
-        </button>
-        </form>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="categoria">Categoría</label>
+                <select
+                  id="categoria"
+                  name="categoria"
+                  value={formData.categoria}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecciona una categoría</option>
+                  {categories.map(cat => (
+                    <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <button className="submit-btn" type="submit" disabled={loading}>
+              {loading ? 'Publicando...' : 'Publicar libro'}
+            </button>
+          </form>
         </div>
       </div>
       <Footer />
+      <style jsx>{`
+        .image-preview-group {
+          display: flex;
+          gap: 10px;
+          margin-top: 10px;
+        }
+        .image-preview {
+          width: 80px;
+          height: 110px;
+          object-fit: cover;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+        }
+      `}</style>
     </>
   );
 }
