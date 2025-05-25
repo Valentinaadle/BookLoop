@@ -144,12 +144,11 @@ MIT
 ### Pasos para importar la base de datos:
 
 1. Abre **phpMyAdmin** y asegúrate de que el servicio MySQL esté corriendo en XAMPP.
-2. Si ya existe una base de datos llamada `bookloop`, elimínala o renómbrala para evitar conflictos.
-3. Crea una base de datos vacía llamada **`bookloop`** (o el nombre que uses en tu `.env`).
-4. Selecciona la base de datos recién creada y ve a la pestaña **"Importar"**.
-5. Haz clic en **"Seleccionar archivo"** y elige el archivo `bookloop.sql`.
-6. Haz clic en **"Continuar"**.
-7. ¡Listo! Ahora tienes todos los libros y datos de prueba en tu entorno local.
+2. Crea una base de datos vacía llamada **`bookloop`** (o el nombre que uses en tu `.env`).
+3. Selecciona la base de datos recién creada y ve a la pestaña **"Importar"**.
+4. Haz clic en **"Seleccionar archivo"** y elige el archivo `bookloop.sql`.
+5. Haz clic en **"Continuar"**.
+6. ¡Listo! Ahora tienes todos los libros y datos de prueba en tu entorno local.
 
 ---
 
