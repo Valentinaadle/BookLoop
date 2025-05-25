@@ -99,14 +99,6 @@ MIT
 
 ---
 
-## 2. Clonar el repositorio y preparar el entorno
-
-1. **Clonar el repositorio**
-   ```bash
-   git clone <URL_DEL_REPO>
-   cd BookLoop
-   ```
-
 2. **Instalar dependencias del backend**
    ```bash
    cd backend
@@ -147,7 +139,7 @@ MIT
 ## 4. Importar la base de datos con todos los libros
 
 > **IMPORTANTE:**  
-> Para que todos tengan los mismos libros y datos de prueba, es necesario importar el archivo `bookloop.sql` que se encuentra en la raíz del proyecto (o que te compartieron).
+> Para que todos tengan los mismos libros y datos de prueba, es necesario importar el archivo `bookloop.sql` que se encuentra en la raíz del proyecto.
 
 ### Pasos para importar la base de datos:
 
