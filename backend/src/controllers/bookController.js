@@ -103,11 +103,24 @@ const createBook = async (req, res) => {
       });
     }
 
+    // Si no hay imagen proporcionada, intentar obtener la de Google Books
+    let finalImageUrl = imageUrl;
+    if (!finalImageUrl && isbn_code) {
+      try {
+        const response = await axios.get(`${GOOGLE_BOOKS_API_URL}?q=isbn:${isbn_code}`);
+        if (response.data.items && response.data.items[0].volumeInfo.imageLinks) {
+          finalImageUrl = response.data.items[0].volumeInfo.imageLinks.thumbnail;
+        }
+      } catch (error) {
+        console.error('Error al obtener imagen de Google Books:', error);
+      }
+    }
+
     const book = await Book.create({
       title,
       authors: Array.isArray(authors) ? authors : [authors],
       description,
-      imageUrl,
+      imageUrl: finalImageUrl,
       price,
       quantity,
       available,
@@ -123,16 +136,24 @@ const createBook = async (req, res) => {
     });
 
     // Guardar imágenes en la tabla Image
-    if (Array.isArray(images) && images.length > 0) {
-      await Promise.all(images.map(imgUrl => {
-        if (imgUrl) {
-          return Image.create({ book_id: book.book_id, image_url: imgUrl });
-        }
-      }));
-    } else if (imageUrl) {
-      // Si no hay array de imágenes, guardar la portada
-      await Image.create({ book_id: book.book_id, image_url: imageUrl });
+    const imagePromises = [];
+
+    // Agregar la imagen de Google Books si existe
+    if (finalImageUrl) {
+      imagePromises.push(Image.create({ book_id: book.book_id, image_url: finalImageUrl }));
     }
+
+    // Agregar las imágenes subidas por el usuario
+    if (Array.isArray(images) && images.length > 0) {
+      images.forEach(imgUrl => {
+        if (imgUrl && !imagePromises.some(p => p.image_url === imgUrl)) {
+          imagePromises.push(Image.create({ book_id: book.book_id, image_url: imgUrl }));
+        }
+      });
+    }
+
+    // Guardar todas las imágenes
+    await Promise.all(imagePromises);
 
     res.status(201).json(book);
   } catch (error) {

@@ -38,8 +38,8 @@ function Login() {
       // Guardar el usuario en el contexto global y en localStorage
       login(response.data.usuario);
       
-      // Redirigir al usuario a la página principal de compra
-      navigate('/comprar');
+      // Redirigir al usuario a la página principal
+      navigate('/');
     } catch (error) {
       console.error('Error en login:', error);
       setError(error.response?.data?.error || 'Error al iniciar sesión. Por favor, intenta de nuevo.');

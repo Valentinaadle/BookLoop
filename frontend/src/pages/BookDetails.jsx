@@ -72,9 +72,23 @@ function BookDetails() {
   }
 
   // Obtener las imágenes del libro (de la relación Images)
-  const bookImages = Array.isArray(book.Images) && book.Images.length > 0
-    ? book.Images.map(img => img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`).filter(Boolean)
-    : [];
+  const bookImages = [];
+  
+  // Agregar la imagen de Google Books si existe
+  if (book.imageUrl) {
+    bookImages.push(book.imageUrl.startsWith('http') ? book.imageUrl : `${API_URL}${book.imageUrl}`);
+  }
+  
+  // Agregar las imágenes subidas por el usuario
+  if (Array.isArray(book.Images) && book.Images.length > 0) {
+    book.Images.forEach(img => {
+      const imgUrl = img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`;
+      // Evitar duplicados
+      if (!bookImages.includes(imgUrl)) {
+        bookImages.push(imgUrl);
+      }
+    });
+  }
 
   return (
     <>
@@ -150,12 +164,9 @@ function BookDetails() {
                   </div>
                 ) : (
                   <img
-                    src={book.imageUrl && !book.imageUrl.startsWith('http') ? `${API_URL}${book.imageUrl}` : (book.imageUrl || book.imagen || book.imageLinks?.thumbnail || '/placeholder-book.png')}
+                    src="/placeholder-book.png"
                     alt={`Portada ${book.title}`}
-                    onError={(e) => {
-                      e.target.src = '/placeholder-book.png';
-                      e.target.onerror = null;
-                    }}
+                    className="book-cover-image"
                   />
                 )}
               </div>

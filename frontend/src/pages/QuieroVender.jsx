@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/quierovender.css';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const pasos = [
   {
@@ -49,6 +50,7 @@ export default function QuieroVender() {
   const [imagePreviews, setImagePreviews] = useState([]);
   const { user } = useAuth();
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -154,12 +156,10 @@ export default function QuieroVender() {
         })
       });
       if (!response.ok) throw new Error('Error al crear el libro');
+      const newBook = await response.json();
       setSuccess('¡Libro publicado correctamente!');
-      setFormData({
-        isbn: '', titulo: '', autor: '', idioma: '', estado: '', categoria: '', precio: '', descripcion: '', imagen: '', paginas: '', publicacion: '', editorial: ''
-      });
-      setImages([]);
-      setImagePreviews([]);
+      // Redirigir a la vista de compra del libro
+      navigate(`/book/${newBook.book_id}`);
     } catch (err) {
       setError('Error al publicar el libro.');
     } finally {

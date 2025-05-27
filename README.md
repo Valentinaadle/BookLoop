@@ -45,11 +45,11 @@ npm start
 ## Variables de Entorno
 
 ### Backend (.env)
-```
-DB_NAME=bookloop
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
+```env
 DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=bookloop
 DB_PORT=3306
 PORT=5000
 ```
