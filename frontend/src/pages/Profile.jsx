@@ -5,6 +5,7 @@ import '../Assets/css/profile.css';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -21,18 +22,19 @@ function Profile() {
     nombre: '', 
     apellido: '', 
     email: '', 
-    username: '',
+    username: '', 
     intereses: [] 
   });
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
-  const publishedBooks = 1; // Valor estático temporal
+  const [publishedBooks, setPublishedBooks] = useState([]);
   const [nuevoInteres, setNuevoInteres] = useState('');
 
   useEffect(() => {
     if (user && user.id) {
+      // Cargar datos del perfil
       fetch(`${API_URL}/api/users/${user.id}`)
         .then(res => res.json())
         .then(data => {
@@ -50,12 +52,16 @@ function Profile() {
           setLoading(false);
         });
 
-      // fetch(`${API_URL}/api/books/user/${user.id}`)
-      //   .then(res => res.json())
-      //   .then(data => {
-      //     setPublishedBooks(Array.isArray(data) ? data.length : 0);
-      //   })
-      //   .catch(err => console.error('Error al cargar libros:', err));
+      // Cargar libros publicados
+      fetch(`${API_URL}/api/books/user/${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          setPublishedBooks(Array.isArray(data) ? data : []);
+        })
+        .catch(err => {
+          console.error('Error al cargar libros:', err);
+          setError('Error al cargar los libros publicados');
+        });
     }
   }, [user]);
 
@@ -87,6 +93,21 @@ function Profile() {
       setError('Error al actualizar el perfil');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteBook = async (bookId) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este libro?')) {
+      try {
+        const res = await fetch(`${API_URL}/api/books/${bookId}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error('Error al eliminar el libro');
+        setPublishedBooks(prev => prev.filter(book => book.book_id !== bookId));
+        setSuccess('Libro eliminado correctamente');
+      } catch (err) {
+        setError('Error al eliminar el libro');
+      }
     }
   };
 
@@ -125,7 +146,7 @@ function Profile() {
               <p>{form.email}</p>
               <div className="stats">
                 <span className="stat-item">
-                  <i className="fas fa-book"></i> {publishedBooks} libros publicados
+                  <i className="fas fa-book"></i> {publishedBooks.length} libros publicados
                 </span>
               </div>
               <div className="intereses-container">
@@ -243,6 +264,81 @@ function Profile() {
           )}
           {success && <div className="success-message">{success}</div>}
           {error && <div className="error-message">{error}</div>}
+
+          {/* Sección de libros publicados */}
+          <div className="published-books-section">
+            <h3>Mis Publicaciones Activas</h3>
+            {publishedBooks.length === 0 ? (
+              <p className="no-books">No tienes libros publicados</p>
+            ) : (
+              <div className="books-grid">
+                {publishedBooks.map(book => {
+                  // Lógica para obtener la imagen igual que en BookCard
+                  let imageUrl = '/placeholder-book.png';
+                  if (book.Images && Array.isArray(book.Images) && book.Images.length > 0 && book.Images[0].image_url) {
+                    imageUrl = book.Images[0].image_url.startsWith('http')
+                      ? book.Images[0].image_url
+                      : `${API_URL}${book.Images[0].image_url}`;
+                  } else if (book.imageUrl) {
+                    imageUrl = book.imageUrl.startsWith('http')
+                      ? book.imageUrl
+                      : `${API_URL}${book.imageUrl}`;
+                  }
+                  return (
+                    <div key={book.book_id} className="book-card" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '0', margin: '10px', width: '250px', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}
+                      onClick={() => window.location.href = `/book/${book.book_id}`}
+                    >
+                      <img 
+                        src={imageUrl} 
+                        alt={book.title}
+                        className="book-cover"
+                        style={{ width: '90%', height: '270px', objectFit: 'cover', borderRadius: '8px', marginTop: '32px' }}
+                        onError={e => { e.target.src = '/placeholder-book.png'; }}
+                      />
+                      <div className="book-card-content" style={{ padding: '16px', textAlign: 'center', width: '100%' }}>
+                        <h4 style={{ fontWeight: 'bold', fontSize: '1.1rem', margin: '10px 0 4px 0', color: '#333' }}>{book.title}</h4>
+                        <p style={{ color: '#666', fontSize: '0.95rem', margin: 0 }}>
+                          de {(() => {
+                            if (Array.isArray(book.authors)) {
+                              return book.authors.join(', ');
+                            } else if (typeof book.authors === 'string') {
+                              // Si es string y parece un array serializado
+                              try {
+                                const parsed = JSON.parse(book.authors);
+                                if (Array.isArray(parsed)) {
+                                  return parsed.join(', ');
+                                }
+                                return parsed;
+                              } catch {
+                                return book.authors;
+                              }
+                            } else {
+                              return '';
+                            }
+                          })()}
+                        </p>
+                        <p style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#394B60', margin: '12px 0 8px 0' }}>{book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'Precio no disponible'}</p>
+                      </div>
+                      <div style={{ display: 'flex', gap: '6px', width: '90%', marginBottom: '16px', justifyContent: 'center' }}
+                        onClick={e => e.stopPropagation()} // Evita que el click en los botones navegue
+                      >
+                        <Link to={`/edit-book/${book.book_id}`} className="edit-button" style={{ background: '#394B60', color: 'white', border: 'none', borderRadius: '6px', padding: '8px 12px', fontSize: '0.9rem', fontWeight: 'bold', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                          <i className="fas fa-edit"></i> Editar
+                        </Link>
+                        <button 
+                          onClick={() => handleDeleteBook(book.book_id)}
+                          className="delete-button"
+                          style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: '6px', padding: '8px 12px', fontSize: '0.9rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}
+                        >
+                          <i className="fas fa-trash"></i> Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <Footer />

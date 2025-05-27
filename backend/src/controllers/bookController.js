@@ -77,7 +77,7 @@ const getBookById = async (req, res) => {
 // Crear un nuevo libro
 const createBook = async (req, res) => {
   try {
-    const {
+    let {
       title,
       authors,
       description,
@@ -103,6 +103,27 @@ const createBook = async (req, res) => {
       });
     }
 
+    // Normalizar authors a array plano
+    if (typeof authors === 'string') {
+      try {
+        // Si viene como string serializado, parsear
+        const parsed = JSON.parse(authors);
+        if (Array.isArray(parsed)) {
+          authors = parsed;
+        } else {
+          authors = [authors];
+        }
+      } catch {
+        // Si no es JSON, separar por coma
+        authors = authors.split(',').map(a => a.trim());
+      }
+    }
+
+    // Si es array de arrays, aplanar
+    if (Array.isArray(authors)) {
+      authors = authors.flat(Infinity).map(a => typeof a === 'string' ? a.trim() : a).filter(Boolean);
+    }
+
     // Si no hay imagen proporcionada, intentar obtener la de Google Books
     let finalImageUrl = imageUrl;
     if (!finalImageUrl && isbn_code) {
@@ -118,7 +139,7 @@ const createBook = async (req, res) => {
 
     const book = await Book.create({
       title,
-      authors: Array.isArray(authors) ? authors : [authors],
+      authors,
       description,
       imageUrl: finalImageUrl,
       price,
@@ -165,7 +186,18 @@ const createBook = async (req, res) => {
 // Actualizar un libro
 const updateBook = async (req, res) => {
   try {
-    const { title, authors, description, imageLinks } = req.body;
+    let {
+      title,
+      authors,
+      description,
+      price,
+      condition,
+      language,
+      pageCount,
+      publication_date,
+      publisher,
+      imageUrl
+    } = req.body;
     const book = await Book.findByPk(req.params.id);
 
     if (!book) {
@@ -178,11 +210,34 @@ const updateBook = async (req, res) => {
       });
     }
 
+    // Normalizar authors a array plano
+    if (typeof authors === 'string') {
+      try {
+        const parsed = JSON.parse(authors);
+        if (Array.isArray(parsed)) {
+          authors = parsed;
+        } else {
+          authors = [authors];
+        }
+      } catch {
+        authors = authors.split(',').map(a => a.trim());
+      }
+    }
+    if (Array.isArray(authors)) {
+      authors = authors.flat(Infinity).map(a => typeof a === 'string' ? a.trim() : a).filter(Boolean);
+    }
+
     await book.update({
       title,
-      authors: Array.isArray(authors) ? authors : [authors],
+      authors,
       description,
-      imageLinks
+      price,
+      condition,
+      language,
+      pageCount,
+      publication_date,
+      publisher,
+      imageUrl
     });
 
     res.json(book);

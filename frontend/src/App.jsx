@@ -9,6 +9,7 @@ import Portada from './pages/Portada';
 import Search from './pages/Search';
 import Books from './pages/Books';
 import QuieroVender from './pages/QuieroVender';
+import EditBook from './pages/EditBook';
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
@@ -56,6 +57,11 @@ function App() {
           <Route path="/book/:id" element={
             <ProtectedRoute>
               <BookDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="/edit-book/:id" element={
+            <ProtectedRoute>
+              <EditBook />
             </ProtectedRoute>
           } />
           <Route path="/vender-page" element={

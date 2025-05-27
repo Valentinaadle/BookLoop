@@ -31,7 +31,30 @@ const BookCard = ({ book, onClick }) => {
         <img src={imageUrl} alt={book.title} style={{ width: '90%', height: '270px', objectFit: 'cover', borderRadius: '8px', marginTop: '32px' }} onError={e => { e.target.src = '/placeholder-book.png'; }} />
         <div className="book-card-content" style={{ padding: '16px', textAlign: 'center', width: '100%' }}>
           <h3 style={{ fontWeight: 'bold', fontSize: '1.1rem', margin: '10px 0 4px 0', color: '#333' }}>{book.title}</h3>
-          <p style={{ color: '#666', fontSize: '0.95rem', margin: 0 }}>de {Array.isArray(book.authors) ? book.authors.join(', ') : book.authors}</p>
+          <p style={{ color: '#666', fontSize: '0.95rem', margin: 0 }}>
+            de {(() => {
+              if (Array.isArray(book.authors)) {
+                return book.authors.join(', ');
+              } else if (typeof book.authors === 'string') {
+                // Si es string tipo '["Autor"]' o '[Autor]'
+                const str = book.authors.trim();
+                if (str.startsWith('[') && str.endsWith(']')) {
+                  try {
+                    const parsed = JSON.parse(str);
+                    if (Array.isArray(parsed)) {
+                      return parsed.join(', ');
+                    }
+                  } catch {
+                    // Si no es JSON válido, limpiar manualmente
+                    return str.slice(1, -1).replace(/"/g, '').replace(/'/g, '');
+                  }
+                }
+                return str;
+              } else {
+                return '';
+              }
+            })()}
+          </p>
           <p style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#394B60', margin: '12px 0 8px 0' }}>{book.price ? `€${parseFloat(book.price).toFixed(2)}` : 'Precio no disponible'}</p>
         </div>
       </Link>
