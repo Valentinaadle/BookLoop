@@ -115,17 +115,15 @@ MIT
 
 ## 3. Configurar variables de entorno
 
-1. **Backend (`backend/.env`)**  
-   Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido (ajusta los valores si tu usuario/contraseña de MySQL son distintos):
-
-   ```
-DB_HOST=192.168.192.145
-DB_USER=bookloop_remote
-DB_PASSWORD=BookLoop2024!   
+### Backend (.env)
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
 DB_NAME=bookloop
 DB_PORT=3306
 PORT=5000
-   ```
+```
 
 2. **Frontend (`frontend/.env`)**  
    Crea un archivo `.env` en la carpeta `frontend`:
