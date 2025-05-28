@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Assets/css/bookcard.css';
+import '../Assets/css/portada.css';
 import { FaShoppingCart, FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const BookCard = ({
@@ -21,6 +21,7 @@ const BookCard = ({
         className="favorite-btn"
         onClick={onToggleFavorito}
         aria-label="Agregar a favoritos"
+        type="button"
       >
         {favorito ? <FaHeart /> : <FaRegHeart />}
       </button>
@@ -30,9 +31,9 @@ const BookCard = ({
     <p>de {autor}</p>
     {precio && (
       <div className="book-price">
-        <span className="price">${precio}</span>
+        <span className="price">${parseFloat(precio).toFixed(2)}</span>
         {showComprar && (
-          <button className="buy-btn" onClick={onBuy}>
+          <button className="buy-btn" onClick={onBuy} type="button">
             <FaShoppingCart /> Comprar
           </button>
         )}

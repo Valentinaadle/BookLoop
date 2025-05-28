@@ -15,6 +15,7 @@ import book9 from "../Assets/book9.webp";
 import book3 from "../Assets/book3.webp";
 import book13 from "../Assets/book13.webp";
 import book14 from "../Assets/book14.webp";
+import BookCard from '../components/BookCard';
 
 const nuevosLibros = [
   { descuento: '-30%', img: book12, titulo: 'La Fortuna', autor: 'Michael McDowell', precio: 15.99 },
@@ -62,27 +63,17 @@ const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
         <button className="carousel-arrow left" onClick={handlePrev} aria-label="Anterior"><FaChevronLeft /></button>
         <div className="carousel-books">
           {visibleBooks.map((book, idx) => (
-            <div className="product-card" key={idx}>
-              {book.descuento && <span className="discount">{book.descuento}</span>}
-              <button 
-                className="favorite-btn"
-                onClick={() => toggleFavorito(idx)}
-                aria-label="Agregar a favoritos"
-              >
-                {favoritos[idx] ? <FaHeart /> : <FaRegHeart />}
-              </button>
-              <img src={book.img} alt={book.titulo} />
-              <h3>{book.titulo}</h3>
-              <p>de {book.autor}</p>
-              {book.precio && (
-                <div className="book-price">
-                  <span className="price">${book.precio}</span>
-                  <button className="buy-btn">
-                    <FaShoppingCart /> Comprar
-                  </button>
-                </div>
-              )}
-            </div>
+            <BookCard
+              key={idx}
+              descuento={book.descuento}
+              img={book.img}
+              titulo={book.titulo}
+              autor={book.autor}
+              precio={book.precio}
+              favorito={favoritos[(startIdx + idx) % total]}
+              onToggleFavorito={() => toggleFavorito((startIdx + idx) % total)}
+              onBuy={() => alert(`Comprar: ${book.titulo}`)}
+            />
           ))}
         </div>
         <button className="carousel-arrow right" onClick={handleNext} aria-label="Siguiente"><FaChevronRight /></button>

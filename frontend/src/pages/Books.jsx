@@ -7,6 +7,7 @@ import "../Assets/css/header.css";
 import "../Assets/css/footer.css";
 import "../Assets/css/filtro.css";
 import "../Assets/css/bookcard.css";
+import BookCard from '../components/BookCard';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -193,48 +194,33 @@ const Books = () => {
                   // Simulación de descuento (puedes cambiar esto por un campo real)
                   const descuento = book.descuento || '-30%';
                   return (
-                    <div key={book.book_id} className="book-card" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '0', margin: '10px', width: '250px', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      {/* Badge de descuento */}
-                      {descuento && (
-                        <span style={{ position: 'absolute', top: 12, left: 12, background: '#394B60', color: '#fff', borderRadius: '6px', padding: '4px 12px', fontWeight: 'bold', fontSize: '1rem', zIndex: 2 }}>{descuento}</span>
-                      )}
-                      {/* Ícono de favorito */}
-                      <button style={{ position: 'absolute', top: 12, right: 12, background: 'none', border: 'none', cursor: 'pointer', zIndex: 2 }} aria-label="Favorito">
-                        <span style={{ fontSize: '1.5rem', color: '#394B60' }}>&#9825;</span>
-                      </button>
-                      <Link to={`/book/${book.book_id}`} style={{ textDecoration: 'none', color: 'inherit', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <img src={imageUrl} alt={book.title} style={{ width: '90%', height: '270px', objectFit: 'cover', borderRadius: '8px', marginTop: '32px' }} onError={e => { e.target.src = '/placeholder-book.png'; }} />
-                        <div className="book-card-content" style={{ padding: '16px', textAlign: 'center', width: '100%' }}>
-                          <h3 style={{ fontWeight: 'bold', fontSize: '1.1rem', margin: '10px 0 4px 0', color: '#333' }}>{book.title}</h3>
-                          <p style={{ color: '#666', fontSize: '0.95rem', margin: 0 }}>
-                            de {(() => {
-                              if (Array.isArray(book.authors)) {
-                                return book.authors.join(', ');
-                              } else if (typeof book.authors === 'string') {
-                                const str = book.authors.trim();
-                                if (str.startsWith('[') && str.endsWith(']')) {
-                                  try {
-                                    const parsed = JSON.parse(str);
-                                    if (Array.isArray(parsed)) {
-                                      return parsed.join(', ');
-                                    }
-                                  } catch {
-                                    return str.slice(1, -1).replace(/"/g, '').replace(/'/g, '');
-                                  }
-                                }
-                                return str;
-                              } else {
-                                return '';
-                              }
-                            })()}
-                          </p>
-                          <p style={{ fontWeight: 'bold', fontSize: '1.3rem', color: '#394B60', margin: '12px 0 8px 0' }}>{formatPrice(book.price)}</p>
-                        </div>
-                      </Link>
-                      <button className="buy-button" style={{ background: '#394B60', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 0', width: '90%', fontWeight: 'bold', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '16px' }}>
-                        <span style={{ fontSize: '1.2rem' }}>&#128722;</span> Comprar
-                      </button>
-                    </div>
+                    <BookCard
+                      key={book.book_id}
+                      descuento={null}
+                      img={imageUrl}
+                      titulo={book.title}
+                      autor={(() => {
+                        if (Array.isArray(book.authors)) {
+                          return book.authors.join(', ');
+                        } else if (typeof book.authors === 'string') {
+                          try {
+                            const parsed = JSON.parse(book.authors);
+                            if (Array.isArray(parsed)) {
+                              return parsed.join(', ');
+                            }
+                            return parsed;
+                          } catch {
+                            return book.authors;
+                          }
+                        } else {
+                          return '';
+                        }
+                      })()}
+                      precio={book.price}
+                      favorito={false}
+                      onToggleFavorito={() => {}}
+                      onBuy={() => {}}
+                    />
                   );
                 })
               ) : (
