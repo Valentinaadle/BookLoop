@@ -52,6 +52,11 @@ DB_PASSWORD=
 DB_NAME=bookloop
 DB_PORT=3306
 PORT=5000
+
+EMAIL_USER=bookloopUNSTA@gmail.com
+EMAIL_PASSWORD=yazmwcyximpxwgdv
+JWT_SECRET=un_secreto_largo_y_seguro
+
 ```
 
 ### Frontend (.env)
@@ -123,6 +128,10 @@ DB_PASSWORD=
 DB_NAME=bookloop
 DB_PORT=3306
 PORT=5000
+
+EMAIL_USER=bookloopUNSTA@gmail.com
+EMAIL_PASSWORD=yazmwcyximpxwgdv
+JWT_SECRET=un_secreto_largo_y_seguro
 ```
 
 2. **Frontend (`frontend/.env`)**  
@@ -221,44 +230,9 @@ http://192.168.1.30/phpmyadmin
 
 ---
 
-## 🔒 Acceso remoto seguro a phpMyAdmin/MySQL usando ZeroTier
-
-### 1. Instalar ZeroTier
-
-- Ve a [https://www.zerotier.com/download/](https://www.zerotier.com/download/) y descarga el instalador para tu sistema operativo.
-- Instala ZeroTier normalmente (siguiente, siguiente, finalizar).
-
-### 2. Unirse a la red de ZeroTier
-
-- Abre la aplicación ZeroTier (icono amarillo cerca del reloj).
-- Haz clic derecho en el icono y selecciona **"Join Network..."**.
-- Ingresa este Network ID:  
-  ```
-  856127940CFE1ED2
-  ```
-- Haz clic en **Join**.
-
-### 3. Ser autorizado en la red
-
-- Avísale al dueño de la red (quien creó la red en my.zerotier.com) que te conectaste.
-- El dueño debe entrar a [https://my.zerotier.com/](https://my.zerotier.com/), seleccionar la red y marcar la casilla **"Auth"** al lado de tu dispositivo para autorizarte.
-
-### 4. Ver tu IP virtual de ZeroTier
-
-- Una vez autorizado, haz clic derecho en el icono de ZeroTier, selecciona la red y busca la **IP virtual** (empieza con `10.`, `172.` o `192.168.`).
-- El dueño del servidor debe pasar su IP virtual a los demás.
-
-### 5. Acceder a phpMyAdmin/MySQL
-
-- Para entrar a phpMyAdmin desde el navegador, usa la IP virtual del dueño:
-  ```
-  http://IP_VIRTUAL_DEL_DUEÑO/phpmyadmin
-  ```
-  (Por ejemplo: `http://192.168.192.145/phpmyadmin`)
-
-
-### 6. Notas importantes
-
-- Todos deben tener ZeroTier encendido y conectados a la misma red.
-- Si no puedes acceder, revisa que estés autorizado en la web de ZeroTier y que el firewall permita el acceso.
-- Solo los dispositivos autorizados en la web de ZeroTier podrán entrar.
+## 10. Npm Install nuevos
+```
+npm install axios@1.9.0
+npm install email-existence@0.1.6
+npm install nodemailer@7.0.3
+npm install multer@2.0.0
