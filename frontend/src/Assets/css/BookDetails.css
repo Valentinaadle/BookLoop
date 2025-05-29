@@ -1,0 +1,357 @@
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.breadcrumb {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.book-header {
+  margin-bottom: 30px;
+  padding: 0 40px;
+}
+
+.new-badge {
+  background: #4CAF50;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.book-title {
+  font-size: 32px;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.book-author, .book-seller {
+  font-size: 18px;
+  color: #394B60;
+  margin: 0 0 5px 0;
+}
+
+.book-content {
+  display: flex;
+  gap: 40px;
+  padding: 0 40px;
+}
+
+.book-left-column {
+  width: 250px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book-cover {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  transition: transform 0.2s;
+}
+
+.book-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.contact-button-detail {
+  background: #2a8ef2;
+  color: white;
+  margin-bottom: 4px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.contact-button-detail:hover {
+  background: #2477ca;
+}
+
+.book-right-column {
+  flex-grow: 1;
+}
+
+.book-details {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.book-details h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.details-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.detail-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 10px;
+}
+
+.detail-item span:first-child {
+  color: #666;
+}
+
+.book-synopsis {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.book-synopsis h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.book-description {
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.modal-content p {
+  margin: 0 0 25px 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.modal-button {
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 120px;
+}
+
+.modal-button.email {
+  background: #2a8ef2;
+  color: white;
+}
+
+.modal-button.email:hover {
+  background: #2477ca;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(42, 142, 242, 0.3);
+}
+
+.modal-button.close {
+  background: #f5f6fa;
+  color: #394B60;
+  border: 1px solid #ddd;
+}
+
+.modal-button.close:hover {
+  background: #e6eaf1;
+  color: #2a8ef2;
+  border-color: #2a8ef2;
+  transform: translateY(-1px);
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.carousel-arrow:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-arrow.left {
+  left: 0px;
+}
+
+.carousel-arrow.right {
+  right: 0px;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.indicator-dot.active {
+  background: #2a8ef2;
+}
+
+@media (max-width: 768px) {
+  .book-content {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  .book-header {
+    padding: 0 20px;
+  }
+
+  .book-left-column {
+    width: 100%;
+    align-items: center;
+  }
+
+  .book-cover {
+    width: 100%;
+    max-width: 350px;
+    height: 500px;
+  }
+
+  .carousel-image {
+    object-position: center;
+  }
+
+  .carousel-arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+
+  .carousel-arrow.left {
+    left: 5px;
+  }
+
+  .carousel-arrow.right {
+    right: 5px;
+  }
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.success-message {
+  color: #28a745;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.modal-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #ccc;
+} 

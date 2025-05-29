@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { User, Profile } = require('../models');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const Profile = require('../models/Profile');
+const emailExistence = require('email-existence');
+const util = require('util');
+const checkEmail = util.promisify(emailExistence.check);
 
 // Ruta para obtener todos los usuarios (temporal para debug)
 router.get('/usuarios', async (req, res) => {
@@ -31,6 +36,30 @@ router.post('/registro', async (req, res) => {
     try {
         console.log('Datos recibidos:', req.body);
         const { nombre, apellido, email, username, password } = req.body;
+
+        // Validar que sea un email de Gmail
+        if (!email.toLowerCase().endsWith('@gmail.com')) {
+            return res.status(400).json({
+                error: 'Por favor, utiliza una dirección de Gmail válida'
+            });
+        }
+
+        try {
+            console.log('Verificando existencia del email:', email);
+            const emailExists = await checkEmail(email);
+            
+            if (!emailExists) {
+                return res.status(400).json({
+                    error: 'El correo electrónico no existe o no es válido'
+                });
+            }
+            console.log('Email verificado exitosamente');
+        } catch (emailError) {
+            console.error('Error al verificar email:', emailError);
+            return res.status(400).json({
+                error: 'No se pudo verificar la validez del correo electrónico'
+            });
+        }
 
         // Verificar si el usuario ya existe
         const existingUser = await User.findOne({
@@ -105,13 +134,27 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Contraseña incorrecta' });
         }
 
+        // Generar token JWT
+        const token = jwt.sign(
+            { 
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                nombre: user.nombre,
+                apellido: user.apellido
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
         // No enviar la contraseña en la respuesta
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
 
         res.json({ 
             mensaje: 'Login exitoso',
-            usuario: userWithoutPassword
+            usuario: userWithoutPassword,
+            token
         });
 
     } catch (error) {

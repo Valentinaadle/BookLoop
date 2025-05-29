@@ -27,6 +27,8 @@ function Register() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    // Limpiar mensaje de error cuando el usuario empieza a escribir
+    if (error) setError('');
   };
 
   const validateForm = () => {
@@ -40,6 +42,11 @@ function Register() {
     }
     if (formData.password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres');
+      return false;
+    }
+    // Validar que sea un email de Gmail
+    if (!formData.email.toLowerCase().endsWith('@gmail.com')) {
+      setError('Por favor, utiliza una dirección de Gmail válida');
       return false;
     }
     return true;
@@ -103,7 +110,9 @@ function Register() {
             <input 
               type="email" 
               name="email" 
-              placeholder="Correo electrónico" 
+              placeholder="Correo electrónico de Gmail" 
+              pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
+              title="Por favor, ingresa una dirección de Gmail válida"
               required
               value={formData.email}
               onChange={handleChange}

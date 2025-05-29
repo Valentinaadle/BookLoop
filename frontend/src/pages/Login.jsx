@@ -35,7 +35,10 @@ function Login() {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
       console.log('Login exitoso:', response.data);
       
-      // Guardar el usuario en el contexto global y en localStorage
+      // Guardar el token en localStorage
+      localStorage.setItem('userToken', response.data.token);
+      
+      // Guardar el usuario en el contexto global
       login(response.data.usuario);
       
       // Redirigir al usuario a la página principal

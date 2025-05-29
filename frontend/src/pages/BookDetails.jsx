@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
+import '../Assets/css/BookDetails.css';
 
 function BookDetails() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(null);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
@@ -19,7 +25,7 @@ function BookDetails() {
         setLoading(true);
         setError(null);
         console.log('Fetching book with ID:', id); // Para debugging
-        const response = await fetch(`http://localhost:5000/api/books/${id}`);
+        const response = await fetch(`${API_URL}/api/books/${id}`);
         
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -39,7 +45,7 @@ function BookDetails() {
     if (id) {
       fetchBookDetails();
     }
-  }, [id]);
+  }, [id, API_URL]);
 
   if (loading) {
     return (
@@ -89,6 +95,76 @@ function BookDetails() {
       }
     });
   }
+
+  const handleContactSeller = async () => {
+    if (!user) {
+      setEmailStatus('Error: Debes iniciar sesión para contactar al vendedor');
+      return;
+    }
+
+    const email = book.seller?.email;
+    if (!email) {
+      setEmailStatus('Error: El email del vendedor no está disponible');
+      return;
+    }
+
+    setSending(true);
+    setEmailStatus(null);
+
+    try {
+      const token = localStorage.getItem('userToken');
+      
+      if (!token) {
+        setEmailStatus('Error: No hay sesión activa. Por favor, inicia sesión nuevamente.');
+        return;
+      }
+
+      console.log('Enviando solicitud con datos:', {
+        to: email,
+        bookTitle: book.title,
+        userData: {
+          nombre: user.nombre,
+          apellido: user.apellido,
+          email: user.email
+        }
+      });
+
+      const response = await fetch(`${API_URL}/api/email/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          to: email,
+          bookTitle: book.title,
+          userData: {
+            nombre: user.nombre,
+            apellido: user.apellido,
+            email: user.email
+          }
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Error del servidor:', data);
+        throw new Error(data.details || data.error || 'Error al enviar el email');
+      }
+
+      setEmailStatus('¡Email enviado correctamente!');
+      setTimeout(() => {
+        setShowModal(false);
+        setEmailStatus(null);
+      }, 2000);
+    } catch (error) {
+      console.error('Error completo:', error);
+      setEmailStatus(`Error: ${error.message}`);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <>
@@ -171,8 +247,12 @@ function BookDetails() {
                 )}
               </div>
               <div className="book-actions">
-                <button className="buy-button-detail">Comprar</button>
-                <button className="contact-button-detail">Contactar vendedor</button>
+                <button 
+                  className="contact-button-detail"
+                  onClick={() => setShowModal(true)}
+                >
+                  Contactar vendedor
+                </button>
               </div>
             </div>
 
@@ -198,245 +278,37 @@ function BookDetails() {
           </div>
         </section>
       </main>
-
       <Footer />
 
-      <style jsx>{`
-        .main {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-        }
-
-        .breadcrumb {
-          color: #666;
-          font-size: 14px;
-          margin-bottom: 20px;
-        }
-
-        .book-header {
-          margin-bottom: 30px;
-          padding: 0 40px;
-        }
-
-        .new-badge {
-          background: #4CAF50;
-          color: white;
-          padding: 4px 12px;
-          border-radius: 4px;
-          font-size: 14px;
-          display: inline-block;
-          margin-bottom: 10px;
-        }
-
-        .book-title {
-          font-size: 32px;
-          color: #333;
-          margin: 0 0 10px 0;
-        }
-
-        .book-author, .book-seller {
-          font-size: 18px;
-          color: #394B60;
-          margin: 0 0 5px 0;
-        }
-
-        .book-content {
-          display: flex;
-          gap: 40px;
-          padding: 0 40px;
-        }
-
-        .book-left-column {
-          width: 300px;
-          flex-shrink: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .book-cover {
-          background: white;
-          width: 250px;
-          height: 350px;
-          margin-bottom: 20px;
-        }
-
-        .book-cover img {
-          width: 100%;
-          height: 100%;
-          border-radius: 4px;
-          object-fit: cover;
-          border-bottom: 1px solid #eee;
-          transition: transform 0.2s;
-        }
-
-        .book-actions {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          width: 100%;
-        }
-
-        .buy-button-detail, .contact-button-detail {
-          width: 100%;
-          padding: 12px;
-          border-radius: 6px;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          border: none;
-          transition: background 0.2s, color 0.2s;
-        }
-
-        .buy-button-detail {
-          background: #2a8ef2;
-          color: white;
-          margin-bottom: 4px;
-        }
-
-        .buy-button-detail:hover {
-          background: #2477ca;
-        }
-
-        .contact-button-detail {
-          background: #f5f6fa;
-          color: #394B60;
-          border: 1px solid #ccc;
-        }
-
-        .contact-button-detail:hover {
-          background: #e6eaf1;
-          color: #2a8ef2;
-          border: 1px solid #2a8ef2;
-        }
-
-        .book-right-column {
-          flex-grow: 1;
-        }
-
-        .book-details {
-          background: white;
-          border-radius: 8px;
-          padding: 20px;
-          margin-bottom: 20px;
-        }
-
-        .book-details h3 {
-          margin: 0 0 15px 0;
-          color: #333;
-        }
-
-        .details-grid {
-          display: grid;
-          gap: 10px;
-        }
-
-        .detail-item {
-          display: grid;
-          grid-template-columns: 150px 1fr;
-          gap: 10px;
-        }
-
-        .detail-item span:first-child {
-          color: #666;
-        }
-
-        .book-synopsis {
-          background: white;
-          border-radius: 8px;
-          padding: 20px;
-        }
-
-        .book-synopsis h3 {
-          margin: 0 0 15px 0;
-          color: #333;
-        }
-
-        .book-description {
-          color: #444;
-          line-height: 1.6;
-          margin-bottom: 15px;
-        }
-
-        @media (max-width: 768px) {
-          .book-content {
-            flex-direction: column;
-            padding: 0 20px;
-          }
-
-          .book-header {
-            padding: 0 20px;
-          }
-
-          .book-left-column {
-            width: 100%;
-          }
-
-          .book-cover img {
-            max-height: 500px;
-            object-position: top;
-          }
-        }
-
-        .carousel {
-          position: relative;
-          width: 250px;
-          height: 350px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .carousel-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 4px;
-          border-bottom: 1px solid #eee;
-        }
-        .carousel-arrow {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          background: rgba(255,255,255,0.7);
-          border: none;
-          font-size: 24px;
-          cursor: pointer;
-          z-index: 2;
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .carousel-arrow.left {
-          left: -18px;
-        }
-        .carousel-arrow.right {
-          right: -18px;
-        }
-        .carousel-indicators {
-          position: absolute;
-          bottom: 10px;
-          left: 0;
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          gap: 6px;
-        }
-        .indicator-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: #ccc;
-          display: inline-block;
-          cursor: pointer;
-        }
-        .indicator-dot.active {
-          background: #2a8ef2;
-        }
-      `}</style>
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Contactar al vendedor</h3>
+            <p>¿Quieres enviar un mensaje al vendedor?</p>
+            {emailStatus && (
+              <p className={emailStatus.includes('Error') ? 'error-message' : 'success-message'}>
+                {emailStatus}
+              </p>
+            )}
+            <div className="modal-buttons">
+              <button 
+                className="modal-button close"
+                onClick={() => setShowModal(false)}
+                disabled={sending}
+              >
+                Cancelar
+              </button>
+              <button 
+                className="modal-button email"
+                onClick={handleContactSeller}
+                disabled={sending}
+              >
+                {sending ? 'Enviando...' : 'Enviar mensaje'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

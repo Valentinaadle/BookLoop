@@ -220,6 +220,7 @@ const Books = () => {
                       favorito={false}
                       onToggleFavorito={() => {}}
                       onBuy={() => {}}
+                      book_id={book.book_id}
                     />
                   );
                 })
