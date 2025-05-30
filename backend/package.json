@@ -15,7 +15,6 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "email-existence": "^0.1.6",
     "express": "^4.21.2",
     "iconv-lite": "^0.6.3",
     "jsonwebtoken": "^9.0.2",

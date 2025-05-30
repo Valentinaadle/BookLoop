@@ -5,9 +5,6 @@ const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Profile = require('../models/Profile');
-const emailExistence = require('email-existence');
-const util = require('util');
-const checkEmail = util.promisify(emailExistence.check);
 
 // Ruta para obtener todos los usuarios (temporal para debug)
 router.get('/usuarios', async (req, res) => {
