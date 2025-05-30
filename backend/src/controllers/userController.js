@@ -26,15 +26,74 @@ const getUserById = async (req, res) => {
   }
 };
 
+// Login de usuario
+const loginUser = async (req, res) => {
+  try {
+    console.log('Datos recibidos en login:', req.body);
+    const { email, password } = req.body;
+
+    // Buscar usuario
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      console.log('Usuario no encontrado con email:', email);
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+
+    // Verificar contraseña
+    const validPassword = await user.validPassword(password);
+    if (!validPassword) {
+      console.log('Contraseña inválida para usuario:', email);
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+
+    console.log('Login exitoso para usuario:', user.username);
+    res.json({
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        nombre: user.nombre,
+        apellido: user.apellido,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Error en login:', error);
+    res.status(500).json({ message: 'Error al iniciar sesión' });
+  }
+};
+
 // Crear un nuevo usuario
 const createUser = async (req, res) => {
   try {
-    console.log('Datos recibidos:', req.body);
-    const user = await User.create(req.body);
-    res.status(201).json(user);
+    console.log('Datos recibidos en createUser:', req.body);
+    const { username, email, password, nombre, apellido } = req.body;
+
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      console.log('Usuario ya existe con email:', email);
+      return res.status(400).json({ message: 'El email ya está registrado' });
+    }
+
+    // Crear usuario (la contraseña se encripta automáticamente en el modelo)
+    const user = await User.create({
+      username,
+      email,
+      password,
+      nombre,
+      apellido,
+      role: 'user',
+      activo: true
+    });
+
+    console.log('Usuario creado exitosamente:', user.username);
+    res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error) {
     console.error('Error detallado al crear usuario:', error);
+    console.error('Stack trace:', error.stack);
     if (error.name === 'SequelizeValidationError') {
+      console.log('Errores de validación:', error.errors);
       return res.status(400).json({
         message: 'Error de validación',
         errors: error.errors.map(e => ({
@@ -44,6 +103,7 @@ const createUser = async (req, res) => {
       });
     }
     if (error.name === 'SequelizeUniqueConstraintError') {
+      console.log('Error de unicidad:', error.errors);
       return res.status(400).json({
         message: 'El usuario ya existe',
         errors: error.errors.map(e => ({
@@ -96,5 +156,6 @@ module.exports = {
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  loginUser
 }; 

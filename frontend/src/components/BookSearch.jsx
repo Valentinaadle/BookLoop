@@ -66,9 +66,63 @@ const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
 
       <div className="books-grid">
         {books && books.length > 0 ? (
-          books.map((book) => (
-            <BookCard key={book.book_id || book.id} book={book} onClick={() => onBookSelect(book)} />
-          ))
+          books.map((book) => {
+            let imageUrl = null;
+            if (book.Images && book.Images.length > 0 && book.Images[0].image_url) {
+              imageUrl = book.Images[0].image_url.startsWith('http')
+                ? book.Images[0].image_url
+                : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.Images[0].image_url}`;
+            } else if (book.imageUrl) {
+              imageUrl = book.imageUrl.startsWith('http')
+                ? book.imageUrl
+                : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.imageUrl}`;
+            } else if (book.imagen) {
+              imageUrl = book.imagen.startsWith('http')
+                ? book.imagen
+                : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.imagen}`;
+            } else if (book.volumeInfo && book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
+              imageUrl = book.volumeInfo.imageLinks.thumbnail;
+            } else {
+              imageUrl = '/icono2.png';
+            }
+            return (
+              <BookCard
+                key={book.book_id || book.id}
+                descuento={null}
+                img={imageUrl}
+                titulo={book.title || book.titulo || 'Sin título'}
+                autor={(() => {
+                  if (book.authors) {
+                    if (Array.isArray(book.authors)) {
+                      return book.authors.join(', ');
+                    } else if (typeof book.authors === 'string') {
+                      if (book.authors.trim().startsWith('[')) {
+                        try {
+                          const parsed = JSON.parse(book.authors);
+                          if (Array.isArray(parsed)) {
+                            return parsed.join(', ');
+                          }
+                        } catch {
+                          // Si falla el parseo, sigue abajo
+                        }
+                      }
+                      return book.authors;
+                    }
+                  } else if (book.autor) {
+                    return book.autor;
+                  } else {
+                    return '';
+                  }
+                })()}
+                precio={book.price || book.precio}
+                favorito={false}
+                onToggleFavorito={() => {}}
+                onBuy={() => {}}
+                book_id={book.book_id || book.id}
+                onClick={() => onBookSelect(book)}
+              />
+            );
+          })
         ) : !loading && (
           <div className="no-results">
             {query ? 'No se encontraron libros' : 'Ingresa un término de búsqueda'}

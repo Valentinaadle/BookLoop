@@ -12,7 +12,7 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -32,20 +32,25 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-      console.log('Login exitoso:', response.data);
+      console.log('Enviando datos de login:', formData);
+      const response = await axios.post('http://localhost:5000/api/users/login', formData);
+      console.log('Respuesta del servidor:', response.data);
       
-      // Guardar el token en localStorage
-      localStorage.setItem('userToken', response.data.token);
-      
-      // Guardar el usuario en el contexto global
-      login(response.data.usuario);
-      
-      // Redirigir al usuario a la página principal
-      navigate('/');
+      if (response.data.user) {
+        // Usar el contexto de autenticación para guardar el usuario
+        login(response.data.user);
+        navigate('/');
+      } else {
+        setError('Error en la respuesta del servidor');
+      }
     } catch (error) {
-      console.error('Error en login:', error);
-      setError(error.response?.data?.error || 'Error al iniciar sesión. Por favor, intenta de nuevo.');
+      console.error('Error completo:', error);
+      console.error('Respuesta del servidor:', error.response?.data);
+      setError(
+        error.response?.data?.message || 
+        error.response?.data?.error || 
+        'Error al iniciar sesión. Por favor, intenta de nuevo.'
+      );
     } finally {
       setLoading(false);
     }
@@ -61,13 +66,13 @@ function Login() {
             {error && <div className="error-message">{error}</div>}
             <form id="loginForm" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="username">Usuario o Correo electrónico</label>
+                <label htmlFor="email">Correo electrónico</label>
                 <input 
-                  type="text" 
-                  id="username" 
-                  name="username" 
+                  type="email" 
+                  id="email" 
+                  name="email" 
                   required
-                  value={formData.username}
+                  value={formData.email}
                   onChange={handleChange}
                   disabled={loading}
                 />

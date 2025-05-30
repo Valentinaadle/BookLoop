@@ -205,12 +205,6 @@ JWT_SECRET=un_secreto_largo_y_seguro
 
 ---
 
-## 8. ¿Qué hacer si la base de datos ya existe?
-
-- Si ya tienes la base de datos `bookloop` con los datos, **no es necesario crearla ni importarla de nuevo**.
-- Solo asegúrate de que el nombre en tu archivo `.env` coincida con el de la base de datos.
-
----
 
 ## 9. Comando rápido para levantar todo
 

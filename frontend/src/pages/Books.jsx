@@ -191,37 +191,44 @@ const Books = () => {
                     ? (book.Images[0].image_url.startsWith('http')
                         ? book.Images[0].image_url
                         : `${API_URL}${book.Images[0].image_url}`)
-                    : (book.imageUrl || DEFAULT_BOOK_IMAGE);
+                    : (book.imageUrl || book.imagen || DEFAULT_BOOK_IMAGE);
                   // Simulación de descuento (puedes cambiar esto por un campo real)
                   const descuento = book.descuento || '-30%';
                   return (
                     <BookCard
-                      key={book.book_id}
+                      key={book.book_id || book.id}
                       descuento={null}
                       img={imageUrl}
-                      titulo={book.title}
+                      titulo={book.title || book.titulo || 'Sin título'}
                       autor={(() => {
-                        if (Array.isArray(book.authors)) {
-                          return book.authors.join(', ');
-                        } else if (typeof book.authors === 'string') {
-                          try {
-                            const parsed = JSON.parse(book.authors);
-                            if (Array.isArray(parsed)) {
-                              return parsed.join(', ');
+                        if (book.authors) {
+                          if (Array.isArray(book.authors)) {
+                            return book.authors.join(', ');
+                          } else if (typeof book.authors === 'string') {
+                            // Si es un string que parece un array, parsea
+                            if (book.authors.trim().startsWith('[')) {
+                              try {
+                                const parsed = JSON.parse(book.authors);
+                                if (Array.isArray(parsed)) {
+                                  return parsed.join(', ');
+                                }
+                              } catch {
+                                // Si falla el parseo, sigue abajo
+                              }
                             }
-                            return parsed;
-                          } catch {
                             return book.authors;
                           }
+                        } else if (book.autor) {
+                          return book.autor;
                         } else {
                           return '';
                         }
                       })()}
-                      precio={book.price}
+                      precio={book.price || book.precio}
                       favorito={false}
                       onToggleFavorito={() => {}}
                       onBuy={() => {}}
-                      book_id={book.book_id}
+                      book_id={book.book_id || book.id}
                     />
                   );
                 })

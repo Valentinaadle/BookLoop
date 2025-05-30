@@ -58,7 +58,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/registro', {
+      console.log('Enviando datos de registro:', {
         nombre: formData.nombre,
         apellido: formData.apellido,
         email: formData.email,
@@ -66,11 +66,24 @@ function Register() {
         password: formData.password
       });
 
-      console.log('Registro exitoso:', response.data);
+      const response = await axios.post('http://localhost:5000/api/users/registro', {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        username: formData.username,
+        password: formData.password
+      });
+
+      console.log('Respuesta del servidor:', response.data);
       navigate('/login');
     } catch (error) {
-      console.error('Error en registro:', error);
-      setError(error.response?.data?.error || 'Error al registrar usuario. Por favor, intenta de nuevo.');
+      console.error('Error completo:', error);
+      console.error('Respuesta del servidor:', error.response?.data);
+      setError(
+        error.response?.data?.message || 
+        error.response?.data?.error || 
+        'Error al registrar usuario. Por favor, intenta de nuevo.'
+      );
     } finally {
       setLoading(false);
     }

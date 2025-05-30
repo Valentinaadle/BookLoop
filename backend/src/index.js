@@ -1,15 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/../.env' });
+
+// Verificar variables de entorno
+console.log('Verificando variables de entorno:', {
+  DB_HOST: process.env.DB_HOST,
+  DB_USER: process.env.DB_USER,
+  DB_NAME: process.env.DB_NAME
+});
+
 const { sequelize, connectDB } = require('./config/db');
 const Category = require('./models/Category');
 
 // Importar rutas
 const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
-const authRoutes = require('./routes/auth.routes');
 const categoryRoutes = require('./routes/categoryRoutes');
-const emailRoutes = require('./routes/emailRoutes');
 
 const app = express();
 
@@ -22,11 +28,9 @@ app.use('/uploads', express.static(__dirname + '/../uploads'));
 const PORT = process.env.PORT || 5000;
 
 // Rutas
-app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/email', emailRoutes);
 
 // Ruta básica
 app.get('/', (req, res) => {
