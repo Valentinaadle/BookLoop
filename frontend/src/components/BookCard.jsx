@@ -3,6 +3,8 @@ import '../Assets/css/portada.css';
 import { FaShoppingCart, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
+const DEFAULT_BOOK_IMAGE = '/icono2.png';
+
 const BookCard = ({
   descuento,
   img,
@@ -42,7 +44,14 @@ const BookCard = ({
           {favorito ? <FaHeart /> : <FaRegHeart />}
         </button>
       )}
-      <img src={img} alt={titulo} />
+      <img 
+        src={img || DEFAULT_BOOK_IMAGE} 
+        alt={titulo}
+        onError={(e) => {
+          e.target.src = DEFAULT_BOOK_IMAGE;
+          e.target.onerror = null;
+        }}
+      />
       <h3>{titulo}</h3>
       <p>de {autor}</p>
       {precio && (

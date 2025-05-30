@@ -46,7 +46,7 @@ const Book = sequelize.define('Book', {
     defaultValue: []
   },
   description: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT('long'),
     allowNull: true
   },
   publishedDate: {

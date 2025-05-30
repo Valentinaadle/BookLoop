@@ -13,6 +13,13 @@
 .book-header {
   margin-bottom: 30px;
   padding: 0 40px;
+  position: relative;
+}
+
+.book-action-top {
+  position: absolute;
+  top: 0;
+  right: 40px;
 }
 
 .new-badge {
@@ -52,7 +59,8 @@
 }
 
 .book-cover {
-  margin-bottom: 20px;
+  width: 100%;
+  margin-bottom: 8px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -68,28 +76,41 @@
 }
 
 .book-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   width: 100%;
+}
+
+.book-actions-container {
+  display: flex;
+  justify-content: center;
+  padding: 0 40px 20px 40px;
+  margin-top: 20px;
 }
 
 .contact-button-detail {
   background: #2a8ef2;
   color: white;
-  margin-bottom: 4px;
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   border: none;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .contact-button-detail:hover {
   background: #2477ca;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(42, 142, 242, 0.2);
+}
+
+.contact-button-detail i {
+  font-size: 1.1rem;
 }
 
 .book-right-column {
@@ -101,6 +122,7 @@
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .book-details h3 {
@@ -117,6 +139,14 @@
   display: grid;
   grid-template-columns: 150px 1fr;
   gap: 10px;
+  overflow: hidden;
+}
+
+.detail-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .detail-item span:first-child {
@@ -127,6 +157,7 @@
   background: white;
   border-radius: 8px;
   padding: 20px;
+  overflow: hidden;
 }
 
 .book-synopsis h3 {
@@ -138,6 +169,47 @@
   color: #444;
   line-height: 1.6;
   margin-bottom: 15px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-line;
+  max-width: 100%;
+}
+
+.edit-book-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #394B60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.edit-book-button:hover {
+  background-color: #2c3b4f;
+  transform: translateY(-2px);
+}
+
+.edit-book-button i {
+  font-size: 0.9rem;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: 500;
 }
 
 .modal-overlay {
@@ -158,62 +230,126 @@
   padding: 30px;
   border-radius: 12px;
   width: 90%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.modal-content h3 {
-  margin: 0 0 20px 0;
-  color: #333;
+.modal-content h2 {
+  color: #394B60;
+  margin-bottom: 25px;
+  text-align: center;
   font-size: 1.5rem;
 }
 
-.modal-content p {
-  margin: 0 0 25px 0;
-  color: #666;
-  font-size: 1.1rem;
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.form-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #394B60;
+  font-weight: 500;
+  width: 100%;
+}
+
+.form-group label i {
+  margin-right: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #394B60;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 120px;
+  max-height: 300px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: auto;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+}
+
+.form-group textarea {
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Estilizar la barra de desplazamiento para navegadores webkit */
+textarea.form-input::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea.form-input::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+textarea.form-input::-webkit-scrollbar-thumb {
+  background: #394B60;
+  border-radius: 4px;
+}
+
+textarea.form-input::-webkit-scrollbar-thumb:hover {
+  background: #2c3b4f;
 }
 
 .modal-buttons {
   display: flex;
-  gap: 15px;
-  justify-content: center;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 25px;
 }
 
-.modal-button {
-  padding: 12px 28px;
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
 }
 
-.modal-button.email {
-  background: #2a8ef2;
+.save-button {
+  background-color: #394B60;
   color: white;
 }
 
-.modal-button.email:hover {
-  background: #2477ca;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(42, 142, 242, 0.3);
+.save-button:hover {
+  background-color: #2c3b4f;
 }
 
-.modal-button.close {
-  background: #f5f6fa;
-  color: #394B60;
-  border: 1px solid #ddd;
+.cancel-button {
+  background-color: #6c757d;
+  color: white;
 }
 
-.modal-button.close:hover {
-  background: #e6eaf1;
-  color: #2a8ef2;
-  border-color: #2a8ef2;
-  transform: translateY(-1px);
+.cancel-button:hover {
+  background-color: #5a6268;
 }
 
 .carousel {
@@ -298,9 +434,19 @@
     padding: 0 20px;
   }
 
+  .book-action-top {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
   .book-left-column {
     width: 100%;
-    align-items: center;
+    max-width: 350px;
+    margin: 0 auto;
   }
 
   .book-cover {
@@ -326,6 +472,46 @@
   .carousel-arrow.right {
     right: 5px;
   }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .edit-book-button {
+    top: 10px;
+    right: 10px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .book-actions-container {
+    padding: 0 20px;
+  }
+
+  .contact-button-detail {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .owner-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .owner-actions button {
+    width: 100%;
+  }
 }
 
 .error-message {
@@ -339,19 +525,80 @@
   text-align: left;
 }
 
-.success-message {
-  color: #28a745;
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  padding: 12px;
-  border-radius: 6px;
-  margin: 15px 0;
-  font-size: 0.95rem;
-  text-align: left;
-}
-
 .modal-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   background-color: #ccc;
+}
+
+.modal-button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal-button.email {
+  background: #2a8ef2;
+  color: white;
+}
+
+.modal-button.email:hover {
+  background: #2477ca;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(42, 142, 242, 0.3);
+}
+
+.modal-button.close {
+  background: #f5f6fa;
+  color: #394B60;
+  border: 1px solid #ddd;
+}
+
+.modal-button.close:hover {
+  background: #e6eaf1;
+  color: #2a8ef2;
+  border-color: #2a8ef2;
+  transform: translateY(-1px);
+}
+
+.owner-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.delete-button-detail {
+  background: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.delete-button-detail:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+}
+
+.delete-button-detail i {
+  font-size: 1.1rem;
 } 

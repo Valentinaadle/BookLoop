@@ -45,7 +45,8 @@ const getBooks = async (req, res) => {
       include: [
         { model: require('../models/Image'), attributes: ['image_id', 'image_url'] },
         { model: Category, attributes: ['category_id', 'category_name'] }
-      ]
+      ],
+      order: [['createdAt', 'DESC']] // Ordenar por fecha de creación, más reciente primero
     });
     res.json(books);
   } catch (error) {
@@ -397,7 +398,14 @@ const searchBookByISBN = async (req, res) => {
 const getBooksByUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const books = await Book.findAll({ where: { seller_id: userId } });
+    const books = await Book.findAll({
+      where: { seller_id: userId },
+      include: [
+        { model: Image, attributes: ['image_id', 'image_url'] },
+        { model: Category, attributes: ['category_id', 'category_name'] }
+      ],
+      order: [['createdAt', 'DESC']] // Ordenar por fecha de creación, más reciente primero
+    });
     res.json(books);
   } catch (error) {
     console.error('Error al obtener libros del usuario:', error);

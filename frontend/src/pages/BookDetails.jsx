@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -10,6 +10,7 @@ import '../Assets/css/BookDetails.css';
 function BookDetails() {
   const { id } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,35 +18,69 @@ function BookDetails() {
   const [showModal, setShowModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [emailStatus, setEmailStatus] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({
+    title: '',
+    authors: '',
+    description: '',
+    price: '',
+    stock: ''
+  });
+  const [success, setSuccess] = useState(null);
+  const [bookImages, setBookImages] = useState([]);
+  const DEFAULT_BOOK_IMAGE = '/icono2.png';
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-  useEffect(() => {
-    const fetchBookDetails = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        console.log('Fetching book with ID:', id); // Para debugging
-        const response = await fetch(`${API_URL}/api/books/${id}`);
-        
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        console.log('Book data received:', data); // Para debugging
-        setBook(data);
-      } catch (err) {
-        console.error('Error fetching book:', err);
-        setError('No se pudo cargar el libro. ' + err.message);
-      } finally {
-        setLoading(false);
+  const fetchBookDetails = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log('Fetching book with ID:', id);
+      const response = await fetch(`${API_URL}/api/books/${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-    };
+      
+      const data = await response.json();
+      console.log('Book data received:', data);
+      setBook(data);
 
+      // Procesar las imágenes del libro
+      const images = [];
+      if (data.imageUrl) {
+        images.push(data.imageUrl.startsWith('http') ? data.imageUrl : `${API_URL}${data.imageUrl}`);
+      }
+      if (Array.isArray(data.Images) && data.Images.length > 0) {
+        data.Images.forEach(img => {
+          const imgUrl = img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`;
+          if (!images.includes(imgUrl)) {
+            images.push(imgUrl);
+          }
+        });
+      }
+      setBookImages(images);
+
+      setEditForm({
+        title: data.title || '',
+        authors: Array.isArray(data.authors) ? data.authors.join(', ') : data.authors || '',
+        description: data.description || '',
+        price: data.price || '',
+        stock: data.stock || ''
+      });
+    } catch (err) {
+      console.error('Error fetching book:', err);
+      setError('No se pudo cargar el libro. ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, API_URL]);
+
+  useEffect(() => {
     if (id) {
       fetchBookDetails();
     }
-  }, [id, API_URL]);
+  }, [id, fetchBookDetails]);
 
   if (loading) {
     return (
@@ -75,25 +110,6 @@ function BookDetails() {
         <Footer />
       </>
     );
-  }
-
-  // Obtener las imágenes del libro (de la relación Images)
-  const bookImages = [];
-  
-  // Agregar la imagen de Google Books si existe
-  if (book.imageUrl) {
-    bookImages.push(book.imageUrl.startsWith('http') ? book.imageUrl : `${API_URL}${book.imageUrl}`);
-  }
-  
-  // Agregar las imágenes subidas por el usuario
-  if (Array.isArray(book.Images) && book.Images.length > 0) {
-    book.Images.forEach(img => {
-      const imgUrl = img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`;
-      // Evitar duplicados
-      if (!bookImages.includes(imgUrl)) {
-        bookImages.push(imgUrl);
-      }
-    });
   }
 
   const handleContactSeller = async () => {
@@ -166,6 +182,63 @@ function BookDetails() {
     }
   };
 
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formattedData = {
+        ...editForm,
+        authors: editForm.authors.split(',').map(author => author.trim()),
+        description: editForm.description.trim()
+      };
+
+      const response = await fetch(`${API_URL}/api/books/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formattedData)
+      });
+
+      if (!response.ok) throw new Error('Error al actualizar el libro');
+      
+      const updatedBook = await response.json();
+      setBook(updatedBook); // Actualizar el estado del libro directamente
+      setSuccess('Libro actualizado correctamente');
+      setShowEditModal(false);
+    } catch (err) {
+      setError('Error al actualizar el libro');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const isOwner = user && book.seller_id === user.id;
+
+  const handleDeleteBook = async () => {
+    if (window.confirm('¿Estás seguro que deseas eliminar este libro?')) {
+      try {
+        const response = await fetch(`${API_URL}/api/books/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) throw new Error('Error al eliminar el libro');
+        
+        navigate('/profile');
+      } catch (err) {
+        setError('Error al eliminar el libro');
+      }
+    }
+  };
+
   return (
     <>
       <Header />
@@ -202,6 +275,31 @@ function BookDetails() {
             <p className="book-seller">
               <b>Vendido por:</b> {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
             </p>
+            <div className="book-action-top">
+              {isOwner ? (
+                <div className="owner-actions">
+                  <button 
+                    className="contact-button-detail"
+                    onClick={() => setShowEditModal(true)}
+                  >
+                    <i className="fas fa-edit"></i> Editar Libro
+                  </button>
+                  <button 
+                    className="delete-button-detail"
+                    onClick={handleDeleteBook}
+                  >
+                    <i className="fas fa-trash"></i> Eliminar Libro
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  className="contact-button-detail"
+                  onClick={() => setShowModal(true)}
+                >
+                  <i className="fas fa-envelope"></i> Contactar Vendedor
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="book-content">
@@ -219,7 +317,7 @@ function BookDetails() {
                       alt={`Imagen ${activeImage + 1} de ${book.title}`}
                       className="carousel-image"
                       onError={(e) => {
-                        e.target.src = '/placeholder-book.png';
+                        e.target.src = DEFAULT_BOOK_IMAGE;
                         e.target.onerror = null;
                       }}
                     />
@@ -240,19 +338,11 @@ function BookDetails() {
                   </div>
                 ) : (
                   <img
-                    src="/placeholder-book.png"
+                    src={DEFAULT_BOOK_IMAGE}
                     alt={`Portada ${book.title}`}
                     className="book-cover-image"
                   />
                 )}
-              </div>
-              <div className="book-actions">
-                <button 
-                  className="contact-button-detail"
-                  onClick={() => setShowModal(true)}
-                >
-                  Contactar vendedor
-                </button>
               </div>
             </div>
 
@@ -309,6 +399,86 @@ function BookDetails() {
           </div>
         </div>
       )}
+
+      {showEditModal && isOwner && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Editar Libro</h2>
+            <form onSubmit={handleEditSubmit}>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-book"></i> Título
+                  <input
+                    type="text"
+                    name="title"
+                    value={editForm.title}
+                    onChange={handleInputChange}
+                    required
+                    className="form-input"
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-user"></i> Autores
+                  <input
+                    type="text"
+                    name="authors"
+                    value={editForm.authors}
+                    onChange={handleInputChange}
+                    required
+                    className="form-input"
+                    placeholder="Separados por comas"
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-align-left"></i> Descripción
+                  <textarea
+                    name="description"
+                    value={editForm.description}
+                    onChange={handleInputChange}
+                    required
+                    className="form-input"
+                    rows="4"
+                    maxLength="1000"
+                  />
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  <i className="fas fa-tag"></i> Precio
+                  <input
+                    type="number"
+                    name="price"
+                    value={editForm.price}
+                    onChange={handleInputChange}
+                    required
+                    className="form-input"
+                    step="0.01"
+                    min="0"
+                  />
+                </label>
+              </div>
+              <div className="modal-buttons">
+                <button type="submit" className="save-button">
+                  <i className="fas fa-save"></i> Guardar Cambios
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setShowEditModal(false)} 
+                  className="cancel-button"
+                >
+                  <i className="fas fa-times"></i> Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {success && <div className="success-message">{success}</div>}
     </>
   );
 }

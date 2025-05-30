@@ -10,6 +10,7 @@ import "../Assets/css/bookcard.css";
 import BookCard from '../components/BookCard';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const DEFAULT_BOOK_IMAGE = '/icono2.png';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -190,7 +191,7 @@ const Books = () => {
                     ? (book.Images[0].image_url.startsWith('http')
                         ? book.Images[0].image_url
                         : `${API_URL}${book.Images[0].image_url}`)
-                    : (book.imageUrl || '/placeholder-book.png');
+                    : (book.imageUrl || DEFAULT_BOOK_IMAGE);
                   // Simulación de descuento (puedes cambiar esto por un campo real)
                   const descuento = book.descuento || '-30%';
                   return (

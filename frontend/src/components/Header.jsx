@@ -10,7 +10,7 @@ export default function Header() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const searchBooks = async (searchQuery) => {
     if (!searchQuery.trim()) {
@@ -49,11 +49,6 @@ export default function Header() {
     navigate('/bookdetails', { state: { book } });
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
   return (
     <header>
       <div className="header-top improved-header-top">
@@ -81,7 +76,6 @@ export default function Header() {
                 <Link to="/favoritos" title="Favoritos"><img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/></Link>
                 <Link to="/profile" title="Perfil"><img src="/icons/usuario.png" className="icon action-icon" alt="usuario" /></Link>
                 <Link to="/carrito" title="Carrito"><img src="/icons/carrito.png" className="icon action-icon" alt="Cart" /></Link>
-                <button onClick={handleLogout} className="logout-button improved-logout">Cerrar sesión</button>
               </>
             ) : (
               <>
