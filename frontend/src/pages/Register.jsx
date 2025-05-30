@@ -44,11 +44,6 @@ function Register() {
       setError('La contraseña debe tener al menos 8 caracteres');
       return false;
     }
-    // Validar que sea un email de Gmail
-    if (!formData.email.toLowerCase().endsWith('@gmail.com')) {
-      setError('Por favor, utiliza una dirección de Gmail válida');
-      return false;
-    }
     return true;
   };
 
@@ -110,9 +105,7 @@ function Register() {
             <input 
               type="email" 
               name="email" 
-              placeholder="Correo electrónico de Gmail" 
-              pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
-              title="Por favor, ingresa una dirección de Gmail válida"
+              placeholder="Correo electrónico" 
               required
               value={formData.email}
               onChange={handleChange}

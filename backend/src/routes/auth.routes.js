@@ -37,30 +37,6 @@ router.post('/registro', async (req, res) => {
         console.log('Datos recibidos:', req.body);
         const { nombre, apellido, email, username, password } = req.body;
 
-        // Validar que sea un email de Gmail
-        if (!email.toLowerCase().endsWith('@gmail.com')) {
-            return res.status(400).json({
-                error: 'Por favor, utiliza una dirección de Gmail válida'
-            });
-        }
-
-        try {
-            console.log('Verificando existencia del email:', email);
-            const emailExists = await checkEmail(email);
-            
-            if (!emailExists) {
-                return res.status(400).json({
-                    error: 'El correo electrónico no existe o no es válido'
-                });
-            }
-            console.log('Email verificado exitosamente');
-        } catch (emailError) {
-            console.error('Error al verificar email:', emailError);
-            return res.status(400).json({
-                error: 'No se pudo verificar la validez del correo electrónico'
-            });
-        }
-
         // Verificar si el usuario ya existe
         const existingUser = await User.findOne({
             where: {
