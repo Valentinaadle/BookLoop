@@ -14,12 +14,25 @@
   margin-bottom: 30px;
   padding: 0 40px;
   position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.book-header-text {
+  text-align: left;
+  flex: 1 1 auto;
 }
 
 .book-action-top {
-  position: absolute;
-  top: 0;
-  right: 40px;
+  position: static;
+  width: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 0;
+  z-index: 2;
+  margin-right: 40px;
 }
 
 .new-badge {
@@ -431,18 +444,18 @@ textarea.form-input::-webkit-scrollbar-thumb:hover {
   }
 
   .book-header {
+    flex-direction: column;
+    align-items: stretch;
     padding: 0 20px;
   }
-
-  .book-action-top {
-    position: relative;
-    top: auto;
-    right: auto;
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
+  .book-header-text {
+    margin-bottom: 10px;
   }
-
+  .book-action-top {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
   .book-left-column {
     width: 100%;
     max-width: 350px;
@@ -505,8 +518,10 @@ textarea.form-input::-webkit-scrollbar-thumb:hover {
   }
 
   .owner-actions {
-    flex-direction: column;
-    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    justify-content: flex-end;
   }
 
   .owner-actions button {
@@ -574,6 +589,9 @@ textarea.form-input::-webkit-scrollbar-thumb:hover {
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: flex-end;
+  width: auto;
+  position: static;
 }
 
 .delete-button-detail {
@@ -601,4 +619,15 @@ textarea.form-input::-webkit-scrollbar-thumb:hover {
 
 .delete-button-detail i {
   font-size: 1.1rem;
+}
+
+@media screen and (max-width: 900px) {
+  .owner-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+  }
+  .owner-actions button {
+    width: 100%;
+  }
 } 

@@ -8,6 +8,7 @@ import "../Assets/css/footer.css";
 import "../Assets/css/filtro.css";
 import "../Assets/css/bookcard.css";
 import BookCard from '../components/BookCard';
+import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const DEFAULT_BOOK_IMAGE = '/icono2.png';
@@ -155,49 +156,20 @@ const Comprar = () => {
           ) : (
             <div className="books-grid">
               {books.length > 0 ? (
-                books.map((book) => {
-                  let imageUrl = (book.Images && book.Images.length > 0)
-                    ? (book.Images[0].image_url.startsWith('http')
-                        ? book.Images[0].image_url
-                        : `${API_URL}${book.Images[0].image_url}`)
-                    : (book.imageUrl || book.imagen || DEFAULT_BOOK_IMAGE);
-                  return (
-                    <BookCard
-                      key={book.book_id || book.id}
-                      descuento={null}
-                      img={imageUrl}
-                      titulo={book.title || book.titulo || 'Sin título'}
-                      autor={(() => {
-                        if (book.authors) {
-                          if (Array.isArray(book.authors)) {
-                            return book.authors.join(', ');
-                          } else if (typeof book.authors === 'string') {
-                            if (book.authors.trim().startsWith('[')) {
-                              try {
-                                const parsed = JSON.parse(book.authors);
-                                if (Array.isArray(parsed)) {
-                                  return parsed.join(', ');
-                                }
-                              } catch {
-                                // Si falla el parseo, sigue abajo
-                              }
-                            }
-                            return book.authors;
-                          }
-                        } else if (book.autor) {
-                          return book.autor;
-                        } else {
-                          return '';
-                        }
-                      })()}
-                      precio={book.price || book.precio}
-                      favorito={false}
-                      onToggleFavorito={() => {}}
-                      onBuy={() => {}}
-                      book_id={book.book_id || book.id}
-                    />
-                  );
-                })
+                books.map((book) => (
+                  <BookCard
+                    key={book.book_id || book.id}
+                    descuento={null}
+                    img={getBookImage(book, API_URL)}
+                    titulo={book.title || book.titulo || 'Sin título'}
+                    autor={getBookAuthor(book)}
+                    precio={book.price || book.precio}
+                    favorito={false}
+                    onToggleFavorito={() => {}}
+                    onBuy={() => {}}
+                    book_id={book.book_id || book.id}
+                  />
+                ))
               ) : (
                 <div className="no-books">
                   <p>No hay libros disponibles.</p>

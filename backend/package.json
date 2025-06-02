@@ -20,6 +20,7 @@
     "multer": "^2.0.0",
     "mysql2": "^3.9.2",
     "node-fetch": "^2.7.0",
+    "nodemailer": "^7.0.3",
     "sequelize": "^6.37.1"
   },
   "devDependencies": {

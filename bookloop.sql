@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2025 a las 02:34:08
+-- Tiempo de generación: 02-06-2025 a las 16:35:11
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -37,8 +37,8 @@ CREATE TABLE `books` (
   `publication_date` varchar(255) DEFAULT NULL,
   `googleBooksId` varchar(255) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
-  `authors` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`authors`)),
-  `description` text DEFAULT NULL,
+  `authors` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`authors`)),
+  `description` longtext DEFAULT NULL,
   `publishedDate` varchar(255) DEFAULT NULL,
   `isbn` varchar(255) DEFAULT NULL,
   `pageCount` int(11) DEFAULT NULL,
@@ -69,7 +69,7 @@ INSERT INTO `books` (`book_id`, `seller_id`, `category_id`, `images_id`, `isbn_c
 (29, 7, 5, NULL, '978-1234567890', 'Nuevo', '2024-01-15', NULL, 'La Fortuna', '[\"Michael McDowell\"]', 'Una novela intrigante que explora los giros del destino y la fortuna.', NULL, NULL, 320, '/Assets/book12.webp', '[\"Novela\"]', 'Español', NULL, 10, 1, 15.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
 (33, 7, 5, NULL, '978-5678901234', 'Nuevo', '2024-03-15', NULL, 'Lluvia', '[\"Michael McDowell\"]', 'Una novela poética sobre la vida y sus ciclos.', NULL, NULL, 250, '/Assets/book3.webp', '[\"Poesía\"]', 'Español', NULL, 12, 1, 13.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
 (34, 7, 5, NULL, '978-6789012345', 'Nuevo', '2024-01-01', NULL, 'Orgullo y Prejuicio', '[\"Jane Austen\"]', 'Un clásico de la literatura inglesa sobre el amor y las convenciones sociales.', NULL, NULL, 400, '/Assets/book13.webp', '[\"Novela Romántica\"]', 'Español', NULL, 15, 1, 18.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
-(35, 7, 5, NULL, '978-7890123456', 'Nuevo', '2024-01-15', NULL, 'Cumbres Borrascosas', '[\"Emily Bronte\"]', 'Una historia de amor apasionado y venganza en los páramos de Yorkshire.', NULL, NULL, 380, '/Assets/book14.webp', '[\"Novela Gótica\"]', 'Español', NULL, 10, 1, 17.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(35, 7, 5, NULL, '978-7890123456', 'Nuevo', '2024-01-15', NULL, 'Cumbres Borrascosas', '[\"Emily Bronte\"]', 'Una historia de amor apasionado y venganza en los páramos de Yorkshir.', NULL, NULL, 380, '/Assets/book14.webp', '[\"Novela Gótica\"]', 'Español', NULL, 10, 1, 17.99, '2025-06-01 20:53:43', '2025-06-02 13:31:38', 'Editorial BookLoop'),
 (36, 7, 3, NULL, '9780140283334', 'Bueno', '1999-10-01', NULL, 'Lord of the Flies', '[\"William Golding\"]', 'Lord of the Flies remains as provocative today as when it was first published in 1954, igniting passionate debate with its startling, brutal portrait of human nature. Though critically acclaimed, it was largely ignored upon its initial publication. Yet soon it became a cult favorite among both students and literary critics who compared it to J.D. Salinger\'s The Catcher in the Rye in its influence on modern thought and literature. William Golding\'s compelling story about a group of very ordinary small boys marooned on a coral island has become a modern classic. At first it seems as though it is all going to be great fun; but the fun before long becomes furious and life on the island turns into a nightmare of panic and death. As ordinary standards of behaviour collapse, the whole world the boys know collapses with them—the world of cricket and homework and adventure stories—and another world is revealed beneath, primitive and terrible. Labeled a parable, an allegory, a myth, a morality tale, a parody, a political treatise, even a vision of the apocalypse, Lord of the Flies has established itself as a true classic. \"Lord of the Flies is one of my favorite books. That was a big influence on me as a teenager, I still read it every couple of years.\" —Suzanne Collins, author of The Hunger Games \"As exciting, relevant, and thought-provoking now as it was when Golding published it in 1954.\" —Stephen King', NULL, NULL, 300, 'http://books.google.com/books/content?id=4uWPEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 4000.00, '2025-06-02 00:03:56', '2025-06-02 00:03:56', 'Planeta');
 
 -- --------------------------------------------------------
@@ -127,7 +127,14 @@ INSERT INTO `images` (`image_id`, `book_id`, `image_url`) VALUES
 (11, 17, '/uploads/1748312375046-579867956.jpg'),
 (15, 19, 'http://books.google.com/books/content?id=ncuX8p2xLIUC&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
 (19, 21, 'http://books.google.com/books/content?id=KHYsAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
-(20, 36, 'http://books.google.com/books/content?id=4uWPEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api');
+(20, 36, 'http://books.google.com/books/content?id=4uWPEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
+(21, 29, '/uploads/1748874192042-927512868.webp'),
+(22, 33, '/uploads/1748874192057-169475455.webp'),
+(23, 34, '/uploads/1748874192068-884147542.webp'),
+(24, 35, '/uploads/1748874192078-443673935.webp'),
+(25, 23, '/uploads/1748874192086-114462442.webp'),
+(26, 24, '/uploads/1748874192095-39250660.webp'),
+(27, 25, '/uploads/1748874192106-744330724.webp');
 
 -- --------------------------------------------------------
 
@@ -303,6 +310,7 @@ ALTER TABLE `books`
   ADD UNIQUE KEY `googleBooksId_52` (`googleBooksId`),
   ADD UNIQUE KEY `googleBooksId_53` (`googleBooksId`),
   ADD UNIQUE KEY `googleBooksId_54` (`googleBooksId`),
+  ADD UNIQUE KEY `googleBooksId_55` (`googleBooksId`),
   ADD KEY `seller_id` (`seller_id`),
   ADD KEY `category_id` (`category_id`);
 
@@ -405,6 +413,8 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email_24` (`email`),
   ADD UNIQUE KEY `username_25` (`username`),
   ADD UNIQUE KEY `email_25` (`email`),
+  ADD UNIQUE KEY `username_26` (`username`),
+  ADD UNIQUE KEY `email_26` (`email`),
   ADD KEY `role_id` (`role_id`);
 
 --
@@ -427,7 +437,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT de la tabla `images`
 --
 ALTER TABLE `images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `profiles`
@@ -481,6 +491,8 @@ ALTER TABLE `books`
   ADD CONSTRAINT `books_ibfk_109` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_11` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_110` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `books_ibfk_111` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `books_ibfk_112` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_12` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_13` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_14` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -632,6 +644,7 @@ ALTER TABLE `images`
   ADD CONSTRAINT `images_ibfk_52` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_53` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_54` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `images_ibfk_55` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_6` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_7` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_8` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -691,6 +704,7 @@ ALTER TABLE `profiles`
   ADD CONSTRAINT `profiles_ibfk_52` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_53` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_54` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `profiles_ibfk_55` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_6` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_7` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_8` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -771,6 +785,9 @@ ALTER TABLE `reviews`
   ADD CONSTRAINT `reviews_ibfk_160` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_161` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_162` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `reviews_ibfk_163` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `reviews_ibfk_164` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `reviews_ibfk_165` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_17` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_18` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_19` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -938,6 +955,9 @@ ALTER TABLE `transactions`
   ADD CONSTRAINT `transactions_ibfk_160` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_161` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_162` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_163` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_164` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_165` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_17` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_18` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_19` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -1085,6 +1105,7 @@ ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_53` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_54` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_55` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_ibfk_56` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_6` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_7` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_8` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,

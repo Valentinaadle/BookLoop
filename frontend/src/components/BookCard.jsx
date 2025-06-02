@@ -1,9 +1,12 @@
-import React from 'react';
-import '../Assets/css/portada.css';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import '../Assets/css/bookcard.css';
 import { FaShoppingCart, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const DEFAULT_BOOK_IMAGE = '/icono2.png';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const BookCard = ({
   descuento,
@@ -18,59 +21,47 @@ const BookCard = ({
   showComprar = true,
   book_id
 }) => {
+  const { user } = useAuth();
+  const [isNotifying, setIsNotifying] = useState(false);
+  const [notificationSent, setNotificationSent] = useState(false);
   const navigate = useNavigate();
 
-  const handleClick = (e) => {
-    e.preventDefault();
+  const handleBuyClick = (e) => {
     e.stopPropagation();
-    if (book_id) {
-      navigate(`/book/${book_id}`);
-    }
+    navigate(`/book/${book_id}`);
   };
 
   return (
-    <div className="product-card" onClick={handleClick} style={{ cursor: 'pointer' }}>
-      {descuento && <span className="discount">{descuento}</span>}
-      {showFavorito && (
-        <button
-          className="favorite-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleFavorito();
+    <div className="book-card" onClick={() => navigate(`/book/${book_id}`)} style={{cursor: 'pointer'}}>
+      <div className="book-image-container">
+        {descuento && <div className="discount-badge">{descuento}</div>}
+        <button className="favorite-btn" tabIndex={-1} aria-label="Favorito"><FaRegHeart /></button>
+        <img 
+          src={img || DEFAULT_BOOK_IMAGE} 
+          alt={titulo}
+          onError={(e) => {
+            e.target.src = DEFAULT_BOOK_IMAGE;
+            e.target.onerror = null;
           }}
-          aria-label="Agregar a favoritos"
-          type="button"
-        >
-          {favorito ? <FaHeart /> : <FaRegHeart />}
-        </button>
-      )}
-      <img 
-        src={img || DEFAULT_BOOK_IMAGE} 
-        alt={titulo}
-        onError={(e) => {
-          e.target.src = DEFAULT_BOOK_IMAGE;
-          e.target.onerror = null;
-        }}
-      />
-      <h3>{titulo}</h3>
-      <p>de {autor}</p>
-      {precio && (
-        <div className="book-price">
-          <span className="price">${parseFloat(precio).toFixed(2)}</span>
-          {showComprar && (
-            <button 
-              className="buy-btn" 
-              onClick={(e) => {
-                e.stopPropagation();
-                onBuy();
-              }} 
-              type="button"
-            >
-              <FaShoppingCart /> Comprar
-            </button>
-          )}
+          className="book-image"
+        />
+      </div>
+      <div className="book-info">
+        <h3 className="book-title">{titulo}</h3>
+        <p className="book-author">de {autor}</p>
+        <div className="book-price-container">
+          <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
         </div>
-      )}
+        <div className="book-actions">
+          <button 
+            className="buy-button"
+            onClick={handleBuyClick}
+          >
+            <FaShoppingCart style={{ marginRight: '8px' }} />
+            Ver detalles
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

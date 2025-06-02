@@ -15,6 +15,7 @@ const {
   searchBooksInDB
 } = require('../controllers/bookController');
 const { addBookFromGoogle } = require('../controllers/googleBooksController');
+const { notifySeller } = require('../controllers/notificationController');
 
 // Rutas de Google Books
 router.get('/search', searchBooks);
@@ -44,5 +45,8 @@ router.post('/upload-image', uploadImage);
 
 // Obtener libros publicados por usuario
 router.get('/user/:userId', getBooksByUser);
+
+// Notificar al vendedor
+router.post('/notify-seller', notifySeller);
 
 module.exports = router; 

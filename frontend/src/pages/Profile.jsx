@@ -6,6 +6,8 @@ import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { getBookImage, getBookAuthor } from '../utils/bookUtils';
+import BookCard from '../components/BookCard';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -225,67 +227,18 @@ function Profile() {
               </button>
               <br></br>
               <div className="recent-books-grid">
-                {publishedBooks.slice(0, 3).map(book => {
-                  let imageUrl = DEFAULT_BOOK_IMAGE;
-                  if (book.Images && Array.isArray(book.Images) && book.Images.length > 0 && book.Images[0].image_url) {
-                    if (book.Images[0].image_url.startsWith('/Assets')) {
-                      imageUrl = book.Images[0].image_url;
-                    } else if (book.Images[0].image_url.startsWith('http')) {
-                      imageUrl = book.Images[0].image_url;
-                    } else {
-                      imageUrl = `${API_URL}${book.Images[0].image_url}`;
-                    }
-                  } else if (book.imageUrl) {
-                    if (book.imageUrl.startsWith('/Assets')) {
-                      imageUrl = book.imageUrl;
-                    } else if (book.imageUrl.startsWith('http')) {
-                      imageUrl = book.imageUrl;
-                    } else {
-                      imageUrl = `${API_URL}${book.imageUrl}`;
-                    }
-                  }
-                  
-                  return (
-                    <div key={book.book_id} className="recent-book-card">
-                      <div className="recent-book-image-container">
-                        <img 
-                          src={imageUrl} 
-                          alt={book.title}
-                          className="recent-book-cover"
-                          onError={e => { e.target.src = DEFAULT_BOOK_IMAGE; }}
-                        />
-                      </div>
-                      <div className="recent-book-info">
-                        <h4>{book.title}</h4>
-                        <p className="recent-book-author">
-                          {(() => {
-                            if (Array.isArray(book.authors)) {
-                              return book.authors.join(', ');
-                            } else if (typeof book.authors === 'string') {
-                              try {
-                                const parsed = JSON.parse(book.authors);
-                                if (Array.isArray(parsed)) {
-                                  return parsed.join(', ');
-                                }
-                                return parsed;
-                              } catch {
-                                return book.authors;
-                              }
-                            } else {
-                              return 'Autor no especificado';
-                            }
-                          })()}
-                        </p>
-                        <p className="recent-book-price">
-                          ${parseFloat(book.price).toFixed(2)}
-                        </p>
-                        <Link to={`/book/${book.book_id}`} className="view-details-link">
-                          Ver detalles <i className="fas fa-arrow-right"></i>
-                        </Link>
-                      </div>
-                    </div>
-                  );
-                })}
+                {publishedBooks.slice(0, 3).map(book => (
+                  <BookCard
+                    key={book.book_id}
+                    descuento={null}
+                    img={getBookImage(book, API_URL)}
+                    titulo={book.title}
+                    autor={getBookAuthor(book)}
+                    precio={book.price}
+                    book_id={book.book_id}
+                    onBuy={() => {}}
+                  />
+                ))}
               </div>
             </div>
           )}

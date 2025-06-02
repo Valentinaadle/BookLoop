@@ -16,6 +16,7 @@ function BookDetails() {
   const [error, setError] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [emailStatus, setEmailStatus] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -123,54 +124,35 @@ function BookDetails() {
       return;
     }
 
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmContact = async () => {
+    setShowConfirmModal(false);
     setSending(true);
     setEmailStatus(null);
 
     try {
-      const token = localStorage.getItem('userToken');
-      
-      if (!token) {
-        setEmailStatus('Error: No hay sesión activa. Por favor, inicia sesión nuevamente.');
-        return;
-      }
-
-      console.log('Enviando solicitud con datos:', {
-        to: email,
-        bookTitle: book.title,
-        userData: {
-          nombre: user.nombre,
-          apellido: user.apellido,
-          email: user.email
-        }
-      });
-
-      const response = await fetch(`${API_URL}/api/email/send`, {
+      const response = await fetch(`${API_URL}/api/books/notify-seller`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          to: email,
-          bookTitle: book.title,
-          userData: {
-            nombre: user.nombre,
-            apellido: user.apellido,
-            email: user.email
-          }
+          bookId: book.book_id || book.id,
+          buyerName: `${user.nombre} ${user.apellido}`,
+          buyerEmail: user.email
         })
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        console.error('Error del servidor:', data);
         throw new Error(data.details || data.error || 'Error al enviar el email');
       }
 
       setEmailStatus('¡Email enviado correctamente!');
       setTimeout(() => {
-        setShowModal(false);
         setEmailStatus(null);
       }, 2000);
     } catch (error) {
@@ -248,32 +230,33 @@ function BookDetails() {
         
         <section className="book-info">
           <div className="book-header">
-            {book.isNew && <span className="new-badge">Novedad</span>}
-            <h1 className="book-title">{book.title}</h1>
-            <p className="book-author">
-              <b>Autor:</b> {(() => {
-                if (Array.isArray(book.authors)) {
-                  return book.authors.join(', ');
-                } else if (typeof book.authors === 'string') {
-                  try {
-                    const parsed = JSON.parse(book.authors);
-                    if (Array.isArray(parsed)) {
-                      return parsed.join(', ');
+            <div className="book-header-text">
+              <h1 className="book-title">{book.title}</h1>
+              <p className="book-author">
+                <b>Autor:</b> {(() => {
+                  if (Array.isArray(book.authors)) {
+                    return book.authors.join(', ');
+                  } else if (typeof book.authors === 'string') {
+                    try {
+                      const parsed = JSON.parse(book.authors);
+                      if (Array.isArray(parsed)) {
+                        return parsed.join(', ');
+                      }
+                      return parsed;
+                    } catch {
+                      return book.authors;
                     }
-                    return parsed;
-                  } catch {
-                    return book.authors;
+                  } else if (book.author) {
+                    return book.author;
+                  } else {
+                    return 'No especificado';
                   }
-                } else if (book.author) {
-                  return book.author;
-                } else {
-                  return 'No especificado';
-                }
-              })()}
-            </p>
-            <p className="book-seller">
-              <b>Vendido por:</b> {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
-            </p>
+                })()}
+              </p>
+              <p className="book-seller">
+                <b>Vendido por:</b> {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
+              </p>
+            </div>
             <div className="book-action-top">
               {isOwner ? (
                 <div className="owner-actions">
@@ -293,9 +276,10 @@ function BookDetails() {
               ) : (
                 <button 
                   className="contact-button-detail"
-                  onClick={() => setShowModal(true)}
+                  onClick={handleContactSeller}
+                  disabled={sending}
                 >
-                  <i className="fas fa-envelope"></i> Contactar Vendedor
+                  <i className="fas fa-envelope"></i> {sending ? 'Enviando...' : 'Contactar Vendedor'}
                 </button>
               )}
             </div>
@@ -367,32 +351,27 @@ function BookDetails() {
           </div>
         </section>
       </main>
-      <Footer />
 
-      {showModal && (
+      {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Contactar al vendedor</h3>
-            <p>¿Quieres enviar un mensaje al vendedor?</p>
-            {emailStatus && (
-              <p className={emailStatus.includes('Error') ? 'error-message' : 'success-message'}>
-                {emailStatus}
-              </p>
-            )}
+            <h3>Confirmar contacto con vendedor</h3>
+            <p>¿Estás seguro que deseas contactar al vendedor de "{book.title}"?</p>
+            <p>Se enviará un email al vendedor con tus datos de contacto.</p>
             <div className="modal-buttons">
               <button 
+                className="modal-button email"
+                onClick={handleConfirmContact}
+                disabled={sending}
+              >
+                {sending ? 'Enviando...' : 'Sí, contactar vendedor'}
+              </button>
+              <button 
                 className="modal-button close"
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowConfirmModal(false)}
                 disabled={sending}
               >
                 Cancelar
-              </button>
-              <button 
-                className="modal-button email"
-                onClick={handleContactSeller}
-                disabled={sending}
-              >
-                {sending ? 'Enviando...' : 'Enviar mensaje'}
               </button>
             </div>
           </div>
@@ -478,6 +457,13 @@ function BookDetails() {
       )}
 
       {success && <div className="success-message">{success}</div>}
+
+      {emailStatus && (
+        <div className={emailStatus.includes('Error') ? 'error-message' : 'success-message'} style={{maxWidth: 500, margin: '20px auto'}}>
+          {emailStatus}
+        </div>
+      )}
+      <Footer />
     </>
   );
 }

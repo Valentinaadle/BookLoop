@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Assets/css/portada.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Loader from '../components/Loader.jsx';
 import '../Assets/css/loader.css';
@@ -16,67 +16,46 @@ import book3 from "../Assets/book3.webp";
 import book13 from "../Assets/book13.webp";
 import book14 from "../Assets/book14.webp";
 import BookCard from '../components/BookCard';
+import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
-const nuevosLibros = [
-  { descuento: '-30%', img: book12, titulo: 'La Fortuna', autor: 'Michael McDowell', precio: 15.99 },
-  { descuento: '-50%', img: book9, titulo: 'El Dique', autor: 'Michael McDowell', precio: 12.99 },
-  { descuento: '-30%', img: book5, titulo: 'La Casa', autor: 'Michael McDowell', precio: 14.99 },
-  { descuento: '-10%', img: book6, titulo: 'La riada', autor: 'Michael McDowell', precio: 16.99 },
-  { descuento: '-40%', img: book3, titulo: 'Lluvia', autor: 'Michael McDowell', precio: 13.99 },
-];
-
-const masVendidos = [
-  { img: book13, titulo: 'Orgullo y Prejuicio', autor: 'Jane Austen' },
-  { img: book14, titulo: 'Cumbres Borrascosas', autor: 'Emily Bronte' },
-  { img: book12, titulo: 'La Fortuna', autor: 'Michael McDowell' },
-  { img: book9, titulo: 'El Dique', autor: 'Michael McDowell' },
-  { img: book5, titulo: 'La Casa', autor: 'Michael McDowell' },
-  { img: book6, titulo: 'La riada', autor: 'Michael McDowell' },
-  { img: book3, titulo: 'Lluvia', autor: 'Michael McDowell' },
-];
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
   const [startIdx, setStartIdx] = useState(0);
-  const [favoritos, setFavoritos] = useState({});
   const visibleCount = 4;
   const total = libros.length;
+  const navigate = useNavigate();
   const handlePrev = () => setStartIdx((prev) => (prev - 1 + total) % total);
   const handleNext = () => setStartIdx((prev) => (prev + 1) % total);
-  const visibleBooks = Array.from({ length: visibleCount }, (_, i) => libros[(startIdx + i) % total]);
-
-  const toggleFavorito = (idx) => {
-    setFavoritos(prev => ({
-      ...prev,
-      [idx]: !prev[idx]
-    }));
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => setStartIdx((prev) => (prev + 1) % total), 4000);
-    return () => clearInterval(interval);
-  }, [total]);
+  const visibleBooks = Array.from({ length: visibleCount }, (_, i) => libros[(startIdx + i) % total])
+    .filter(b => b && b.book_id);
 
   return (
     <section className={`ofertas ${extraClass}`}>
       <h2>{titulo}</h2>
       <div className="carousel-container">
-        <button className="carousel-arrow left" onClick={handlePrev} aria-label="Anterior"><FaChevronLeft /></button>
+        {total > visibleCount && (
+          <button className="carousel-arrow left" onClick={handlePrev} aria-label="Anterior"><FaChevronLeft /></button>
+        )}
         <div className="carousel-books">
           {visibleBooks.map((book, idx) => (
             <BookCard
-              key={idx}
+              key={book.book_id || book.titulo + idx}
               descuento={book.descuento}
-              img={book.img}
-              titulo={book.titulo}
-              autor={book.autor}
-              precio={book.precio}
-              favorito={favoritos[(startIdx + idx) % total]}
-              onToggleFavorito={() => toggleFavorito((startIdx + idx) % total)}
-              onBuy={() => alert(`Comprar: ${book.titulo}`)}
+              img={getBookImage(book, API_URL)}
+              titulo={book.title || book.titulo}
+              autor={getBookAuthor(book)}
+              precio={book.price || book.precio}
+              book_id={book.book_id}
+              onBuy={e => { e.stopPropagation(); navigate(`/book/${book.book_id}`); }}
+              showFavorito={true}
+              showComprar={true}
             />
           ))}
         </div>
-        <button className="carousel-arrow right" onClick={handleNext} aria-label="Siguiente"><FaChevronRight /></button>
+        {total > visibleCount && (
+          <button className="carousel-arrow right" onClick={handleNext} aria-label="Siguiente"><FaChevronRight /></button>
+        )}
       </div>
     </section>
   );
@@ -84,6 +63,30 @@ const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
 
 export default function Portada() {
   const [loading, setLoading] = useState(true);
+  const [booksDB, setBooksDB] = useState([]);
+  const [destacados, setDestacados] = useState([]);
+  const [masVendidos, setMasVendidos] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/books`)
+      .then(res => res.json())
+      .then(data => {
+        const books = Array.isArray(data) ? data : [];
+        setBooksDB(books);
+        // Nuevos ingresos: últimos 5 libros
+        const nuevos = [...books]
+          .sort((a, b) => (b.book_id || b.id || 0) - (a.book_id || a.id || 0))
+          .slice(0, 5)
+          .map(book => ({ ...book, descuento: null }));
+        setDestacados(nuevos);
+        // Más vendidos: primeros 5 libros (puedes cambiar por aleatorio si prefieres)
+        const masVend = [...books]
+          .slice(0, 5)
+          .map(book => ({ ...book, descuento: null }));
+        setMasVendidos(masVend);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   // Cuando el loader termine, ocultarlo
   const handleLoaderFinish = () => setLoading(false);
@@ -123,7 +126,7 @@ export default function Portada() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-              <CarruselLibros libros={nuevosLibros} titulo="Nuevos ingresos" />
+              <CarruselLibros libros={destacados} titulo="Nuevos ingresos" />
             </motion.section>
             <motion.section
               initial={{ opacity: 0, y: 40 }}
