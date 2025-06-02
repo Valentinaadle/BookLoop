@@ -226,7 +226,17 @@ http://192.168.1.30/phpmyadmin
 
 ## 10. Npm Install nuevos
 ```
-npm install axios@1.9.0
-npm install email-existence@0.1.6
-npm install nodemailer@7.0.3
-npm install multer@2.0.0
+npm install axios
+npm install nodemailer
+npm install multer
+
+## 10. Para importar la BD en PHP my admin
+
+En phpMyAdmin, selecciona la base de datos bookloop en el panel izquierdo.
+Haz clic en la pestaña “Operaciones”.
+Busca la opción “Eliminar la base de datos (DROP)” y haz clic en “Eliminar la base de datos”.
+Confirma la eliminación.
+Crea una nueva base de datos con el mismo nombre (bookloop).
+Selecciona la base de datos recién creada.
+Ve a la pestaña “Importar” y sube el archivo .sql.
+
