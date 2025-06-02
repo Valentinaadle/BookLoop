@@ -230,6 +230,24 @@ npm install axios
 npm install nodemailer
 npm install multer
 
+
+#archivo .env del backend 
+
+   # Database Configuration
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=
+   DB_NAME=bookloop
+   DB_PORT=3306
+
+   # Server Configuration
+   PORT=5000
+
+   # Email Configuration
+   EMAIL_USER=itsbookloop@gmail.com
+   EMAIL_PASSWORD=gcnsizqqkkgwydib
+
+
 ## 10. Para importar la BD en PHP my admin
 
 En phpMyAdmin, selecciona la base de datos bookloop en el panel izquierdo.
