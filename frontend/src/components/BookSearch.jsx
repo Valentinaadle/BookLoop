@@ -69,17 +69,29 @@ const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
           books.map((book) => {
             let imageUrl = null;
             if (book.Images && book.Images.length > 0 && book.Images[0].image_url) {
-              imageUrl = book.Images[0].image_url.startsWith('http')
-                ? book.Images[0].image_url
-                : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.Images[0].image_url}`;
+              if (book.Images[0].image_url.startsWith('/Assets')) {
+                imageUrl = book.Images[0].image_url;
+              } else if (book.Images[0].image_url.startsWith('http')) {
+                imageUrl = book.Images[0].image_url;
+              } else {
+                imageUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.Images[0].image_url}`;
+              }
             } else if (book.imageUrl) {
-              imageUrl = book.imageUrl.startsWith('http')
-                ? book.imageUrl
-                : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.imageUrl}`;
+              if (book.imageUrl.startsWith('/Assets')) {
+                imageUrl = book.imageUrl;
+              } else if (book.imageUrl.startsWith('http')) {
+                imageUrl = book.imageUrl;
+              } else {
+                imageUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.imageUrl}`;
+              }
             } else if (book.imagen) {
-              imageUrl = book.imagen.startsWith('http')
-                ? book.imagen
-                : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.imagen}`;
+              if (book.imagen.startsWith('/Assets')) {
+                imageUrl = book.imagen;
+              } else if (book.imagen.startsWith('http')) {
+                imageUrl = book.imagen;
+              } else {
+                imageUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${book.imagen}`;
+              }
             } else if (book.volumeInfo && book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
               imageUrl = book.volumeInfo.imageLinks.thumbnail;
             } else {

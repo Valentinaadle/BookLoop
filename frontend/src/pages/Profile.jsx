@@ -228,13 +228,21 @@ function Profile() {
                 {publishedBooks.slice(0, 3).map(book => {
                   let imageUrl = DEFAULT_BOOK_IMAGE;
                   if (book.Images && Array.isArray(book.Images) && book.Images.length > 0 && book.Images[0].image_url) {
-                    imageUrl = book.Images[0].image_url.startsWith('http')
-                      ? book.Images[0].image_url
-                      : `${API_URL}${book.Images[0].image_url}`;
+                    if (book.Images[0].image_url.startsWith('/Assets')) {
+                      imageUrl = book.Images[0].image_url;
+                    } else if (book.Images[0].image_url.startsWith('http')) {
+                      imageUrl = book.Images[0].image_url;
+                    } else {
+                      imageUrl = `${API_URL}${book.Images[0].image_url}`;
+                    }
                   } else if (book.imageUrl) {
-                    imageUrl = book.imageUrl.startsWith('http')
-                      ? book.imageUrl
-                      : `${API_URL}${book.imageUrl}`;
+                    if (book.imageUrl.startsWith('/Assets')) {
+                      imageUrl = book.imageUrl;
+                    } else if (book.imageUrl.startsWith('http')) {
+                      imageUrl = book.imageUrl;
+                    } else {
+                      imageUrl = `${API_URL}${book.imageUrl}`;
+                    }
                   }
                   
                   return (
@@ -421,13 +429,21 @@ function Profile() {
                   {getCurrentPageBooks().map(book => {
                     let imageUrl = DEFAULT_BOOK_IMAGE;
                     if (book.Images && Array.isArray(book.Images) && book.Images.length > 0 && book.Images[0].image_url) {
-                      imageUrl = book.Images[0].image_url.startsWith('http')
-                        ? book.Images[0].image_url
-                        : `${API_URL}${book.Images[0].image_url}`;
+                      if (book.Images[0].image_url.startsWith('/Assets')) {
+                        imageUrl = book.Images[0].image_url;
+                      } else if (book.Images[0].image_url.startsWith('http')) {
+                        imageUrl = book.Images[0].image_url;
+                      } else {
+                        imageUrl = `${API_URL}${book.Images[0].image_url}`;
+                      }
                     } else if (book.imageUrl) {
-                      imageUrl = book.imageUrl.startsWith('http')
-                        ? book.imageUrl
-                        : `${API_URL}${book.imageUrl}`;
+                      if (book.imageUrl.startsWith('/Assets')) {
+                        imageUrl = book.imageUrl;
+                      } else if (book.imageUrl.startsWith('http')) {
+                        imageUrl = book.imageUrl;
+                      } else {
+                        imageUrl = `${API_URL}${book.imageUrl}`;
+                      }
                     }
                     
                     return (

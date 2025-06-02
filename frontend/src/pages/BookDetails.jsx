@@ -35,21 +35,22 @@ function BookDetails() {
     try {
       setLoading(true);
       setError(null);
-      console.log('Fetching book with ID:', id);
       const response = await fetch(`${API_URL}/api/books/${id}`);
-      
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-      
       const data = await response.json();
-      console.log('Book data received:', data);
       setBook(data);
-
       // Procesar las imágenes del libro
       const images = [];
       if (data.imageUrl) {
-        images.push(data.imageUrl.startsWith('http') ? data.imageUrl : `${API_URL}${data.imageUrl}`);
+        // Si la imagen es una ruta estática (comienza con /Assets)
+        if (data.imageUrl.startsWith('/Assets')) {
+          images.push(data.imageUrl);
+        } else {
+          // Si es una URL completa o una ruta del backend
+          images.push(data.imageUrl.startsWith('http') ? data.imageUrl : `${API_URL}${data.imageUrl}`);
+        }
       }
       if (Array.isArray(data.Images) && data.Images.length > 0) {
         data.Images.forEach(img => {
@@ -60,7 +61,6 @@ function BookDetails() {
         });
       }
       setBookImages(images);
-
       setEditForm({
         title: data.title || '',
         authors: Array.isArray(data.authors) ? data.authors.join(', ') : data.authors || '',
@@ -69,7 +69,6 @@ function BookDetails() {
         stock: data.stock || ''
       });
     } catch (err) {
-      console.error('Error fetching book:', err);
       setError('No se pudo cargar el libro. ' + err.message);
     } finally {
       setLoading(false);
@@ -351,7 +350,7 @@ function BookDetails() {
                 <h3>Detalles del libro:</h3>
                 <div className="details-grid">
                   <div className="detail-item"><span>Editorial:</span><span>{book.publisher || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Temática:</span><span>{book.Category?.category_name || 'No especificado'}</span></div>
+                  <div className="detail-item"><span>Categoría:</span><span>{book.Category?.category_name || 'No especificado'}</span></div>
                   <div className="detail-item"><span>Número de páginas:</span><span>{book.pageCount || 'No especificado'}</span></div>
                   <div className="detail-item"><span>Año de publicación:</span><span>{book.publication_date || 'No especificado'}</span></div>
                   <div className="detail-item"><span>Idioma:</span><span>{book.language || book.idioma || 'No especificado'}</span></div>

@@ -356,16 +356,6 @@ export default function QuieroVender() {
                   required
                 >
                   <option value="">Selecciona una categoría</option>
-                  <option value="1">Ficción</option>
-                  <option value="2">No Ficción</option>
-                  <option value="3">Literatura</option>
-                  <option value="4">Infantil y Juvenil</option>
-                  <option value="5">Académico</option>
-                  <option value="6">Autoayuda</option>
-                  <option value="7">Historia</option>
-                  <option value="8">Ciencia</option>
-                  <option value="9">Arte y Fotografía</option>
-                  <option value="10">Cocina</option>
                   {categories.map(cat => (
                     <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
                   ))}
