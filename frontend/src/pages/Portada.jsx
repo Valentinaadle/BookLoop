@@ -63,9 +63,16 @@ const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
 
 export default function Portada() {
   const [loading, setLoading] = useState(true);
+  const [minTimePassed, setMinTimePassed] = useState(false);
   const [booksDB, setBooksDB] = useState([]);
   const [destacados, setDestacados] = useState([]);
   const [masVendidos, setMasVendidos] = useState([]);
+
+  useEffect(() => {
+    // Tiempo mínimo para el loader (3 segundos)
+    const timer = setTimeout(() => setMinTimePassed(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_URL}/api/books`)
@@ -88,13 +95,13 @@ export default function Portada() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Cuando el loader termine, ocultarlo
-  const handleLoaderFinish = () => setLoading(false);
+  // El loader solo desaparece cuando ambos son false
+  const showLoader = loading || !minTimePassed;
 
   return (
     <>
-      {loading && <Loader onFinish={handleLoaderFinish} />}
-      {!loading && (
+      {showLoader && <Loader />}
+      {!showLoader && (
         <>
           <Header />
           <div className="portada">
