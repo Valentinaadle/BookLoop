@@ -46,16 +46,19 @@ npm start
 
 ### Backend (.env)
 ```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=bookloop
-DB_PORT=3306
-PORT=5000
+   # Database Configuration
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=
+   DB_NAME=bookloop
+   DB_PORT=3306
 
-EMAIL_USER=bookloopUNSTA@gmail.com
-EMAIL_PASSWORD=yazmwcyximpxwgdv
-JWT_SECRET=un_secreto_largo_y_seguro
+   # Server Configuration
+   PORT=5000
+
+   # Email Configuration
+   EMAIL_USER=itsbookloop@gmail.com
+   EMAIL_PASSWORD=gcnsizqqkkgwydib
 
 ```
 
@@ -121,17 +124,19 @@ MIT
 ## 3. Configurar variables de entorno
 
 ### Backend (.env)
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=bookloop
-DB_PORT=3306
-PORT=5000
+   # Database Configuration
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=
+   DB_NAME=bookloop
+   DB_PORT=3306
 
-EMAIL_USER=bookloopUNSTA@gmail.com
-EMAIL_PASSWORD=yazmwcyximpxwgdv
-JWT_SECRET=un_secreto_largo_y_seguro
+   # Server Configuration
+   PORT=5000
+
+   # Email Configuration
+   EMAIL_USER=itsbookloop@gmail.com
+   EMAIL_PASSWORD=gcnsizqqkkgwydib
 ```
 
 2. **Frontend (`frontend/.env`)**  
@@ -219,8 +224,6 @@ npm start
 ```
 
 http://192.168.1.30/phpmyadmin
-
-856127940CFE1ED2
 
 ---
 
