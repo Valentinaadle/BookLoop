@@ -75,7 +75,7 @@ export default function Header() {
               <>
                 <Link to="/favoritos" title="Favoritos"><img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/></Link>
                 <Link to="/profile" title="Perfil"><img src="/icons/usuario.png" className="icon action-icon" alt="usuario" /></Link>
-                <Link to="/carrito" title="Carrito"><img src="/icons/carrito.png" className="icon action-icon" alt="Cart" /></Link>
+                
               </>
             ) : (
               <>

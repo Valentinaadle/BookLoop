@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Loader from '../components/Loader.jsx';
 import '../Assets/css/loader.css';
+import FAQQuestions from '../components/FAQQuestion.jsx';
 
 import { FaShoppingCart, FaBookOpen, FaChevronLeft, FaChevronRight, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/Header';
@@ -141,7 +142,7 @@ export default function Portada() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-              <CarruselLibros libros={masVendidos} titulo="Más vendidos" extraClass="separado" />
+              
             </motion.section>
 
             <motion.section
@@ -168,6 +169,9 @@ export default function Portada() {
                 ))}
               </div>
             </motion.section>
+            
+
+            <FAQQuestions />
           </div>
           <Footer />
         </>

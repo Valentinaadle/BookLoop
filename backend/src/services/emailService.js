@@ -1,5 +1,6 @@
 const transporter = require('../config/emailConfig');
 
+
 const sendInterestEmail = async ({ sellerEmail, bookTitle, buyerName, buyerEmail }) => {
   try {
     const mailOptions = {

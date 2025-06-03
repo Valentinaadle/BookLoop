@@ -8,48 +8,47 @@ export default function Footer() {
         <div className="footer-box">
           <div className="footer-title">
             <img src="/icons/libroa.png" className="iconf" alt="Bookshop icon" />
-            <h4>BOOKSHOP</h4>
+            <h4>BOOKLOOP</h4>
           </div>
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod incididunt ut laoreet dolore.</p>
-          <Link to="#">Learn More About Us</Link>
+          <p>Tu plataforma confiable para comprar y vender libros usados. Conectamos lectores de todo el país.</p>
+          
         </div>
 
         <div className="footer-box">
           <div className="footer-title">
             <img src="/icons/brujula.png" className="iconf" alt="Compass icon" />
-            <h4>OUR MAIN OFFICE</h4>
+            <h4>Contacto</h4>
           </div>
-          <p>San Francisco, California, US</p>
-          <p>P.O. BOX: 55300</p>
-          <p>Phone: (+1) 998 5364</p>
-          <p>Mail: admin@bookshop.com</p>
+          <p>📍 Tucumán, Argentina</p>
+          <p>Telefono: (+54) 3815699499</p>
+          <p>Mail: itsbookloop@gmail.com</p>
         </div>
 
         <div className="footer-box">
           <div className="footer-title">
             <img src="/icons/lupa.png" className="iconf" alt="Social media icon" />
-            <h4>KEEP IN TOUCH WITH US</h4>
+            <h4>Seguinos!</h4>
           </div>
           <Link to="#">Facebook</Link>
           <Link to="#">Twitter</Link>
-          <Link to="#">Google Plus</Link>
+          <Link to="#">Instagram</Link>
         </div>
 
         <div className="footer-box">
           <div className="footer-title">
             <img src="/icons/i.png" className="iconf" alt="Information icon" />
-            <h4>INFORMATIONS</h4>
+            <h4>Informacion</h4>
           </div>
           <div className="info-columns">
             <div className="links-column">
-              <Link to="#">About Us</Link>
-              <Link to="#">Contact Us</Link>
-              <Link to="#">FAQ</Link>
+              <Link to="#">Acerca de Nosotros</Link>
+              <Link to="#">Contactanos</Link>
+              <Link to="#">Preguntas frecuentes</Link>
             </div>
             <div className="links-column">
-              <Link to="#">Terms & Conditions</Link>
-              <Link to="/profile">My Account</Link>
-              <Link to="#">Blog</Link>
+              <Link to="#">Terminos y Condiciones</Link>
+              <Link to="/profile">Mi Cuenta</Link>
+              <Link to="#">Redes Sociales</Link>
             </div>
           </div>
         </div>
@@ -57,7 +56,7 @@ export default function Footer() {
       </div>
 
       <p className="copyright">
-        © 2025 Bookshop Pty Ltd. ALL RIGHTS RESERVED
+        © 2025 BOOKLOOP - Todos los derechos reservados.
       </p>
     </footer>
   );
