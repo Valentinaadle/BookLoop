@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2025 a las 16:35:11
+-- Tiempo de generación: 03-06-2025 a las 16:32:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `bookloop`
 --
+CREATE DATABASE IF NOT EXISTS `bookloop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `bookloop`;
 
 -- --------------------------------------------------------
 
@@ -59,17 +61,17 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`book_id`, `seller_id`, `category_id`, `images_id`, `isbn_code`, `condition`, `publication_date`, `googleBooksId`, `title`, `authors`, `description`, `publishedDate`, `isbn`, `pageCount`, `imageUrl`, `categories`, `language`, `averageRating`, `quantity`, `available`, `price`, `createdAt`, `updatedAt`, `publisher`) VALUES
-(16, 4, 12, NULL, '9780307474278', 'Nuevo', '2009-03-31', NULL, 'The Da Vinci Code', '[\"Dan Brown\"]', '#1 WORLDWIDE BESTSELLER • While in Paris, Harvard symbologist Robert Langdon is awakened by a phone call in the dead of the night. The elderly curator of the Louvre has been murdered inside the museum, his body covered in baffling symbols. “Blockbuster perfection.... A gleefully erudite suspense novel.” —The New York Times “A pulse-quickening, brain-teasing adventure.” —People As Langdon and gifted French cryptologist Sophie Neveu sort through the bizarre riddles, they are stunned to discover a trail of clues hidden in the works of Leonardo da Vinci—clues visible for all to see and yet ingeniously disguised by the painter. Even more startling, the late curator was involved in the Priory of Sion—a secret society whose members included Sir Isaac Newton, Victor Hugo, and Da Vinci—and he guarded a breathtaking historical secret. Unless Langdon and Neveu can decipher the labyrinthine puzzle—while avoiding the faceless adversary who shadows their every move—the explosive, ancient truth will be lost forever.', NULL, NULL, 610, 'http://books.google.com/books/content?id=YuDl2Wl651AC&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3000.00, '2025-05-27 02:17:03', '2025-05-27 22:41:02', 'Planeta'),
+(16, 4, 12, NULL, '9780307474278', 'Nuevo', '2009-03-31', NULL, 'The Da Vinci Code', '[\"Dan Brown\"]', '#1 WORLDWIDE BESTSELLER • While in Paris, Harvard symbologist Robert Langdon is awakened by a phone call in the dead of the night. The elderly curator of the Louvre has been murdered inside the museum, his body covered in baffling symbols. "Blockbuster perfection.... A gleefully erudite suspense novel." —The New York Times "A pulse-quickening, brain-teasing adventure." —People As Langdon and gifted French cryptologist Sophie Neveu sort through the bizarre riddles, they are stunned to discover a trail of clues hidden in the works of Leonardo da Vinci—clues visible for all to see and yet ingeniously disguised by the painter. Even more startling, the late curator was involved in the Priory of Sion—a secret society whose members included Sir Isaac Newton, Victor Hugo, and Da Vinci—and he guarded a breathtaking historical secret. Unless Langdon and Neveu can decipher the labyrinthine puzzle—while avoiding the faceless adversary who shadows their every move—the explosive, ancient truth will be lost forever.', NULL, NULL, 610, 'http://books.google.com/books/content?id=YuDl2Wl651AC&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3000.00, '2025-05-27 02:17:03', '2025-05-27 22:41:02', 'Planeta'),
 (17, 4, 5, NULL, '9780544003415', 'Muy bueno', '2012', NULL, 'The Lord of the Rings', '[\"J. R. R. Tolkien\"]', 'Presents the epic depicting the Great War of the Ring, a struggle between good and evil in Middle-earth, following the odyssey of Frodo the hobbit and his companions on a quest to destroy the Ring of Power.', NULL, NULL, 1178, '/uploads/1748312375028-452432862.png', '[]', 'en', NULL, 1, 1, 44444.00, '2025-05-27 02:19:35', '2025-05-27 22:41:02', 'Penguin'),
 (19, 4, 14, NULL, '9780061120084', 'Usado', '2006-05-23', NULL, 'To Kill a Mockingbird', '[\"Harper Lee\"]', 'Harper Lee\'s Pulitzer Prize-winning masterwork of honor and injustice in the deep South -- and the heroism of one man in the face of blind and violent hatred One of the best-loved stories of all time, To Kill a Mockingbird has been translated into more than forty languages, sold more than thirty million copies worldwide, served as the basis of an enormously popular motion picture, and was voted one of the best novels of the twentieth century by librarians across the country. A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice, it views a world of great beauty and savage inequities through the eyes of a young girl, as her father -- a crusading local lawyer -- risks everything to defend a black man unjustly accused of a terrible crime.', NULL, NULL, 346, 'http://books.google.com/books/content?id=ncuX8p2xLIUC&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3399.00, '2025-05-27 02:23:18', '2025-05-27 22:41:02', 'aaaaaa'),
 (21, 7, 3, NULL, '9788497592208', 'Muy bueno', '2003', NULL, 'Cien años de soledad', '[\"Gabriel García Márquez\"]', 'Señalada como «catedral gótica del lenguaje», este clásico del siglo XX es el enorme y espléndido tapiz de la saga de la familia Buendía, en la mítica aldea de Macondo. Un referente imprescindible de la vida y la narrativa latinoamericana. «Muchos años después, frente al pelotón de fusilamiento, el coronel Aureliano Buendía había de recordar aquella tarde remota en que su padre lo llevó a conocer el hielo. Macondo era entonces una aldea de veinte casas de barro y cañabrava construidas a la orilla de un río de aguas diáfanas que se precipitaban por un lecho de piedras pulidas, blancas y enormes como huevos prehistóricos. El mundo era tan reciente, que muchas cosas carecían de nombre, y para mencionarlas había que señalarlas con el dedo.» Con estas palabras empieza la novela ya legendaria en los anales de la literatura universal, una de las aventuras literarias más fascinantes de nuestro siglo. Millones de ejemplares de Cien años de soledad leídos en todas las lenguas y el Premio Nobel de Literatura coronando una obra que se había abierto paso «boca a boca» -como gusta decir al escritor- son la más palpable demostración de que la aventura fabulosa de la familia Buendía-Iguarán, con sus milagros, fantasías, obsesiones, tragedias, incestos, adulterios, rebeldías, descubrimientos y condenas, representaba al mismo tiempo el mito y la historia, la tragedia y el amor del mundo entero. Pablo Neruda dijo...«El Quijote de nuestro tiempo.». -- [éditeur].', NULL, NULL, 502, 'http://books.google.com/books/content?id=KHYsAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'es', NULL, 1, 1, 6887.00, '2025-05-30 22:12:12', '2025-06-01 23:27:09', 'aaa'),
-(23, 7, 5, NULL, '978-2345678901', 'Usado - Como nuevo', '2024-02-01', NULL, 'El Dique', '[\"Michael McDowell\"]', 'Una historia de suspense ambientada en un pequeño pueblo costero.', NULL, NULL, 280, '/Assets/book9.webp', '[\"Misterio\"]', 'Español', NULL, 5, 1, 12.99, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Editorial BookLoop'),
-(24, 7, 5, NULL, '978-3456789012', 'Nuevo', '2024-02-15', NULL, 'La Casa', '[\"Michael McDowell\"]', 'Una novela gótica que explora los secretos de una antigua mansión.', NULL, NULL, 350, '/Assets/book11.webp', '[\"Terror\"]', 'Español', NULL, 8, 1, 14.99, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Editorial BookLoop'),
-(25, 7, 5, NULL, '978-4567890123', 'Usado - Buen estado', '2024-03-01', NULL, 'La Riada', '[\"Michael McDowell\"]', 'Una historia de supervivencia y esperanza en tiempos difíciles.', NULL, NULL, 300, '/Assets/book6.webp', '[\"Drama\"]', 'Español', NULL, 3, 1, 16.99, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Editorial BookLoop'),
-(29, 7, 5, NULL, '978-1234567890', 'Nuevo', '2024-01-15', NULL, 'La Fortuna', '[\"Michael McDowell\"]', 'Una novela intrigante que explora los giros del destino y la fortuna.', NULL, NULL, 320, '/Assets/book12.webp', '[\"Novela\"]', 'Español', NULL, 10, 1, 15.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
-(33, 7, 5, NULL, '978-5678901234', 'Nuevo', '2024-03-15', NULL, 'Lluvia', '[\"Michael McDowell\"]', 'Una novela poética sobre la vida y sus ciclos.', NULL, NULL, 250, '/Assets/book3.webp', '[\"Poesía\"]', 'Español', NULL, 12, 1, 13.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
-(34, 7, 5, NULL, '978-6789012345', 'Nuevo', '2024-01-01', NULL, 'Orgullo y Prejuicio', '[\"Jane Austen\"]', 'Un clásico de la literatura inglesa sobre el amor y las convenciones sociales.', NULL, NULL, 400, '/Assets/book13.webp', '[\"Novela Romántica\"]', 'Español', NULL, 15, 1, 18.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
-(35, 7, 5, NULL, '978-7890123456', 'Nuevo', '2024-01-15', NULL, 'Cumbres Borrascosas', '[\"Emily Bronte\"]', 'Una historia de amor apasionado y venganza en los páramos de Yorkshir.', NULL, NULL, 380, '/Assets/book14.webp', '[\"Novela Gótica\"]', 'Español', NULL, 10, 1, 17.99, '2025-06-01 20:53:43', '2025-06-02 13:31:38', 'Editorial BookLoop'),
+(23, 7, 5, NULL, '978-2345678901', 'Usado - Como nuevo', '2024-02-01', NULL, 'El Dique', '[\"Michael McDowell\"]', 'Una historia de suspense ambientada en un pequeño pueblo costero.', NULL, NULL, 280, '/uploads/1748874192086-114462442.webp', '[\"Misterio\"]', 'Español', NULL, 5, 1, 12.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(24, 7, 5, NULL, '978-3456789012', 'Nuevo', '2024-02-15', NULL, 'La Casa', '[\"Michael McDowell\"]', 'Una novela gótica que explora los secretos de una antigua mansión.', NULL, NULL, 350, '/uploads/1748874192095-39250660.webp', '[\"Terror\"]', 'Español', NULL, 8, 1, 14.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(25, 7, 5, NULL, '978-4567890123', 'Usado - Buen estado', '2024-03-01', NULL, 'La Riada', '[\"Michael McDowell\"]', 'Una historia de supervivencia y esperanza en tiempos difíciles.', NULL, NULL, 300, '/uploads/1748874192106-744330724.webp', '[\"Drama\"]', 'Español', NULL, 3, 1, 16.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(29, 7, 5, NULL, '978-1234567890', 'Nuevo', '2024-01-15', NULL, 'La Fortuna', '[\"Michael McDowell\"]', 'Una novela intrigante que explora los giros del destino y la fortuna.', NULL, NULL, 320, '/uploads/1748874192042-927512868.webp', '[\"Novela\"]', 'Español', NULL, 10, 1, 15.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(33, 7, 5, NULL, '978-5678901234', 'Nuevo', '2024-03-15', NULL, 'Lluvia', '[\"Michael McDowell\"]', 'Una novela poética sobre la vida y sus ciclos.', NULL, NULL, 250, '/uploads/1748874192057-169475455.webp', '[\"Poesía\"]', 'Español', NULL, 12, 1, 13.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(34, 7, 5, NULL, '978-6789012345', 'Nuevo', '2024-01-01', NULL, 'Orgullo y Prejuicio', '[\"Jane Austen\"]', 'Un clásico de la literatura inglesa sobre el amor y las convenciones sociales.', NULL, NULL, 400, '/uploads/1748874192068-884147542.webp', '[\"Novela Romántica\"]', 'Español', NULL, 15, 1, 18.99, '2025-06-01 20:53:43', '2025-06-01 20:53:43', 'Editorial BookLoop'),
+(35, 7, 5, NULL, '978-7890123456', 'Nuevo', '2024-01-15', NULL, 'Cumbres Borrascosas', '[\"Emily Bronte\"]', 'Una historia de amor apasionado y venganza en los páramos de Yorkshir.', NULL, NULL, 380, '/uploads/1748874192078-443673935.webp', '[\"Novela Gótica\"]', 'Español', NULL, 10, 1, 17.99, '2025-06-01 20:53:43', '2025-06-02 13:31:38', 'Editorial BookLoop'),
 (36, 7, 3, NULL, '9780140283334', 'Bueno', '1999-10-01', NULL, 'Lord of the Flies', '[\"William Golding\"]', 'Lord of the Flies remains as provocative today as when it was first published in 1954, igniting passionate debate with its startling, brutal portrait of human nature. Though critically acclaimed, it was largely ignored upon its initial publication. Yet soon it became a cult favorite among both students and literary critics who compared it to J.D. Salinger\'s The Catcher in the Rye in its influence on modern thought and literature. William Golding\'s compelling story about a group of very ordinary small boys marooned on a coral island has become a modern classic. At first it seems as though it is all going to be great fun; but the fun before long becomes furious and life on the island turns into a nightmare of panic and death. As ordinary standards of behaviour collapse, the whole world the boys know collapses with them—the world of cricket and homework and adventure stories—and another world is revealed beneath, primitive and terrible. Labeled a parable, an allegory, a myth, a morality tale, a parody, a political treatise, even a vision of the apocalypse, Lord of the Flies has established itself as a true classic. \"Lord of the Flies is one of my favorite books. That was a big influence on me as a teenager, I still read it every couple of years.\" —Suzanne Collins, author of The Hunger Games \"As exciting, relevant, and thought-provoking now as it was when Golding published it in 1954.\" —Stephen King', NULL, NULL, 300, 'http://books.google.com/books/content?id=4uWPEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 4000.00, '2025-06-02 00:03:56', '2025-06-02 00:03:56', 'Planeta');
 
 -- --------------------------------------------------------
@@ -1110,6 +1112,168 @@ ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_7` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_8` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+--
+-- Base de datos: `phpmyadmin`
+--
+CREATE DATABASE IF NOT EXISTS `phpmyadmin` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `phpmyadmin`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__bookmark`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__bookmark: #1932 - Table &#039;phpmyadmin.pma__bookmark&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__bookmark: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__bookmark`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__central_columns`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__central_columns: #1932 - Table &#039;phpmyadmin.pma__central_columns&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__central_columns: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__central_columns`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__column_info`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__column_info: #1932 - Table &#039;phpmyadmin.pma__column_info&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__column_info: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__column_info`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__designer_settings`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__designer_settings: #1932 - Table &#039;phpmyadmin.pma__designer_settings&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__designer_settings: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__designer_settings`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__export_templates`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__export_templates: #1932 - Table &#039;phpmyadmin.pma__export_templates&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__export_templates: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__export_templates`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__favorite`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__favorite: #1932 - Table &#039;phpmyadmin.pma__favorite&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__favorite: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__favorite`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__history`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__history: #1932 - Table &#039;phpmyadmin.pma__history&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__history: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__history`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__navigationhiding`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__navigationhiding: #1932 - Table &#039;phpmyadmin.pma__navigationhiding&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__navigationhiding: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__navigationhiding`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__pdf_pages`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__pdf_pages: #1932 - Table &#039;phpmyadmin.pma__pdf_pages&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__pdf_pages: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__pdf_pages`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__recent`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__recent: #1932 - Table &#039;phpmyadmin.pma__recent&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__recent: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__recent`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__relation`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__relation: #1932 - Table &#039;phpmyadmin.pma__relation&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__relation: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__relation`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__savedsearches`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__savedsearches: #1932 - Table &#039;phpmyadmin.pma__savedsearches&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__savedsearches: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__savedsearches`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__table_coords`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__table_coords: #1932 - Table &#039;phpmyadmin.pma__table_coords&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__table_coords: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__table_coords`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__table_info`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__table_info: #1932 - Table &#039;phpmyadmin.pma__table_info&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__table_info: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__table_info`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__table_uiprefs`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__table_uiprefs: #1932 - Table &#039;phpmyadmin.pma__table_uiprefs&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__table_uiprefs: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__table_uiprefs`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__tracking`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__tracking: #1932 - Table &#039;phpmyadmin.pma__tracking&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__tracking: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__tracking`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__userconfig`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__userconfig: #1932 - Table &#039;phpmyadmin.pma__userconfig&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__userconfig: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__userconfig`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__usergroups`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__usergroups: #1932 - Table &#039;phpmyadmin.pma__usergroups&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__usergroups: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__usergroups`&#039; en la linea 1
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pma__users`
+--
+-- Error leyendo la estructura de la tabla phpmyadmin.pma__users: #1932 - Table &#039;phpmyadmin.pma__users&#039; doesn&#039;t exist in engine
+-- Error leyendo datos de la tabla phpmyadmin.pma__users: #1064 - Algo está equivocado en su sintax cerca &#039;FROM `phpmyadmin`.`pma__users`&#039; en la linea 1
+--
+-- Base de datos: `test`
+--
+CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `test`;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
