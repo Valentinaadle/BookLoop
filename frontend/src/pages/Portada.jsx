@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Loader from '../components/Loader.jsx';
 import '../Assets/css/loader.css';
 import FAQQuestions from '../components/FAQQuestion.jsx';
+import Newsletter from '../components/Newsletter.jsx';
 
 import { FaShoppingCart, FaBookOpen, FaChevronLeft, FaChevronRight, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/Header';
@@ -142,7 +143,7 @@ export default function Portada() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-              
+              {/* Aquí podrías agregar otro carrusel o sección si lo deseas */}
             </motion.section>
 
             <motion.section
@@ -172,8 +173,9 @@ export default function Portada() {
             
 
             <FAQQuestions />
+            <Newsletter />
+            <Footer />
           </div>
-          <Footer />
         </>
       )}
     </>
