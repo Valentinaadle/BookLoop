@@ -117,11 +117,12 @@ export default function Portada() {
                    ¡Dale una segunda vida a tus libros con BookLoop!
                   </motion.h1>
                   <div className="hero-buttons">
-                      <Link to="/" className="btn-orange">
-                          <FaShoppingCart /> Quiero Comprar
-                      </Link>
+                      
                       <Link to="/vender-page" className="btn-white">
-                          <FaBookOpen /> Quiero Vender
+                          <FaBookOpen /> Publicar mi libro
+                      </Link>
+                      <Link to="/comprar" className="btn-orange">
+                          <FaShoppingCart /> Explorar descuentos
                       </Link>
                   </div>
                 </div>
@@ -169,7 +170,7 @@ export default function Portada() {
                 ))}
               </div>
             </motion.section>
-            
+
 
             <FAQQuestions />
           </div>
