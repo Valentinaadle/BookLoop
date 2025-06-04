@@ -1,0 +1,64 @@
+/* Estilos para el cuestionario interactivo */
+.cuestionario {
+  padding: 2rem;
+  text-align: center;
+  background-color: #F5EFEB;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.cuestionario h3 {
+  font-family: var(--heading-font);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #394B60;
+  font-weight: 700;
+}
+
+.pregunta {
+  margin-bottom: 1.5rem;
+}
+
+.pregunta p {
+  font-size: 1.2rem;
+  color: #394B60;
+  margin-bottom: 1rem;
+}
+
+.pregunta button {
+  font-family: var(--heading-font);
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #CBd9E6;
+  color: #394B60;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin: 0.5rem;
+}
+
+.pregunta button:hover {
+  background-color: #b9c7d4;
+}
+
+/* Estilos para el botón de ver recomendaciones */
+.ver-recomendaciones {
+  font-family: var(--heading-font);
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #394B60;
+  color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin-top: 1rem;
+}
+
+.ver-recomendaciones:hover {
+  background-color: #2f3c4d;
+} 

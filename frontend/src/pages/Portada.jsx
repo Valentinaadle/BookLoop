@@ -6,6 +6,8 @@ import Loader from '../components/Loader.jsx';
 import '../Assets/css/loader.css';
 import FAQQuestions from '../components/FAQQuestion.jsx';
 import Newsletter from '../components/Newsletter.jsx';
+import Recomendados from '../components/Recomendados';
+import Cuestionario from '../components/Cuestionario';
 
 import { FaShoppingCart, FaBookOpen, FaChevronLeft, FaChevronRight, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/Header';
@@ -63,12 +65,42 @@ const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
   );
 };
 
+const opciones = ['Novela', 'Ciencia Ficción', 'Misterio', 'Fantasía', 'Poesía', 'Terror'];
+
+function PreferenciasUsuario({ onSeleccionar }) {
+  return (
+    <div className="preferencias-usuario">
+      <h3>Selecciona tus géneros favoritos:</h3>
+      {opciones.map(opcion => (
+        <button key={opcion} onClick={() => onSeleccionar(opcion)}>
+          {opcion}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Recomendaciones({ libros, preferencias }) {
+  const librosRecomendados = libros.filter(libro => preferencias.includes(libro.genero));
+
+  return (
+    <div>
+      <h3>Recomendaciones para ti:</h3>
+      {librosRecomendados.map(libro => (
+        <BookCard key={libro.book_id} {...libro} />
+      ))}
+    </div>
+  );
+}
+
 export default function Portada() {
   const [loading, setLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [booksDB, setBooksDB] = useState([]);
   const [destacados, setDestacados] = useState([]);
   const [masVendidos, setMasVendidos] = useState([]);
+  const [preferencias, setPreferencias] = useState([]);
+  const [recomendaciones, setRecomendaciones] = useState([]);
 
   useEffect(() => {
     // Tiempo mínimo para el loader (3 segundos)
@@ -80,6 +112,7 @@ export default function Portada() {
     fetch(`${API_URL}/api/books`)
       .then(res => res.json())
       .then(data => {
+        console.log('Fetched Books:', data); // Debugging
         const books = Array.isArray(data) ? data : [];
         setBooksDB(books);
         // Nuevos ingresos: últimos 5 libros
@@ -99,6 +132,36 @@ export default function Portada() {
 
   // El loader solo desaparece cuando ambos son false
   const showLoader = loading || !minTimePassed;
+
+  const manejarSeleccion = (opcion) => {
+    setPreferencias(prev => {
+      if (prev.includes(opcion)) {
+        return prev.filter(pref => pref !== opcion);
+      } else {
+        return [...prev, opcion];
+      }
+    });
+  };
+
+  const manejarFinalizacionCuestionario = (respuestas) => {
+    console.log('Selected Genre:', respuestas.genero); // Debugging
+    if (respuestas.genero) {
+      const librosRecomendados = booksDB.filter(libro => libro.genero === respuestas.genero);
+      console.log('Filtered Books:', librosRecomendados); // Debugging
+      setRecomendaciones(librosRecomendados);
+    } else {
+      setRecomendaciones([]); // Clear recommendations if no genre is selected
+    }
+  };
+
+  const aplicarFiltros = (filtros) => {
+    const librosFiltrados = booksDB.filter(libro => {
+      const cumpleAutor = filtros.autor ? libro.autor.includes(filtros.autor) : true;
+      const cumplePrecio = libro.precio >= filtros.precio.min && libro.precio <= filtros.precio.max;
+      return cumpleAutor && cumplePrecio;
+    });
+    setRecomendaciones(librosFiltrados);
+  };
 
   return (
     <>
@@ -138,14 +201,9 @@ export default function Portada() {
             >
               <CarruselLibros libros={destacados} titulo="Nuevos ingresos" />
             </motion.section>
-            <motion.section
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-            >
-              {/* Aquí podrías agregar otro carrusel o sección si lo deseas */}
-            </motion.section>
+
+            <Cuestionario onFinalizar={manejarFinalizacionCuestionario} />
+            {recomendaciones.length > 0 && <Recomendados libros={recomendaciones} />}
 
             <motion.section
               initial={{ opacity: 0, y: 40 }}

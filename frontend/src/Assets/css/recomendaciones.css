@@ -1,0 +1,45 @@
+/* Estilos para la selección de género favorito */
+.recomendaciones {
+  padding: 2rem;
+  text-align: center;
+  background-color: #F5EFEB;
+}
+
+.recomendaciones h3 {
+  font-family: var(--heading-font);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #394B60;
+  font-weight: 700;
+}
+
+.generos {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.generos button {
+  font-family: var(--heading-font);
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #CBd9E6;
+  color: #394B60;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.generos button:hover {
+  background-color: #b9c7d4;
+}
+
+.recomendaciones-grid {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+} 

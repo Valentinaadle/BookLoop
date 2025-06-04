@@ -265,9 +265,7 @@ export default function QuieroVender() {
                   <option value="">Selecciona un estado</option>
                   <option value="Nuevo">Nuevo</option>
                   <option value="Como nuevo">Como nuevo</option>
-                  <option value="Muy bueno">Muy bueno</option>
-                  <option value="Bueno">Bueno</option>
-                  <option value="Aceptable">Aceptable</option>
+                  <option value="Buen Estado">Aceptable</option>
                   <option value="Usado">Usado</option>
                 </select>
               </div>

@@ -99,7 +99,9 @@ const Comprar = () => {
           <div className="filter-group">
             <div className="filter-header" onClick={() => toggle("genero")}>Género <span>{collapsed.genero ? "-" : "+"}</span></div>
             <div className={`filter-options ${collapsed.genero ? "" : "collapsed"}`}>
-              {["Novela", "Cuento", "Poesía", "Drama", "Ciencia ficción", "Fantasía", "Misterio", "Terror", "Romance", "Deportes", "Realistas", "Salud", "Tecnología"].map((genre) => (
+              {[
+                "Novela", "Cuento", "Poesía", "Drama", "Ciencia ficción", "Fantasía", "Misterio", "Terror", "Romance", "Deportes", "Realistas", "Salud", "Tecnología"
+              ].map((genre) => (
                 <label key={genre}>
                   <input type="checkbox" /> {genre}
                 </label>
@@ -109,7 +111,9 @@ const Comprar = () => {
           <div className="filter-group">
             <div className="filter-header" onClick={() => toggle("idioma")}>Idioma <span>{collapsed.idioma ? "-" : "+"}</span></div>
             <div className={`filter-options ${collapsed.idioma ? "" : "collapsed"}`}>
-              {["Español", "Inglés", "Francés"].map((lang) => (
+              {[
+                "Español", "Inglés", "Francés"
+              ].map((lang) => (
                 <label key={lang}>
                   <input type="checkbox" /> {lang}
                 </label>
@@ -119,7 +123,9 @@ const Comprar = () => {
           <div className="filter-group">
             <div className="filter-header" onClick={() => toggle("estado")}>Estado <span>{collapsed.estado ? "-" : "+"}</span></div>
             <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
-              {["Nuevo","Como Nuevo","Buen Estado", "Usado"].map((state) => (
+              {[
+                "Nuevo","Como Nuevo","Buen Estado", "Usado"
+              ].map((state) => (
                 <label key={state}>
                   <input type="checkbox" /> {state}
                 </label>

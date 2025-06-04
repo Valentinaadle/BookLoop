@@ -915,7 +915,7 @@ body {
   padding: 8px;
   border-radius: 6px;
   transition: background-color 0.2s;
-  user-select: none;
+  -webkit-user-select: none;
 }
 
 .interes-checkbox:hover {
@@ -1000,7 +1000,7 @@ body {
   gap: 10px;
   cursor: pointer;
   width: 100%;
-  user-select: none;
+  -webkit-user-select: none;
 }
 
 .interes-text {
@@ -1103,6 +1103,7 @@ body {
   gap: 10px;
   cursor: pointer;
   width: 100%;
+  -webkit-user-select: none;
 }
 
 .interes-text {
