@@ -11,7 +11,7 @@ import Books from './pages/Books';
 import QuieroVender from './pages/QuieroVender';
 import EditBook from './pages/EditBook';
 import Comprar from './pages/Comprar';
-
+import FAQQuestions from './components/FAQQuestion';
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -68,6 +68,11 @@ function App() {
           <Route path="/vender-page" element={
             <ProtectedRoute>
               <QuieroVender />
+            </ProtectedRoute>
+          } />
+          <Route path="/preguntas" element={
+            <ProtectedRoute>
+              <FAQQuestions />
             </ProtectedRoute>
           } />
         </Routes>

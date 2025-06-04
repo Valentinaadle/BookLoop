@@ -43,7 +43,7 @@ export default function Footer() {
             <div className="links-column">
               <Link to="#">Acerca de Nosotros</Link>
               <Link to="#">Contactanos</Link>
-              <Link to="#">Preguntas frecuentes</Link>
+              <Link to="/preguntas">Preguntas frecuentes</Link>
             </div>
             <div className="links-column">
               <Link to="#">Terminos y Condiciones</Link>
