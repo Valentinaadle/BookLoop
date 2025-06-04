@@ -8,7 +8,7 @@ const FAQQuestions = () => {
       answer: 'Para comprar, selecciona el libro que te interese y haz clic en "Contactar al vendedor". Automáticamente se enviará un email al vendedor con tus datos para que coordinen el pago y envío. Bookloop facilita el contacto, pero la transacción final se acuerda directamente entre las partes.'
     },
     {
-      question: '¿Cuánto cuesta publicar un libro en Bookloop?',
+      question: '¿Cuánto cuesta publicar un libro?',
       answer: 'Es completamente gratis. Solo regístrate, completa los datos del libro y publícalo. No hay límites ni comisiones por venta. Puedes editar o eliminar tus publicaciones cuando quieras.',
     },
     {
