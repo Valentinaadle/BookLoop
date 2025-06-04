@@ -205,30 +205,7 @@ export default function Portada() {
             <Cuestionario onFinalizar={manejarFinalizacionCuestionario} />
             {recomendaciones.length > 0 && <Recomendados libros={recomendaciones} />}
 
-            <motion.section
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="categorias-destacadas"
-            >
-              <h2>Categorías destacadas</h2>
-              <div className="categorias-grid">
-                {[
-                  { nombre: 'Novela', icon: '📖' },
-                  { nombre: 'Ciencia Ficción', icon: '🚀' },
-                  { nombre: 'Misterio', icon: '🕵️‍♂️' },
-                  { nombre: 'Fantasía', icon: '🐉' },
-                  { nombre: 'Poesía', icon: '📝' },
-                  { nombre: 'Terror', icon: '👻' },
-                ].map((cat) => (
-                  <div className="categoria-card" key={cat.nombre}>
-                    <span className="categoria-icon">{cat.icon}</span>
-                    <span className="categoria-nombre">{cat.nombre}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.section>
+            
 
 
             <FAQQuestions />
