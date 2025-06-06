@@ -249,6 +249,25 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `nombre`, `a
 (5, 'andresbleck', 'andres.bleckwedel2@gmail.com', '$2a$10$TyRmyHm8WaVGXzaD1eOq6uctr/x44/oXaTI1RBwf.AmPW5JFsRkDO', 'user', 'andres', 'bleck', 1, '2025-05-27 20:42:32', '2025-05-27 20:42:32', NULL),
 (7, 'valelopez', 'paciente@demo.com', '$2a$10$znlB6to7mUxfI0zQcws75.UQop.l6rQ3H8pIjEcGhVmjZ35coiKe.', 'user', 'Valentin', 'Lopez', 1, '2025-05-30 22:03:52', '2025-05-30 22:03:52', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `wishlist`
+--
+
+CREATE TABLE IF NOT EXISTS `wishlist` (
+  `wishlist_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `book_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`wishlist_id`),
+  UNIQUE KEY `unique_user_book` (`user_id`, `book_id`),
+  KEY `idx_wishlist_user` (`user_id`),
+  KEY `idx_wishlist_book` (`book_id`),
+  CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Índices para tablas volcadas
 --
@@ -1112,6 +1131,7 @@ ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_7` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_8` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
 --
 -- Base de datos: `phpmyadmin`
 --

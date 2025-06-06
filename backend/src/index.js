@@ -16,6 +16,7 @@ const Category = require('./models/Category');
 const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 
 // Ruta básica
 app.get('/', (req, res) => {

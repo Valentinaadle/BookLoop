@@ -1,4 +1,7 @@
-const User = require('../models/User');
+const { User } = require('../models');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'tu_clave_secreta';
 
 // Obtener todos los usuarios
 const getUsers = async (req, res) => {
@@ -46,6 +49,13 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
+    // Generar token JWT
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
     console.log('Login exitoso para usuario:', user.username);
     res.json({
       user: {
@@ -55,7 +65,8 @@ const loginUser = async (req, res) => {
         nombre: user.nombre,
         apellido: user.apellido,
         role: user.role
-      }
+      },
+      token
     });
   } catch (error) {
     console.error('Error en login:', error);
