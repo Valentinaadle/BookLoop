@@ -48,7 +48,13 @@ const getBooks = async (req, res) => {
       ],
       order: [['createdAt', 'DESC']] // Ordenar por fecha de creación, más reciente primero
     });
-    res.json(books);
+
+    const booksWithGenre = books.map(book => ({
+      ...book.toJSON(),
+      genre: book.Category ? book.Category.category_name : null
+    }));
+
+    res.json(booksWithGenre);
   } catch (error) {
     console.error('Error al obtener libros:', error);
     res.status(500).json({ message: 'Error al obtener libros' });
