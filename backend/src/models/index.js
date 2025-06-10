@@ -6,6 +6,7 @@ const Role = require('./Role');
 const Transaction = require('./Transaction');
 const Review = require('./Review');
 const Image = require('./Image');
+const Wishlist = require('./Wishlist');
 
 // Establecer relaciones
 User.hasOne(Profile);
@@ -49,6 +50,12 @@ User.hasMany(Review, { as: 'reviewsByBuyer', foreignKey: 'buyer_id' }); // Un us
 Review.belongsTo(Book, { foreignKey: 'book_id' }); // Cada review es sobre un libro
 Book.hasMany(Review, { foreignKey: 'book_id' });   // Un libro puede tener muchas reviews
 
+// Relaciones de Wishlist
+Wishlist.belongsTo(Book, { foreignKey: 'book_id' });
+Book.hasMany(Wishlist, { foreignKey: 'book_id' });
+Wishlist.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Wishlist, { foreignKey: 'user_id' });
+
 // Exportar modelos
 module.exports = {
   User,
@@ -58,5 +65,6 @@ module.exports = {
   Role,
   Transaction,
   Review,
-  Image
+  Image,
+  Wishlist
 }; 

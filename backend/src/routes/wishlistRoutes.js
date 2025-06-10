@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/auth');
 const {
   getUserWishlist,
   addToWishlist,
@@ -8,10 +7,7 @@ const {
   checkWishlist
 } = require('../controllers/wishlistController');
 
-// Aplicar middleware de autenticación a todas las rutas
-router.use(authenticateToken);
-
-// Obtener todos los favoritos del usuario
+// Obtener todos los favoritos
 router.get('/', getUserWishlist);
 
 // Verificar si un libro está en favoritos
