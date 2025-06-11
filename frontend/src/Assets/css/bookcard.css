@@ -1,170 +1,132 @@
 /* src/components/BookCard.css */
 
 .book-card {
+  background: #ffffff;
   border-radius: 8px;
-  padding-top: 15px;
+  padding: 15px;
   text-align: center;
   margin: 0;
-  border: 1px solid #00000028;
-  background: #ffffffbe;
-  transition: box-shadow 0.2s, transform 0.2s;
-  
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  will-change: transform;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .book-card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
-  transform: translateY(-6px) scale(1.03);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .book-image-container {
   width: 100%;
   height: 320px;
-  border-radius: 16px 16px 0 0;
+  border-radius: 4px;
   overflow: hidden;
   position: relative;
-  background: #f5f5f5;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 15px;
 }
 
 .book-image {
   width: 100%;
   height: 100%;
-  
-  display: block;
-  object-fit: cover; 
-  padding: 5px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-.discount-badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: #394B60;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 4px 12px;
-  border-radius: 8px;
-  z-index: 2;
+.book-card:hover .book-image {
+  transform: scale(1.05);
 }
 
 .favorite-btn {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  background: #fff;
+  top: 0;
+  right: 0;
+  background: white;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   z-index: 2;
-  transition: all 0.2s;
+  padding: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.heart-icon.filled {
+  color: #ff4b4b;
+}
+
 .favorite-btn:hover {
-  background: #f5f5f5;
   transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .book-info {
-  width: 100%;
-  padding: 18px 18px 0 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
+  padding: 10px;
 }
 
 .book-title {
-  font-size: 3.1rem;
-  
-  font-weight: 500; /* Texto un poco más grueso */
-
-  font-weight: 700;
-  color: #222;
-  
-  line-height: 1.2;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
 .book-author {
-  color: #394B60;
-  font-size: 5.25rem;
-  
-  
-}
-
-.book-price-container {
-  
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
 }
 
 .book-price {
-  font-size: 1.55rem;
-  font-weight: bold;
-  color: #394B60;
-}
-
-.book-actions {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #E3AF64;
+  display: block;
+  margin-bottom: 15px;
 }
 
 .buy-button {
-  flex: 1;
-  background: #394B60;
-  color: #fff;
+  width: 100%;
+  background: #516AC8;
+  color: white;
   border: none;
-  border-radius: 8px;
-  padding: 10px 0;
-  font-size: 1rem;
-  
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
- 
+  gap: 8px;
 }
+
 .buy-button:hover {
-  background: #2c3b4f;
-  transform: scale(1.04);
+  background: #26428B;
+  transform: translateY(-2px);
 }
 
-.details-button {
-  color: #394B60;
-  background: none;
-  border: none;
-  font-size: 0.98rem;
-  font-weight: 600;
-  margin-left: 8px;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: color 0.2s;
-}
-.details-button:hover {
-  color: #2a8ef2;
-}
-
-@media (max-width: 600px) {
-  .book-card {
-    width: 98%;
-    min-width: 0;
-    padding: 0 0 12px 0;
-  }
-  .book-image-container {
-    height: 220px;
-  }
-}
-
-/* Estilos para el modal */
+/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -179,61 +141,77 @@
 }
 
 .modal-content {
-  background-color: white;
-  padding: 2rem;
+  background: white;
+  padding: 24px;
   border-radius: 8px;
   max-width: 400px;
   width: 90%;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .modal-content h3 {
-  color: #394B60;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
 }
 
 .modal-content p {
   color: #666;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
-  line-height: 1.5;
+  margin-bottom: 20px;
 }
 
 .modal-actions {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .modal-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
-  border: none;
+  transition: all 0.2s ease;
 }
 
 .modal-button.cancel {
-  background-color: #394B60;
-  color: white;
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
 }
 
 .modal-button.cancel:hover {
-  background-color: #2c3b4f;
-  transform: scale(1.04);
+  background: #eee;
 }
 
 .modal-button.confirm {
-  background-color: #dc3545;
+  background: #dc3545;
   color: white;
+  border: none;
 }
 
 .modal-button.confirm:hover {
-  background-color: #c82333;
-  transform: scale(1.04);
+  background: #c82333;
+}
+
+@media (max-width: 600px) {
+  .book-card {
+    padding: 10px;
+  }
+
+  .book-image-container {
+    height: 250px;
+  }
+
+  .book-info {
+    padding: 8px;
+  }
+
+  .book-title {
+    font-size: 1rem;
+  }
+
+  .buy-button {
+    padding: 8px 16px;
+  }
 }

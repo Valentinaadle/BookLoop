@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeButton from './ThemeButton';
 import '../Assets/css/SearchModal.css';
 import '../Assets/css/header.css';
 
@@ -75,10 +76,11 @@ export default function Header() {
               <>
                 <Link to="/favoritos" title="Favoritos"><img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/></Link>
                 <Link to="/profile" title="Perfil"><img src="/icons/usuario.png" className="icon action-icon" alt="usuario" /></Link>
-                
+                <ThemeButton />
               </>
             ) : (
               <>
+                <ThemeButton />
                 <Link to="/login" className="login-button">Iniciar sesión</Link>
                 <Link to="/register" className="register-button">Registrarse</Link>
               </>

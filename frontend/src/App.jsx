@@ -14,6 +14,7 @@ import EditBook from './pages/EditBook';
 import Comprar from './pages/Comprar';
 import Favoritos from './pages/Favoritos';
 import FAQQuestions from './components/FAQQuestion';
+
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();

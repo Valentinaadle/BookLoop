@@ -3,9 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import '../Assets/css/bookcard.css';
-import { FaShoppingCart, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
-const DEFAULT_BOOK_IMAGE = '/icono2.png';
+const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const BookCard = ({
@@ -94,9 +95,38 @@ const BookCard = ({
     navigate(`/book/${book_id}`);
   };
 
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 20;
+    const rotateY = (centerX - x) / 20;
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    const card = e.currentTarget;
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  };
+
   return (
     <>
-      <div className="book-card" onClick={handleBookClick} style={{cursor: 'pointer'}}>
+      <div 
+        className="book-card" 
+        onClick={handleBookClick} 
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          cursor: 'pointer',
+          transition: 'transform 0.3s ease'
+        }}
+      >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{descuento}</div>}
           {showFavorito && (
@@ -106,7 +136,7 @@ const BookCard = ({
               disabled={isLoading}
               aria-label={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
             >
-              {isBookFavorite ? <FaHeart color="#e74c3c" /> : <FaRegHeart />}
+              {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
             </button>
           )}
           <img 

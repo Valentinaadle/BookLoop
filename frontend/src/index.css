@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Ysabeau:wght@400;500;700&display=swap');
 
 :root {
@@ -10,22 +14,190 @@
   --black: #2A2A2A;
   --heading-font: 'Playfair Display', serif;
   --body-font: 'Ysabeau', sans-serif;
+  --raptures-light: #F6F3E7;
+  --milk-tooth: #FAEBD7;
+  --caramel-essence: #E3AF64;
+  --sapphire-dust: #516AC8;
+  --blue-oblivion: #26428B;
+  --cosmic-odyssey: #0F1939;
 }
 
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  html {
+    @apply min-h-screen bg-black;
+  }
+
+  body {
+    @apply m-0 font-[var(--body-font)] antialiased bg-gradient-to-br from-cosmic-odyssey to-black text-raptures-light min-h-screen;
+  }
+
+  body.intro-active {
+    @apply overflow-hidden;
+  }
+
+  code {
+    @apply font-mono;
+  }
+
+  .App-link {
+    @apply text-sapphire-dust;
+  }
+
+  :root {
+    --raptures-light: 246 243 231;
+    --milk-tooth: 250 235 215;
+    --caramel-essence: 227 175 100;
+    --sapphire-dust: 81 106 200;
+    --blue-oblivion: 38 66 139;
+    --cosmic-odyssey: 15 25 57;
+  }
+}
+
+@layer components {
+  .container, .card {
+    @apply bg-cosmic-odyssey/70 border border-raptures-light/10 rounded-2xl backdrop-blur-lg shadow-lg;
+  }
+
+  input, textarea, select {
+    @apply bg-cosmic-odyssey/70 border border-raptures-light/10 rounded-xl text-raptures-light p-4 transition-all duration-300 ease-in-out backdrop-blur-md;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    @apply outline-none border-sapphire-dust shadow-sapphire-dust/20;
+  }
+
+  button {
+    @apply bg-sapphire-dust text-raptures-light border-none rounded-xl py-3 px-6 font-semibold cursor-pointer transition-all duration-300 ease-in-out;
+  }
+
+  button:hover {
+    @apply bg-blue-oblivion -translate-y-0.5 shadow-lg shadow-sapphire-dust/30;
+  }
+
+  button:disabled {
+    @apply bg-sapphire-dust/30 cursor-not-allowed transform-none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-raptures-light mb-4;
+  }
+
+  p {
+    @apply text-milk-tooth leading-relaxed;
+  }
+
+  a {
+    @apply text-caramel-essence no-underline transition-colors duration-300;
+  }
+
+  a:hover {
+    @apply text-sapphire-dust;
+  }
+
+  .card-3d {
+    @apply relative w-full transform-gpu transition-all duration-300 will-change-transform;
+  }
+
+  .btn-primary {
+    @apply bg-caramel-essence text-cosmic-odyssey font-medium py-2 px-4 rounded-lg 
+           hover:bg-opacity-90 transition-all duration-300 
+           transform hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .glass-effect {
+    @apply bg-opacity-20 backdrop-blur-md border border-white/10 
+           dark:border-white/5 rounded-xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r 
+           from-caramel-essence to-sapphire-dust;
+  }
+}
+
+@layer utilities {
+  .dark-mode {
+    @apply bg-black text-raptures-light;
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--cosmic-odyssey));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--sapphire-dust));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--blue-oblivion));
+}
+
+/* Base styles */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @apply bg-black text-raptures-light antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body.intro-active {
-  overflow: hidden;
+/* Dark mode styles */
+.dark {
+  @apply bg-black text-raptures-light;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.dark .prose {
+  @apply text-raptures-light;
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  @apply text-milk-tooth;
+}
+
+.dark .prose a {
+  @apply text-sapphire-dust hover:text-caramel-essence;
+}
+
+/* Modern card styles */
+.modern-card {
+  @apply relative overflow-hidden rounded-xl border border-white/10
+         bg-gradient-to-b from-cosmic-odyssey to-black
+         transition-all duration-300 hover:border-white/20;
+}
+
+.modern-card:hover {
+  @apply shadow-xl shadow-sapphire-dust/10;
+}
+
+/* Animation utilities */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+.hover-scale {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold tracking-tight text-milk-tooth;
 }
