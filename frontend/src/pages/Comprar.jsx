@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -9,11 +10,17 @@ import "../Assets/css/filtro.css";
 import "../Assets/css/bookcard.css";
 import BookCard from '../components/BookCard';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const DEFAULT_BOOK_IMAGE = '/icono2.png';
 
 const Comprar = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,6 +126,29 @@ const Comprar = () => {
       default:
         return books;
     }
+  };
+
+  // Admin handlers for edit/delete
+  const [deleting, setDeleting] = useState(false);
+  const [adminError, setAdminError] = useState(null);
+
+  const handleEditBook = (id) => {
+    navigate(`/edit-book/${id}`);
+  };
+
+  const handleDeleteBook = async (id) => {
+    if (!window.confirm('¿Seguro que quieres borrar este libro?')) return;
+    setDeleting(true);
+    setAdminError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/books/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Error al borrar libro');
+      // Refresh books
+      fetchBooks();
+    } catch (err) {
+      setAdminError('Error al borrar libro');
+    }
+    setDeleting(false);
   };
 
   const filteredBooks = books.filter(book => {
@@ -236,20 +266,42 @@ const Comprar = () => {
             <div className="loading">Cargando libros...</div>
           ) : (
             <div className="books-grid">
+              {adminError && (
+                <div className="error-message">{adminError}</div>
+              )}
               {sortedBooks.length > 0 ? (
                 sortedBooks.map((book) => (
-                  <BookCard
-                    key={book.book_id || book.id}
-                    descuento={null}
-                    img={getBookImage(book, API_URL)}
-                    titulo={book.title || book.titulo || 'Sin título'}
-                    autor={getBookAuthor(book)}
-                    precio={book.price || book.precio}
-                    favorito={false}
-                    onToggleFavorito={() => {}}
-                    onBuy={() => {}}
-                    book_id={book.book_id || book.id}
-                  />
+                  <div key={book.book_id || book.id} style={{ position: 'relative' }}>
+                    <BookCard
+                      descuento={null}
+                      img={getBookImage(book, API_URL)}
+                      titulo={book.title || book.titulo || 'Sin título'}
+                      autor={getBookAuthor(book)}
+                      precio={book.price || book.precio}
+                      favorito={false}
+                      onToggleFavorito={() => {}}
+                      onBuy={() => {}}
+                      book_id={book.book_id || book.id}
+                    />
+                    {user?.role === 'admin' && (
+                      <div className="admin-action-container">
+                        <button
+                          onClick={() => handleEditBook(book.book_id || book.id)}
+                          disabled={deleting}
+                          className="admin-action-btn"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBook(book.book_id || book.id)}
+                          disabled={deleting}
+                          className="admin-action-btn"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 ))
               ) : (
                 <div className="no-books">

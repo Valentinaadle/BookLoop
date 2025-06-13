@@ -2,15 +2,45 @@
 export function getBookImage(book, API_URL = 'http://localhost:5000') {
   const DEFAULT_BOOK_IMAGE = '/icono2.png';
 
-  // Primero intentar obtener la imagen de la tabla Images
+  // 1. Usar coverImageUrl si existe
+  if (book.coverImageUrl) {
+    if (book.coverImageUrl.startsWith('http') || book.coverImageUrl.startsWith('/Assets')) {
+      return book.coverImageUrl;
+    }
+    return `${API_URL}${book.coverImageUrl}`;
+  }
+
+  // 2. Si hay coverIndex y Images, usar esa imagen como portada
+  if (
+    typeof book.coverIndex === 'number' &&
+    book.Images && Array.isArray(book.Images) &&
+    book.Images.length > book.coverIndex &&
+    book.Images[book.coverIndex]
+  ) {
+    const coverImg = book.Images[book.coverIndex].image_url;
+    if (coverImg) {
+      if (coverImg.startsWith('http') || coverImg.startsWith('/Assets')) {
+        return coverImg;
+      }
+      return `${API_URL}${coverImg}`;
+    }
+  }
+
+  // 3. Usar la última imagen del array Images
   if (book.Images && Array.isArray(book.Images) && book.Images.length > 0) {
+    const lastImage = book.Images[book.Images.length - 1].image_url;
+    if (lastImage) {
+      if (lastImage.startsWith('http') || lastImage.startsWith('/Assets')) {
+        return lastImage;
+      }
+      return `${API_URL}${lastImage}`;
+    }
+    // fallback a la primera si la última falla
     const firstImage = book.Images[0].image_url;
     if (firstImage) {
-      // Si la URL es absoluta (comienza con http o /Assets), usarla directamente
       if (firstImage.startsWith('http') || firstImage.startsWith('/Assets')) {
         return firstImage;
       }
-      // Si es una ruta relativa, agregar el API_URL
       return `${API_URL}${firstImage}`;
     }
   }

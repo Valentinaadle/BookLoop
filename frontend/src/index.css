@@ -71,8 +71,9 @@
   }
 
   button {
-    @apply bg-sapphire-dust text-raptures-light border-none rounded-xl py-3 px-6 font-semibold cursor-pointer transition-all duration-300 ease-in-out;
+    @apply text-raptures-light border-none rounded-xl py-3 px-6 font-semibold cursor-pointer transition-all duration-300 ease-in-out;
   }
+  
 
   button:hover {
     @apply bg-blue-oblivion -translate-y-0.5 shadow-lg shadow-sapphire-dust/30;

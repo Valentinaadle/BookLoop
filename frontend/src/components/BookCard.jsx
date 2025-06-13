@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import '../Assets/css/bookcard.css';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaEdit, FaTrash } from 'react-icons/fa';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';
@@ -17,12 +17,13 @@ const BookCard = ({
   precio,
   showFavorito = true,
   showComprar = true,
-  book_id
+  book_id,
+  isAdmin = false,
+  onDelete
 }) => {
   const { user } = useAuth();
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const navigate = useNavigate();
-  const location = useLocation();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isBookFavorite, setIsBookFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -129,7 +130,7 @@ const BookCard = ({
       >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{descuento}</div>}
-          {showFavorito && (
+          {!isAdmin && showFavorito && (
             <button 
               className={`favorite-btn ${isLoading ? 'loading' : ''}`}
               onClick={handleFavoriteClick}
@@ -139,6 +140,7 @@ const BookCard = ({
               {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
             </button>
           )}
+
           <img 
             src={img || DEFAULT_BOOK_IMAGE} 
             alt={titulo}

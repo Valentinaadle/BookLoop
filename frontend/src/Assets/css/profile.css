@@ -141,6 +141,11 @@ body {
 
 .profile-actions button i {
   font-size: 1rem;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
 }
 
 .profile-actions .edit-button {
@@ -388,21 +393,22 @@ body {
   background-color: #394B60;
   color: white;
   border: none;
-  border-radius: 40px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-top: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .edit-button:hover {
-  background-color: #2c3b4f;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 .edit-button i {
+  font-size: 16px;
   margin-right: 5px;
+  color: white;
 }
 
 .save-button {
@@ -514,29 +520,66 @@ body {
 }
 
 .published-books-section {
-  padding: 20px;
-  margin-top: 20px;
-  background: #f8f9fa;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #fff;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
 }
 
-.published-books-section h3 {
+.published-books-section h2 {
   color: #394B60;
-  margin-bottom: 20px;
   font-size: 1.5rem;
-}
-
-.no-books {
+  margin-bottom: 1.5rem;
   text-align: center;
-  color: #666;
-  padding: 20px;
 }
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
+  padding: 0 16px;
+  margin-left: 80px;
+  margin-right: 80px;
+}
+
+@media (max-width: 600px) {
+  .books-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+    padding: 0 4px;
+  }
+}
+
+.no-books {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-books p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.add-book-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0066cc;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.add-book-link:hover {
+  background-color: #0056b3;
 }
 
 .book-card {
@@ -633,42 +676,40 @@ body {
 }
 
 .edit-button {
-  background: #394B60;
+  background-color: #394B60;
   color: white;
   border: none;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .delete-button {
-  background: #dc3545;
+  background-color: #394B60;
   color: white;
   border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .view-button:hover, .edit-button:hover, .delete-button:hover {
+  opacity: 0.9;
   transform: translateY(-2px);
-  filter: brightness(1.1);
 }
 
-@media screen and (max-width: 768px) {
-  .books-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .books-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .book-actions {
-    flex-direction: column;
-  }
-  
-  .view-button, .edit-button, .delete-button {
-    width: 100%;
-    justify-content: center;
-  }
+.view-button i,
+.edit-button i,
+.delete-button i {
+  font-size: 16px;
+  margin-right: 5px;
+  color: white;
 }
 
 .edit-book-container {
@@ -1138,7 +1179,7 @@ body {
 }
 
 .book-action-button.delete-button {
-  background: #dc3545;
+  background: #394B60;
   color: white;
 }
 
@@ -1149,6 +1190,12 @@ body {
 
 .book-action-button i {
   font-size: 0.85rem;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  margin-right: 4px;
 }
 
 .delete-confirm-modal {
@@ -1331,36 +1378,21 @@ body {
 }
 
 /* Responsive */
-@media screen and (max-width: 900px) {
-  .books-grid-modal {
-    grid-template-columns: repeat(2, 1fr);
+@media screen and (max-width: 1200px) {
+  .books-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 libros por fila */
   }
-  
-  .book-card-modal {
-    max-width: 240px;
+}
+
+@media screen and (max-width: 900px) {
+  .books-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 libros por fila */
   }
 }
 
 @media screen and (max-width: 600px) {
-  .books-grid-modal {
-    grid-template-columns: 1fr;
-  }
-
-  .books-modal {
-    padding: 15px !important;
-  }
-
-  .book-card-modal {
-    max-width: 100%;
-  }
-
-  .book-cover-modal {
-    height: 180px;
-  }
-
-  .close-modal {
-    right: 20px;
-    top: calc((100vh - 67.5vh) / 2 - 16px);
+  .books-grid {
+    grid-template-columns: 1fr; /* 1 libro por fila en móviles */
   }
 }
 
@@ -1650,4 +1682,103 @@ body {
 .logout-confirm-modal .cancel-button:hover {
   background-color: #5a6268;
   transform: scale(1.05);
+}
+
+/* Forzar visibilidad y color de los íconos Font Awesome */
+i.fas, i.far, i.fab, i.fa-solid, i.fa-regular, i.fa-brands {
+  color: #fff !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+.user-action-buttons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  table-layout: fixed; /* Asegura que las columnas mantengan su ancho */
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #eee;
+  padding: 15px 15px; /* Aumenta el padding vertical y horizontal */
+  text-align: left;
+  word-wrap: break-word;
+  vertical-align: middle; /* Alinea el contenido verticalmente en el medio */
+}
+
+.users-table th {
+  background-color: #f8f8f8;
+  color: #333;
+  font-weight: 600;
+}
+
+.users-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.users-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.users-table th:last-child,
+.users-table td:last-child {
+  min-width: 180px; /* Asegura un ancho mínimo para la columna de acciones */
+  text-align: center; /* Centra el contenido en la columna de acciones */
+}
+
+.users-table td.actions-column {
+  display: flex;
+  gap: 10px; /* Asegura espacio entre los botones */
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+.users-table td:last-child {
+  display: flex; /* Habilita flexbox para alinear el botón */
+  justify-content: center; /* Centra horizontalmente el botón */
+  align-items: center; /* Centra verticalmente el botón */
+  height: 100%; /* Asegura que ocupe toda la altura de la celda */
+}
+
+/* Eliminar el margen derecho del botón de editar si aún existe una clase genérica */
+.edit-button {
+  margin-right: 0 !important; 
+}
+
+/* Asegurar que el botón de baja no tenga un ancho que lo fuerce a apilarse */
+.delete-button {
+  white-space: nowrap; /* Evita que el texto del botón se envuelva */
+  width: auto; /* Asegura que no tome el 100% del ancho disponible */
+  box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+}
+
+@media screen and (max-width: 768px) {
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .books-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .book-actions {
+    flex-direction: column;
+  }
+  
+  .view-button, .edit-button, .delete-button {
+    width: 100%;
+    justify-content: center;
+  }
 }

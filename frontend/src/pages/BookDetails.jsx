@@ -43,25 +43,24 @@ function BookDetails() {
       const data = await response.json();
       setBook(data);
       // Procesar las imágenes del libro
-      const images = [];
-      if (data.imageUrl) {
-        // Si la imagen es una ruta estática (comienza con /Assets)
-        if (data.imageUrl.startsWith('/Assets')) {
-          images.push(data.imageUrl);
-        } else {
-          // Si es una URL completa o una ruta del backend
-          images.push(data.imageUrl.startsWith('http') ? data.imageUrl : `${API_URL}${data.imageUrl}`);
-        }
-      }
+      // --- COVER LOGIC FIX: Ensure cover is always first and no duplicates ---
+      let images = [];
+      // 1. Get all image URLs (imageUrl, Images[])
       if (Array.isArray(data.Images) && data.Images.length > 0) {
-        data.Images.forEach(img => {
-          const imgUrl = img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`;
-          if (!images.includes(imgUrl)) {
-            images.push(imgUrl);
-          }
-        });
+        images = data.Images.map(img => img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`);
+      }
+      if (data.imageUrl) {
+        const imgUrl = data.imageUrl.startsWith('http') ? data.imageUrl : (data.imageUrl.startsWith('/Assets') ? data.imageUrl : `${API_URL}${data.imageUrl}`);
+        if (!images.includes(imgUrl)) images.push(imgUrl);
+      }
+      // 2. If coverImageUrl exists, ensure it is first
+      let coverUrl = data.coverImageUrl || data.imageUrl || (images.length > 0 ? images[0] : null);
+      if (coverUrl) {
+        coverUrl = coverUrl.startsWith('http') ? coverUrl : (coverUrl.startsWith('/Assets') ? coverUrl : `${API_URL}${coverUrl}`);
+        images = [coverUrl, ...images.filter(url => url !== coverUrl)];
       }
       setBookImages(images);
+      setActiveImage(0); // Always show the cover first
       setEditForm({
         title: data.title || '',
         authors: Array.isArray(data.authors) ? data.authors.join(', ') : data.authors || '',
@@ -69,6 +68,7 @@ function BookDetails() {
         price: data.price || '',
         stock: data.stock || ''
       });
+      // --- END COVER LOGIC FIX ---
     } catch (err) {
       setError('No se pudo cargar el libro. ' + err.message);
     } finally {
@@ -200,25 +200,43 @@ function BookDetails() {
   };
 
   const isOwner = user && book.seller_id === user.id;
+  const isAdmin = user && user.role === 'admin';
 
   const handleDeleteBook = async () => {
-    if (window.confirm('¿Estás seguro que deseas eliminar este libro?')) {
-      try {
-        const response = await fetch(`${API_URL}/api/books/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!response.ok) throw new Error('Error al eliminar el libro');
-        
-        navigate('/profile');
-      } catch (err) {
-        setError('Error al eliminar el libro');
+  const bookId = book && book.book_id ? book.book_id : id;
+  if (!bookId) {
+    setError('No se encontró el ID del libro.');
+    console.error('ID de libro no encontrado', { book, id });
+    return;
+  }
+  if (window.confirm('¿Estás seguro que deseas eliminar este libro?')) {
+    try {
+      console.log('Intentando borrar libro con ID:', bookId);
+      const response = await fetch(`${API_URL}/api/books/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        let backendError = '';
+        try {
+          const data = await response.json();
+          backendError = data.message || data.error || JSON.stringify(data);
+        } catch (e) {
+          backendError = response.statusText;
+        }
+        console.error('Error backend al borrar:', backendError);
+        throw new Error(backendError || 'Error al eliminar el libro');
       }
+      setSuccess('Libro eliminado correctamente');
+      setTimeout(() => navigate('/profile'), 1500);
+    } catch (err) {
+      setError('Error al eliminar el libro: ' + err.message);
+      console.error('Error al eliminar el libro:', err);
     }
-  };
+  }
+};
 
   return (
     <>
@@ -258,11 +276,11 @@ function BookDetails() {
               </p>
             </div>
             <div className="book-action-top">
-              {isOwner ? (
+              {(isOwner || isAdmin) ? (
                 <div className="owner-actions">
                   <button 
-                    className="contact-button-detail"
-                    onClick={() => setShowEditModal(true)}
+                    className="edit-button"
+                    onClick={() => navigate(`/edit-book/${book.book_id}`)}
                   >
                     <i className="fas fa-edit"></i> Editar Libro
                   </button>
@@ -274,13 +292,17 @@ function BookDetails() {
                   </button>
                 </div>
               ) : (
-                <button 
-                  className="contact-button-detail"
-                  onClick={handleContactSeller}
-                  disabled={sending}
-                >
-                  <i className="fas fa-envelope"></i> {sending ? 'Enviando...' : 'Contactar Vendedor'}
-                </button>
+                <>
+                  {user && (
+                    <button 
+                      className="contact-button-detail"
+                      onClick={handleContactSeller}
+                      disabled={sending}
+                    >
+                      <i className="fas fa-envelope"></i> {sending ? 'Enviando...' : 'Contactar Vendedor'}
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>

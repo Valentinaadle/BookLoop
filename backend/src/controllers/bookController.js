@@ -46,13 +46,17 @@ const getBooks = async (req, res) => {
         { model: require('../models/Image'), attributes: ['image_id', 'image_url'] },
         { model: Category, attributes: ['category_id', 'category_name'] }
       ],
-      order: [['createdAt', 'DESC']] // Ordenar por fecha de creación, más reciente primero
+      order: [['createdAt', 'DESC']]
     });
 
-    const booksWithGenre = books.map(book => ({
-      ...book.toJSON(),
-      genre: book.Category ? book.Category.category_name : null
-    }));
+    const booksWithGenre = books.map(book => {
+      const bookData = book.toJSON();
+      return {
+        ...bookData,
+        genre: book.Category ? book.Category.category_name : null,
+        coverImageUrl: bookData.coverImageUrl || (bookData.Images && bookData.Images.length > 0 ? bookData.Images[bookData.Images.length-1].image_url : null)
+      };
+    });
 
     res.json(booksWithGenre);
   } catch (error) {
@@ -74,7 +78,12 @@ const getBookById = async (req, res) => {
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
-    res.json(book);
+    const bookData = book.toJSON();
+    const enrichedBook = {
+      ...bookData,
+      coverImageUrl: bookData.coverImageUrl || (bookData.Images && bookData.Images.length > 0 ? bookData.Images[bookData.Images.length-1].image_url : null)
+    };
+    res.json(enrichedBook);
   } catch (error) {
     console.error('Error al obtener libro:', error);
     res.status(500).json({ message: 'Error al obtener libro' });
@@ -203,21 +212,19 @@ const updateBook = async (req, res) => {
       pageCount,
       publication_date,
       publisher,
-      imageUrl
+      category_id,
+      images, // array of image URLs (remaining/new)
+      deletedImageIds, // array of image IDs to delete
+      coverImageUrl // optional: explicit cover
     } = req.body;
     const book = await Book.findByPk(req.params.id);
-
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
-
     if (!title || !authors) {
-      return res.status(400).json({ 
-        message: 'El título y los autores son requeridos' 
-      });
+      return res.status(400).json({ message: 'El título y los autores son requeridos' });
     }
-
-    // Normalizar authors a array plano
+    // Normalize authors
     if (typeof authors === 'string') {
       try {
         const parsed = JSON.parse(authors);
@@ -233,7 +240,34 @@ const updateBook = async (req, res) => {
     if (Array.isArray(authors)) {
       authors = authors.flat(Infinity).map(a => typeof a === 'string' ? a.trim() : a).filter(Boolean);
     }
-
+    // Handle image deletions
+    if (Array.isArray(deletedImageIds) && deletedImageIds.length > 0) {
+      await Image.destroy({ where: { image_id: deletedImageIds, book_id: book.book_id } });
+    }
+    // Handle images: ensure all URLs in 'images' exist for this book
+    if (Array.isArray(images)) {
+      // Get current images from DB
+      const currentImages = await Image.findAll({ where: { book_id: book.book_id } });
+      const currentUrls = currentImages.map(img => img.image_url);
+      // Add new images
+      for (const imgUrl of images) {
+        if (!currentUrls.includes(imgUrl)) {
+          await Image.create({ book_id: book.book_id, image_url: imgUrl });
+        }
+      }
+      // Remove images not in the new images array (if not already deleted)
+      for (const img of currentImages) {
+        if (!images.includes(img.image_url)) {
+          await img.destroy();
+        }
+      }
+    }
+    // Determine cover image
+    let finalCoverUrl = coverImageUrl;
+    if (!finalCoverUrl && Array.isArray(images) && images.length > 0) {
+      finalCoverUrl = images[images.length - 1]; // newest is last
+    }
+    // Update book
     await book.update({
       title,
       authors,
@@ -244,13 +278,14 @@ const updateBook = async (req, res) => {
       pageCount,
       publication_date,
       publisher,
-      imageUrl
+      category_id: category_id || book.category_id,
+      imageUrl: finalCoverUrl || book.imageUrl, // fallback to previous if none
+      coverImageUrl: finalCoverUrl // <--- guardar la portada explícita
     });
-
     res.json(book);
   } catch (error) {
     console.error('Error al actualizar libro:', error);
-    res.status(500).json({ message: 'Error al actualizar libro' });
+    res.status(500).json({ message: 'Error al actualizar libro', error: error.message });
   }
 };
 
@@ -261,11 +296,27 @@ const deleteBook = async (req, res) => {
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
+    // Eliminar wishlist asociada
+    try {
+      const { Wishlist } = require('../models');
+      await Wishlist.destroy({ where: { book_id: book.book_id } });
+    } catch (wishErr) {
+      console.error('Error al eliminar wishlist asociada:', wishErr);
+      // No retornamos aquí, seguimos con el borrado
+    }
+    // Eliminar imágenes asociadas
+    try {
+      const { Image } = require('../models');
+      await Image.destroy({ where: { book_id: book.book_id } });
+    } catch (imgErr) {
+      console.error('Error al eliminar imágenes asociadas:', imgErr);
+      // No retornamos aquí, seguimos con el borrado del libro
+    }
     await book.destroy();
     res.json({ message: 'Libro eliminado correctamente' });
   } catch (error) {
-    console.error('Error al eliminar libro:', error);
-    res.status(500).json({ message: 'Error al eliminar libro' });
+    console.error('Error al eliminar libro:', error, error?.message);
+    res.status(500).json({ message: error?.message || 'Error al eliminar libro', error: error });
   }
 };
 

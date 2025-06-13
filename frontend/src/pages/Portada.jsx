@@ -20,11 +20,12 @@ import book3 from "../Assets/book3.webp";
 import book13 from "../Assets/book13.webp";
 import book14 from "../Assets/book14.webp";
 import BookCard from '../components/BookCard';
+import { useAuth } from '../context/AuthContext';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
+const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) => {
   const [startIdx, setStartIdx] = useState(0);
   const visibleCount = 4;
   const total = libros.length;
@@ -54,6 +55,8 @@ const CarruselLibros = ({ libros, titulo, extraClass = "" }) => {
               onBuy={e => { e.stopPropagation(); navigate(`/book/${book.book_id}`); }}
               showFavorito={true}
               showComprar={true}
+              isAdmin={isAdmin}
+              onDelete={onDelete}
             />
           ))}
         </div>
@@ -94,6 +97,21 @@ function Recomendaciones({ libros, preferencias }) {
 }
 
 export default function Portada() {
+  const { user } = useAuth();
+  const isAdmin = user && user.role === 'admin';
+
+  // Handler para eliminar libro (solo admin)
+  const handleDeleteBook = async (bookId) => {
+    if (!window.confirm('¿Seguro que quieres borrar este libro?')) return;
+    try {
+      const res = await fetch(`${API_URL}/api/books/${bookId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Error al borrar libro');
+      setDestacados(prev => prev.filter(b => b.book_id !== bookId));
+      setBooksDB(prev => prev.filter(b => b.book_id !== bookId));
+    } catch (err) {
+      alert('Error al borrar libro');
+    }
+  }
   const [loading, setLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [booksDB, setBooksDB] = useState([]);
@@ -199,7 +217,7 @@ export default function Portada() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-              <CarruselLibros libros={destacados} titulo="Nuevos ingresos" />
+              <CarruselLibros libros={destacados} titulo="Nuevos ingresos" isAdmin={isAdmin} onDelete={handleDeleteBook} />
             </motion.section>
 
             <Cuestionario onFinalizar={manejarFinalizacionCuestionario} />

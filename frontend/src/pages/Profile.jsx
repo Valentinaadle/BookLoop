@@ -23,6 +23,56 @@ const BOOKS_PER_PAGE = 9; // 3x3 grid
 function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  // Admin user management state
+  const [allUsers, setAllUsers] = useState([]);
+  const [userLoading, setUserLoading] = useState(false);
+  const [userError, setUserError] = useState(null);
+  const [deletingUserId, setDeletingUserId] = useState(null);
+  const [showDeleteUserModal, setShowDeleteUserModal] = useState(false); // Modal de usuario, solo usado en admin
+
+  useEffect(() => {
+    if (user && user.role === 'admin') {
+      fetchAllUsers();
+    }
+  }, [user]);
+
+  const fetchAllUsers = async () => {
+    setUserLoading(true);
+    setUserError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/users`);
+      if (!res.ok) throw new Error('Error al cargar usuarios');
+      const data = await res.json();
+      setAllUsers(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setUserError('Error al cargar usuarios');
+    }
+    setUserLoading(false);
+  };
+
+  
+
+  const handleDeleteUser = async (id) => {
+    setUserError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/users/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Error al desactivar usuario');
+      setAllUsers(prev => prev.filter(u => (u.user_id || u.id) !== id));
+      setShowDeleteUserModal(false);
+    } catch (err) {
+      setUserError('Error al desactivar usuario');
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
+
+  // Función para cancelar el modal de usuario
+  const handleCancelDeleteUser = () => {
+    setShowDeleteUserModal(false);
+    setDeletingUserId(null);
+  };
+
   const [form, setForm] = useState({ 
     nombre: '', 
     apellido: '', 
@@ -105,20 +155,7 @@ function Profile() {
     }
   };
 
-  const handleDeleteBook = async (bookId) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este libro?')) {
-      try {
-        const res = await fetch(`${API_URL}/api/books/${bookId}`, {
-          method: 'DELETE'
-        });
-        if (!res.ok) throw new Error('Error al eliminar el libro');
-        setPublishedBooks(prev => prev.filter(book => book.book_id !== bookId));
-        setSuccess('Libro eliminado correctamente');
-      } catch (err) {
-        setError('Error al eliminar el libro');
-      }
-    }
-  };
+  
 
   const handleOpenIntereses = () => {
     setTempIntereses([...form.intereses]);
@@ -181,6 +218,75 @@ function Profile() {
 
   if (loading) return <div>Cargando perfil...</div>;
 
+  if (user && user.role === 'admin') {
+    return (
+      <>
+        <Header />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '60vh', paddingTop: '40px' }}>
+          <div style={{ background: '#fff', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', padding: '32px', minWidth: '700px', maxWidth: '95vw' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '24px', color: '#394B60', fontSize: '2.2rem', fontWeight: 700 }}>Gestión de usuarios</h2>
+            {userError && <div className="error-message">{userError}</div>}
+            {userLoading ? (
+              <div className="loading">Cargando usuarios...</div>
+            ) : (
+              <>
+                <table className="users-table" style={{ width: '100%', borderCollapse: 'collapse', margin: '0 auto' }}>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Apellido</th>
+                      <th>Email</th>
+                      <th>Rol</th>
+                      <th className="actions-column">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allUsers.filter(u => u.role === 'user').map(u => (
+                      <tr key={u.user_id || u.id}>
+                        <td>{u.user_id || u.id}</td>
+                        <td>{u.nombre || u.first_name || '-'}</td>
+                        <td>{u.apellido || u.last_name || '-'}</td>
+                        <td>{u.email}</td>
+                        <td>{u.role || 'usuario'}</td>
+                        <td className="actions-column">
+                          <div className="user-action-buttons">
+                            <button
+                               onClick={() => {
+                                 setDeletingUserId(u.user_id || u.id);
+                                 setShowDeleteUserModal(true);
+                               }}
+                               className="delete-button"
+                               disabled={deletingUserId === (u.user_id || u.id)}
+                             >
+                              Desactivar
+                             </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {showDeleteUserModal && (
+                  <div className="modal-overlay" style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <div className="modal-content" style={{background:'#fff',padding:32,borderRadius:8,minWidth:320,boxShadow:'0 2px 12px rgba(0,0,0,0.15)'}}>
+                      <h3 style={{marginBottom:24}}>¿Estás seguro que quieres desactivar este usuario?</h3>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: 24 }}>
+                        <button onClick={handleCancelDeleteUser} className="cancel-button" style={{background:'#eee',border:'none',padding:'8px 18px',borderRadius:4,cursor:'pointer'}}>Cancelar</button>
+                        <button onClick={() => handleDeleteUser(deletingUserId)} className="delete-button" style={{background:'#d32f2f',color:'#fff',border:'none',padding:'8px 18px',borderRadius:4,cursor:'pointer'}} autoFocus>Desactivar</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -188,7 +294,7 @@ function Profile() {
         <div className="profile-card">
           <div className="header-background"></div>
           <div className="profile-top">
-            <div className="avatar-circle">{form.nombre?.[0] || 'U'}</div>
+            <div className="avatar-circle">{(form.nombre?.[0]) || 'U'}</div>
             <div className="info">
               <h2>
                 {form.nombre} {form.apellido}
@@ -206,161 +312,167 @@ function Profile() {
                   </span>
                 ))}
               </div>
-
             </div>
             <div className="profile-actions">
-              <button onClick={() => setEditMode(true)} className="edit-button">
-                <i className="fas fa-edit"></i>
-              </button>
+              {(!user || (user.role !== 'admin')) && (
+                <button onClick={() => setEditMode(true)} className="edit-button">
+                  <i className="fas fa-edit"></i>
+                </button>
+              )}
               <button onClick={handleLogout} className="logout-button" title="Cerrar sesión">
                 <i className="fas fa-sign-out-alt"></i>
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Libros Recientes */}
-          {publishedBooks.length > 0 && (
-            <div className="recent-books-section">
-              <h3> Libros Recientes</h3>
-              <button onClick={() => setShowBooksModal(true)} className="view-books-button">
-                <i className="fas fa-books"></i> Mis libros
-              </button>
-              <br></br>
-              <div className="recent-books-grid">
-                {publishedBooks.slice(0, 3).map(book => (
+        {/* Sección de Libros Publicados */}
+        <div className="published-books-section">
+          <h2>Mis Libros Publicados</h2>
+          {publishedBooks.length > 0 ? (
+            <div className="books-grid">
+              {publishedBooks.map(book => (
+                <div key={book.book_id} style={{ position: 'relative' }}>
                   <BookCard
-                    key={book.book_id}
                     descuento={null}
                     img={getBookImage(book, API_URL)}
-                    titulo={book.title}
+                    titulo={book.title || book.titulo || 'Sin título'}
                     autor={getBookAuthor(book)}
-                    precio={book.price}
+                    precio={book.price || book.precio}
                     book_id={book.book_id}
-                    onBuy={() => {}}
+                    showFavorito={false}
+                    showComprar={true}
                   />
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-books">
+              <p>No has publicado ningún libro todavía.</p>
+              <Link to="/search" className="add-book-link">
+                Publicar un libro
+              </Link>
             </div>
           )}
+        </div>
 
-          {editMode && (
-            <div className="modal-overlay">
-              <div className="modal-content edit-profile-modal">
-                <form onSubmit={handleSave}>
-                  <div className="form-group">
-                    <label>
-                      <i className="fas fa-user"></i> Nombre
-                      <input 
-                        type="text" 
-                        name="nombre" 
-                        value={form.nombre} 
-                        onChange={handleChange} 
-                        required 
-                        className="form-input"
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      <i className="fas fa-user"></i> Apellido
-                      <input 
-                        type="text" 
-                        name="apellido" 
-                        value={form.apellido} 
-                        onChange={handleChange} 
-                        required 
-                        className="form-input"
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      <i className="fas fa-envelope"></i> Email
-                      <input 
-                        type="email" 
-                        name="email" 
-                        value={form.email} 
-                        onChange={handleChange} 
-                        required 
-                        className="form-input"
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      <i className="fas fa-heart"></i> Intereses
-                    </label>
-                    <button 
-                      type="button" 
-                      onClick={handleOpenIntereses}
-                      className="select-intereses-button"
-                    >
-                      Seleccionar Intereses
-                    </button>
-                  </div>
-                  <div className="modal-buttons">
-                    <button type="submit" className="save-button">
-                      <i className="fas fa-save"></i> Guardar
-                    </button>
-                    <button 
-                      type="button" 
-                      onClick={() => setEditMode(false)} 
-                      className="cancel-button"
-                    >
-                      <i className="fas fa-times"></i> Cancelar
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-
-          {showInteresesModal && (
-            <div className="modal-overlay">
-              <div className="modal-content intereses-modal">
-                <h3>Seleccionar Intereses</h3>
-                <div className="intereses-list">
-                  {INTERESES_PREDEFINIDOS.map((interes) => (
-                    <div key={interes} className="interes-item">
-                      <label className="interes-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={tempIntereses.includes(interes)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setTempIntereses(prev => [...prev, interes]);
-                            } else {
-                              setTempIntereses(prev => prev.filter(i => i !== interes));
-                            }
-                          }}
-                        />
-                        <span className="checkbox-custom"></span>
-                        <span className="interes-text">{interes}</span>
-                      </label>
-                    </div>
-                  ))}
+        {editMode && (
+          <div className="modal-overlay">
+            <div className="modal-content edit-profile-modal">
+              <form onSubmit={handleSave}>
+                <div className="form-group">
+                  <label>
+                    <i className="fas fa-user"></i> Nombre
+                    <input 
+                      type="text" 
+                      name="nombre" 
+                      value={form.nombre} 
+                      onChange={handleChange} 
+                      required 
+                      className="form-input"
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    <i className="fas fa-user"></i> Apellido
+                    <input 
+                      type="text" 
+                      name="apellido" 
+                      value={form.apellido} 
+                      onChange={handleChange} 
+                      required 
+                      className="form-input"
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    <i className="fas fa-envelope"></i> Email
+                    <input 
+                      type="email" 
+                      name="email" 
+                      value={form.email} 
+                      onChange={handleChange} 
+                      required 
+                      className="form-input"
+                    />
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>
+                    <i className="fas fa-heart"></i> Intereses
+                  </label>
+                  <button 
+                    type="button" 
+                    onClick={handleOpenIntereses}
+                    className="select-intereses-button"
+                  >
+                    Seleccionar Intereses
+                  </button>
                 </div>
                 <div className="modal-buttons">
-                  <button 
-                    onClick={handleSaveIntereses} 
-                    className="save-button"
-                  >
-                    <i className="fas fa-check"></i> Confirmar
+                  <button type="submit" className="save-button">
+                    <i className="fas fa-save"></i> Guardar
                   </button>
                   <button 
-                    onClick={() => setShowInteresesModal(false)} 
+                    type="button" 
+                    onClick={() => setEditMode(false)} 
                     className="cancel-button"
                   >
                     <i className="fas fa-times"></i> Cancelar
                   </button>
                 </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {showInteresesModal && (
+          <div className="modal-overlay">
+            <div className="modal-content intereses-modal">
+              <h3>Seleccionar Intereses</h3>
+              <div className="intereses-list">
+                {INTERESES_PREDEFINIDOS.map((interes) => (
+                  <div key={interes} className="interes-item">
+                    <label className="interes-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={tempIntereses.includes(interes)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setTempIntereses(prev => [...prev, interes]);
+                          } else {
+                            setTempIntereses(prev => prev.filter(i => i !== interes));
+                          }
+                        }}
+                      />
+                      <span className="checkbox-custom"></span>
+                      <span className="interes-text">{interes}</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div className="modal-buttons">
+                <button 
+                  onClick={handleSaveIntereses} 
+                  className="save-button"
+                >
+                  <i className="fas fa-check"></i> Confirmar
+                </button>
+                <button 
+                  onClick={() => setShowInteresesModal(false)} 
+                  className="cancel-button"
+                >
+                  <i className="fas fa-times"></i> Cancelar
+                </button>
               </div>
             </div>
-          )}
-          
-          {success && <div className="success-message">{success}</div>}
-          {error && <div className="error-message">{error}</div>}
-        </div>
+          </div>
+        )}
+        
+        {success && <div className="success-message">{success}</div>}
+        {error && <div className="error-message">{error}</div>}
       </div>
 
       {/* Modal de Libros */}
@@ -434,6 +546,9 @@ function Profile() {
                           <div className="book-actions-modal">
                             <Link to={`/book/${book.book_id}`} className="view-button">
                               <i className="fas fa-eye"></i> Ver
+                            </Link>
+                            <Link to={`/edit-book-user/${book.book_id}`} className="edit-button">
+                              <i className="fas fa-edit"></i> Editar
                             </Link>
                             <button 
                               className="delete-button"

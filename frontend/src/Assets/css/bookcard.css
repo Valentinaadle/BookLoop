@@ -13,7 +13,94 @@
   transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
   position: relative;
   overflow: hidden;
+  width: 240px;
+  min-width: 240px;
+  max-width: 240px;
+  height: 420px;
+  min-height: 420px;
+  max-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
+
+@media (max-width: 600px) {
+  .book-card {
+    padding: 10px;
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    height: auto;
+    min-height: unset;
+    max-height: unset;
+  }
+}
+
+
+.book-actions {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.buy-button {
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #394B60;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.buy-button:hover {
+  background: #232e41;
+  transform: translateY(-2px);
+}
+
+
+.buy-button:hover {
+  background: #1b2e5a;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .book-card {
+    padding: 10px;
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    height: auto;
+    min-height: unset;
+    max-height: unset;
+  }
+  .book-image-container {
+    height: 250px;
+  }
+  .book-info {
+    padding: 8px;
+  }
+  .book-title {
+    font-size: 1rem;
+  }
+  .buy-button {
+    padding: 8px 16px;
+  }
+}
+
 
 .book-card:hover {
   transform: translateY(-5px);
@@ -22,7 +109,8 @@
 
 .book-image-container {
   width: 100%;
-  height: 320px;
+  height: 360px; /* más alto, rectangular */
+  aspect-ratio: 2/3; /* 2:3 es típico de portadas */
   border-radius: 4px;
   overflow: hidden;
   position: relative;
@@ -33,11 +121,21 @@
   margin-bottom: 15px;
 }
 
+@media (min-width: 601px) {
+  .book-image-container {
+    height: 340px;
+    aspect-ratio: 3/4;
+  }
+}
+
 .book-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* mostrar toda la portada, sin recortar */
+  aspect-ratio: 2/3;
   transition: transform 0.3s ease;
+  display: block;
+  background: #f6f6f6;
 }
 
 .book-card:hover .book-image {
@@ -106,7 +204,6 @@
 
 .buy-button {
   width: 100%;
-  background: #516AC8;
   color: white;
   border: none;
   border-radius: 6px;
@@ -214,4 +311,46 @@
   .buy-button {
     padding: 8px 16px;
   }
+}
+
+.admin-action-container {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 5px;
+}
+
+.admin-action-btn {
+  background-color: #394B60; /* Color de fondo para que se vean */
+  color: #fff; /* Color del texto/ícono */
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.admin-action-btn.edit {
+  background-color: #394B60;
+}
+
+.admin-action-btn.delete {
+  background-color: #dc3545; /* Rojo para el botón de eliminar */
+}
+
+.admin-action-btn:hover {
+  opacity: 0.9;
+}
+
+.admin-action-btn svg {
+  font-size: 18px;
+  color: #fff;
 }

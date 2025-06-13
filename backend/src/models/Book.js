@@ -65,6 +65,10 @@ const Book = sequelize.define('Book', {
     type: DataTypes.STRING(1000),
     allowNull: true
   },
+  coverImageUrl: {
+    type: DataTypes.STRING(1000),
+    allowNull: true
+  },
   categories: {
     type: DataTypes.JSON,
     allowNull: true,

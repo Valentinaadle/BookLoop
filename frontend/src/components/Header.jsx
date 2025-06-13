@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import ThemeButton from './ThemeButton';
 import '../Assets/css/SearchModal.css';
 import '../Assets/css/header.css';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 export default function Header() {
   const [query, setQuery] = useState('');
@@ -11,7 +12,9 @@ export default function Header() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const isAdmin = user && user.role === 'admin';
 
   const searchBooks = async (searchQuery) => {
     if (!searchQuery.trim()) {
@@ -74,8 +77,21 @@ export default function Header() {
           <div className="user-actions improved-user-actions">
             {isAuthenticated ? (
               <>
-                <Link to="/favoritos" title="Favoritos"><img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/></Link>
+                {!isAdmin && (
+                  <Link to="/favoritos" title="Favoritos">
+                    <img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/>
+                  </Link>
+                )}
                 <Link to="/profile" title="Perfil"><img src="/icons/usuario.png" className="icon action-icon" alt="usuario" /></Link>
+                {isAdmin ? (
+                  <button onClick={logout} className="improved-logout" title="Cerrar Sesión">
+                    <FaSignOutAlt className="icon action-icon" style={{ color: '#394B60' }} />
+                  </button>
+                ) : (
+                  <button onClick={logout} className="logout-button" title="Cerrar Sesión">
+                    <FaSignOutAlt className="icon action-icon" style={{ color: '#394B60' }} />
+                  </button>
+                )}
                 <ThemeButton />
               </>
             ) : (
@@ -92,12 +108,12 @@ export default function Header() {
         <nav>
           <ul className="nav-links">
             {/* <li><Link to="/home">Inicio</Link></li> */}
-            {isAuthenticated && (
+            {user ? (
               <>
                 <li><Link to="/vender-page">Quiero vender</Link></li>
                 <li><Link to="/comprar">Quiero comprar</Link></li>
               </>
-            )}
+            ) : null}
           </ul>
         </nav>
       </div>

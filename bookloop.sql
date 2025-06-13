@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-06-2025 a las 17:43:51
+-- Tiempo de generación: 13-06-2025 a las 06:52:10
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -37,12 +37,13 @@ CREATE TABLE `books` (
   `publication_date` varchar(255) DEFAULT NULL,
   `googleBooksId` varchar(255) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
-  `authors` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`authors`)),
+  `authors` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`authors`)),
   `description` text DEFAULT NULL,
   `publishedDate` varchar(255) DEFAULT NULL,
   `isbn` varchar(255) DEFAULT NULL,
   `pageCount` int(11) DEFAULT NULL,
   `imageUrl` varchar(1000) DEFAULT NULL,
+  `coverImageUrl` varchar(1000) DEFAULT NULL,
   `categories` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`categories`)),
   `language` varchar(255) DEFAULT NULL,
   `averageRating` float DEFAULT NULL,
@@ -58,23 +59,16 @@ CREATE TABLE `books` (
 -- Volcado de datos para la tabla `books`
 --
 
-INSERT INTO `books` (`book_id`, `seller_id`, `category_id`, `images_id`, `isbn_code`, `condition`, `publication_date`, `googleBooksId`, `title`, `authors`, `description`, `publishedDate`, `isbn`, `pageCount`, `imageUrl`, `categories`, `language`, `averageRating`, `quantity`, `available`, `price`, `createdAt`, `updatedAt`, `publisher`) VALUES
-(13, 2, 11, NULL, '9780140449136', 'Como nuevo', '2003', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, '/uploads/1748119660568-861931132.jpg', '[]', 'en', NULL, 1, 1, 4444.00, '2025-05-24 20:47:40', '2025-05-27 22:41:02', 'aaa'),
-(16, 4, 12, NULL, '9780307474278', 'Nuevo', '2009-03-31', NULL, 'The Da Vinci Code', '[\"Dan Brown\"]', '#1 WORLDWIDE BESTSELLER • While in Paris, Harvard symbologist Robert Langdon is awakened by a phone call in the dead of the night. The elderly curator of the Louvre has been murdered inside the museum, his body covered in baffling symbols. “Blockbuster perfection.... A gleefully erudite suspense novel.” —The New York Times “A pulse-quickening, brain-teasing adventure.” —People As Langdon and gifted French cryptologist Sophie Neveu sort through the bizarre riddles, they are stunned to discover a trail of clues hidden in the works of Leonardo da Vinci—clues visible for all to see and yet ingeniously disguised by the painter. Even more startling, the late curator was involved in the Priory of Sion—a secret society whose members included Sir Isaac Newton, Victor Hugo, and Da Vinci—and he guarded a breathtaking historical secret. Unless Langdon and Neveu can decipher the labyrinthine puzzle—while avoiding the faceless adversary who shadows their every move—the explosive, ancient truth will be lost forever.', NULL, NULL, 610, 'http://books.google.com/books/content?id=YuDl2Wl651AC&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3000.00, '2025-05-27 02:17:03', '2025-05-27 22:41:02', 'Planeta'),
-(17, 4, 5, NULL, '9780544003415', 'Muy bueno', '2012', NULL, 'The Lord of the Rings', '[\"J. R. R. Tolkien\"]', 'Presents the epic depicting the Great War of the Ring, a struggle between good and evil in Middle-earth, following the odyssey of Frodo the hobbit and his companions on a quest to destroy the Ring of Power.', NULL, NULL, 1178, '/uploads/1748312375028-452432862.png', '[]', 'en', NULL, 1, 1, 44444.00, '2025-05-27 02:19:35', '2025-05-27 22:41:02', 'Penguin'),
-(19, 4, 14, NULL, '9780061120084', 'Usado', '2006-05-23', NULL, 'To Kill a Mockingbird', '[\"Harper Lee\"]', 'Harper Lee\'s Pulitzer Prize-winning masterwork of honor and injustice in the deep South -- and the heroism of one man in the face of blind and violent hatred One of the best-loved stories of all time, To Kill a Mockingbird has been translated into more than forty languages, sold more than thirty million copies worldwide, served as the basis of an enormously popular motion picture, and was voted one of the best novels of the twentieth century by librarians across the country. A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice, it views a world of great beauty and savage inequities through the eyes of a young girl, as her father -- a crusading local lawyer -- risks everything to defend a black man unjustly accused of a terrible crime.', NULL, NULL, 346, 'http://books.google.com/books/content?id=ncuX8p2xLIUC&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3399.00, '2025-05-27 02:23:18', '2025-05-27 22:41:02', 'aaaaaa'),
-(20, 5, 9, NULL, '9780140283334', 'Aceptable', '1999-10-01', NULL, 'Lord of the Flies', '[\"William Golding\"]', 'Lord of the Flies remains as provocative today as when it was first published in 1954, igniting passionate debate with its startling, brutal portrait of human nature. Though critically acclaimed, it was largely ignored upon its initial publication. Yet soon it became a cult favorite among both students and literary critics who compared it to J.D. Salinger\'s The Catcher in the Rye in its influence on modern thought and literature. William Golding\'s compelling story about a group of very ordinary small boys marooned on a coral island has become a modern classic. At first it seems as though it is all going to be great fun; but the fun before long becomes furious and life on the island turns into a nightmare of panic and death. As ordinary standards of behaviour collapse, the whole world the boys know collapses with them—the world of cricket and homework and adventure stories—and another world is revealed beneath, primitive and terrible. Labeled a parable, an allegory, a myth, a morality tale, a parody, a political treatise, even a vision of the apocalypse, Lord of the Flies has established itself as a true classic. \"Lord of the Flies is one of my favorite books. That was a big influence on me as a teenager, I still read it every couple of years.\" —Suzanne Collins, author of The Hunger Games \"As exciting, relevant, and thought-provoking now as it was when Golding published it in 1954.\" —Stephen King', NULL, NULL, 1200, '/uploads/1748378760745-386470253.png', '[]', 'en', NULL, 1, 1, 7500.00, '2025-05-27 20:46:00', '2025-05-27 22:41:02', 'Cafe'),
-(21, 6, 6, NULL, '9780140449136', 'Nuevo', '2003', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3500.00, '2025-05-29 17:37:04', '2025-05-29 17:37:04', 'Planeta'),
-(22, 6, 8, NULL, '9780140449136', 'Nuevo', '2003', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3500.00, '2025-05-29 17:40:00', '2025-05-29 17:40:00', 'planeta'),
-(24, 8, 8, NULL, '9780140449136', 'Como nuevo', '1233', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 321.00, '2025-05-29 18:18:38', '2025-05-29 18:18:38', 'asasd'),
-(27, 7, 5, NULL, '978-3-16-148410-0', 'Muy bueno', '2014-07-23', NULL, 'Davi Julga Davi', '[\"Hoozemberg Sena De Oliveira\"]', 'Deus havia cumprido sua promessa a Abraão: formou um povo no Egito (Israel) e designou Moisés para o levar às portas da Terra Prometida, Canaã. Nesta, Israel cumpriu em grande parte a ordem de Deus de extermínio das nações canaanitas. Mas não para todas, como Deus queria. As que ficaram, entre elas os filisteus, seu maior inimigo, fizeram com que Israel reivindicasse de Deus um rei, para liderar na frente de combate. O primeiro foi Saul, impetuoso, decidido, mas que teve por isto ser morto por Deus (I Crônicas 10.13,14). Davi, o homem de Deus , certa feita ficou em casa, em vez de ir para a guerra. Foi a partir daí, em casa, que ele se tornou a vergonha de Deus (Salmo 17.3), bem como o réu para quem só ele mesmo teria as palavras da sentença de sua condenação.', NULL, NULL, 300, '', '[]', 'pt-BR', NULL, 1, 1, 2323.00, '2025-05-30 15:59:42', '2025-05-30 15:59:42', NULL),
-(28, 7, 5, NULL, '9780140449136', 'Bueno', '2003', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api', '[]', 'en', NULL, 1, 1, 3500.00, '2025-05-30 15:59:59', '2025-05-30 15:59:59', NULL),
-(29, 7, 7, NULL, '9780140449136', 'Nuevo', '2003', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, '/uploads/1748624966644-663310737.png', '[]', 'en', NULL, 1, 1, 123.00, '2025-05-30 17:09:26', '2025-05-30 17:09:26', '123'),
-(30, 7, 4, NULL, '9780140449136', 'Como nuevo', '2003', NULL, 'Crime and Punishment', '[\"Fyodor Dostoyevsky\"]', 'This classic, begun as a novel concerned with the psychology of a crime and the process of guilt, surpasses itself to take on the tragic force of myth.', NULL, NULL, 754, '/uploads/1748624991696-37958582.png', '[]', 'en', NULL, 1, 1, 123.00, '2025-05-30 17:09:51', '2025-05-30 17:09:51', '312'),
-(31, 7, 6, NULL, '978-3-16-148410-0', 'Nuevo', '2014-07-23423', NULL, 'Nose', '[\"Hoozemberg Sena De Oliveira\"]', 'Deus havia cumprido sua promessa a Abraão: formou um povo no Egito (Israel) e designou Moisés para o levar às portas da Terra Prometida, Canaã. Nesta, Israel cumpriu em grande parte a ordem de Deus de extermínio das nações canaanitas. Mas não para todas, como Deus queria. As que ficaram, entre elas os filisteus, seu maior inimigo, fizeram com que Israel reivindicasse de Deus um rei, para liderar na frente de combate. O primeiro foi Saul, impetuoso, decidido, mas que teve por isto ser morto por Deus (I Crônicas 10.13,14). Davi, o homem de Deus , certa feita ficou em casa, em vez de ir para a guerra. Foi a partir daí, em casa, que ele se tornou a vergonha de Deus (Salmo 17.3), bem como o réu para quem só ele mesmo teria as palavras da sentença de sua condenação.', NULL, NULL, 423, '/uploads/1748625046393-411900972.png', '[]', 'pt-BR', NULL, 1, 1, 234.00, '2025-05-30 17:10:46', '2025-05-30 17:10:46', NULL),
-(33, 7, 5, NULL, '978-3-16-148410-0', 'Muy bueno', '2014-07-23', NULL, 'Davi Julga Davi', '[\"Fyodor Dostoyevsky\"]', 'Deus havia cumprido sua promessa a Abraão: formou um povo no Egito (Israel) e designou Moisés para o levar às portas da Terra Prometida, Canaã. Nesta, Israel cumpriu em grande parte a ordem de Deus de extermínio das nações canaanitas. Mas não para todas, como Deus queria. As que ficaram, entre elas os filisteus, seu maior inimigo, fizeram com que Israel reivindicasse de Deus um rei, para liderar na frente de combate. O primeiro foi Saul, impetuoso, decidido, mas que teve por isto ser morto por Deus (I Crônicas 10.13,14). Davi, o homem de Deus , certa feita ficou em casa, em vez de ir para a guerra. Foi a partir daí, em casa, que ele se tornou a vergonha de Deus (Salmo 17.3), bem como o réu para quem só ele mesmo teria as palavras da sentença de sua condenação.', NULL, NULL, 345, '/uploads/1748625143087-923971599.png', '[]', 'pt-BR', NULL, 1, 1, 534.00, '2025-05-30 17:12:23', '2025-05-30 17:12:23', '453'),
-(35, 7, 5, NULL, '978-3-16-148410-0', 'Como nuevo', '2014-07-23534', NULL, 'Davi Julga Davi', '[\"Hoozemberg Sena De Oliveira\"]', 'Deus havia cumprido sua promessa a Abraão: formou um povo no Egito (Israel) e designou Moisés para o levar às portas da Terra Prometida, Canaã. Nesta, Israel cumpriu em grande parte a ordem de Deus de extermínio das nações canaanitas. Mas não para todas, como Deus queria. As que ficaram, entre elas os filisteus, seu maior inimigo, fizeram com que Israel reivindicasse de Deus um rei, para liderar na frente de combate. O primeiro foi Saul, impetuoso, decidido, mas que teve por isto ser morto por Deus (I Crônicas 10.13,14). Davi, o homem de Deus , certa feita ficou em casa, em vez de ir para a guerra. Foi a partir daí, em casa, que ele se tornou a vergonha de Deus (Salmo 17.3), bem como o réu para quem só ele mesmo teria as palavras da sentença de sua condenação.', NULL, NULL, 534, '/uploads/1748625169862-246977893.png', '[]', 'pt-BR', NULL, 1, 1, 453.00, '2025-05-30 17:12:49', '2025-05-30 17:12:49', '534'),
-(36, 7, 8, NULL, '978-3-16-148410-0', 'Nuevo', '2014-07-23', NULL, 'Davi Julga Davi', '[\"Hoozemberg Sena De Oliveira\"]', 'Deus havia cumprido sua promessa a Abraão: formou um povo no Egito (Israel) e designou Moisés para o levar às portas da Terra Prometida, Canaã. Nesta, Israel cumpriu em grande parte a ordem de Deus de extermínio das nações canaanitas. Mas não para todas, como Deus queria. As que ficaram, entre elas os filisteus, seu maior inimigo, fizeram com que Israel reivindicasse de Deus um rei, para liderar na frente de combate. O primeiro foi Saul, impetuoso, decidido, mas que teve por isto ser morto por Deus (I Crônicas 10.13,14). Davi, o homem de Deus , certa feita ficou em casa, em vez de ir para a guerra. Foi a partir daí, em casa, que ele se tornou a vergonha de Deus (Salmo 17.3), bem como o réu para quem só ele mesmo teria as palavras da sentença de sua condenação.', NULL, NULL, 123, '/uploads/1748627019149-122277879.png', '[]', 'pt-BR', NULL, 1, 1, 123.00, '2025-05-30 17:43:39', '2025-05-30 17:43:39', '123');
+INSERT INTO `books` (`book_id`, `seller_id`, `category_id`, `images_id`, `isbn_code`, `condition`, `publication_date`, `googleBooksId`, `title`, `authors`, `description`, `publishedDate`, `isbn`, `pageCount`, `imageUrl`, `coverImageUrl`, `categories`, `language`, `averageRating`, `quantity`, `available`, `price`, `createdAt`, `updatedAt`, `publisher`) VALUES
+(16, 4, 6, NULL, '9780307474278', 'Nuevo', '2009-03-31', NULL, 'The Da Vinci Code', '[\"Dan Brown\"]', '#1 WORLDWIDE BESTSELLER • While in Paris, Harvard symbologist Robert Langdon is awakened by a phone call in the dead of the night. The elderly curator of the Louvre has been murdered inside the museum, his body covered in baffling symbols. “Blockbuster perfection.... A gleefully erudite suspense novel.” —The New York Times “A pulse-quickening, brain-teasing adventure.” —People As Langdon and gifted French cryptologist Sophie Neveu sort through the bizarre riddles, they are stunned to discover a trail of clues hidden in the works of Leonardo da Vinci—clues visible for all to see and yet ingeniously disguised by the painter. Even more startling, the late curator was involved in the Priory of Sion—a secret society whose members included Sir Isaac Newton, Victor Hugo, and Da Vinci—and he guarded a breathtaking historical secret. Unless Langdon and Neveu can decipher the labyrinthine puzzle—while avoiding the faceless adversary who shadows their every move—the explosive, ancient truth will be lost forever.', NULL, NULL, 610, '/uploads/1749785064216-991042173.jpg', NULL, '[]', 'en', NULL, 1, 1, 3000.00, '2025-05-27 02:17:03', '2025-06-13 03:35:53', 'Planeta'),
+(17, 4, 5, NULL, '9780544003415', 'Bueno', '2025-06-11', NULL, 'The Lord of the Rings', '[\"J. R. R. Tolkien\"]', 'Presents the epic depicting the Great War of the Ring, a struggle between good and evil in Middle-earth, following the odyssey of Frodo the hobbit and his companions on a quest to destroy the Ring of Power.', NULL, NULL, 1178, '/uploads/1748312375028-452432862.png', '/uploads/1748312375028-452432862.png', '[]', 'en', NULL, 1, 1, 44444.00, '2025-05-27 02:19:35', '2025-06-13 04:46:24', 'Penguin'),
+(20, 5, 9, NULL, '9780140283334', 'Aceptable', '1999-10-01', NULL, 'Lord of the Flies', '[\"William Golding\"]', 'Lord of the Flies remains as provocative today as when it was first published in 1954, igniting passionate debate with its startling, brutal portrait of human nature. Though critically acclaimed, it was largely ignored upon its initial publication. Yet soon it became a cult favorite among both students and literary critics who compared it to J.D. Salinger\'s The Catcher in the Rye in its influence on modern thought and literature. William Golding\'s compelling story about a group of very ordinary small boys marooned on a coral island has become a modern classic. At first it seems as though it is all going to be great fun; but the fun before long becomes furious and life on the island turns into a nightmare of panic and death. As ordinary standards of behaviour collapse, the whole world the boys know collapses with them—the world of cricket and homework and adventure stories—and another world is revealed beneath, primitive and terrible. Labeled a parable, an allegory, a myth, a morality tale, a parody, a political treatise, even a vision of the apocalypse, Lord of the Flies has established itself as a true classic. \"Lord of the Flies is one of my favorite books. That was a big influence on me as a teenager, I still read it every couple of years.\" —Suzanne Collins, author of The Hunger Games \"As exciting, relevant, and thought-provoking now as it was when Golding published it in 1954.\" —Stephen King', NULL, NULL, 1200, '/uploads/1748378760773-817602128.jpg', NULL, '[]', 'en', NULL, 1, 1, 7500.00, '2025-05-27 20:46:00', '2025-06-13 03:29:18', 'Cafe'),
+(21, 4, 5, NULL, '9780061122415', 'Como nuevo', '2006', NULL, 'To Kill a Mockingbird', '[\"Harper Lee\"]', '...resumen...', NULL, NULL, 336, '/uploads/1749784002862-464954884.jpg', NULL, '[]', 'en', NULL, 1, 1, 6000.00, '2025-05-27 02:17:03', '2025-06-13 03:06:42', 'Harper Perennial Modern Classics'),
+(23, 4, 3, NULL, '9780140449266', 'Como nuevo', '2025-06-10', NULL, 'The Odyssey', '[\"Homer\"]', '...resumen...', NULL, NULL, 560, '/uploads/1748312375028-452432862.png', NULL, '[]', 'en', NULL, 1, 1, 7000.00, '2025-05-27 02:17:03', '2025-06-13 04:31:49', 'Penguin Classics'),
+(29, 4, 5, NULL, '9780451524935', 'Como nuevo', '1950', NULL, '1984', '[\"George Orwell\"]', '...resumen...', NULL, NULL, 328, '/uploads/1749784981768-750340431.jpg', '/uploads/1749784981768-750340431.jpg', '[]', 'en', NULL, 1, 1, 8000.00, '2025-05-27 02:17:03', '2025-06-13 04:49:10', 'Signet Classics'),
+(33, 4, 5, NULL, '9780142437230', 'Aceptable', '2002', NULL, 'Moby-Dick', '[\"Herman Melville\"]', '...resumen...', NULL, NULL, 720, '/uploads/1749785279483-551536488.webp', NULL, '[]', 'en', NULL, 1, 1, 8800.00, '2025-05-27 02:17:03', '2025-06-13 03:34:21', 'Penguin Classics'),
+(34, 4, 7, NULL, '9780140449136', 'Aceptable', '2007', NULL, 'Crime and Punishment', '[\"Fyodor Dostoevsky\"]', '...resumen...', NULL, NULL, 720, '/uploads/1749785171068-85007806.jpg', NULL, '[]', 'en', NULL, 1, 1, 7700.00, '2025-05-27 02:17:03', '2025-06-13 04:21:48', 'Penguin Classics'),
+(36, 4, 9, NULL, '9780679783275', 'Como nuevo', '1999', NULL, 'Pride and Prejudice', '[\"Jane Austen\"]', '...resumen...', NULL, NULL, 480, '/uploads/1749783334074-378473697.jpg', NULL, '[]', 'en', NULL, 1, 1, 6600.00, '2025-05-27 02:17:03', '2025-06-13 04:29:34', 'Vintage');
 
 -- --------------------------------------------------------
 
@@ -126,30 +120,20 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`image_id`, `book_id`, `image_url`) VALUES
-(7, 13, '/uploads/1748119660568-861931132.jpg'),
-(9, 16, 'http://books.google.com/books/content?id=YuDl2Wl651AC&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
 (10, 17, '/uploads/1748312375028-452432862.png'),
 (11, 17, '/uploads/1748312375046-579867956.jpg'),
-(15, 19, 'http://books.google.com/books/content?id=ncuX8p2xLIUC&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
 (16, 20, '/uploads/1748378760745-386470253.png'),
 (17, 20, '/uploads/1748378760773-817602128.jpg'),
 (18, 20, '/uploads/1748378760745-386470253.png'),
-(19, 21, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
-(20, 22, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
-(21, 24, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
-(23, 28, 'http://books.google.com/books/content?id=SYu-4-oO3h8C&printsec=frontcover&img=1&zoom=1&source=gbs_api'),
-(24, 29, '/uploads/1748624966644-663310737.png'),
-(25, 29, '/uploads/1748624966644-663310737.png'),
-(26, 30, '/uploads/1748624991696-37958582.png'),
-(27, 30, '/uploads/1748624991696-37958582.png'),
-(28, 31, '/uploads/1748625046393-411900972.png'),
-(29, 31, '/uploads/1748625046393-411900972.png'),
-(30, 33, '/uploads/1748625143087-923971599.png'),
-(31, 33, '/uploads/1748625143087-923971599.png'),
-(33, 35, '/uploads/1748625169862-246977893.png'),
-(34, 35, '/uploads/1748625169862-246977893.png'),
-(35, 36, '/uploads/1748627019149-122277879.png'),
-(36, 36, '/uploads/1748627019149-122277879.png');
+(19, 23, '/uploads/1748312375028-452432862.png'),
+(21, 23, '/uploads/1749784797833-437540278.jpg'),
+(23, 29, '/uploads/1749784981768-750340431.jpg'),
+(24, 16, '/uploads/1749785064216-991042173.jpg'),
+(26, 34, '/uploads/1749785171068-85007806.jpg'),
+(28, 33, '/uploads/1749785279483-551536488.webp'),
+(29, 20, '/uploads/1749783380647-331037118.jpg'),
+(30, 36, '/uploads/1749783334074-378473697.jpg'),
+(33, 29, '/uploads/1749790143096-942280971.jpg');
 
 -- --------------------------------------------------------
 
@@ -176,14 +160,7 @@ CREATE TABLE `profiles` (
 INSERT INTO `profiles` (`id`, `direccion`, `telefono`, `ciudad`, `pais`, `codigoPostal`, `UserId`, `createdAt`, `updatedAt`) VALUES
 (1, NULL, NULL, NULL, NULL, NULL, 2, '2025-05-24 17:47:32', '2025-05-24 17:47:32'),
 (3, NULL, NULL, NULL, NULL, NULL, 4, '2025-05-27 02:06:03', '2025-05-27 02:06:03'),
-(4, NULL, NULL, NULL, NULL, NULL, 5, '2025-05-27 20:42:33', '2025-05-27 20:42:33'),
-(5, NULL, NULL, NULL, NULL, NULL, 6, '2025-05-28 20:44:57', '2025-05-28 20:44:57'),
-(6, NULL, NULL, NULL, NULL, NULL, 7, '2025-05-29 15:56:47', '2025-05-29 15:56:47'),
-(7, NULL, NULL, NULL, NULL, NULL, 8, '2025-05-29 18:17:33', '2025-05-29 18:17:33'),
-(10, NULL, NULL, NULL, NULL, NULL, 11, '2025-05-30 18:44:09', '2025-05-30 18:44:09'),
-(11, NULL, NULL, NULL, NULL, NULL, 12, '2025-05-30 18:46:36', '2025-05-30 18:46:36'),
-(12, NULL, NULL, NULL, NULL, NULL, 13, '2025-05-30 18:47:15', '2025-05-30 18:47:15'),
-(13, NULL, NULL, NULL, NULL, NULL, 14, '2025-05-30 18:50:18', '2025-05-30 18:50:18');
+(4, NULL, NULL, NULL, NULL, NULL, 5, '2025-05-27 20:42:33', '2025-05-27 20:42:33');
 
 -- --------------------------------------------------------
 
@@ -265,13 +242,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `nombre`, `a
 (2, 'katiadle', 'katiadle@gmail.com', '$2a$10$YxDsk63QzQKz5hc9CcT7OupujBwUZ5k/FV8/8o2xOQS9UeSYtaX22', 'user', 'Katja', 'Adle', 1, '2025-05-24 17:47:32', '2025-05-24 21:26:39', NULL),
 (4, 'valentinaadle', 'valentinaadle1@gmail.com', '$2a$10$uIV2s1t9OzC7x2e2yReBGuiA5f7k60gD.RAIPBh1b7.ahJXO8TXwS', 'user', 'Valentina', 'Adle', 1, '2025-05-27 02:06:02', '2025-05-27 02:06:02', NULL),
 (5, 'andresbleck', 'andres.bleckwedel2@gmail.com', '$2a$10$TyRmyHm8WaVGXzaD1eOq6uctr/x44/oXaTI1RBwf.AmPW5JFsRkDO', 'user', 'andres', 'bleck', 1, '2025-05-27 20:42:32', '2025-05-27 20:42:32', NULL),
-(6, 'Lucas', 'lucas@gmail.com', '$2a$10$A4rLzuPRojFPykTxbK0viuQP0kLEV3gdiTVEYC1N7PjNLapsoRvK.', 'user', 'Lucas', 'Luna', 1, '2025-05-28 20:44:57', '2025-05-29 15:22:58', NULL),
-(7, 'Lucas123', 'lucas3814889446@gmail.com', '$2a$10$pcKjv89RU4ct5avuORzmzu1iCA8.EyF02A6/yod1AZBSCINCohBCy', 'user', 'Lucas', 'Luna', 1, '2025-05-29 15:56:47', '2025-05-30 17:08:13', NULL),
-(8, 'BookLoop', 'bookloopUNSTA@gmail.com', '$2a$10$lpcJqXDNB3hcgPVOr.9m3u2zmn6FaSILrrrmvEcbC2deJL9xd1cJW', 'admin', 'Book', 'Loop', 1, '2025-05-29 18:17:33', '2025-05-29 18:17:33', NULL),
-(11, 'valentinaadle@gmail.com', 'valentinaadle@gmail.com', '$2a$10$YyFDUCDlMBSUscERQRMBHOcCj7x.YoWU2wOhAYVQmU/6OKzhTaNou', 'user', 'vale', 'adle', 1, '2025-05-30 18:44:09', '2025-05-30 18:44:09', NULL),
-(12, 'lunamarca', 'Lucas381@gmail.com', '$2a$10$ujzMZ4Kah5LBmNbFN72SvO9ArnQwA8UQlktLz/SRzjXViJSjhTsDq', 'user', 'Lucas', 'Luna', 1, '2025-05-30 18:46:36', '2025-05-30 18:46:36', NULL),
-(13, 'Hola', 'asdasdasddasdadasdadadsasd@gmail.com', '$2a$10$dadFMFRq3GgQCw4z.fxsduVUk8LTb3hsnpZ0bn8kbF50CGq49xsFC', 'user', 'asdas', 'asdasd', 1, '2025-05-30 18:47:15', '2025-05-30 18:47:15', NULL),
-(14, '123123', '123123@gmail.com', '$2a$10$v2VVA0FXMny98MPw0zsQceqJO6ZOdPj7svFZIrgMTchemWqDielv2', 'user', '123123', '123123', 1, '2025-05-30 18:50:17', '2025-05-30 18:50:17', NULL);
+(7, 'adminbl', 'itsbookloop@gmail.com', '$2a$10$9.v5Pn/qnJC3WyhcdMR5Q.NlnTRRbJKk/eU3xQL3x8fIva7l9upom', 'admin', 'Admin', 'BookLoop', 1, '2025-06-12 20:17:24', '2025-06-12 20:17:24', 2),
+(10, 'katiadle1', 'katiadle1@gmail.com', '$2a$10$TyujLnrALVX4XIKF/gJNOeY.KC/Anbw6ml76FXkmVFzfBkLv8reVi', 'user', 'Kati', 'Adle', 1, '2025-06-13 04:50:45', '2025-06-13 04:50:45', NULL);
 
 -- --------------------------------------------------------
 
@@ -291,14 +263,9 @@ CREATE TABLE `wishlist` (
 --
 
 INSERT INTO `wishlist` (`wishlist_id`, `user_id`, `book_id`, `created_at`) VALUES
-(10, 7, 35, '2025-06-10 14:45:53'),
-(11, 7, 30, '2025-06-10 14:45:58'),
-(12, 7, 33, '2025-06-10 14:46:51'),
-(13, 7, 36, '2025-06-10 14:49:42'),
-(16, 6, 36, '2025-06-10 14:51:27'),
-(18, 6, 33, '2025-06-10 14:51:28'),
-(19, 6, 35, '2025-06-10 14:53:28'),
-(21, 6, 31, '2025-06-10 14:53:33');
+(5, 4, 20, '2025-06-13 03:15:04'),
+(6, 4, 36, '2025-06-13 03:35:16'),
+(8, 10, 20, '2025-06-13 04:51:07');
 
 --
 -- Índices para tablas volcadas
@@ -363,12 +330,6 @@ ALTER TABLE `books`
   ADD UNIQUE KEY `googleBooksId_52` (`googleBooksId`),
   ADD UNIQUE KEY `googleBooksId_53` (`googleBooksId`),
   ADD UNIQUE KEY `googleBooksId_54` (`googleBooksId`),
-  ADD UNIQUE KEY `googleBooksId_55` (`googleBooksId`),
-  ADD UNIQUE KEY `googleBooksId_56` (`googleBooksId`),
-  ADD UNIQUE KEY `googleBooksId_57` (`googleBooksId`),
-  ADD UNIQUE KEY `googleBooksId_58` (`googleBooksId`),
-  ADD UNIQUE KEY `googleBooksId_59` (`googleBooksId`),
-  ADD UNIQUE KEY `googleBooksId_60` (`googleBooksId`),
   ADD KEY `seller_id` (`seller_id`),
   ADD KEY `category_id` (`category_id`);
 
@@ -471,18 +432,6 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email_24` (`email`),
   ADD UNIQUE KEY `username_25` (`username`),
   ADD UNIQUE KEY `email_25` (`email`),
-  ADD UNIQUE KEY `username_26` (`username`),
-  ADD UNIQUE KEY `email_26` (`email`),
-  ADD UNIQUE KEY `username_27` (`username`),
-  ADD UNIQUE KEY `email_27` (`email`),
-  ADD UNIQUE KEY `username_28` (`username`),
-  ADD UNIQUE KEY `email_28` (`email`),
-  ADD UNIQUE KEY `username_29` (`username`),
-  ADD UNIQUE KEY `email_29` (`email`),
-  ADD UNIQUE KEY `username_30` (`username`),
-  ADD UNIQUE KEY `email_30` (`email`),
-  ADD UNIQUE KEY `username_31` (`username`),
-  ADD UNIQUE KEY `email_31` (`email`),
   ADD KEY `role_id` (`role_id`);
 
 --
@@ -513,13 +462,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT de la tabla `images`
 --
 ALTER TABLE `images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `profiles`
 --
 ALTER TABLE `profiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `reviews`
@@ -543,13 +492,13 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas
@@ -573,19 +522,7 @@ ALTER TABLE `books`
   ADD CONSTRAINT `books_ibfk_109` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_11` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_110` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_111` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_112` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_113` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_114` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_115` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_116` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_117` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_118` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_119` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_12` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_120` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_121` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `books_ibfk_122` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_13` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_14` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_15` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -736,13 +673,7 @@ ALTER TABLE `images`
   ADD CONSTRAINT `images_ibfk_52` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_53` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_54` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `images_ibfk_55` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `images_ibfk_56` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `images_ibfk_57` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `images_ibfk_58` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `images_ibfk_59` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_6` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `images_ibfk_60` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_7` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_8` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `images_ibfk_9` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -801,13 +732,7 @@ ALTER TABLE `profiles`
   ADD CONSTRAINT `profiles_ibfk_52` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_53` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_54` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profiles_ibfk_55` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profiles_ibfk_56` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profiles_ibfk_57` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profiles_ibfk_58` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profiles_ibfk_59` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_6` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `profiles_ibfk_60` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_7` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_8` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `profiles_ibfk_9` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -887,26 +812,8 @@ ALTER TABLE `reviews`
   ADD CONSTRAINT `reviews_ibfk_160` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_161` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_162` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_163` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_164` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_165` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_166` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_167` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_168` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_169` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_17` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_170` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_171` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_172` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_173` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_174` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_175` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_176` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_177` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_178` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_179` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_18` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_180` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_19` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`transaction_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `reviews_ibfk_20` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -1072,26 +979,8 @@ ALTER TABLE `transactions`
   ADD CONSTRAINT `transactions_ibfk_160` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_161` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_162` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_163` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_164` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_165` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_166` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_167` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_168` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_169` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_17` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_170` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_171` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_172` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_173` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_174` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_175` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_176` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_177` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_178` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_179` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_18` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_180` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_19` FOREIGN KEY (`seller_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_20` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -1237,13 +1126,7 @@ ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_53` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_54` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_55` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_56` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_57` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_58` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_59` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_6` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_60` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_ibfk_61` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_7` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_8` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `users_ibfk_9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE;
