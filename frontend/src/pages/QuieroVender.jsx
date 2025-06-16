@@ -262,10 +262,11 @@ export default function QuieroVender() {
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Selecciona un estado</option>
+                  <option value="">Selecciona el estado</option>
                   <option value="Nuevo">Nuevo</option>
                   <option value="Como nuevo">Como nuevo</option>
-                  <option value="Buen Estado">Aceptable</option>
+                  <option value="Buen estado">Buen estado</option>
+                  <option value="Aceptable">Aceptable</option>
                   <option value="Usado">Usado</option>
                 </select>
               </div>
@@ -275,22 +276,12 @@ export default function QuieroVender() {
                   type="number"
                   id="precio"
                   name="precio"
-                  placeholder="Ej: 3500"
+                  placeholder="Ej: 1500"
                   value={formData.precio}
                   onChange={handleChange}
                   required
                 />
               </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="descripcion">Descripción</label>
-              <textarea
-                id="descripcion"
-                name="descripcion"
-                placeholder="Descripción del libro"
-                value={formData.descripcion}
-                onChange={handleChange}
-              />
             </div>
             <div className="form-row">
               <div className="form-group">
@@ -299,7 +290,7 @@ export default function QuieroVender() {
                   type="number"
                   id="paginas"
                   name="paginas"
-                  placeholder="Ej: 300"
+                  placeholder="Ej: 350"
                   value={formData.paginas}
                   onChange={handleChange}
                 />
@@ -310,57 +301,67 @@ export default function QuieroVender() {
                   type="text"
                   id="publicacion"
                   name="publicacion"
-                  placeholder="Ej: 2010"
+                  placeholder="Ej: 1967"
                   value={formData.publicacion}
                   onChange={handleChange}
                 />
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="imagen">URL de la imagen</label>
+              <label htmlFor="categoria">Categoría</label>
+              <select
+                id="categoria"
+                name="categoria"
+                value={formData.categoria}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Selecciona una categoría</option>
+                {categories.map((cat) => (
+                  <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="descripcion">Descripción del libro</label>
+              <textarea
+                id="descripcion"
+                name="descripcion"
+                placeholder="Escribe una breve sinopsis del libro."
+                value={formData.descripcion}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="imagen">URL de la imagen de portada</label>
               <input
                 type="text"
                 id="imagen"
                 name="imagen"
-                placeholder="URL de la portada"
+                placeholder="URL de la portada principal"
                 value={formData.imagen}
                 onChange={handleChange}
               />
             </div>
+
             <div className="form-group">
-              <label htmlFor="imagenes">Imágenes del libro</label>
+              <label htmlFor="images">Imágenes adicionales del libro</label>
               <input
                 type="file"
-                id="imagenes"
-                name="imagenes"
-                accept="image/*"
+                id="images"
+                name="images"
                 multiple
                 onChange={handleImageChange}
               />
-              <div className="image-preview-group">
-                {imagePreviews.map((src, idx) => (
-                  <img key={idx} src={src} alt={`preview-${idx}`} className="image-preview" />
+              <div className="image-previews">
+                {imagePreviews.map((preview, index) => (
+                  <img key={index} src={preview} alt="Previsualización" />
                 ))}
               </div>
             </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="categoria">Categoría</label>
-                <select
-                  id="categoria"
-                  name="categoria"
-                  value={formData.categoria}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Selecciona una categoría</option>
-                  {categories.map(cat => (
-                    <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <button className="submit-btn" type="submit" disabled={loading}>
+            <button type="submit" className="submit-btn" disabled={loading}>
               {loading ? 'Publicando...' : 'Publicar libro'}
             </button>
           </form>
