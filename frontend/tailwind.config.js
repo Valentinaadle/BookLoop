@@ -13,7 +13,13 @@ module.exports = {
         'blue-oblivion': '#26428B',
         'cosmic-odyssey': '#0F1939',
       },
+      fontFamily: {
+        'playfair': ['"Playfair Display"', 'serif'],
+        'inter': ['Inter', 'sans-serif'],
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }; 

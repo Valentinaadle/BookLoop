@@ -14,22 +14,14 @@ function BookDetails() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeImage, setActiveImage] = useState(0);
-  const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [emailStatus, setEmailStatus] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editForm, setEditForm] = useState({
-    title: '',
-    authors: '',
-    description: '',
-    price: '',
-    stock: ''
-  });
-  const [success, setSuccess] = useState(null);
   const [bookImages, setBookImages] = useState([]);
-  const DEFAULT_BOOK_IMAGE = '/icono2.png';
+  const [activeImage, setActiveImage] = useState(0);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ title: '', authors: '', description: '', price: '', stock: '' });
+  const [success, setSuccess] = useState(null);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   const fetchBookDetails = useCallback(async () => {
@@ -82,36 +74,6 @@ function BookDetails() {
     }
   }, [id, fetchBookDetails]);
 
-  if (loading) {
-    return (
-      <>
-        <Header />
-        <div className="loading">Cargando detalles del libro...</div>
-        <Footer />
-      </>
-    );
-  }
-
-  if (error) {
-    return (
-      <>
-        <Header />
-        <div className="error">{error}</div>
-        <Footer />
-      </>
-    );
-  }
-
-  if (!book) {
-    return (
-      <>
-        <Header />
-        <div className="error">No se encontró el libro</div>
-        <Footer />
-      </>
-    );
-  }
-
   const handleContactSeller = async () => {
     if (!user) {
       setEmailStatus('Error: Debes iniciar sesión para contactar al vendedor');
@@ -163,23 +125,14 @@ function BookDetails() {
     }
   };
 
-  const handleEditSubmit = async (e) => {
+  const handleUpdateBook = async (e) => {
     e.preventDefault();
     try {
-      const formattedData = {
-        ...editForm,
-        authors: editForm.authors.split(',').map(author => author.trim()),
-        description: editForm.description.trim()
-      };
-
-      const response = await fetch(`${API_URL}/api/books/${id}`, {
+      const response = await fetch(`${API_URL}/api/books/${book.book_id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formattedData)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editForm)
       });
-
       if (!response.ok) throw new Error('Error al actualizar el libro');
       
       const updatedBook = await response.json();
@@ -199,293 +152,213 @@ function BookDetails() {
     }));
   };
 
-  const isOwner = user && book.seller_id === user.id;
+  const isOwner = user && book && book.seller_id === user.id;
   const isAdmin = user && user.role === 'admin';
 
   const handleDeleteBook = async () => {
-  const bookId = book && book.book_id ? book.book_id : id;
-  if (!bookId) {
-    setError('No se encontró el ID del libro.');
-    console.error('ID de libro no encontrado', { book, id });
-    return;
-  }
-  if (window.confirm('¿Estás seguro que deseas eliminar este libro?')) {
-    try {
-      console.log('Intentando borrar libro con ID:', bookId);
-      const response = await fetch(`${API_URL}/api/books/${bookId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!response.ok) {
-        let backendError = '';
-        try {
-          const data = await response.json();
-          backendError = data.message || data.error || JSON.stringify(data);
-        } catch (e) {
-          backendError = response.statusText;
-        }
-        console.error('Error backend al borrar:', backendError);
-        throw new Error(backendError || 'Error al eliminar el libro');
-      }
-      setSuccess('Libro eliminado correctamente');
-      setTimeout(() => navigate('/profile'), 1500);
-    } catch (err) {
-      setError('Error al eliminar el libro: ' + err.message);
-      console.error('Error al eliminar el libro:', err);
+    const bookId = book && book.book_id ? book.book_id : id;
+    if (!bookId) {
+      setError('No se encontró el ID del libro.');
+      console.error('ID de libro no encontrado', { book, id });
+      return;
     }
+    if (window.confirm('¿Estás seguro que deseas eliminar este libro?')) {
+      try {
+        console.log('Intentando borrar libro con ID:', bookId);
+        const response = await fetch(`${API_URL}/api/books/${bookId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          let backendError = '';
+          try {
+            const data = await response.json();
+            backendError = data.message || data.error || JSON.stringify(data);
+          } catch (e) {
+            backendError = response.statusText;
+          }
+          console.error('Error backend al borrar:', backendError);
+          throw new Error(backendError || 'Error al eliminar el libro');
+        }
+        setSuccess('Libro eliminado correctamente');
+        setTimeout(() => navigate('/profile'), 1500);
+      } catch (err) {
+        setError('Error al eliminar el libro: ' + err.message);
+        console.error('Error al eliminar el libro:', err);
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="loading">Cargando detalles del libro...</div>
+        <Footer />
+      </>
+    );
   }
-};
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div className="error">{error}</div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!book) {
+    return (
+      <>
+        <Header />
+        <div className="error">No se encontró el libro</div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
       <Header />
-      <main className="main">
-        <div className="breadcrumb">
-          <span>Inicio / Libros / {book.category || 'Categoría'}</span>
+      <div className="container mx-auto p-4 max-w-6xl">
+        <nav aria-label="Breadcrumb" className="mb-4 text-xs text-slate-500">
+          <ol className="list-none p-0 inline-flex space-x-2">
+            <li className="flex items-center">
+              <a href="/" className="hover:text-slate-700">Inicio</a>
+            </li>
+            <li className="flex items-center">
+              <span className="material-icons text-xs">chevron_right</span>
+              <a href="/books" className="hover:text-slate-700">Libros</a>
+            </li>
+            <li className="flex items-center">
+              <span className="material-icons text-xs">chevron_right</span>
+              <span className="text-slate-700">{book.Category?.category_name || 'Categoría'}</span>
+            </li>
+          </ol>
+        </nav>
+
+        <header className="mb-6">
+          <h1 className="text-4xl">{book.title}</h1>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
+              <div className="book-cover-detail">
+                <img
+                  src={bookImages.length > 0 ? bookImages[activeImage] : '/icono2.png'}
+                  alt={`Portada ${book.title}`}
+                  onError={(e) => {
+                    e.target.src = '/icono2.png';
+                    e.target.onerror = null;
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <p className="text-slate-700 font-inter text-sm">
+                  <span className="font-semibold text-slate-800">Autor:</span> {Array.isArray(book.authors) ? book.authors.join(', ') : (book.author || 'No especificado')}
+                </p>
+                <p className="text-slate-700 font-inter text-sm">
+                  <span className="font-semibold text-slate-800">Vendido por:</span>{' '}
+                  {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
+                </p>
+                <p className="text-2xl font-bold text-slate-800">
+                  {book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'No especificado'}
+                </p>
+              </div>
+              <button
+                onClick={handleContactSeller}
+                className="mt-4 w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-4 rounded-md shadow-sm hover:shadow transition-all duration-300 ease-in-out flex items-center justify-center text-sm"
+              >
+                <i className="fas fa-envelope mr-2"></i>
+                Contactar Vendedor
+              </button>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-2xl font-semibold text-slate-800 mb-4 font-playfair">Detalles del libro:</h2>
+              <div className="details-grid grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div>
+                  <p className="text-xs text-slate-500">Editorial</p>
+                  <p className="text-sm text-slate-800">{book.publisher || 'No especificado'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Categoría</p>
+                  <p className="text-sm text-slate-800">{book.Category?.category_name || 'No especificado'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Número de páginas</p>
+                  <p className="text-sm text-slate-800">{book.pageCount || 'No especificado'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Año de publicación</p>
+                  <p className="text-sm text-slate-800">{book.publication_date || 'No especificado'}</p>
+                </div>
+                <div>
+                   <p className="text-xs text-slate-500">ISBN</p>
+                   <p className="text-sm text-slate-800">{book.isbn || book.isbn_code || 'No especificado'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Idioma</p>
+                  <p className="text-sm text-slate-800">{book.language || book.idioma || 'No especificado'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Estado</p>
+                  <p className="text-sm text-slate-800">{book.estado || book.condition || 'No especificado'}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-2xl font-semibold text-slate-800 mb-4 font-playfair">Sinopsis:</h2>
+               <div className="prose prose-sm prose-slate max-w-none" style={{color: '#111'}}>
+                 <p className="text-sm" style={{color: '#111'}}>{book.description || 'Sin descripción disponible'}</p>
+                </div>
+            </div>
+          </div>
         </div>
-        
-        <section className="book-info">
-          <div className="book-header">
-            <div className="book-header-text">
-              <h1 className="book-title">{book.title}</h1>
-              <p className="book-author">
-                <b>Autor:</b> {(() => {
-                  if (Array.isArray(book.authors)) {
-                    return book.authors.join(', ');
-                  } else if (typeof book.authors === 'string') {
-                    try {
-                      const parsed = JSON.parse(book.authors);
-                      if (Array.isArray(parsed)) {
-                        return parsed.join(', ');
-                      }
-                      return parsed;
-                    } catch {
-                      return book.authors;
-                    }
-                  } else if (book.author) {
-                    return book.author;
-                  } else {
-                    return 'No especificado';
-                  }
-                })()}
-              </p>
-              <p className="book-seller">
-                <b>Vendido por:</b> {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
-              </p>
-            </div>
-            <div className="book-action-top">
-              {(isOwner || isAdmin) ? (
-                <div className="owner-actions">
-                  <button 
-                    className="edit-button"
-                    onClick={() => navigate(`/edit-book/${book.book_id}`)}
-                  >
-                    <i className="fas fa-edit"></i> Editar Libro
-                  </button>
-                  <button 
-                    className="delete-button-detail"
-                    onClick={handleDeleteBook}
-                  >
-                    <i className="fas fa-trash"></i> Eliminar Libro
-                  </button>
-                </div>
-              ) : (
-                <>
-                  {user && (
-                    <button 
-                      className="contact-button-detail"
-                      onClick={handleContactSeller}
-                      disabled={sending}
-                    >
-                      <i className="fas fa-envelope"></i> {sending ? 'Enviando...' : 'Contactar Vendedor'}
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className="book-content">
-            <div className="book-left-column">
-              <div className="book-cover">
-                {bookImages.length > 0 ? (
-                  <div className="carousel">
-                    <button
-                      className="carousel-arrow left"
-                      onClick={() => setActiveImage((prev) => (prev === 0 ? bookImages.length - 1 : prev - 1))}
-                      aria-label="Anterior"
-                    >&#8592;</button>
-                    <img
-                      src={bookImages[activeImage]}
-                      alt={`Imagen ${activeImage + 1} de ${book.title}`}
-                      className="carousel-image"
-                      onError={(e) => {
-                        e.target.src = DEFAULT_BOOK_IMAGE;
-                        e.target.onerror = null;
-                      }}
-                    />
-                    <button
-                      className="carousel-arrow right"
-                      onClick={() => setActiveImage((prev) => (prev === bookImages.length - 1 ? 0 : prev + 1))}
-                      aria-label="Siguiente"
-                    >&#8594;</button>
-                    <div className="carousel-indicators">
-                      {bookImages.map((img, idx) => (
-                        <span
-                          key={idx}
-                          className={`indicator-dot${activeImage === idx ? ' active' : ''}`}
-                          onClick={() => setActiveImage(idx)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <img
-                    src={DEFAULT_BOOK_IMAGE}
-                    alt={`Portada ${book.title}`}
-                    className="book-cover-image"
-                  />
-                )}
-              </div>
-            </div>
-
-            <div className="book-right-column">
-              <div className="book-details">
-                <h3>Detalles del libro:</h3>
-                <div className="details-grid">
-                  <div className="detail-item"><span>Editorial:</span><span>{book.publisher || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Categoría:</span><span>{book.Category?.category_name || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Número de páginas:</span><span>{book.pageCount || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Año de publicación:</span><span>{book.publication_date || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Idioma:</span><span>{book.language || book.idioma || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Estado:</span><span>{book.estado || book.condition || 'No especificado'}</span></div>
-                  <div className="detail-item"><span>Precio:</span><span>{book.price ? `$${book.price}` : 'No especificado'}</span></div>
-                </div>
-              </div>
-
-              <div className="book-synopsis">
-                <h3>Sinopsis de {book.title}:</h3>
-                <p className="book-description">{book.description || 'Sin descripción disponible'}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+      </div>
+      <Footer />
 
       {showConfirmModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Confirmar contacto con vendedor</h3>
-            <p>¿Estás seguro que deseas contactar al vendedor de "{book.title}"?</p>
-            <p>Se enviará un email al vendedor con tus datos de contacto.</p>
-            <div className="modal-buttons">
-              <button 
-                className="modal-button email"
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-4 max-w-sm w-full">
+            <h3 className="text-xl font-semibold text-slate-800 mb-3">Contactar al vendedor</h3>
+            <p className="text-slate-600 text-sm mb-4">¿Estás seguro de que deseas contactar al vendedor?</p>
+            <div className="flex gap-3">
+              <button
+                className="flex-1 bg-sky-600 text-white py-2 px-3 rounded-md hover:bg-sky-700 transition-colors text-sm"
                 onClick={handleConfirmContact}
                 disabled={sending}
               >
-                {sending ? 'Enviando...' : 'Sí, contactar vendedor'}
+                {sending ? 'Enviando...' : 'Sí, contactar'}
               </button>
-              <button 
-                className="modal-button close"
+              <button
+                className="flex-1 bg-slate-100 text-slate-800 py-2 px-3 rounded-md hover:bg-slate-200 transition-colors text-sm"
                 onClick={() => setShowConfirmModal(false)}
                 disabled={sending}
               >
                 Cancelar
               </button>
             </div>
+            {emailStatus && (
+              <p className={`mt-3 p-2 rounded-md text-center text-sm ${
+                emailStatus.includes('Error') 
+                  ? 'bg-red-50 text-red-700' 
+                  : 'bg-green-50 text-green-700'
+              }`}>
+                {emailStatus}
+              </p>
+            )}
           </div>
         </div>
       )}
-
-      {showEditModal && isOwner && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Editar Libro</h2>
-            <form onSubmit={handleEditSubmit}>
-              <div className="form-group">
-                <label>
-                  <i className="fas fa-book"></i> Título
-                  <input
-                    type="text"
-                    name="title"
-                    value={editForm.title}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                  />
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  <i className="fas fa-user"></i> Autores
-                  <input
-                    type="text"
-                    name="authors"
-                    value={editForm.authors}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                    placeholder="Separados por comas"
-                  />
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  <i className="fas fa-align-left"></i> Descripción
-                  <textarea
-                    name="description"
-                    value={editForm.description}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                    rows="4"
-                    maxLength="1000"
-                  />
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  <i className="fas fa-tag"></i> Precio
-                  <input
-                    type="number"
-                    name="price"
-                    value={editForm.price}
-                    onChange={handleInputChange}
-                    required
-                    className="form-input"
-                    step="0.01"
-                    min="0"
-                  />
-                </label>
-              </div>
-              <div className="modal-buttons">
-                <button type="submit" className="save-button">
-                  <i className="fas fa-save"></i> Guardar Cambios
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => setShowEditModal(false)} 
-                  className="cancel-button"
-                >
-                  <i className="fas fa-times"></i> Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {success && <div className="success-message">{success}</div>}
-
-      {emailStatus && (
-        <div className={emailStatus.includes('Error') ? 'error-message' : 'success-message'} style={{maxWidth: 500, margin: '20px auto'}}>
-          {emailStatus}
-        </div>
-      )}
-      <Footer />
     </>
   );
 }

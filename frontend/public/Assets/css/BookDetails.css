@@ -59,8 +59,8 @@
 }
 
 .book-cover {
-  width: 100%;
-  margin-bottom: 8px;
+  width: 260px;
+  margin: 0 auto 8px auto;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -68,7 +68,24 @@
 
 .book-cover img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  transition: transform 0.2s;
+}
+
+.book-cover-detail {
+  width: 160px;
+  margin: 0 auto 8px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.book-cover-detail img {
+  width: 100%;
+  height: auto;
   border-radius: 4px;
   object-fit: cover;
   border-bottom: 1px solid #eee;
