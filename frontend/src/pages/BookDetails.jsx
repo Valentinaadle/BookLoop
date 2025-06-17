@@ -8,8 +8,10 @@ import '../Assets/css/footer.css';
 import '../Assets/css/BookDetails.css';
 
 function BookDetails() {
+  // Detecta admin robustamente
   const { id } = useParams();
   const { user } = useAuth();
+  const isAdmin = user && (user.isAdmin || user.admin === true || user.role === 'admin' || user.rol === 'admin');
   const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -153,7 +155,7 @@ function BookDetails() {
   };
 
   const isOwner = user && book && book.seller_id === user.id;
-  const isAdmin = user && user.role === 'admin';
+  
 
   const handleDeleteBook = async () => {
     const bookId = book && book.book_id ? book.book_id : id;
@@ -243,6 +245,48 @@ function BookDetails() {
 
         <header className="mb-6">
           <h1 className="text-4xl">{book.title}</h1>
+          {(isAdmin || isOwner) && book && (
+            <div style={{ position: 'absolute', top: 10, right: 10, display: 'flex', gap: '8px', zIndex: 10 }}>
+              <button
+                title="Editar libro"
+                onClick={() => navigate(`/edit-book/${book.book_id || book.id}`)}
+                aria-label="Editar libro"
+                style={{
+                  background: 'none',
+                  color: '#2c3e50',
+                  border: 'none',
+                  padding: 0,
+                  width: 28,
+                  height: 28,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path></svg>
+              </button>
+              <button
+                title="Borrar libro"
+                onClick={() => setShowEditModal(true)}
+                aria-label="Borrar libro"
+                style={{
+                  background: 'none',
+                  color: '#2c3e50',
+                  border: 'none',
+                  padding: 0,
+                  width: 28,
+                  height: 28,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
+            </div>
+          )}
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -260,7 +304,13 @@ function BookDetails() {
               </div>
               <div className="space-y-2">
                 <p className="text-slate-700 font-inter text-sm">
-                  <span className="font-semibold text-slate-800">Autor:</span> {Array.isArray(book.authors) ? book.authors.join(', ') : (book.author || 'No especificado')}
+                  <span className="font-semibold text-slate-800">Autor:</span> {
+  Array.isArray(book.authors)
+    ? book.authors.join(', ')
+    : (typeof book.authors === 'string' && book.authors.trim().startsWith('['))
+      ? JSON.parse(book.authors).join(', ')
+      : (book.authors ? book.authors : (book.author || 'No especificado'))
+}
                 </p>
                 <p className="text-slate-700 font-inter text-sm">
                   <span className="font-semibold text-slate-800">Vendido por:</span>{' '}
@@ -270,13 +320,15 @@ function BookDetails() {
                   {book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'No especificado'}
                 </p>
               </div>
-              <button
-                onClick={handleContactSeller}
-                className="mt-4 w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-4 rounded-md shadow-sm hover:shadow transition-all duration-300 ease-in-out flex items-center justify-center text-sm"
-              >
-                <i className="fas fa-envelope mr-2"></i>
-                Contactar Vendedor
-              </button>
+              {!isOwner && !isAdmin && (
+                <button
+                  onClick={handleContactSeller}
+                  className="mt-4 w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-4 rounded-md shadow-sm hover:shadow transition-all duration-300 ease-in-out flex items-center justify-center text-sm"
+                >
+                  <i className="fas fa-envelope mr-2"></i>
+                  Contactar Vendedor
+                </button>
+              )}
             </div>
           </div>
 
@@ -326,7 +378,7 @@ function BookDetails() {
       </div>
       <Footer />
 
-      {showConfirmModal && (
+      {showConfirmModal && !isOwner && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-4 max-w-sm w-full">
             <h3 className="text-xl font-semibold text-slate-800 mb-3">Contactar al vendedor</h3>

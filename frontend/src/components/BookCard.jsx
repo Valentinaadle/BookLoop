@@ -21,6 +21,7 @@ const BookCard = ({
   isAdmin = false,
   onDelete
 }) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user } = useAuth();
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const navigate = useNavigate();
@@ -130,16 +131,66 @@ const BookCard = ({
       >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
-          {!isAdmin && showFavorito && (
-            <button 
-              className={`favorite-btn ${isLoading ? 'loading' : ''}`}
-              onClick={handleFavoriteClick}
-              disabled={isLoading}
-              aria-label={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
-            >
-              {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
-            </button>
-          )}
+          {/* No wishlist para admin */}
+
+          {/* Icono de admin en la esquina superior derecha */}
+          {isAdmin && book_id && (
+  <div className="admin-icon-top-right" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <button
+        title="Editar libro"
+        onClick={() => window.location.href = `http://localhost:3000/edit-book/${book_id}`}
+        aria-label="Editar libro"
+        style={{
+          background: '#fff',
+          color: '#2c3e50',
+          border: 'none',
+          borderRadius: '8px',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
+          padding: 0,
+          width: 28,
+          height: 28,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+        }}
+      >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path></svg>
+    </button>
+      <button
+        title="Borrar libro"
+        onClick={(e) => { e.stopPropagation(); setShowDeleteModal(true); }}
+        aria-label="Borrar libro"
+        style={{
+          background: '#fff',
+          color: '#2c3e50',
+          border: 'none',
+          borderRadius: '8px',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
+          padding: 0,
+          width: 28,
+          height: 28,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+        }}
+      >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+    </button>
+    {showDeleteModal && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h3>¿Seguro que deseas borrar este libro?</h3>
+          <div className="modal-actions">
+            <button className="modal-button cancel" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); }}>Cancelar</button>
+            <button className="modal-button confirm" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); onDelete && onDelete(e); }}>Borrar</button>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+)}
 
           <img 
             src={img || DEFAULT_BOOK_IMAGE} 
@@ -163,15 +214,14 @@ const BookCard = ({
                 className="buy-button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  // Redirige al detalle del libro al hacer clic en comprar
                   navigate(`/book/${book_id}`);
                 }}
               >
-                <FaShoppingCart style={{ marginRight: '8px' }} />
-                Comprar
+                {isAdmin ? 'Ver detalles' : (<><FaShoppingCart style={{ marginRight: '8px' }} />Comprar</>)}
               </button>
             </div>
           )}
+
         </div>
       </div>
 

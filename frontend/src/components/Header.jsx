@@ -58,7 +58,7 @@ export default function Header() {
       <div className="header-top improved-header-top">
         <div className="logo">
           <Link to="/">
-            <img src="/icons/icono.png" className="icon logo-icon" alt="icon" />
+            <img src="/icons/iconoe.png" className="icon logo-icon" alt="icon" />
             <h1>BOOKLOOP</h1>
           </Link>
         </div>

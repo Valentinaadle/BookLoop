@@ -282,25 +282,9 @@ const Comprar = () => {
                       onToggleFavorito={() => {}}
                       onBuy={() => {}}
                       book_id={book.book_id || book.id}
+                      isAdmin={user?.role === 'admin'}
                     />
-                    {user?.role === 'admin' && (
-                      <div className="admin-action-container">
-                        <button
-                          onClick={() => handleEditBook(book.book_id || book.id)}
-                          disabled={deleting}
-                          className="admin-action-btn"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteBook(book.book_id || book.id)}
-                          disabled={deleting}
-                          className="admin-action-btn"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    )}
+
                   </div>
                 ))
               ) : (
