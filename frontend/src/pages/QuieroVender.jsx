@@ -183,7 +183,7 @@ export default function QuieroVender() {
           ))}
         </div>
 
-        <div className="form-container">
+        <div className="quierovender-form-container">
           <h2>Formulario de venta</h2>
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}

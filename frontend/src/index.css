@@ -62,27 +62,6 @@
     @apply bg-cosmic-odyssey/70 border border-raptures-light/10 rounded-2xl backdrop-blur-lg shadow-lg;
   }
 
-  input, textarea, select {
-    @apply bg-cosmic-odyssey/70 border border-raptures-light/10 rounded-xl text-raptures-light p-4 transition-all duration-300 ease-in-out backdrop-blur-md;
-  }
-
-  input:focus, textarea:focus, select:focus {
-    @apply outline-none border-sapphire-dust shadow-sapphire-dust/20;
-  }
-
-  button {
-    @apply text-raptures-light border-none rounded-xl py-3 px-6 font-semibold cursor-pointer transition-all duration-300 ease-in-out;
-  }
-  
-
-  button:hover {
-    @apply bg-blue-oblivion -translate-y-0.5 shadow-lg shadow-sapphire-dust/30;
-  }
-
-  button:disabled {
-    @apply bg-sapphire-dust/30 cursor-not-allowed transform-none;
-  }
-
   h1, h2, h3, h4, h5, h6 {
     @apply text-raptures-light mb-4;
   }

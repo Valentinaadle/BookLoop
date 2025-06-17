@@ -5,72 +5,231 @@
   box-sizing: border-box;
 }
 
-body{
-  font-family: Arial, sans-serif;
-  background: #f3f2ef;
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
   line-height: 1.6;
   display: flex;
-  flex-direction: column; /* Asegura que header, main y footer se apilen verticalmente */
+    flex-direction: column;
   min-height: 100vh;
 }
+  
+  main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background-color: #f4f5f7; /* Fondo gris claro */
+    min-height: calc(100vh - 160px); /* Ajusta según la altura de tu header/footer */
+  }
 
-.form-container {
+.register-container {
     width: 100%;
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 30px;
+    max-width: 550px;
     background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Borde sutil para definir el contorno */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 5px 10px rgba(0, 0, 0, 0.04); /* Efecto 3D mejorado */
+    text-align: center;
+    color: #1a1a1a; /* Hacemos todo el texto oscuro por defecto */
   }
   
-  .form-container h2 {
+  .form-header {
     text-align: center;
+    margin-bottom: 22px;
+  }
+  
+  .form-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+  }
+  
+  .form-header p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 20px;
     margin-bottom: 20px;
   }
   
-  .form-container form input[type="text"],
-  .form-container form input[type="email"],
-  .form-container form input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
+  .form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-group label {
     display: block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
   }
   
-  .form-container .terms {
-    margin: 15px 0;
-  }
-  
-  .form-container button {
+  .register-container form input[type="text"],
+  .register-container form input[type="email"],
+  .register-container form input[type="password"] {
     width: 100%;
-    padding: 12px;
-    background-color: #2a8ef2;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background-color: #f0f2f5; /* Gris claro como en la imagen */
+    font-size: 15px;
+    color: #333;
+    transition: all 0.3s ease;
+  }
+  
+  .register-container form input::placeholder {
+    color: #aaa;
+  }
+  
+  .register-container form input:focus {
+    outline: none;
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(50, 50, 50, 0.1);
+  }
+  
+  .info-text {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+    text-align: left;
+    padding-left: 2px;
+  }
+  
+  .terms {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 25px;
+    text-align: left;
+  }
+  
+  .terms input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    accent-color: #000;
+  }
+  
+  .terms label {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #000000;
     border: none;
     color: white;
     font-size: 16px;
-    border-radius: 4px;
+    font-weight: 600;
+    border-radius: 10px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 5px; /* Pequeño espacio extra arriba */
   }
   
-  .form-container button:hover {
-    background-color:#2981d9;
-    ;
+  .submit-btn:hover:not(:disabled) {
+    background-color: #333;
+    transform: translateY(-2px);
   }
   
-  .form-container .small-text {
+  .submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .register-container .switch-form-link {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 20px;
+    font-size: 15px;
+    color: #000 !important; /* Forzamos el texto negro */
   }
   
-  .form-container .small-text a {
-    color: #007BFF;
+  .register-container .switch-form-link a {
+    color: #000000;
+    font-weight: 600;
     text-decoration: none;
   }
   
-  .form-container .small-text a:hover {
+  .register-container .switch-form-link a:hover {
     text-decoration: underline;
   }
   
+  .error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  /* --- Separador 'O' --- */
+  .or-separator {
+    text-align: center;
+    margin: 20px 0;
+    color: #adb5bd;
+    display: flex;
+    align-items: center;
+  }
+  .or-separator::before,
+  .or-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .or-separator span {
+    padding: 0 10px;
+  }
+  
+  /* --- Botones de Login Social --- */
+  .social-login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+  }
+  .social-btn:hover {
+    border-color: #adb5bd;
+    background-color: #f8f9fa;
+  }
+  .social-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  .social-btn.google .social-icon {
+    color: #DB4437;
+  }
+  .social-btn.apple .social-icon {
+    color: #000000;
+  } 

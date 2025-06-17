@@ -129,7 +129,7 @@ const BookCard = ({
         }}
       >
         <div className="book-image-container">
-          {descuento && <div className="discount-badge">{descuento}</div>}
+          {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
           {!isAdmin && showFavorito && (
             <button 
               className={`favorite-btn ${isLoading ? 'loading' : ''}`}
@@ -163,11 +163,12 @@ const BookCard = ({
                 className="buy-button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleBookClick();
+                  // Redirige al detalle del libro al hacer clic en comprar
+                  navigate(`/book/${book_id}`);
                 }}
               >
                 <FaShoppingCart style={{ marginRight: '8px' }} />
-                Ver detalles
+                Comprar
               </button>
             </div>
           )}

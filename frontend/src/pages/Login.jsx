@@ -61,49 +61,49 @@ function Login() {
       <Header />
       <main>
         <div className="login-container">
-          <div className="login-form">
-            <h2>Iniciar Sesión</h2>
-            {error && <div className="error-message">{error}</div>}
-            <form id="loginForm" onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="email">Correo electrónico</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  disabled={loading}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Contraseña</label>
-                <input 
-                  type="password" 
-                  id="password" 
-                  name="password" 
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  disabled={loading}
-                />
-              </div>
-              <div className="form-group">
-                <button 
-                  type="submit" 
-                  className="btn-login"
-                  disabled={loading}
-                >
-                  {loading ? 'Iniciando sesión...' : 'Ingresar'}
-                </button>
-              </div>
-              <div className="form-links">
-                <Link to="/register">¿No tienes una cuenta? Regístrate</Link>
-                <Link to="/recover-password">¿Olvidaste tu contraseña?</Link>
-              </div>
-            </form>
+          <div className="form-header">
+            <h2>Bienvenido de nuevo</h2>
+            <p>Inicia sesión para continuar explorando BookLoop.</p>
           </div>
+          {error && <div className="error-message">{error}</div>}
+          <form id="loginForm" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="email">Correo electrónico</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="ejemplo@correo.com"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Contraseña</label>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="Introduce tu contraseña"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </div>
+              <button 
+                type="submit" 
+                className="submit-btn"
+                disabled={loading}
+              >
+                {loading ? 'Iniciando sesión...' : 'Ingresar →'}
+              </button>
+              <div className="switch-form-link">
+              <Link to="/register">¿No tienes una cuenta? Regístrate</Link>
+            </div>
+          </form>
         </div>
       </main>
       <Footer />
