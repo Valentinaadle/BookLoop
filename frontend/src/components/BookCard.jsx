@@ -131,7 +131,38 @@ const BookCard = ({
       >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
-          {/* No wishlist para admin */}
+          {/* Wishlist solo para usuarios no admin */}
+{!isAdmin && showFavorito && (
+  <button
+    className="wishlist-button"
+    title={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+    onClick={handleFavoriteClick}
+    aria-label={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+    style={{
+      background: '#fff',
+      border: 'none',
+      position: 'absolute',
+      top: 8,
+      right: 0,
+      zIndex: 2,
+      cursor: 'pointer',
+      fontSize: 26,
+      color: isBookFavorite ? '#e63946' : '#2c3e50',
+      padding: 4,
+      borderRadius: '50%',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
+      outline: 'none',
+      transition: 'color 0.2s, background 0.2s',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      lineHeight: 1
+    }}
+    disabled={isLoading}
+  >
+    {isBookFavorite ? <AiFillHeart style={{ fontSize: 21 }} /> : <AiOutlineHeart style={{ fontSize: 21 }} />}
+  </button>
+)}
 
           {/* Icono de admin en la esquina superior derecha */}
           {isAdmin && book_id && (
