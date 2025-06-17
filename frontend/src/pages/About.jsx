@@ -42,7 +42,7 @@ const About = () => {
         {/* Sección Contacto */}
         <section className="content-section contact-section">
           <div className="section-header">
-            <img src="/icons/email.png" alt="Icono Contacto" className="section-icon contact-icon" />
+            <img src="/icons/whatsapp.png" alt="Icono WhatsApp" className="section-icon contact-icon" />
             <h2 className="section-title">Contacto</h2>
           </div>
           <div className="section-content">

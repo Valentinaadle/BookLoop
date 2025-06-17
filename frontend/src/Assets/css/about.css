@@ -43,7 +43,10 @@
   object-fit: contain;
   margin-bottom: 1.5rem;
   transition: transform 0.3s ease;
+  /* Para PNG: gris oscuro #2c3e50 */
+  filter: brightness(0) saturate(100%) invert(22%) sepia(10%) saturate(1326%) hue-rotate(169deg) brightness(93%) contrast(93%);
 }
+/* Para SVGs: usar fill="#394B60" en el SVG */
 
 .content-section:hover .section-icon {
   transform: scale(1.1) rotate(5deg);
@@ -52,6 +55,8 @@
 .contact-icon {
   width: 90px;
   height: 90px;
+  background: transparent !important;
+  filter: brightness(0) saturate(100%) invert(22%) sepia(10%) saturate(1326%) hue-rotate(169deg) brightness(93%) contrast(93%);
 }
 
 /* Títulos */
