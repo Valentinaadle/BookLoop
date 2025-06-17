@@ -124,14 +124,9 @@ const BookCard = ({
         onClick={handleBookClick} 
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{
-          cursor: 'pointer',
-          transition: 'transform 0.3s ease'
-        }}
       >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
-<<<<<<< HEAD
           
           {showFavorito && !isAdmin && (
             <button
@@ -143,99 +138,42 @@ const BookCard = ({
               {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
             </button>
           )}
-=======
-          {/* Wishlist solo para usuarios no admin */}
-{!isAdmin && showFavorito && (
-  <button
-    className="wishlist-button"
-    title={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
-    onClick={handleFavoriteClick}
-    aria-label={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
-    style={{
-      background: '#fff',
-      border: 'none',
-      position: 'absolute',
-      top: 8,
-      right: 0,
-      zIndex: 2,
-      cursor: 'pointer',
-      fontSize: 26,
-      color: isBookFavorite ? '#e63946' : '#2c3e50',
-      padding: 4,
-      borderRadius: '50%',
-      boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
-      outline: 'none',
-      transition: 'color 0.2s, background 0.2s',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      lineHeight: 1
-    }}
-    disabled={isLoading}
-  >
-    {isBookFavorite ? <AiFillHeart style={{ fontSize: 21 }} /> : <AiOutlineHeart style={{ fontSize: 21 }} />}
-  </button>
-)}
->>>>>>> 291fd177541118c3da05db8d3c6897d791a869e7
 
           {/* Icono de admin en la esquina superior derecha */}
           {isAdmin && book_id && (
-  <div className="admin-icon-top-right" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-      <button
-        title="Editar libro"
-        onClick={() => window.location.href = `http://localhost:3000/edit-book/${book_id}`}
-        aria-label="Editar libro"
-        style={{
-          background: '#fff',
-          color: '#2c3e50',
-          border: 'none',
-          borderRadius: '8px',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
-          padding: 0,
-          width: 28,
-          height: 28,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-        }}
-      >
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path></svg>
-    </button>
-      <button
-        title="Borrar libro"
-        onClick={(e) => { e.stopPropagation(); setShowDeleteModal(true); }}
-        aria-label="Borrar libro"
-        style={{
-          background: '#fff',
-          color: '#2c3e50',
-          border: 'none',
-          borderRadius: '8px',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
-          padding: 0,
-          width: 28,
-          height: 28,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-        }}
-      >
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-    </button>
-    {showDeleteModal && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h3>¿Seguro que deseas borrar este libro?</h3>
-          <div className="modal-actions">
-            <button className="modal-button cancel" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); }}>Cancelar</button>
-            <button className="modal-button confirm" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); onDelete && onDelete(e); }}>Borrar</button>
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-)}
+            <div className="admin-icon-top-right">
+              <button
+                title="Editar libro"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/edit-book/${book_id}`);
+                }}
+                aria-label="Editar libro"
+                className="admin-action-btn"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path></svg>
+              </button>
+              <button
+                title="Borrar libro"
+                onClick={(e) => { e.stopPropagation(); setShowDeleteModal(true); }}
+                aria-label="Borrar libro"
+                className="admin-action-btn"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
+              {showDeleteModal && (
+                <div className="modal-overlay">
+                  <div className="modal-content">
+                    <h3>¿Seguro que deseas borrar este libro?</h3>
+                    <div className="modal-actions">
+                      <button className="modal-button cancel" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); }}>Cancelar</button>
+                      <button className="modal-button confirm" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); onDelete && onDelete(e); }}>Borrar</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <img 
             src={img || DEFAULT_BOOK_IMAGE} 
@@ -249,7 +187,7 @@ const BookCard = ({
         </div>
         <div className="book-info">
           <h3 className="book-title">{titulo}</h3>
-          <p className="book-author">de {Array.isArray(autor) ? autor.join(', ') : (typeof autor === 'string' ? autor.replace(/^[\[\]"]+|[\[\]"]+$/g, '') : autor)}</p>
+          <p className="book-author">de {autor}</p>
           <div className="book-price-container">
             <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
           </div>
