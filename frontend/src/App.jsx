@@ -16,6 +16,7 @@ import EditBookUser from './pages/EditBookUser';
 import Comprar from './pages/Comprar';
 import Favoritos from './pages/Favoritos';
 import FAQQuestions from './components/FAQQuestion';
+import About from './pages/About';
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
@@ -90,6 +91,11 @@ function App() {
             <Route path="/preguntas" element={
               <ProtectedRoute>
                 <FAQQuestions />
+              </ProtectedRoute>
+            } />
+            <Route path="/nosotros" element={
+              <ProtectedRoute>
+                <About />
               </ProtectedRoute>
             } />
           </Routes>

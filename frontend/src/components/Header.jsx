@@ -112,6 +112,7 @@ export default function Header() {
               <>
                 <li><Link to="/vender-page">Quiero vender</Link></li>
                 <li><Link to="/comprar">Quiero comprar</Link></li>
+                <li><Link to="/nosotros">Sobre Nosotros</Link></li>
               </>
             ) : null}
           </ul>

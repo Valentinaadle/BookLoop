@@ -1,193 +1,117 @@
+/* about.css */
+
 /* Estilos generales */
 .about-us-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Arial', sans-serif;
-  color: #4a4a4a;
 }
 
-/* Encabezado */
-.page-header {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Contenedores principales */
+.content-section {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding: 2.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  border: 1px solid #f0f0f0;
 }
 
-.underlined-title {
-  font-size: 3rem;
-  color: #2c3e50;
-  text-decoration: underline;
-  text-decoration-color: #3498db;
-  text-underline-offset: 10px;
-  margin-bottom: 1rem;
+.content-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: #e0e0e0;
 }
 
-/* Navegación */
-.main-nav {
+/* Encabezado de sección */
+.section-header {
+  flex: 0 0 220px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 3rem;
+  text-align: center;
 }
 
-.search-bar input {
-  padding: 0.8rem 1.2rem;
-  width: 300px;
-  border: 2px solid #ddd;
-  border-radius: 25px;
-  font-size: 1rem;
+/* Iconos */
+.section-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
   margin-bottom: 1.5rem;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #2c3e50;
-  font-weight: bold;
-  font-size: 1.1rem;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-}
-
-.nav-links a.active {
-  color: #3498db;
-  border-bottom: 2px solid #3498db;
-}
-
-.nav-links a:hover {
-  color: #3498db;
-}
-
-/* Sección Historia */
-.our-story {
-  margin-bottom: 4rem;
-  text-align: center;
-}
-
-/* Sección Misión */
-.mission-section {
-  margin-bottom: 4rem;
-  background-color: #f8f9fa;
-  padding: 3rem;
-  border-radius: 15px;
-}
-
-.mission-content {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-}
-
-.mission-image img {
-  width: 200px;
-  height: auto;
-  object-fit: contain;
-}
-
-.mission-text {
-  flex: 1;
-}
-
-/* Sección Equipo */
-.team-section {
-  margin-bottom: 4rem;
-}
-
-.team-content {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  margin-bottom: 2rem;
-}
-
-.team-image img {
-  width: 200px;
-  height: auto;
-  object-fit: contain;
-}
-
-.team-text {
-  flex: 1;
-}
-
-/* Miembros del equipo */
-.team-members {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  margin-top: 2.5rem;
-}
-
-.team-member {
-  background-color: #f8f9fa;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  text-align: center;
   transition: transform 0.3s ease;
-  width: 250px;
 }
 
-.team-member:hover {
-  transform: translateY(-5px);
+.content-section:hover .section-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
-.member-name {
-  font-size: 1.5rem;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+.contact-icon {
+  width: 90px;
+  height: 90px;
 }
 
-.member-position {
-  color: #7f8c8d;
-  font-style: italic;
-}
-
-/* Títulos y texto */
+/* Títulos */
 .section-title {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   color: #2c3e50;
-  margin-bottom: 1.5rem;
+  margin: 0;
+  position: relative;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #3498db;
-  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.content-section:hover .section-title::after {
+  transform: scaleX(1);
+}
+
+/* Contenido */
+.section-content {
+  flex: 1;
+  padding-top: 0.8rem;
 }
 
 .section-text {
-  line-height: 1.8;
   font-size: 1.1rem;
-  color: #4a4a4a;
-  margin-bottom: 2rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 1.5rem;
 }
 
-/* Formulario de contacto */
-.contact-form {
-  text-align: center;
-  background-color: #f8f9fa;
-  padding: 3rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.contact-text {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: #2c3e50;
-}
-
+/* Contacto */
 .contact-info {
-  margin-top: 1.5rem;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 2rem;
 }
 
 .contact-item {
-  margin-bottom: 1.2rem;
   font-size: 1.1rem;
-  line-height: 1.8;
+  line-height: 1.6;
+  padding: 0.8rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  background-color: #eef7ff;
+  transform: translateX(5px);
 }
 
 .contact-label {
@@ -198,34 +122,23 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .mission-content, .team-content {
+  .content-section {
     flex-direction: column;
+    gap: 2rem;
+    padding: 1.8rem;
   }
   
-  .mission-image img, .team-image img {
-    width: 150px;
-    margin-bottom: 1.5rem;
+  .section-header {
+    flex: 1;
   }
   
-  .team-members {
-    flex-direction: column;
-    align-items: center;
+  .section-icon {
+    width: 70px;
+    height: 70px;
   }
   
-  .nav-links {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .about-us-container {
-    padding: 1.5rem;
-  }
-  
-  .mission-section, .contact-form {
-    padding: 2rem 1.5rem;
-  }
-  
-  .underlined-title {
-    font-size: 2.2rem;
+  .contact-icon {
+    width: 80px;
+    height: 80px;
   }
 }
