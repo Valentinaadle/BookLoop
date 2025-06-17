@@ -131,6 +131,7 @@ const BookCard = ({
       >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
+<<<<<<< HEAD
           
           {showFavorito && !isAdmin && (
             <button
@@ -142,6 +143,40 @@ const BookCard = ({
               {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
             </button>
           )}
+=======
+          {/* Wishlist solo para usuarios no admin */}
+{!isAdmin && showFavorito && (
+  <button
+    className="wishlist-button"
+    title={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+    onClick={handleFavoriteClick}
+    aria-label={isBookFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+    style={{
+      background: '#fff',
+      border: 'none',
+      position: 'absolute',
+      top: 8,
+      right: 0,
+      zIndex: 2,
+      cursor: 'pointer',
+      fontSize: 26,
+      color: isBookFavorite ? '#e63946' : '#2c3e50',
+      padding: 4,
+      borderRadius: '50%',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.13)',
+      outline: 'none',
+      transition: 'color 0.2s, background 0.2s',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      lineHeight: 1
+    }}
+    disabled={isLoading}
+  >
+    {isBookFavorite ? <AiFillHeart style={{ fontSize: 21 }} /> : <AiOutlineHeart style={{ fontSize: 21 }} />}
+  </button>
+)}
+>>>>>>> 291fd177541118c3da05db8d3c6897d791a869e7
 
           {/* Icono de admin en la esquina superior derecha */}
           {isAdmin && book_id && (
@@ -214,7 +249,7 @@ const BookCard = ({
         </div>
         <div className="book-info">
           <h3 className="book-title">{titulo}</h3>
-          <p className="book-author">de {autor}</p>
+          <p className="book-author">de {Array.isArray(autor) ? autor.join(', ') : (typeof autor === 'string' ? autor.replace(/^[\[\]"]+|[\[\]"]+$/g, '') : autor)}</p>
           <div className="book-price-container">
             <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
           </div>
