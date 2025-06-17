@@ -131,7 +131,17 @@ const BookCard = ({
       >
         <div className="book-image-container">
           {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
-          {/* No wishlist para admin */}
+          
+          {showFavorito && !isAdmin && (
+            <button
+              className={`favorite-btn ${isBookFavorite ? 'filled' : ''}`}
+              onClick={handleFavoriteClick}
+              disabled={isLoading}
+              aria-label={isBookFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+            >
+              {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
+            </button>
+          )}
 
           {/* Icono de admin en la esquina superior derecha */}
           {isAdmin && book_id && (
