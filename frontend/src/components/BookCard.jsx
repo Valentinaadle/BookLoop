@@ -235,7 +235,7 @@ const BookCard = ({
         </div>
         <div className="book-info">
           <h3 className="book-title">{titulo}</h3>
-          <p className="book-author">de {autor}</p>
+          <p className="book-author">de {Array.isArray(autor) ? autor.join(', ') : (typeof autor === 'string' ? autor.replace(/^[\[\]"]+|[\[\]"]+$/g, '') : autor)}</p>
           <div className="book-price-container">
             <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
           </div>

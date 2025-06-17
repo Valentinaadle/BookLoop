@@ -51,9 +51,9 @@
 }
 
 .admin-icon-top-right:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-  background: #f8f8f8;
-  cursor: pointer;
+  box-shadow: none;
+  background: none;
+  cursor: default;
 }
 
 .book-image {
