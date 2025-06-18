@@ -56,6 +56,7 @@ function Filtros({ onAplicarFiltros }) {
           <label>Desde <input type="number" value={filtros.precio.min} onChange={(e) => manejarCambio('precio', { ...filtros.precio, min: e.target.value })} /></label>
           <label>Hasta <input type="number" value={filtros.precio.max} onChange={(e) => manejarCambio('precio', { ...filtros.precio, max: e.target.value })} /></label>
         </div>
+
       </div>
       <button onClick={aplicarFiltros}>APPLY</button>
     </div>

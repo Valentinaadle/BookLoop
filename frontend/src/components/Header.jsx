@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import ThemeButton from './ThemeButton';
 import '../Assets/css/SearchModal.css';
 import '../Assets/css/header.css';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt, FaHeart, FaSearch } from 'react-icons/fa';
+import { CgProfile } from "react-icons/cg";
 
 export default function Header() {
   const [query, setQuery] = useState('');
@@ -53,70 +54,69 @@ export default function Header() {
     navigate('/bookdetails', { state: { book } });
   };
 
+  const renderProfilePicture = () => {
+    if (user && user.profile && user.profile.profileImage) {
+      return <img src={`${process.env.REACT_APP_API_URL}/${user.profile.profileImage}`} alt="Perfil" className="profile-pic" />;
+    }
+    return <CgProfile className="icon action-icon" />;
+  };
+
   return (
-    <header>
-      <div className="header-top improved-header-top">
-        <div className="logo">
-          <Link to="/">
-            <img src="/icons/iconoe.png" className="icon logo-icon" alt="icon" />
-            <h1>BOOKLOOP</h1>
-          </Link>
+    <header className="modern-header">
+      <div className="header-content">
+        <div className="logo-and-nav">
+          <div className="logo">
+            <Link to="/">
+              <img src="/icons/iconoe.png" className="icon logo-icon" alt="icon" />
+              <span className="logo-text">BookLoop</span>
+            </Link>
+          </div>
+          <nav className="header-nav">
+            <ul className="nav-links">
+                <li><Link to="/vender-page">Quiero vender</Link></li>
+                <li><Link to="/comprar">Quiero comprar</Link></li>
+                <li><Link to="/nosotros">Sobre Nosotros</Link></li>
+            </ul>
+          </nav>
         </div>
-        <form className="search-bar improved-search-bar" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Buscar libros..."
-            value={query}
-            onChange={handleInputChange}
-          />
-          <button type="submit" className="search-btn">
-            <img src="/icons/lupa.png" alt="Buscar" className="search-icon" />
-          </button>
-        </form>
-        <div className="header-actions improved-header-actions">
-          <div className="user-actions improved-user-actions">
+
+        <div className="search-container">
+          <form className="search-bar" onSubmit={handleSearch}>
+            <FaSearch className="search-icon-form" />
+            <input
+              type="text"
+              placeholder="Buscar libros..."
+              value={query}
+              onChange={handleInputChange}
+            />
+          </form>
+        </div>
+
+        <div className="header-actions">
+          <div className="user-actions">
             {isAuthenticated ? (
               <>
                 {!isAdmin && (
-                  <Link to="/favoritos" title="Favoritos">
-                    <img src="/icons/favorito.png" className="icon action-icon" alt="favorito"/>
+                  <Link to="/favoritos" title="Favoritos" className="action-link">
+                    <FaHeart className="icon action-icon" />
                   </Link>
                 )}
-                <Link to="/profile" title="Perfil"><img src="/icons/usuario.png" className="icon action-icon" alt="usuario" /></Link>
-                {isAdmin ? (
-                  <button onClick={logout} className="improved-logout" title="Cerrar Sesión">
-                    <FaSignOutAlt className="icon action-icon" style={{ color: '#394B60' }} />
-                  </button>
-                ) : (
-                  <button onClick={logout} className="logout-button" title="Cerrar Sesión">
-                    <FaSignOutAlt className="icon action-icon" style={{ color: '#394B60' }} />
-                  </button>
-                )}
-                <ThemeButton />
+                <Link to="/profile" title="Perfil" className="action-link profile-link">
+                   {renderProfilePicture()}
+                </Link>
+                <button onClick={logout} className="logout-btn" title="Cerrar Sesión">
+                  <FaSignOutAlt className="icon action-icon" />
+                </button>
               </>
             ) : (
               <>
-                <ThemeButton />
                 <Link to="/login" className="login-button">Iniciar sesión</Link>
                 <Link to="/register" className="register-button">Registrarse</Link>
               </>
             )}
+             <ThemeButton />
           </div>
         </div>
-      </div>
-      <div className="header-bottom improved-header-bottom">
-        <nav>
-          <ul className="nav-links">
-            {/* <li><Link to="/home">Inicio</Link></li> */}
-            {user ? (
-              <>
-                <li><Link to="/vender-page">Quiero vender</Link></li>
-                <li><Link to="/comprar">Quiero comprar</Link></li>
-                <li><Link to="/nosotros">Sobre Nosotros</Link></li>
-              </>
-            ) : null}
-          </ul>
-        </nav>
       </div>
     </header>
   );

@@ -129,11 +129,7 @@
 }
 
 /* Removing conflicting styles */
-.product-card,
-.product-card:hover,
-.product-card img,
 .discount,
-
 .book-price {
   /* These styles are now handled by bookcard.css */
   all: unset;
