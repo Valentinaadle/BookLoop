@@ -75,9 +75,7 @@
     @apply text-caramel-essence no-underline transition-colors duration-300;
   }
 
-  a:hover {
-    @apply text-sapphire-dust;
-  }
+  
 
   .card-3d {
     @apply relative w-full transform-gpu transition-all duration-300 will-change-transform;
