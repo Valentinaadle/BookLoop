@@ -167,7 +167,7 @@ const BookCard = ({
                     <h3>¿Seguro que deseas borrar este libro?</h3>
                     <div className="modal-actions">
                       <button className="modal-button cancel" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); }}>Cancelar</button>
-                      <button className="modal-button confirm" onClick={(e) => { e.stopPropagation(); setShowDeleteModal(false); onDelete && onDelete(e); }}>Borrar</button>
+                      <button className="modal-button confirm" onClick={(e) => { e.stopPropagation(); onDelete && onDelete(book_id); setShowDeleteModal(false); }}>Borrar</button>
                     </div>
                   </div>
                 </div>

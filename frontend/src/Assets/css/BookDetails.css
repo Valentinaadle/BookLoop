@@ -74,7 +74,7 @@ h1.text-4xl {
 
 /* "Contactar Vendedor" button */
 button.bg-sky-600 {
-  background-color: #007bff !important;
+  background-color: #000000 !important;
   color: white !important;
   border-radius: 10px !important;
   font-weight: 600 !important;

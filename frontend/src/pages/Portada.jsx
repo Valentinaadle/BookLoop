@@ -102,7 +102,6 @@ export default function Portada() {
 
   // Handler para eliminar libro (solo admin)
   const handleDeleteBook = async (bookId) => {
-    if (!window.confirm('¿Seguro que quieres borrar este libro?')) return;
     try {
       const res = await fetch(`${API_URL}/api/books/${bookId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Error al borrar libro');
