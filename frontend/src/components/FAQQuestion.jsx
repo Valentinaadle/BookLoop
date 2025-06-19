@@ -13,7 +13,7 @@ const FAQQuestions = () => {
     },
     {
       question: '¿Qué hago si tengo problemas con una venta?',
-      answer:' Contacta a nuestro equipo de soporte desde la sección "Contacto". Mediamos en disputas y brindamos asistencia para resolver cualquier inconveniente con compradores o vendedores.'
+      answer:' Contacta a nuestro equipo de soporte desde la sección "Sobre Nosotros". Mediamos en disputas y brindamos asistencia para resolver cualquier inconveniente con compradores o vendedores.'
     },
     {
       question: '¿Puedo editar o eliminar una publicación?',

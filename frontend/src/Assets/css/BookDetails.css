@@ -84,7 +84,7 @@ button.bg-sky-600 {
   border: none;
 }
 button.bg-sky-600:hover {
-  background-color: #0069d9 !important;
+  background-color: #1c1c1d !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 123, 255, 0.25);
 }
