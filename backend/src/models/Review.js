@@ -1,47 +1,44 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const supabase = require('../config/db');
 
-const Review = sequelize.define('Review', {
-  review_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  transaction_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  buyer_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  book_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  experience_rate: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  book_rate: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  seller_rate: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  comment: {
-    type: DataTypes.TEXT,
-    allowNull: true
-  },
-  review_date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  }
-}, {
-  timestamps: false
-});
+// Obtener todas las reviews
+async function getAllReviews() {
+  const { data, error } = await supabase.from('reviews').select('*');
+  if (error) throw error;
+  return data;
+}
 
-module.exports = Review; 
+// Obtener una review por ID
+async function getReviewById(id) {
+  const { data, error } = await supabase.from('reviews').select('*').eq('id', id).single();
+  if (error) throw error;
+  return data;
+}
+
+// Crear una review
+async function createReview(review) {
+  const { data, error } = await supabase.from('reviews').insert([review]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+// Actualizar una review
+async function updateReview(id, updates) {
+  const { data, error } = await supabase.from('reviews').update(updates).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
+}
+
+// Eliminar una review
+async function deleteReview(id) {
+  const { error } = await supabase.from('reviews').delete().eq('id', id);
+  if (error) throw error;
+  return { success: true };
+}
+
+module.exports = {
+  getAllReviews,
+  getReviewById,
+  createReview,
+  updateReview,
+  deleteReview
+};

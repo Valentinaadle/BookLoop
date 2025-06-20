@@ -1,42 +1,44 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const supabase = require('../config/db');
 
-const Profile = sequelize.define('Profile', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    direccion: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    telefono: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    ciudad: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    pais: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    codigoPostal: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    UserId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'id'
-        }
-    }
-}, {
-    timestamps: true
-});
+// Obtener todos los perfiles
+async function getAllProfiles() {
+  const { data, error } = await supabase.from('profiles').select('*');
+  if (error) throw error;
+  return data;
+}
 
-module.exports = Profile; 
+// Obtener un perfil por ID
+async function getProfileById(id) {
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', id).single();
+  if (error) throw error;
+  return data;
+}
+
+// Crear un perfil
+async function createProfile(profile) {
+  const { data, error } = await supabase.from('profiles').insert([profile]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+// Actualizar un perfil
+async function updateProfile(id, updates) {
+  const { data, error } = await supabase.from('profiles').update(updates).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
+}
+
+// Eliminar un perfil
+async function deleteProfile(id) {
+  const { error } = await supabase.from('profiles').delete().eq('id', id);
+  if (error) throw error;
+  return { success: true };
+}
+
+module.exports = {
+  getAllProfiles,
+  getProfileById,
+  createProfile,
+  updateProfile,
+  deleteProfile
+};

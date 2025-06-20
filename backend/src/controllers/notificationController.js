@@ -16,13 +16,7 @@ const notifySeller = async (req, res) => {
 
     // Buscar el libro y el vendedor
     console.log('Buscando libro con ID:', bookId);
-    const book = await Book.findByPk(bookId, {
-      include: [{
-        model: User,
-        as: 'seller',
-        attributes: ['email']
-      }]
-    });
+    const book = await Book.getBookById(bookId);
 
     console.log('Libro encontrado:', book ? 'Sí' : 'No');
     if (!book || !book.seller) {

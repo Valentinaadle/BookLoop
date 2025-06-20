@@ -29,6 +29,11 @@ const Books = () => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [sortBy, setSortBy] = useState('default');
 
+  // Filtros
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [selectedStates, setSelectedStates] = useState([]);
+
   useEffect(() => {
     fetchBooks();
   }, []);
@@ -123,8 +128,74 @@ const Books = () => {
     return typeof str === 'string' ? str.replace(/:1$/, '').trim() : str;
   };
 
+  // Función para filtrar libros según los filtros seleccionados
+  function filteredBooks() {
+    window.alert('filteredBooks ejecutada');
+    books.forEach(book => {
+      let bookGenre = '';
+      if (book.categoria) {
+        bookGenre = book.categoria;
+      } else if (book.category && typeof book.category === 'object' && book.category.category_name) {
+        bookGenre = book.category.category_name;
+      } else if (book.category && typeof book.category === 'string') {
+        bookGenre = book.category;
+      } else if (book.genero) {
+        bookGenre = book.genero;
+      }
+      bookGenre = bookGenre.toString().trim();
+      console.log('[DEBUG libro]', {
+        bookGenre,
+        categoria: book.categoria,
+        category: book.category,
+        genero: book.genero
+      });
+    });
+    return books.filter(book => {
+      // Filtro por género/categoría
+      if (selectedGenres.length > 0) {
+        // Extraer el nombre de la categoría de todas las variantes posibles
+        let bookGenre = '';
+        if (book.categoria) {
+          bookGenre = book.categoria;
+        } else if (book.category && typeof book.category === 'object' && book.category.category_name) {
+          bookGenre = book.category.category_name;
+        } else if (book.category && typeof book.category === 'string') {
+          bookGenre = book.category;
+        } else if (book.genero) {
+          bookGenre = book.genero;
+        }
+        bookGenre = bookGenre.toString().trim();
+        // DEBUG: Mostrar el valor real que se compara SIEMPRE
+        window.alert(`Comparando: libro='${bookGenre}' | filtros='${selectedGenres.join(", ")}'`);
+        // Comparar normalizando a minúsculas y quitando espacios
+        const normalizedSelected = selectedGenres.map(g => g.toLowerCase().trim());
+        const normalizedBookGenre = bookGenre.toLowerCase().trim();
+        if (!normalizedSelected.includes(normalizedBookGenre)) return false;
+      }
+      // Filtro por idioma
+      if (selectedLanguages.length > 0) {
+        const bookLang = (book.language || book.idioma || '').toString().trim();
+        if (!selectedLanguages.includes(bookLang)) return false;
+      }
+      // Filtro por estado
+      if (selectedStates.length > 0) {
+        const bookState = (book.state || book.estado || '').toString().trim();
+        if (!selectedStates.includes(bookState)) return false;
+      }
+      // Filtro por precio
+      const price = parseFloat(book.price || book.precio || 0);
+      if (priceRange.min && price < parseFloat(priceRange.min)) return false;
+      if (priceRange.max && price > parseFloat(priceRange.max)) return false;
+      return true;
+    });
+  }
+
+  console.log('BOOKS EN RENDER', books);
+  // ALERT DEBUG: Mostrar libros y filtros al renderizar
+  window.alert(`Libros: ${books.length} | Géneros seleccionados: ${selectedGenres.join(', ')}`);
   return (
     <>
+      <h1 style={{color:'red',background:'#fff',padding:'20px',zIndex:9999}}>ESTE ES EL BOOKS.JSX QUE ESTÁS VIENDO</h1>
       <Header />
       <main className="home-container">
         <aside className="sidebar">
@@ -132,11 +203,23 @@ const Books = () => {
           <div className="filter-group">
             <div className="filter-header" onClick={() => toggle("genero")}>Género <span>{collapsed.genero ? "-" : "+"}</span></div>
             <div className={`filter-options ${collapsed.genero ? "" : "collapsed"}`}>
-              {["Novela", "Cuento", "Poesía", "Drama", "Ciencia ficción", "Fantasía", "Misterio", "Terror", "Romance", "Deportes", "Realistas", "Salud", "Tecnología"].map((genre) => (
-                <label key={genre}>
-                  <input type="checkbox" /> {genre}
-                </label>
-              ))}
+              {[...new Set(books.map(book => (book.categoria || '').trim()).filter(Boolean))]
+                .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
+                .map((genre) => (
+                  <label key={genre}>
+                    <input
+                      type="checkbox"
+                      checked={selectedGenres.includes(genre)}
+                      onChange={e => {
+                        setSelectedGenres(prev =>
+                          e.target.checked
+                            ? [...prev, genre]
+                            : prev.filter(g => g !== genre)
+                        );
+                      }}
+                    /> {genre}
+                  </label>
+                ))}
             </div>
           </div>
           <div className="filter-group">
@@ -144,7 +227,17 @@ const Books = () => {
             <div className={`filter-options ${collapsed.idioma ? "" : "collapsed"}`}>
               {["Español", "Inglés", "Francés"].map((lang) => (
                 <label key={lang}>
-                  <input type="checkbox" /> {lang}
+                  <input
+                    type="checkbox"
+                    checked={selectedLanguages.includes(lang)}
+                    onChange={e => {
+                      setSelectedLanguages(prev =>
+                        e.target.checked
+                          ? [...prev, lang]
+                          : prev.filter(l => l !== lang)
+                      );
+                    }}
+                  /> {lang}
                 </label>
               ))}
             </div>
@@ -154,7 +247,17 @@ const Books = () => {
             <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
               {["Nuevo","Como Nuevo","Buen Estado", "Usado"].map((state) => (
                 <label key={state}>
-                  <input type="checkbox" /> {state}
+                  <input
+                    type="checkbox"
+                    checked={selectedStates.includes(state)}
+                    onChange={e => {
+                      setSelectedStates(prev =>
+                        e.target.checked
+                          ? [...prev, state]
+                          : prev.filter(s => s !== state)
+                      );
+                    }}
+                  /> {state}
                 </label>
               ))}
             </div>
@@ -188,18 +291,36 @@ const Books = () => {
             <div className="loading">Cargando libros...</div>
           ) : (
             <div className="books-grid">
-              {books.length > 0 ? (
-                books.map((book, idx) => (
-                  <BookCard
-                    key={book.book_id || book.id}
-                    descuento={DESCUENTOS[idx % DESCUENTOS.length]}
-                    img={getBookImage(book, API_URL)}
-                    titulo={book.title || book.titulo || 'Sin título'}
-                    autor={getBookAuthor(book)}
-                    precio={book.price || book.precio}
-                    onBuy={() => {}}
-                    book_id={book.book_id || book.id}
-                  />
+              {filteredBooks().length > 0 ? (
+                filteredBooks().map((book, idx) => (
+                  <div key={book.book_id || book.id} style={{border: '1px solid #ddd', marginBottom: '8px'}}>
+                    {/* Debug visual: mostrar campos relevantes */}
+                    <pre style={{fontSize:'11px',background:'#f5f5f5',padding:'4px',marginBottom:'2px'}}>
+                      {JSON.stringify({
+                        categoria: book.categoria,
+                        category: book.category,
+                        genero: book.genero,
+                        selectedGenres,
+                        filtroNormalizado: selectedGenres.map(g => g.toLowerCase().trim()),
+                        categoriaNormalizada: (book.categoria || '').toLowerCase().trim(),
+                        language: book.language,
+                        idioma: book.idioma,
+                        estado: book.estado,
+                        state: book.state,
+                        price: book.price,
+                        precio: book.precio
+                      }, null, 2)}
+                    </pre>
+                    <BookCard
+                      descuento={DESCUENTOS[idx % DESCUENTOS.length]}
+                      img={getBookImage(book, API_URL)}
+                      titulo={book.title || book.titulo || 'Sin título'}
+                      autor={getBookAuthor(book)}
+                      precio={book.price || book.precio}
+                      onBuy={() => {}}
+                      book_id={book.book_id || book.id}
+                    />
+                  </div>
                 ))
               ) : (
                 <div className="no-books">

@@ -33,32 +33,42 @@ const uploadImage = [
       return res.status(400).json({ message: 'No se subió ninguna imagen' });
     }
     // Devolver la URL relativa
-    const imageUrl = `/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
+    const imageurl = `/uploads/${req.file.filename}`;
+    res.json({ imageurl });
   }
 ];
 
 // Obtener todos los libros
 const getBooks = async (req, res) => {
   try {
-    const books = await Book.findAll({
-      include: [
-        { model: require('../models/Image'), attributes: ['image_id', 'image_url'] },
-        { model: Category, attributes: ['category_id', 'category_name'] }
-      ],
-      order: [['createdAt', 'DESC']]
-    });
-
-    const booksWithGenre = books.map(book => {
-      const bookData = book.toJSON();
+    // JOIN: obtener libros con nombre del vendedor y categoría
+    const { data: books, error } = await require('../config/db')
+      .from('books')
+      .select('*, seller:seller_id(id, nombre, apellido, username, email), category:category_id(category_id, category_name)');
+    if (error) throw error;
+    // Para cada libro, buscar imágenes y armar coverimageurl e images
+    const booksWithImages = await Promise.all(books.map(async (book) => {
+      let images = await Image.getImagesByBook(book.book_id);
+      // Si no hay imágenes y existe imageurl, agregarla automáticamente a la tabla images
+      if ((images.length === 0 || !images.some(img => img.image_url === book.imageurl)) && book.imageurl) {
+        try {
+          await Image.createImage({ book_id: book.book_id, image_url: book.imageurl });
+          images = await Image.getImagesByBook(book.book_id);
+        } catch (err) {
+          console.error('Error sincronizando imageurl con tabla images:', err);
+        }
+      }
+      const coverimageurl = book.coverimageurl || (images.length > 0 ? images[images.length - 1].image_url : book.imageurl || null);
       return {
-        ...bookData,
-        genre: book.Category ? book.Category.category_name : null,
-        coverImageUrl: bookData.coverImageUrl || (bookData.Images && bookData.Images.length > 0 ? bookData.Images[bookData.Images.length-1].image_url : null)
+        ...book,
+        coverimageurl,
+        images: images.map(img => img.image_url),
+        vendedor: book.seller ? `${book.seller.nombre || ''} ${book.seller.apellido || ''}`.trim() || book.seller.username || book.seller.email : 'No especificado',
+        categoria: book.category ? book.category.category_name : 'No especificada',
+        category_id: book.category ? book.category.category_id : book.category_id
       };
-    });
-
-    res.json(booksWithGenre);
+    }));
+    res.json(booksWithImages);
   } catch (error) {
     console.error('Error al obtener libros:', error);
     res.status(500).json({ message: 'Error al obtener libros' });
@@ -68,22 +78,35 @@ const getBooks = async (req, res) => {
 // Obtener un libro por ID
 const getBookById = async (req, res) => {
   try {
-    const book = await Book.findByPk(req.params.id, {
-      include: [
-        { model: require('../models/User'), as: 'seller', attributes: ['nombre', 'apellido', 'email', 'id'] },
-        { model: Image, attributes: ['image_id', 'image_url'] },
-        { model: Category, attributes: ['category_id', 'category_name'] }
-      ]
-    });
-    if (!book) {
+    // JOIN: obtener libro con nombre del vendedor y categoría
+    const { data: book, error } = await require('../config/db')
+      .from('books')
+      .select('*, seller:seller_id(id, nombre, apellido, username, email), category:category_id(category_id, category_name)')
+      .eq('book_id', req.params.id)
+      .single();
+    if (error || !book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
-    const bookData = book.toJSON();
-    const enrichedBook = {
-      ...bookData,
-      coverImageUrl: bookData.coverImageUrl || (bookData.Images && bookData.Images.length > 0 ? bookData.Images[bookData.Images.length-1].image_url : null)
-    };
-    res.json(enrichedBook);
+    // Buscar imágenes asociadas
+    let images = await Image.getImagesByBook(book.book_id);
+    // Si no hay imágenes y existe imageurl, agregarla automáticamente a la tabla images
+    if ((images.length === 0 || !images.some(img => img.image_url === book.imageurl)) && book.imageurl) {
+      try {
+        await Image.createImage({ book_id: book.book_id, image_url: book.imageurl });
+        images = await Image.getImagesByBook(book.book_id);
+      } catch (err) {
+        console.error('Error sincronizando imageurl con tabla images:', err);
+      }
+    }
+    const coverimageurl = book.coverimageurl || (images.length > 0 ? images[images.length - 1].image_url : null);
+    res.json({
+      ...book,
+      coverimageurl,
+      images: images.map(img => img.image_url),
+      vendedor: book.seller ? `${book.seller.nombre || ''} ${book.seller.apellido || ''}`.trim() || book.seller.username || book.seller.email : 'No especificado',
+      categoria: book.category ? book.category.category_name : 'No especificada',
+      category_id: book.category ? book.category.category_id : book.category_id
+    });
   } catch (error) {
     console.error('Error al obtener libro:', error);
     res.status(500).json({ message: 'Error al obtener libro' });
@@ -97,12 +120,12 @@ const createBook = async (req, res) => {
       title,
       authors,
       description,
-      imageUrl,
+      imageurl,
       price,
       quantity,
       available,
       language,
-      pageCount,
+      pagecount,
       seller_id,
       category_id,
       images_id,
@@ -141,7 +164,7 @@ const createBook = async (req, res) => {
     }
 
     // Si no hay imagen proporcionada, intentar obtener la de Google Books
-    let finalImageUrl = imageUrl;
+    let finalImageUrl = imageurl;
     if (!finalImageUrl && isbn_code) {
       try {
         const response = await axios.get(`${GOOGLE_BOOKS_API_URL}?q=isbn:${isbn_code}`);
@@ -153,46 +176,56 @@ const createBook = async (req, res) => {
       }
     }
 
-    const book = await Book.create({
+    const now = new Date();
+    const book = await Book.createBook({
       title,
       authors,
       description,
-      imageUrl: finalImageUrl,
+      imageurl: finalImageUrl,
       price,
       quantity,
       available,
       language,
-      pageCount: pageCount ? parseInt(pageCount, 10) : null,
+      pagecount: pagecount ? parseInt(pagecount, 10) : null,
       seller_id,
       category_id,
       images_id,
       isbn_code,
       condition,
       publication_date: publication_date ? String(publication_date) : null,
-      publisher: publisher || null
+      publisher: publisher || null,
+      createdat: now,
+      updatedat: now
     });
 
     // Guardar imágenes en la tabla Image
     const imagePromises = [];
-
-    // Agregar la imagen de Google Books si existe
-    if (finalImageUrl) {
-      imagePromises.push(Image.create({ book_id: book.book_id, image_url: finalImageUrl }));
-    }
+    let allImages = [];
+    let coverUrl = finalImageUrl;
 
     // Agregar las imágenes subidas por el usuario
     if (Array.isArray(images) && images.length > 0) {
+      // Si el usuario especifica portada, úsala; si no, la última
+      if (req.body.coverimageurl && images.includes(req.body.coverimageurl)) {
+        coverUrl = req.body.coverimageurl;
+      } else {
+        coverUrl = images[images.length - 1];
+      }
       images.forEach(imgUrl => {
-        if (imgUrl && !imagePromises.some(p => p.image_url === imgUrl)) {
-          imagePromises.push(Image.create({ book_id: book.book_id, image_url: imgUrl }));
-        }
+        imagePromises.push(Image.createImage({ book_id: book.book_id, image_url: imgUrl }));
       });
+    } else if (finalImageUrl) {
+      // Si no hay imágenes subidas, usa la de Google Books
+      imagePromises.push(Image.createImage({ book_id: book.book_id, image_url: finalImageUrl }));
     }
-
     // Guardar todas las imágenes
-    await Promise.all(imagePromises);
+    allImages = await Promise.all(imagePromises);
 
-    res.status(201).json(book);
+    // Actualiza la portada en el libro
+    await Book.updateBookCover(book.book_id, coverUrl);
+
+    // Devuelve el libro con todas las imágenes y la portada correcta
+    res.status(201).json({ ...book, coverimageurl: coverUrl, images: allImages.map(img => img.image_url) });
   } catch (error) {
     console.error('Error al crear libro:', error);
     res.status(500).json({ message: 'Error al crear libro' });
@@ -209,15 +242,19 @@ const updateBook = async (req, res) => {
       price,
       condition,
       language,
-      pageCount,
+      pagecount,
       publication_date,
       publisher,
       category_id,
       images, // array of image URLs (remaining/new)
       deletedImageIds, // array of image IDs to delete
-      coverImageUrl // optional: explicit cover
+      coverimageurl // optional: explicit cover
     } = req.body;
-    const book = await Book.findByPk(req.params.id);
+    // Filter out invalid/null/undefined/empty image URLs
+    if (Array.isArray(images)) {
+      images = images.filter(url => typeof url === 'string' && url.trim().length > 0);
+    }
+    const book = await Book.getBookById(req.params.id);
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
@@ -242,47 +279,92 @@ const updateBook = async (req, res) => {
     }
     // Handle image deletions
     if (Array.isArray(deletedImageIds) && deletedImageIds.length > 0) {
-      await Image.destroy({ where: { image_id: deletedImageIds, book_id: book.book_id } });
+      // (removido: no usar destroy, solo deleteImage por ID)
     }
     // Handle images: ensure all URLs in 'images' exist for this book
     if (Array.isArray(images)) {
       // Get current images from DB
-      const currentImages = await Image.findAll({ where: { book_id: book.book_id } });
+      const currentImages = await Image.getImagesByBook(book.book_id);
       const currentUrls = currentImages.map(img => img.image_url);
       // Add new images
       for (const imgUrl of images) {
         if (!currentUrls.includes(imgUrl)) {
-          await Image.create({ book_id: book.book_id, image_url: imgUrl });
+          await Image.createImage({ book_id: book.book_id, image_url: imgUrl });
         }
       }
-      // Remove images not in the new images array (if not already deleted)
+      // Remove images not in the new images array (borrar realmente de la DB)
       for (const img of currentImages) {
         if (!images.includes(img.image_url)) {
-          await img.destroy();
+          await Image.deleteImage(img.image_id);
         }
       }
     }
-    // Determine cover image
-    let finalCoverUrl = coverImageUrl;
-    if (!finalCoverUrl && Array.isArray(images) && images.length > 0) {
-      finalCoverUrl = images[images.length - 1]; // newest is last
+    // Obtener imágenes actuales de la DB
+    let currentImages = await Image.getImagesByBook(book.book_id);
+    let currentUrls = currentImages.map(img => img.image_url);
+
+    // Manejar eliminación y sincronización de imágenes
+    if (Array.isArray(deletedImageIds) && deletedImageIds.length > 0) {
+      for (let imgId of deletedImageIds) {
+        if (typeof imgId === 'object' && imgId.image_id) imgId = imgId.image_id;
+        imgId = parseInt(imgId, 10);
+        if (!isNaN(imgId)) {
+          await Image.deleteImage(imgId);
+        }
+      }
+      // Refrescar imágenes
+      currentImages = await Image.getImagesByBook(book.book_id);
+      currentUrls = currentImages.map(img => img.image_url);
     }
-    // Update book
-    await book.update({
+
+    // Agregar nuevas imágenes
+    if (Array.isArray(images)) {
+      for (const imgUrl of images) {
+        if (!currentUrls.includes(imgUrl)) {
+          await Image.createImage({ book_id: book.book_id, image_url: imgUrl });
+        }
+      }
+      // Refrescar imágenes
+      currentImages = await Image.getImagesByBook(book.book_id);
+      currentUrls = currentImages.map(img => img.image_url);
+    }
+
+    // Determinar la portada
+    let finalCoverUrl = coverimageurl;
+    if (coverimageurl && currentUrls.includes(coverimageurl)) {
+      finalCoverUrl = coverimageurl;
+    } else if (Array.isArray(images) && images.length > 0) {
+      finalCoverUrl = images[images.length - 1];
+    } else if (currentUrls.length > 0) {
+      finalCoverUrl = currentUrls[currentUrls.length - 1];
+    } else {
+      finalCoverUrl = book.coverimageurl || book.imageurl || null;
+    }
+
+    // Actualizar el libro
+    const updatedat = new Date();
+    await Book.updateBook(book.book_id, {
       title,
       authors,
       description,
       price,
       condition,
       language,
-      pageCount,
+      pagecount: pagecount ? parseInt(pagecount, 10) : null,
       publication_date,
       publisher,
-      category_id: category_id || book.category_id,
-      imageUrl: finalCoverUrl || book.imageUrl, // fallback to previous if none
-      coverImageUrl: finalCoverUrl // <--- guardar la portada explícita
+      category_id: category_id ? parseInt(category_id, 10) : book.category_id,
+      quantity: req.body.quantity ? parseInt(req.body.quantity, 10) : book.quantity,
+      seller_id: req.body.seller_id ? parseInt(req.body.seller_id, 10) : book.seller_id,
+      images_id: req.body.images_id ? parseInt(req.body.images_id, 10) : book.images_id,
+      imageurl: finalCoverUrl || book.imageurl,
+      coverimageurl: finalCoverUrl,
+      updatedat
     });
-    res.json(book);
+
+    // Devolver el libro actualizado y todas las imágenes
+    const updatedImages = await Image.getImagesByBook(book.book_id);
+    res.json({ ...book, coverimageurl: finalCoverUrl, images: updatedImages.map(img => img.image_url) });
   } catch (error) {
     console.error('Error al actualizar libro:', error);
     res.status(500).json({ message: 'Error al actualizar libro', error: error.message });
@@ -292,31 +374,32 @@ const updateBook = async (req, res) => {
 // Eliminar un libro
 const deleteBook = async (req, res) => {
   try {
-    const book = await Book.findByPk(req.params.id);
+    const book = await Book.getBookById(req.params.id);
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
     // Eliminar wishlist asociada
     try {
-      const { Wishlist } = require('../models');
-      await Wishlist.destroy({ where: { book_id: book.book_id } });
+      const Wishlist = require('../models/Wishlist');
+      await Wishlist.deleteWishlistByBookId(book.book_id);
     } catch (wishErr) {
       console.error('Error al eliminar wishlist asociada:', wishErr);
-      // No retornamos aquí, seguimos con el borrado
     }
     // Eliminar imágenes asociadas
     try {
-      const { Image } = require('../models');
-      await Image.destroy({ where: { book_id: book.book_id } });
+      const Image = require('../models/Image');
+      const images = await Image.getImagesByBook(book.book_id);
+      for (const img of images) {
+        await Image.deleteImage(img.id);
+      }
     } catch (imgErr) {
       console.error('Error al eliminar imágenes asociadas:', imgErr);
-      // No retornamos aquí, seguimos con el borrado del libro
     }
-    await book.destroy();
+    await Book.deleteBook(book.book_id);
     res.json({ message: 'Libro eliminado correctamente' });
   } catch (error) {
-    console.error('Error al eliminar libro:', error, error?.message);
-    res.status(500).json({ message: error?.message || 'Error al eliminar libro', error: error });
+    console.error('Error al eliminar libro:', error?.message || error);
+    res.status(500).json({ message: error?.message || 'Error al eliminar libro', error });
   }
 };
 
@@ -338,8 +421,8 @@ const searchBooks = async (req, res) => {
             publishedDate: item.volumeInfo.publishedDate,
             isbn: item.volumeInfo.industryIdentifiers ? 
                   item.volumeInfo.industryIdentifiers[0].identifier : null,
-            pageCount: item.volumeInfo.pageCount,
-            imageUrl: item.volumeInfo.imageLinks ? 
+            pagecount: item.volumeInfo.pagecount,
+            imageurl: item.volumeInfo.imageLinks ? 
                      item.volumeInfo.imageLinks.thumbnail : null,
             categories: item.volumeInfo.categories ? 
                        item.volumeInfo.categories.join(', ') : null,
@@ -359,7 +442,7 @@ const addBookToLibrary = async (req, res) => {
         const { googleBooksId } = req.body;
         
         // Verificar si el libro ya existe
-        const existingBook = await Book.findOne({
+        const existingBook = await Book.getBookById({
             where: { googleBooksId }
         });
 
@@ -375,10 +458,10 @@ const addBookToLibrary = async (req, res) => {
         const bookData = response.data.volumeInfo;
 
         // Procesar la URL de la imagen para hacerla más corta
-        let imageUrl = null;
+        let imageurl = null;
         if (bookData.imageLinks && bookData.imageLinks.thumbnail) {
             // Remover parámetros innecesarios de la URL
-            imageUrl = bookData.imageLinks.thumbnail.split('&edge=')[0];
+            imageurl = bookData.imageLinks.thumbnail.split('&edge=')[0];
         }
 
         // Crear nuevo libro en la base de datos
@@ -390,8 +473,8 @@ const addBookToLibrary = async (req, res) => {
             publishedDate: bookData.publishedDate || null,
             isbn: bookData.industryIdentifiers ? 
                   bookData.industryIdentifiers[0].identifier : null,
-            pageCount: bookData.pageCount || null,
-            imageUrl: imageUrl,
+            pagecount: bookData.pagecount || null,
+            imageurl: imageurl,
             categories: bookData.categories || [],
             language: bookData.language || null,
             averageRating: bookData.averageRating || null,
@@ -414,7 +497,7 @@ const addBookToLibrary = async (req, res) => {
 
 const getLibraryBooks = async (req, res) => {
   try {
-    const books = await Book.findAll();
+    const books = await Book.getAllBooks();
     res.json(books);
   } catch (error) {
     console.error('Error al obtener libros de la biblioteca:', error);
@@ -440,7 +523,7 @@ const searchBookByISBN = async (req, res) => {
         idioma: info.language || '',
         descripcion: info.description || '',
         imagen: info.imageLinks ? info.imageLinks.thumbnail : '',
-        paginas: info.pageCount || '',
+        paginas: info.pagecount || '',
         publicacion: info.publishedDate || ''
       });
     } else {
@@ -455,14 +538,7 @@ const searchBookByISBN = async (req, res) => {
 const getBooksByUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const books = await Book.findAll({
-      where: { seller_id: userId },
-      include: [
-        { model: Image, attributes: ['image_id', 'image_url'] },
-        { model: Category, attributes: ['category_id', 'category_name'] }
-      ],
-      order: [['createdAt', 'DESC']] // Ordenar por fecha de creación, más reciente primero
-    });
+    const books = await Book.getBooksByUser(userId);
     res.json(books);
   } catch (error) {
     console.error('Error al obtener libros del usuario:', error);
@@ -476,18 +552,24 @@ const searchBooksInDB = async (req, res) => {
     return res.json([]);
   }
   try {
-    const books = await Book.findAll({
-      where: {
-        [Op.or]: [
-          { title: { [Op.like]: `%${query}%` } },
-          // Buscar en autores (asumiendo que es un array o string)
-          { authors: { [Op.like]: `%${query}%` } },
-          { isbn: { [Op.like]: `%${query}%` } },
-          { isbn_code: { [Op.like]: `%${query}%` } }
-        ]
-      }
+    const books = await Book.getAllBooks(); // Trae todos los libros
+    const lowerQuery = query.toLowerCase();
+    const filtered = books.filter(book => {
+      // Normalizar campos
+      const title = (book.title || book.titulo || '').toLowerCase();
+      const authors = Array.isArray(book.authors)
+        ? book.authors.join(', ').toLowerCase()
+        : (book.authors || '').toLowerCase();
+      const isbn = (book.isbn || '').toLowerCase();
+      const isbnCode = (book.isbn_code || '').toLowerCase();
+      return (
+        title.includes(lowerQuery) ||
+        authors.includes(lowerQuery) ||
+        isbn.includes(lowerQuery) ||
+        isbnCode.includes(lowerQuery)
+      );
     });
-    res.json(books);
+    res.json(filtered);
   } catch (error) {
     res.status(500).json({ error: 'Error al buscar libros en la base de datos' });
   }

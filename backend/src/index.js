@@ -2,14 +2,13 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config({ path: __dirname + '/../.env' });
 
-// Verificar variables de entorno
+// Verificar variables de entorno relevantes para Supabase
 console.log('Verificando variables de entorno:', {
-  DB_HOST: process.env.DB_HOST,
-  DB_USER: process.env.DB_USER,
-  DB_NAME: process.env.DB_NAME
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  PORT: process.env.PORT
 });
 
-const { sequelize, connectDB } = require('./config/db');
+
 const Category = require('./models/Category');
 
 // Importar rutas
@@ -48,9 +47,7 @@ app.use((err, req, res, next) => {
 // Sincronizar base de datos y iniciar servidor
 const startServer = async () => {
   try {
-    await connectDB();
     await Category.seedCategories();
-    await sequelize.sync({ force: false });
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en el puerto ${PORT}`);
     });

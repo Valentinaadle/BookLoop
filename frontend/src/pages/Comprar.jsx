@@ -156,27 +156,43 @@ const Comprar = () => {
     if (priceRange.min && price < parseFloat(priceRange.min)) return false;
     if (priceRange.max && price > parseFloat(priceRange.max)) return false;
 
-    // Filtrado por género
+    // --- Filtrado por categoría/género ---
     if (selectedGenres.length > 0) {
-      const bookGenres = (book.genero || book.genre || '').split(',').map(g => g.trim());
+      let bookCategory = '';
+      // Soportar diferentes estructuras posibles
+      if (book.categoria) {
+        bookCategory = book.categoria;
+      } else if (book.category && typeof book.category === 'object' && book.category.category_name) {
+        bookCategory = book.category.category_name;
+      } else if (book.category && typeof book.category === 'string') {
+        bookCategory = book.category;
+      } else if (book.genero) {
+        bookCategory = book.genero;
+      }
+      // Normalizar para comparar
+      const normalizedBookCategory = (bookCategory || '').toLowerCase().trim();
       const matchesGenre = selectedGenres.some(selectedGenre =>
-        bookGenres.some(bookGenre => bookGenre.toLowerCase() === selectedGenre.toLowerCase())
+        normalizedBookCategory === selectedGenre.toLowerCase().trim()
       );
       if (!matchesGenre) return false;
     }
 
-    // Filtrado por idioma
+    // --- Filtrado por idioma ---
     if (selectedLanguages.length > 0) {
       const bookLanguage = book.language || '';
-      // Convertir el código de idioma del libro a nombre completo para la comparación
       const fullLanguageName = languageMap[bookLanguage] || '';
       if (!selectedLanguages.includes(fullLanguageName)) return false;
     }
 
-    // Filtrado por estado
+    // --- Filtrado por estado ---
     if (selectedConditions.length > 0) {
-      const bookCondition = book.condition || '';
-      if (!selectedConditions.includes(bookCondition)) return false;
+      // Soportar variantes: estado, condition, state
+      let bookCondition = book.estado || book.condition || book.state || '';
+      bookCondition = bookCondition.trim().toLowerCase();
+      const matchesCondition = selectedConditions.some(selectedCond =>
+        bookCondition === selectedCond.trim().toLowerCase()
+      );
+      if (!matchesCondition) return false;
     }
 
     return true;

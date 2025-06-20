@@ -22,7 +22,8 @@ function BookDetails() {
   const [bookImages, setBookImages] = useState([]);
   const [activeImage, setActiveImage] = useState(0);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editForm, setEditForm] = useState({ title: '', authors: '', description: '', price: '', stock: '' });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editForm, setEditForm] = useState({ title: '', authors: '', description: '', price: '', stock: '', pagecount: '' });
   const [success, setSuccess] = useState(null);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -39,16 +40,18 @@ function BookDetails() {
       // Procesar las imágenes del libro
       // --- COVER LOGIC FIX: Ensure cover is always first and no duplicates ---
       let images = [];
-      // 1. Get all image URLs (imageUrl, Images[])
-      if (Array.isArray(data.Images) && data.Images.length > 0) {
+      // Prefer backend's images array (lowercase) and coverimageurl
+      if (Array.isArray(data.images) && data.images.length > 0) {
+        images = data.images.map(img => img.startsWith('http') ? img : `${API_URL}${img}`);
+      } else if (Array.isArray(data.Images) && data.Images.length > 0) {
         images = data.Images.map(img => img.image_url.startsWith('http') ? img.image_url : `${API_URL}${img.image_url}`);
       }
       if (data.imageUrl) {
         const imgUrl = data.imageUrl.startsWith('http') ? data.imageUrl : (data.imageUrl.startsWith('/Assets') ? data.imageUrl : `${API_URL}${data.imageUrl}`);
         if (!images.includes(imgUrl)) images.push(imgUrl);
       }
-      // 2. If coverImageUrl exists, ensure it is first
-      let coverUrl = data.coverImageUrl || data.imageUrl || (images.length > 0 ? images[0] : null);
+      // 2. If coverimageurl exists, ensure it is first
+      let coverUrl = data.coverimageurl || data.coverImageUrl || data.imageUrl || (images.length > 0 ? images[0] : null);
       if (coverUrl) {
         coverUrl = coverUrl.startsWith('http') ? coverUrl : (coverUrl.startsWith('/Assets') ? coverUrl : `${API_URL}${coverUrl}`);
         images = [coverUrl, ...images.filter(url => url !== coverUrl)];
@@ -60,7 +63,9 @@ function BookDetails() {
         authors: Array.isArray(data.authors) ? data.authors.join(', ') : data.authors || '',
         description: data.description || '',
         price: data.price || '',
-        stock: data.stock || ''
+        stock: data.stock || '',
+        pagecount: data.pagecount || data.pageCount || data.num_pages || data.numpages || '',
+        images: Array.isArray(data.images) ? [...data.images] : []
       });
       // --- END COVER LOGIC FIX ---
     } catch (err) {
@@ -130,10 +135,15 @@ function BookDetails() {
   const handleUpdateBook = async (e) => {
     e.preventDefault();
     try {
+      // Convierte pagecount a número si existe
+      const formToSend = {
+        ...editForm,
+        pagecount: editForm.pagecount ? Number(editForm.pagecount) : null
+      };
       const response = await fetch(`${API_URL}/api/books/${book.book_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editForm)
+        body: JSON.stringify(formToSend)
       });
       if (!response.ok) throw new Error('Error al actualizar el libro');
       
@@ -141,6 +151,7 @@ function BookDetails() {
       setBook(updatedBook); // Actualizar el estado del libro directamente
       setSuccess('Libro actualizado correctamente');
       setShowEditModal(false);
+      setTimeout(() => navigate(`/books/${updatedBook.book_id || updatedBook.id}`), 1200);
     } catch (err) {
       setError('Error al actualizar el libro');
     }
@@ -185,7 +196,7 @@ function BookDetails() {
           throw new Error(backendError || 'Error al eliminar el libro');
         }
         setSuccess('Libro eliminado correctamente');
-        setTimeout(() => navigate('/profile'), 1500);
+        setTimeout(() => navigate('/comprar'), 1500);
       } catch (err) {
         setError('Error al eliminar el libro: ' + err.message);
         console.error('Error al eliminar el libro:', err);
@@ -268,7 +279,7 @@ function BookDetails() {
               </button>
               <button
                 title="Borrar libro"
-                onClick={() => setShowEditModal(true)}
+                onClick={() => setShowDeleteModal(true)}
                 aria-label="Borrar libro"
                 style={{
                   background: 'none',
@@ -292,16 +303,38 @@ function BookDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
-              <div className="book-cover-detail">
-                <img
-                  src={bookImages.length > 0 ? bookImages[activeImage] : '/icono2.png'}
-                  alt={`Portada ${book.title}`}
-                  onError={(e) => {
-                    e.target.src = '/icono2.png';
-                    e.target.onerror = null;
-                  }}
-                />
-              </div>
+              <div className="book-cover-detail flex flex-col items-center">
+  <div className="relative w-full flex items-center justify-center">
+    {bookImages.length > 1 && (
+      <button
+        onClick={() => setActiveImage((activeImage - 1 + bookImages.length) % bookImages.length)}
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-sky-100 transition z-10"
+        aria-label="Anterior"
+        style={{ left: -16 }}
+      >
+        <svg width="24" height="24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+    )}
+    <img
+      src={bookImages.length > 0 ? bookImages[activeImage] : '/icono2.png'}
+      alt={`Imagen ${activeImage + 1} de ${book.title}`}
+      onError={e => { e.target.src = '/icono2.png'; e.target.onerror = null; }}
+      className="w-full h-64 object-contain rounded mb-2 select-none"
+      style={{ maxWidth: 320 }}
+    />
+    {bookImages.length > 1 && (
+      <button
+        onClick={() => setActiveImage((activeImage + 1) % bookImages.length)}
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-sky-100 transition z-10"
+        aria-label="Siguiente"
+        style={{ right: -16 }}
+      >
+        <svg width="24" height="24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    )}
+  </div>
+
+</div>
               <div className="space-y-2">
                 <p className="text-slate-700 font-inter text-sm">
                   <span className="font-semibold text-slate-800">Autor:</span> {
@@ -342,11 +375,11 @@ function BookDetails() {
                 </div>
                 <div>
                   <p className="text-xs text-slate-500">Categoría</p>
-                  <p className="text-sm text-slate-800">{book.Category?.category_name || 'No especificado'}</p>
+                  <p className="text-sm text-slate-800">{book.Category?.category_name || book.category?.category_name || book.categoria || book.category || 'No especificado'}</p>
                 </div>
                 <div>
                   <p className="text-xs text-slate-500">Número de páginas</p>
-                  <p className="text-sm text-slate-800">{book.pageCount || 'No especificado'}</p>
+                  <p className="text-sm text-slate-800">{(book.pagecount && book.pagecount > 0) ? book.pagecount : 'No especificado'}</p>
                 </div>
                 <div>
                   <p className="text-xs text-slate-500">Año de publicación</p>
@@ -383,6 +416,46 @@ function BookDetails() {
           <div className="bg-white rounded-lg p-4 max-w-sm w-full">
             <h3 className="text-xl font-semibold text-slate-800 mb-3">Contactar al vendedor</h3>
             <p className="text-slate-600 text-sm mb-4">¿Estás seguro de que deseas contactar al vendedor?</p>
+            <label className="block mb-2">
+              <span className="text-gray-700 text-sm font-medium">Número de páginas</span>
+              <input
+                type="number"
+                name="pagecount"
+                value={editForm.pagecount}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50 text-sm"
+                placeholder="Ej: 320"
+                min="1"
+              />
+            </label>
+
+            {/* Galería de imágenes para editar */}
+            {Array.isArray(editForm.images) && editForm.images.length > 0 && (
+              <div className="flex flex-wrap gap-3 mb-4 relative">
+                {editForm.images.map((img, idx) => (
+                  <div key={idx} style={{ position: 'relative', display: 'inline-block' }}>
+                    <img
+                      src={img}
+                      alt={`Imagen ${idx + 1}`}
+                      style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
+                    />
+                    <button
+                      type="button"
+                      title="Eliminar"
+                      style={{ position: 'absolute', top: 2, right: 2, background: '#fff', border: 'none', borderRadius: '50%', padding: '2px 6px', cursor: 'pointer', fontWeight: 'bold', fontSize: 16, color: '#c00', lineHeight: 1 }}
+                      onClick={() => {
+                        setEditForm(prev => ({
+                          ...prev,
+                          images: prev.images.filter((_, i) => i !== idx)
+                        }));
+                      }}
+                    >
+                      ✖
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="flex gap-3">
               <button
                 className="flex-1 bg-sky-600 text-white py-2 px-3 rounded-md hover:bg-sky-700 transition-colors text-sm"
@@ -408,6 +481,33 @@ function BookDetails() {
                 {emailStatus}
               </p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Delete Warning Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6 border-t-8 border-red-600 relative animate-fade-in">
+            <div className="flex items-center mb-4">
+              <svg className="w-7 h-7 text-red-600 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+              <h3 className="text-xl font-bold text-red-700">Confirmar eliminación</h3>
+            </div>
+            <p className="text-slate-700 mb-5">¿Estás seguro que deseas <span className='font-semibold text-red-700'>eliminar</span> este libro? Esta acción no se puede deshacer.</p>
+            <div className="flex gap-3">
+              <button
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-md shadow transition-colors text-sm font-semibold"
+                onClick={() => { setShowDeleteModal(false); handleDeleteBook(); }}
+              >
+                Sí, eliminar
+              </button>
+              <button
+                className="flex-1 bg-slate-100 text-slate-800 py-2 px-3 rounded-md hover:bg-slate-200 transition-colors text-sm"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
       )}

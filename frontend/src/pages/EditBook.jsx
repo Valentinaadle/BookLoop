@@ -36,6 +36,8 @@ function EditBook() {
   const [coverPreview, setCoverPreview] = useState(null); // preview para la portada
 
   useEffect(() => {
+    // Limpieza defensiva de residuos de hot reload o estados corruptos
+    setNewImages(prev => Array.isArray(prev) ? prev.filter(obj => obj && obj.file && obj.blobUrl) : []);
     const fetchBook = async () => {
       try {
         const response = await fetch(`${API_URL}/api/books/${id}`);
@@ -54,21 +56,20 @@ function EditBook() {
           publisher: data.publisher || '',
           category_id: data.category_id || data.Category?.category_id || ''
         });
-        // Gather all images
+        // Usar los campos images (array de URLs) y coverimageurl del backend
         let imgs = [];
-        if (Array.isArray(data.Images)) {
-          imgs = data.Images.map(img => ({ image_id: img.image_id, image_url: img.image_url }));
-        }
-        // Also add imageUrl if not in Images array
-        if (data.imageUrl && !imgs.some(i => i.image_url === data.imageUrl)) {
-          imgs.push({ image_id: null, image_url: data.imageUrl });
+        if (Array.isArray(data.images)) {
+          imgs = data.images.map((url, idx) => ({ image_id: idx, image_url: url }));
         }
         setBookImages(imgs);
-        // Set cover image
-        let cover = data.coverImageUrl || data.imageUrl || (imgs.length > 0 ? imgs[imgs.length-1].image_url : null);
-        setCoverPreview(cover);
-        // Por defecto, la portada es la última imagen
-        setCoverIndex(imgs.length > 0 ? imgs.length - 1 : 0);
+        // Determinar el índice de la portada actual
+        let coverIdx = 0;
+        if (data.coverimageurl && imgs.length > 0) {
+          const found = imgs.findIndex(img => img.image_url === data.coverimageurl);
+          coverIdx = found !== -1 ? found : 0;
+        }
+        setCoverIndex(coverIdx);
+        setCoverPreview(imgs[coverIdx]?.image_url || null);
       } catch (err) {
         setError('Error al cargar el libro: ' + err.message);
       } finally {
@@ -97,12 +98,12 @@ function EditBook() {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
       setNewImages(prev => {
-        const newImgs = [...prev, ...files];
-        // Solo si no hay imágenes, la portada será la nueva
+        // Guardar file y blobUrl para cada imagen nueva
+        const newImgs = [...prev, ...files.map(file => ({ file, blobUrl: URL.createObjectURL(file) }))];
         setTimeout(() => {
           const allImgs = [
             ...bookImages.filter(img => !deletedImageIds.includes(img.image_id)),
-            ...newImgs.map(file => ({ type: 'new', image_url: URL.createObjectURL(file), file }))
+            ...newImgs.map(obj => ({ type: 'new', image_url: obj.blobUrl, file: obj.file }))
           ];
           if (allImgs.length === files.length) {
             setCoverIndex(allImgs.length - 1);
@@ -118,11 +119,12 @@ function EditBook() {
     // Si es imagen nueva (no subida aún)
     if (img.type === 'new' || img.file) {
       setNewImages(prev => {
-        const filtered = prev.filter(f => f.name !== (img.file?.name || img.image_url));
+        // prev es [{file, blobUrl}, ...]
+        const filtered = prev.filter(obj => obj.file.name !== (img.file?.name || img.image_url));
         setTimeout(() => {
           const allImgs = [
             ...bookImages.filter(img => !deletedImageIds.includes(img.image_id)),
-            ...filtered.map(file => ({ type: 'new', image_url: URL.createObjectURL(file), file }))
+            ...filtered.map(obj => ({ type: 'new', image_url: obj.blobUrl, file: obj.file }))
           ];
           if (allImgs.length === 0) {
             setCoverIndex(0);
@@ -140,7 +142,7 @@ function EditBook() {
         setTimeout(() => {
           const allImgs = [
             ...bookImages.filter(img => !updated.includes(img.image_id)),
-            ...newImages.map(file => ({ type: 'new', image_url: URL.createObjectURL(file), file }))
+            ...newImages.map(obj => ({ type: 'new', image_url: obj.blobUrl, file: obj.file }))
           ];
           if (allImgs.length === 0) {
             setCoverIndex(0);
@@ -204,30 +206,43 @@ function EditBook() {
         autoresArray = autoresArray.flat(Infinity).map(a => typeof a === 'string' ? a.trim() : a).filter(Boolean);
       }
 
-      // Upload new images and get URLs
+      // Subir imágenes nuevas y obtener URLs
       let uploadedUrls = [];
-      for (const file of newImages) {
+      for (const obj of newImages) {
         const formDataImg = new FormData();
-        formDataImg.append('image', file);
+        formDataImg.append('image', obj.file);
         const res = await fetch(`${API_URL}/api/books/upload-image`, {
           method: 'POST',
           body: formDataImg
         });
         if (!res.ok) throw new Error('Error al subir la imagen');
         const imgData = await res.json();
-        uploadedUrls.push(imgData.imageUrl);
+        uploadedUrls.push(imgData.imageurl);
       }
-      // Prepare all image URLs to keep
+      // Preparar todas las URLs de imágenes a mantener
       const existingUrls = bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => img.image_url);
       const allImages = [...existingUrls, ...uploadedUrls];
-      // Determinar la portada por índice
-      let coverUrl = allImages[coverIndex] || null;
+
+      // Determinar correctamente la portada:
+      // 1. Si la portada seleccionada era una imagen nueva, su URL en bookImages es un blob local, pero después de subirlas tenemos la URL real en uploadedUrls.
+      // 2. Si la portada seleccionada era una imagen existente, su URL está en existingUrls.
+      let coverUrl = null;
+      if (coverIndex < bookImages.length && bookImages[coverIndex]?.image_url?.startsWith('blob')) {
+        // Es una imagen nueva. Buscar su índice en newImages para mapearlo a uploadedUrls
+        const blobUrl = bookImages[coverIndex].image_url;
+        const idxInNew = newImages.findIndex(obj => obj.blobUrl === blobUrl);
+        coverUrl = idxInNew !== -1 ? uploadedUrls[idxInNew] : allImages[0] || null;
+      } else {
+        // Es una imagen existente
+        coverUrl = allImages[coverIndex] || allImages[0] || null;
+      }
+
       const payload = {
         ...form,
         authors: autoresArray,
         images: allImages,
         deletedImageIds,
-        coverImageUrl: coverUrl,
+        coverimageurl: coverUrl, // usar minúscula para backend
         category_id: form.category_id
       };
       console.log('Payload a enviar:', payload);
@@ -271,7 +286,7 @@ function EditBook() {
                 ...img,
                 image_url: img.image_url && !img.image_url.startsWith('http') ? `${API_URL}${img.image_url}` : img.image_url
               })),
-              ...newImages.map(file => ({ type: 'new', image_url: URL.createObjectURL(file), file }))
+              ...Array.isArray(newImages) ? newImages.filter(obj => obj && obj.file && obj.blobUrl).map(obj => ({ type: 'new', image_url: obj.blobUrl, file: obj.file })) : []
               ].map((img, idx) => (
                 <div key={img.image_id || img.image_url || img.file?.name} style={{position:'relative',display:'inline-block'}}>
                   <img src={img.image_url} alt={`Imagen ${idx+1}`} style={{width:80,height:110,objectFit:'cover',border:coverIndex===idx?'2px solid #007bff':'1px solid #ccc',borderRadius:6,cursor:'pointer'}} onClick={() => {
