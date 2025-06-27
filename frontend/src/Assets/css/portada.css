@@ -223,6 +223,7 @@
   margin-top: 0.8rem;
   letter-spacing: -0.01em;
 }
+
 @media (max-width: 700px) {
   .categorias-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -352,6 +353,63 @@
 .hero-animated-title span {
   display: inline-block;
   white-space: pre;
+}
+/* Estilos responsive para el carrusel */
+@media (max-width: 768px) {
+  .carousel-container {
+    padding: 0 0px;
+    max-width: 100vw;
+    gap: 0.5rem;
+    overflow: visible;
+    position: relative;
+  }
+  .carousel-books {
+    gap: 0.3rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .carousel-books .book-card {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .carousel-arrow {
+    display: flex !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 1.4rem;
+  }
+  .carousel-arrow.left {
+    left: -18px;
+  }
+  .carousel-arrow.right {
+    right: -18px;
+  }
+}
+@media (min-width: 769px) {
+  .carousel-books {
+    gap: 1.3rem;
+    justify-content: center;
+  }
+  .carousel-books .book-card {
+    min-width: unset;
+    max-width: unset;
+    transform: none;
+    padding: 0;
+    margin: 0;
+    
+    box-sizing: border-box;
+  }
 }
 @media (max-width: 700px) {
   .hero-animated-title {

@@ -27,11 +27,28 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) => {
   const [startIdx, setStartIdx] = useState(0);
-  const visibleCount = 4;
+  const [visibleCount, setVisibleCount] = useState(4); // cambia dinámicamente
   const total = libros.length;
   const navigate = useNavigate();
-  const handlePrev = () => setStartIdx((prev) => (prev - 1 + total) % total);
-  const handleNext = () => setStartIdx((prev) => (prev + 1) % total);
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setVisibleCount(2); // mostrar 2 en móviles
+      } else {
+        setVisibleCount(4); // mostrar 4 en pantallas grandes
+      }
+    };
+
+    updateVisibleCount();
+    window.addEventListener('resize', updateVisibleCount);
+    return () => window.removeEventListener('resize', updateVisibleCount);
+  }, []);
+
+  const handlePrev = () => setStartIdx((prev) => (prev - visibleCount + total) % total);
+  const handleNext = () => setStartIdx((prev) => (prev + visibleCount) % total);
+
   const visibleBooks = Array.from({ length: visibleCount }, (_, i) => libros[(startIdx + i) % total])
     .filter(b => b && b.book_id);
 
@@ -67,6 +84,7 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
     </section>
   );
 };
+
 
 const opciones = ['Novela', 'Ciencia Ficción', 'Misterio', 'Fantasía', 'Poesía', 'Terror'];
 
