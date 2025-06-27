@@ -91,7 +91,7 @@ const opciones = ['Realistas', 'Ciencia Ficción', 'Misterio', 'Drama', 'Romance
 function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomendaciones }) {
   return (
     <div className="preferencias-usuario">
-      <h3>Selecciona tu género favorito:</h3>
+      <h3>Descubre tus intereses:</h3>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
         {opciones.map(opcion => (
           <button
@@ -135,18 +135,7 @@ function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomenda
   );
 }
 
-function Recomendaciones({ libros, preferencias }) {
-  const librosRecomendados = libros.filter(libro => preferencias.includes(libro.genero));
 
-  return (
-    <div>
-      <h3>Recomendaciones para ti:</h3>
-      {librosRecomendados.map(libro => (
-        <BookCard key={libro.book_id} {...libro} />
-      ))}
-    </div>
-  );
-}
 
 export default function Portada() {
   const { user } = useAuth();
@@ -272,7 +261,7 @@ export default function Portada() {
             >
               <CarruselLibros libros={destacados} titulo="Nuevos ingresos" isAdmin={isAdmin} onDelete={handleDeleteBook} />
             </motion.section>
-
+            
             <PreferenciasUsuario
               generoSeleccionado={generoSeleccionado}
               onSeleccionar={setGeneroSeleccionado}
