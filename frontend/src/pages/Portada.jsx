@@ -86,17 +86,51 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
 };
 
 
-const opciones = ['Novela', 'Ciencia Ficción', 'Misterio', 'Fantasía', 'Poesía', 'Terror'];
+const opciones = ['Realistas', 'Ciencia Ficción', 'Misterio', 'Drama', 'Romance', 'Terror'];
 
-function PreferenciasUsuario({ onSeleccionar }) {
+function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomendaciones }) {
   return (
     <div className="preferencias-usuario">
-      <h3>Selecciona tus géneros favoritos:</h3>
-      {opciones.map(opcion => (
-        <button key={opcion} onClick={() => onSeleccionar(opcion)}>
-          {opcion}
-        </button>
-      ))}
+      <h3>Selecciona tu género favorito:</h3>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+        {opciones.map(opcion => (
+          <button
+            key={opcion}
+            onClick={() => onSeleccionar(opcion)}
+            style={{
+              background: generoSeleccionado === opcion ? '#394B60' : '#CBd9E6',
+              color: generoSeleccionado === opcion ? '#fff' : '#394B60',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '0.7rem 1.5rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            {opcion}
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={onVerRecomendaciones}
+        disabled={!generoSeleccionado}
+        style={{
+          marginTop: '1.2rem',
+          background: '#394B60',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          padding: '0.9rem 2.2rem',
+          fontWeight: 700,
+          fontSize: '1.1rem',
+          cursor: generoSeleccionado ? 'pointer' : 'not-allowed',
+          opacity: generoSeleccionado ? 1 : 0.6,
+          transition: 'all 0.2s',
+        }}
+      >
+        Ver recomendaciones
+      </button>
     </div>
   );
 }
@@ -117,6 +151,8 @@ function Recomendaciones({ libros, preferencias }) {
 export default function Portada() {
   const { user } = useAuth();
   const isAdmin = user && user.role === 'admin';
+  const navigate = useNavigate();
+  const [generoSeleccionado, setGeneroSeleccionado] = useState("");
 
   // Handler para eliminar libro (solo admin)
   const handleDeleteBook = async (bookId) => {
@@ -236,6 +272,16 @@ export default function Portada() {
             >
               <CarruselLibros libros={destacados} titulo="Nuevos ingresos" isAdmin={isAdmin} onDelete={handleDeleteBook} />
             </motion.section>
+
+            <PreferenciasUsuario
+              generoSeleccionado={generoSeleccionado}
+              onSeleccionar={setGeneroSeleccionado}
+              onVerRecomendaciones={() => {
+                if (generoSeleccionado) {
+                  navigate(`/comprar?genero=${encodeURIComponent(generoSeleccionado)}`);
+                }
+              }}
+            />
 
             <Cuestionario onFinalizar={manejarFinalizacionCuestionario} />
             {recomendaciones.length > 0 && <Recomendados libros={recomendaciones} />}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import "../Assets/css/home.css";
@@ -20,6 +19,7 @@ const DEFAULT_BOOK_IMAGE = '/icono2.png';
 const Comprar = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,6 +43,16 @@ const Comprar = () => {
     'es': 'Español',
     'fr': 'Francés',
   };
+
+  // Leer el query param 'genero' al cargar la página
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const genero = params.get('genero');
+    if (genero) {
+      setSelectedGenres([genero]);
+    }
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     fetchBooks();
