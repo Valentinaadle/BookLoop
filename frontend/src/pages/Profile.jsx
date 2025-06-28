@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 import BookCard from '../components/BookCard';
+import { useFavorites } from '../context/FavoritesContext';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -78,7 +79,10 @@ function Profile() {
     apellido: '', 
     email: '', 
     intereses: [],
-    photoUrl: ''
+    photoUrl: '',
+    username: '',
+    bio: '',
+    stats: { publicados: 0, vendidos: 0, rating: 0 }
   });
   const [editMode, setEditMode] = useState(false);
   const [showInteresesModal, setShowInteresesModal] = useState(false);
@@ -96,7 +100,6 @@ function Profile() {
 
   useEffect(() => {
     if (user && user.id) {
-      // Cargar datos del perfil
       fetch(`${API_URL}/api/users/${user.id}`)
         .then(res => res.json())
         .then(data => {
@@ -105,7 +108,10 @@ function Profile() {
             apellido: data.apellido || '',
             email: data.email || '',
             intereses: data.intereses || [],
-            photoUrl: data.photoUrl || ''
+            photoUrl: data.photoUrl || '',
+            username: data.username || '@usuario',
+            bio: data.bio || 'Vendedor/a de libros apasionado/a.',
+            stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
           });
           setLoading(false);
         })
@@ -113,8 +119,6 @@ function Profile() {
           setError('No se pudo cargar el perfil');
           setLoading(false);
         });
-
-      // Cargar libros publicados
       fetch(`${API_URL}/api/books/user/${user.id}`)
         .then(res => res.json())
         .then(data => {
@@ -145,7 +149,9 @@ function Profile() {
           apellido: form.apellido,
           email: form.email,
           photoUrl: form.photoUrl,
-          intereses: form.intereses
+          intereses: form.intereses,
+          username: form.username,
+          bio: form.bio
         })
       });
       if (!res.ok) throw new Error('Error al actualizar el perfil');
@@ -217,6 +223,12 @@ function Profile() {
   const confirmLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleTabClick = (tab) => {
+    if (tab === 'Favoritos') navigate('/favoritos');
+    if (tab === 'Publicar') navigate('/vender-page');
+    // Puedes agregar lógica para otros tabs si lo deseas
   };
 
   if (loading) return <div>Cargando perfil...</div>;
@@ -293,201 +305,235 @@ function Profile() {
   return (
     <>
       <Header />
-      <div className="profile-modern-container">
-        <div className="profile-modern-header">
-          <div className="profile-modern-avatar">
-            {form.photoUrl ? (
-              <img src={form.photoUrl} alt="Foto de perfil" style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}} />
-            ) : (
-              (form.nombre?.[0]) || 'U'
-            )}
-          </div>
-          <h2 className="profile-modern-name">{form.nombre} {form.apellido}</h2>
-          <div className="profile-modern-role">Vendedor/a de libros</div>
-          <div className="profile-modern-actions">
-            <button onClick={() => setEditMode(true)} className="profile-modern-edit-btn" title="Editar perfil">
-              <i className="fas fa-edit"></i>
+      <div className="profile-dashboard-layout">
+        {/* Sidebar */}
+        <aside className="profile-sidebar">
+          <div className="profile-sidebar-card">
+            <div className="profile-sidebar-avatar">
+              {form.photoUrl ? (
+                <img src={form.photoUrl} alt="Foto de perfil" />
+              ) : (
+                <span>{(form.nombre?.[0]) || 'U'}</span>
+              )}
+            </div>
+            <h2 className="profile-sidebar-name">{form.nombre} {form.apellido}</h2>
+            <p className="profile-sidebar-username">{form.username}</p>
+            <p className="profile-sidebar-bio">{form.bio}</p>
+            <button className="profile-sidebar-edit-btn" onClick={() => setEditMode(true)}>
+              <i className="fas fa-edit"></i> Editar perfil
             </button>
-            <button onClick={() => { logout(); navigate('/'); }} className="profile-modern-logout-btn" title="Cerrar sesión">
-              <i className="fas fa-sign-out-alt"></i>
-            </button>
           </div>
-        </div>
-        <div className="profile-modern-tabs">
-          <button className="profile-modern-tab active">Libros Publicados</button>
-          <button className="profile-modern-tab" disabled>Libros Vendidos</button>
-          <button className="profile-modern-tab" disabled>Solicitudes de Compra</button>
-          <button className="profile-modern-tab" disabled>Reseñas</button>
-        </div>
-        {publishedBooks.length === 0 && (
-          <div className="profile-modern-no-books">
-            <p className="profile-modern-no-books-text">Aún no has publicado ningún libro.</p>
-            <Link to="/search" className="profile-modern-add-book-btn">
-              <i className="fas fa-plus"></i> Publicar un libro
-            </Link>
-          </div>
-        )}
-        {publishedBooks.length > 0 && (
-          <div className="profile-books-list-minimal">
-            <Link to="/search" className="profile-book-card-minimal add-new-book">
-              <div className="profile-book-add-icon"><i className="fas fa-plus"></i></div>
-              <div className="profile-book-add-text">Publicar nuevo libro</div>
-            </Link>
-            {publishedBooks.map(book => (
-              <div key={book.book_id} className="profile-book-card-minimal">
-                <div className="profile-book-img-minimal">
-                  <img src={getBookImage(book, API_URL)} alt={book.title} onError={e => { e.target.src = '/icono2.png'; }} />
-                </div>
-                <div className="profile-book-info-minimal">
-                  <div className="profile-book-title-minimal">{book.title || book.titulo || 'Sin título'}</div>
-                  <div className="profile-book-author-minimal">{book.author || book.autor || 'Autor desconocido'}</div>
-                  <div className="profile-book-price-minimal">${parseFloat(book.price || book.precio).toFixed(2)}</div>
-                  <Link to={`/book/${book.book_id}`} className="profile-book-details-btn-minimal">
-                    <i className="fas fa-eye"></i> Ver detalles
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        {editMode && (
-          <div className="modal-overlay">
-            <div className="modal-content edit-profile-modal-minimal">
-              <form onSubmit={handleSave}>
-                <div className="edit-profile-avatar-section">
-                  <label htmlFor="profile-photo-upload" className="edit-profile-avatar-label">
-                    {form.photoUrl ? (
-                      <img src={form.photoUrl} alt="Foto de perfil" className="edit-profile-avatar-img" />
-                    ) : (
-                      <span className="edit-profile-avatar-initial">{(form.nombre?.[0]) || 'U'}</span>
-                    )}
-                    <input
-                      id="profile-photo-upload"
-                      type="file"
-                      accept="image/*"
-                      style={{ display: 'none' }}
-                      onChange={e => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onload = ev => setForm(prev => ({ ...prev, photoUrl: ev.target.result }));
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
-                    <span className="edit-profile-avatar-upload-icon"><i className="fas fa-camera"></i></span>
-                  </label>
-                </div>
-                <div className="form-group-minimal">
-                  <input 
-                    type="text" 
-                    name="nombre" 
-                    value={form.nombre} 
-                    onChange={handleChange} 
-                    required 
-                    className="form-input-minimal"
-                    placeholder="Nombre"
-                  />
-                </div>
-                <div className="form-group-minimal">
-                  <input 
-                    type="text" 
-                    name="apellido" 
-                    value={form.apellido} 
-                    onChange={handleChange} 
-                    required 
-                    className="form-input-minimal"
-                    placeholder="Apellido"
-                  />
-                </div>
-                <div className="form-group-minimal">
-                  <input 
-                    type="email" 
-                    name="email" 
-                    value={form.email} 
-                    onChange={handleChange} 
-                    required 
-                    className="form-input-minimal"
-                    placeholder="Email"
-                  />
-                </div>
-                <div className="form-group-minimal">
-                  <button 
-                    type="button" 
-                    onClick={handleOpenIntereses}
-                    className="select-intereses-button-minimal"
-                  >
-                    <i className="fas fa-tags"></i> Seleccionar intereses
-                  </button>
-                  <div className="edit-profile-intereses-tags">
-                    {form.intereses.map((interes, idx) => (
-                      <span key={idx} className="edit-profile-interes-tag">{interes}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="edit-buttons-minimal">
-                  <button type="submit" className="save-btn-minimal">
-                    <i className="fas fa-save"></i> Guardar
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => setEditMode(false)} 
-                    className="cancel-btn-minimal"
-                  >
-                    <i className="fas fa-times"></i> Cancelar
-                  </button>
-                </div>
-              </form>
+          <div className="profile-sidebar-stats">
+            <div className="profile-sidebar-stat">
+              <span className="profile-sidebar-stat-value">{publishedBooks.length}</span>
+              <span className="profile-sidebar-stat-label">Libros en venta</span>
+            </div>
+            <div className="profile-sidebar-stat">
+              <span className="profile-sidebar-stat-value">{form.stats.vendidos}</span>
+              <span className="profile-sidebar-stat-label">Vendidos</span>
             </div>
           </div>
-        )}
-
-        {showInteresesModal && (
-          <div className="modal-overlay">
-            <div className="modal-content intereses-modal">
-              <h3>Seleccionar Intereses</h3>
-              <div className="intereses-list">
-                {INTERESES_PREDEFINIDOS.map((interes) => (
-                  <div key={interes} className="interes-item">
-                    <label className="interes-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={tempIntereses.includes(interes)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setTempIntereses(prev => [...prev, interes]);
-                          } else {
-                            setTempIntereses(prev => prev.filter(i => i !== interes));
-                          }
-                        }}
-                      />
-                      <span className="checkbox-custom"></span>
-                      <span className="interes-text">{interes}</span>
-                    </label>
-                  </div>
-                ))}
+          <div className="profile-sidebar-bio-card">
+            <h3>Biografía</h3>
+            <p>{form.bio}</p>
+          </div>
+        </aside>
+        {/* Main */}
+        <main className="profile-main">
+          <div className="profile-main-tabs">
+            <button className="profile-main-tab active">Libros Publicados</button>
+            <button className="profile-main-tab">Libros Vendidos</button>
+            <button className="profile-main-tab">Solicitudes</button>
+            <button className="profile-main-tab">Reseñas</button>
+            <button className="profile-main-tab" onClick={() => handleTabClick('Favoritos')}>Favoritos</button>
+          </div>
+          <div className="profile-main-content">
+            {publishedBooks.length === 0 ? (
+              <div className="profile-main-empty-card">
+                <img src="/Assets/book-empty.png" alt="No books" className="profile-main-empty-img" />
+                <h3>Aún no has publicado ningún libro</h3>
+                <p className="profile-main-empty-desc">Es hora de compartir tus tesoros literarios con el mundo. Publica tu primer libro y conéctate con otros amantes de la lectura.</p>
+                <button className="profile-main-add-btn" onClick={() => handleTabClick('Publicar')}><i className="fas fa-plus-circle"></i> Publicar un libro</button>
               </div>
-              <div className="modal-buttons">
+            ) : (
+              <>
+                <h3 className="profile-main-section-title">Libros Recientes</h3>
+                <div className="profile-main-books-grid">
+                  {publishedBooks.map(book => (
+                    <div key={book.book_id} className="profile-main-book-card">
+                      <img src={getBookImage(book, API_URL)} alt={book.title} className="profile-main-book-img" />
+                      <div className="profile-main-book-info">
+                        <h4>{book.title || book.titulo || 'Sin título'}</h4>
+                        <p>{book.author || book.autor || 'Autor desconocido'}</p>
+                        <p className="profile-main-book-price">${parseFloat(book.price || book.precio).toFixed(2)}</p>
+                        <button className="profile-main-book-details"><i className="fas fa-eye"></i> Ver Detalles</button>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="profile-main-book-card add-new-book" onClick={() => handleTabClick('Publicar')} style={{cursor:'pointer'}}>
+                    <div className="profile-main-add-icon"><i className="fas fa-plus-circle"></i></div>
+                    <p className="profile-main-add-text">Publicar nuevo libro</p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </main>
+      </div>
+      {/* Modal de edición de perfil ordenado y claro */}
+      {editMode && (
+        <div className="modal-overlay">
+          <div className="modal-content edit-profile-modal-minimal">
+            <form onSubmit={handleSave}>
+              <div className="edit-profile-avatar-section">
+                <label htmlFor="profile-photo-upload" className="edit-profile-avatar-label">
+                  {form.photoUrl ? (
+                    <img src={form.photoUrl} alt="Foto de perfil" className="edit-profile-avatar-img" />
+                  ) : (
+                    <span className="edit-profile-avatar-initial">{(form.nombre?.[0]) || 'U'}</span>
+                  )}
+                  <input
+                    id="profile-photo-upload"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={e => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = ev => setForm(prev => ({ ...prev, photoUrl: ev.target.result }));
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  <span className="edit-profile-avatar-upload-icon"><i className="fas fa-camera"></i></span>
+                </label>
+              </div>
+              <div className="form-group-minimal">
+                <label htmlFor="nombre">Nombre</label>
+                <input 
+                  id="nombre"
+                  type="text" 
+                  name="nombre" 
+                  value={form.nombre} 
+                  onChange={handleChange} 
+                  required 
+                  className="form-input-minimal"
+                  placeholder="Nombre"
+                />
+              </div>
+              <div className="form-group-minimal">
+                <label htmlFor="apellido">Apellido</label>
+                <input 
+                  id="apellido"
+                  type="text" 
+                  name="apellido" 
+                  value={form.apellido} 
+                  onChange={handleChange} 
+                  required 
+                  className="form-input-minimal"
+                  placeholder="Apellido"
+                />
+              </div>
+              <div className="form-group-minimal">
+                <label htmlFor="email">Email</label>
+                <input 
+                  id="email"
+                  type="email" 
+                  name="email" 
+                  value={form.email} 
+                  onChange={handleChange} 
+                  required 
+                  className="form-input-minimal"
+                  placeholder="Email"
+                />
+              </div>
+              <div className="form-group-minimal">
+                <label htmlFor="bio">Biografía</label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  value={form.bio}
+                  onChange={handleChange}
+                  className="form-input-minimal"
+                  placeholder="Biografía"
+                  rows={3}
+                />
+              </div>
+              <div className="form-group-minimal">
+                <label>Intereses</label>
                 <button 
-                  onClick={handleSaveIntereses} 
-                  className="save-btn-minimal"
+                  type="button" 
+                  onClick={handleOpenIntereses}
+                  className="select-intereses-button-minimal"
                 >
-                  <i className="fas fa-check"></i> Confirmar
+                  <i className="fas fa-tags"></i> Seleccionar intereses
+                </button>
+                <div className="edit-profile-intereses-tags">
+                  {form.intereses.map((interes, idx) => (
+                    <span key={idx} className="edit-profile-interes-tag">{interes}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="edit-buttons-minimal">
+                <button type="submit" className="save-btn-minimal">
+                  <i className="fas fa-save"></i> Guardar
                 </button>
                 <button 
-                  onClick={() => setShowInteresesModal(false)} 
+                  type="button" 
+                  onClick={() => setEditMode(false)} 
                   className="cancel-btn-minimal"
                 >
                   <i className="fas fa-times"></i> Cancelar
                 </button>
               </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Modal de intereses visual y funcional */}
+      {showInteresesModal && (
+        <div className="modal-overlay">
+          <div className="modal-content intereses-modal">
+            <h3>Seleccionar Intereses</h3>
+            <div className="intereses-list">
+              {INTERESES_PREDEFINIDOS.map((interes) => (
+                <div key={interes} className="interes-item">
+                  <label className="interes-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={tempIntereses.includes(interes)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setTempIntereses(prev => [...prev, interes]);
+                        } else {
+                          setTempIntereses(prev => prev.filter(i => i !== interes));
+                        }
+                      }}
+                    />
+                    <span className="checkbox-custom"></span>
+                    <span className="interes-text">{interes}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
+            <div className="modal-buttons">
+              <button 
+                onClick={handleSaveIntereses} 
+                className="save-btn-minimal"
+              >
+                <i className="fas fa-check"></i> Confirmar
+              </button>
+              <button 
+                onClick={() => setShowInteresesModal(false)} 
+                className="cancel-btn-minimal"
+              >
+                <i className="fas fa-times"></i> Cancelar
+              </button>
             </div>
           </div>
-        )}
-        
-        {success && <div className="success-message">{success}</div>}
-        {error && <div className="error-message">{error}</div>}
-      </div>
+        </div>
+      )}
       <Footer />
     </>
   );
