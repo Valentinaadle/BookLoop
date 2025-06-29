@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useFavorites } from '../context/FavoritesContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { FaHeart } from 'react-icons/fa';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import '../Assets/css/BookDetails.css';
@@ -26,6 +28,9 @@ function BookDetails() {
   const [editForm, setEditForm] = useState({ title: '', authors: '', description: '', price: '', stock: '', pagecount: '' });
   const [success, setSuccess] = useState(null);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const [isBookFavorite, setIsBookFavorite] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
 
   const fetchBookDetails = useCallback(async () => {
     try {
@@ -80,6 +85,16 @@ function BookDetails() {
       fetchBookDetails();
     }
   }, [id, fetchBookDetails]);
+
+  useEffect(() => {
+    const checkFavorite = async () => {
+      if (user && book && book.book_id) {
+        const result = await isFavorite(book.book_id);
+        setIsBookFavorite(result);
+      }
+    };
+    checkFavorite();
+  }, [user, book, isFavorite]);
 
   const handleContactSeller = async () => {
     if (!user) {
@@ -204,6 +219,34 @@ function BookDetails() {
     }
   };
 
+  const handleFavoriteClick = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    if (!book || !book.book_id) return;
+    setFavLoading(true);
+    if (isBookFavorite) {
+      console.log('Intentando eliminar de favoritos:', book.book_id);
+      await removeFavorite(book.book_id);
+      setIsBookFavorite(false);
+      console.log('Eliminado de favoritos:', book.book_id);
+    } else {
+      const favObj = {
+        book_id: book.book_id,
+        title: book.title,
+        authors: book.authors,
+        price: book.price,
+        imageUrl: book.imageUrl || book.coverimageurl || book.coverImageUrl || book.imageurl || book.imageUrl
+      };
+      console.log('Intentando agregar a favoritos:', favObj);
+      const resp = await addFavorite(favObj);
+      setIsBookFavorite(true);
+      console.log('Respuesta de addFavorite:', resp);
+    }
+    setFavLoading(false);
+  };
+
   if (loading) {
     return (
       <>
@@ -254,8 +297,20 @@ function BookDetails() {
           </ol>
         </nav>
 
-        <header className="mb-6">
-          <h1 className="text-4xl">{book.title}</h1>
+        <header className="mb-6 book-details-header-row">
+          <div className="book-details-title-row">
+            <h1 className="text-4xl book-details-title">{book.title}</h1>
+            {!isOwner && (
+              <button
+                className={`favorite-btn${isBookFavorite ? ' filled' : ''}`}
+                aria-label={isBookFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+                onClick={handleFavoriteClick}
+                disabled={favLoading}
+              >
+                <FaHeart className={`heart-icon${isBookFavorite ? ' filled' : ''}`} />
+              </button>
+            )}
+          </div>
           {(isAdmin || isOwner) && book && (
             <div style={{ position: 'absolute', top: 10, right: 10, display: 'flex', gap: '8px', zIndex: 10 }}>
               <button

@@ -360,15 +360,15 @@ function Profile() {
                 <h3 className="profile-main-section-title">Libros Recientes</h3>
                 <div className="profile-main-books-grid">
                   {publishedBooks.map(book => (
-                    <div key={book.book_id} className="profile-main-book-card">
-                      <img src={getBookImage(book, API_URL)} alt={book.title} className="profile-main-book-img" />
-                      <div className="profile-main-book-info">
-                        <h4>{book.title || book.titulo || 'Sin título'}</h4>
-                        <p>{book.author || book.autor || 'Autor desconocido'}</p>
-                        <p className="profile-main-book-price">${parseFloat(book.price || book.precio).toFixed(2)}</p>
-                        <button className="profile-main-book-details"><i className="fas fa-eye"></i> Ver Detalles</button>
-                      </div>
-                    </div>
+                    <BookCard
+                      key={book.book_id}
+                      book_id={book.book_id}
+                      titulo={book.title || book.titulo || 'Sin título'}
+                      autor={book.author || book.autor || 'Autor desconocido'}
+                      precio={book.price || book.precio}
+                      img={getBookImage(book, API_URL)}
+                      showVerDetalles={true}
+                    />
                   ))}
                   <div className="profile-main-book-card add-new-book" onClick={() => handleTabClick('Publicar')} style={{cursor:'pointer'}}>
                     <div className="profile-main-add-icon"><i className="fas fa-plus-circle"></i></div>

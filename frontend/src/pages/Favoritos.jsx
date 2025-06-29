@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ export default function Favoritos() {
   const { favorites } = useFavorites();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [activeTab] = useState('libros');
 
   // Redirigir si no hay usuario autenticado
   React.useEffect(() => {
@@ -26,31 +27,43 @@ export default function Favoritos() {
   return (
     <>
       <Header />
-      <main className="favoritos-container">
-        <h1>Mis Libros Favoritos</h1>
-        {favorites.length === 0 ? (
-          <div className="no-favorites">
-            <p>No tienes libros favoritos aún.</p>
-            <button onClick={() => navigate('/comprar')} className="explore-button">
-              Explorar libros
-            </button>
+      <div className="favoritos-bg">
+        <main className="favoritos-container">
+          <div className="favoritos-header">
+            <h1 className="favoritos-title">Favoritos</h1>
+            <div className="favoritos-header-actions">
+              <button className={'favorites-tab active'}>Libros</button>
+              {favorites.length > 0 && (
+                <button className="agregar-favorito-btn" onClick={()=>navigate('/comprar')}>
+                  Agregar más favoritos
+                </button>
+              )}
+            </div>
           </div>
-        ) : (
-          <div className="favorites-grid">
-            {favorites.map((book) => (
-              <BookCard
-                key={book.book_id}
-                book_id={book.book_id}
-                titulo={book.title || book.titulo}
-                autor={book.autor}
-                precio={book.price || book.precio}
-                img={book.img}
-                favorito={true}
-              />
-            ))}
-          </div>
-        )}
-      </main>
+          {favorites.length === 0 ? (
+            <div className="favoritos-empty">
+              <div className="favoritos-empty-text">No tienes libros favoritos aún.</div>
+              <button className="agregar-favorito-btn" onClick={()=>navigate('/comprar')}>
+                Agregar libro favorito
+              </button>
+            </div>
+          ) : (
+            <div className="favorites-grid">
+              {favorites.map((book) => (
+                <BookCard
+                  key={book.book_id}
+                  book_id={book.book_id}
+                  titulo={book.title || book.titulo}
+                  autor={book.autor}
+                  precio={book.price || book.precio}
+                  img={book.img}
+                  favorito={true}
+                />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
       <Footer />
     </>
   );

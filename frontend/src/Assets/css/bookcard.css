@@ -103,38 +103,38 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.favorite-btn {
+.book-card .favorite-btn {
   position: absolute;
   top: 5px;
   right: 5px;
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  background: white !important;
+  border: 1px solid #eee !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 2;
   padding: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.2s ease;
 }
 
-.favorite-btn:hover {
-    transform: scale(1.1);
-    background-color: #f8f8f8;
+.book-card .favorite-btn:hover {
+  transform: scale(1.1);
+  background-color: #f8f8f8 !important;
 }
 
-.heart-icon {
-  width: 20px;
-  height: 20px;
-  color: #555;
+.book-card .heart-icon {
+  width: 20px !important;
+  height: 20px !important;
+  color: #555 !important;
 }
 
-.heart-icon.filled {
-  color: #e53935;
+.book-card .heart-icon.filled {
+  color: #e53935 !important;
 }
 
 .book-info {
