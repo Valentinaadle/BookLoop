@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 // Obtener todos los usuarios
 async function getAllUsers() {
-  const { data, error } = await supabase.from('users').select('*');
+  const { data, error } = await supabase.from('users').select('id, nombre, apellido, username, email, role');
   if (error) throw error;
   return data;
 }
@@ -20,6 +20,8 @@ async function getUserByEmail(email) {
   const { data, error } = await supabase.from('users').select('*').eq('email', email);
   if (error) throw error;
   if (!data || data.length === 0) return null;
+  // Si hay más de un usuario con ese email, devuelve null (no debería pasar, pero previene errores)
+  if (Array.isArray(data) && data.length > 1) return null;
   return Array.isArray(data) ? data[0] : data;
 }
 
@@ -27,13 +29,27 @@ async function getUserByEmail(email) {
 async function createUser(user) {
   const hashedPassword = await bcrypt.hash(user.password, 10);
   const { data, error } = await supabase.from('users').insert([{ ...user, password: hashedPassword }]).select();
-  if (error) throw error;
+  if (error) {
+    // Si el error es de clave duplicada, lanza un error controlado
+    if (error.code === '23505' || (error.message && error.message.includes('duplicate key'))) {
+      throw new Error('El email ya está registrado');
+    }
+    throw error;
+  }
   return Array.isArray(data) ? data[0] : data;
 }
 
 // Actualizar un usuario (hashea si cambia la contraseña)
 async function updateUser(id, updates) {
+  console.log('[DEBUG] updateUser - id:', id, 'updates:', updates);
   let updatesToSend = { ...updates };
+  // Eliminar campos que no existen en la base de datos
+  delete updatesToSend.intereses;
+  // Si no hay campos para actualizar, retornar null y evitar el update vacío
+  if (Object.keys(updatesToSend).length === 0) {
+    console.log('[DEBUG] updateUser - No hay campos para actualizar, no se realiza update.');
+    return null;
+  }
   if (updates.password) {
     updatesToSend.password = await bcrypt.hash(updates.password, 10);
   }

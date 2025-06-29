@@ -44,7 +44,8 @@ const getBooks = async (req, res) => {
     // JOIN: obtener libros con nombre del vendedor y categoría
     const { data: books, error } = await require('../config/db')
       .from('books')
-      .select('*, seller:seller_id(id, nombre, apellido, username, email), category:category_id(category_id, category_name)');
+      .select('*, seller:seller_id(id, nombre, apellido, username, email), category:category_id(category_id, category_name)')
+      .neq('status', 'vendido');
     if (error) throw error;
     // Para cada libro, buscar imágenes y armar coverimageurl e images
     const booksWithImages = await Promise.all(books.map(async (book) => {
@@ -248,7 +249,8 @@ const updateBook = async (req, res) => {
       category_id,
       images, // array of image URLs (remaining/new)
       deletedImageIds, // array of image IDs to delete
-      coverimageurl // optional: explicit cover
+      coverimageurl, // optional: explicit cover
+      status // <-- Permite actualizar el estado
     } = req.body;
     // Filter out invalid/null/undefined/empty image URLs
     if (Array.isArray(images)) {
@@ -258,9 +260,7 @@ const updateBook = async (req, res) => {
     if (!book) {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
-    if (!title || !authors) {
-      return res.status(400).json({ message: 'El título y los autores son requeridos' });
-    }
+
     // Normalize authors
     if (typeof authors === 'string') {
       try {
@@ -343,24 +343,35 @@ const updateBook = async (req, res) => {
 
     // Actualizar el libro
     const updatedat = new Date();
-    await Book.updateBook(book.book_id, {
-      title,
-      authors,
-      description,
-      price,
-      condition,
-      language,
-      pagecount: pagecount ? parseInt(pagecount, 10) : null,
-      publication_date,
-      publisher,
-      category_id: category_id ? parseInt(category_id, 10) : book.category_id,
-      quantity: req.body.quantity ? parseInt(req.body.quantity, 10) : book.quantity,
-      seller_id: req.body.seller_id ? parseInt(req.body.seller_id, 10) : book.seller_id,
-      images_id: req.body.images_id ? parseInt(req.body.images_id, 10) : book.images_id,
-      imageurl: finalCoverUrl || book.imageurl,
-      coverimageurl: finalCoverUrl,
-      updatedat
-    });
+    // Construir objeto de actualización solo con campos definidos
+    const updates = {};
+    if (title !== undefined) updates.title = title;
+    if (authors !== undefined) updates.authors = authors;
+    if (description !== undefined) updates.description = description;
+    if (price !== undefined) updates.price = price;
+    if (condition !== undefined) updates.condition = condition;
+    if (language !== undefined) updates.language = language;
+    if (pagecount !== undefined) updates.pagecount = pagecount ? parseInt(pagecount, 10) : null;
+    if (publication_date !== undefined) updates.publication_date = publication_date;
+    if (publisher !== undefined) updates.publisher = publisher;
+    if (category_id !== undefined) updates.category_id = category_id ? parseInt(category_id, 10) : book.category_id;
+    if (req.body.quantity !== undefined) updates.quantity = req.body.quantity ? parseInt(req.body.quantity, 10) : book.quantity;
+    if (req.body.seller_id !== undefined) updates.seller_id = req.body.seller_id ? parseInt(req.body.seller_id, 10) : book.seller_id;
+    if (req.body.images_id !== undefined) updates.images_id = req.body.images_id ? parseInt(req.body.images_id, 10) : book.images_id;
+    if (finalCoverUrl !== undefined) updates.imageurl = finalCoverUrl || book.imageurl;
+    if (finalCoverUrl !== undefined) updates.coverimageurl = finalCoverUrl;
+    if (updatedat !== undefined) updates.updatedat = updatedat;
+    if (status !== undefined) updates.status = status;
+
+    // Log para depuración
+    console.log('Actualizando libro con:', updates);
+    let updatedBook;
+    try {
+      updatedBook = await Book.updateBook(book.book_id, updates);
+    } catch (updateErr) {
+      console.error('Error en modelo/updateBook:', updateErr);
+      return res.status(400).json({ message: 'Error en la actualización', error: updateErr.message });
+    }
 
     // Devolver el libro actualizado y todas las imágenes
     const updatedImages = await Image.getImagesByBook(book.book_id);
