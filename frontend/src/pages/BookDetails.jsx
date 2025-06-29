@@ -305,18 +305,42 @@ function BookDetails() {
         </nav>
 
         <header className="mb-6 book-details-header-row">
-          <div className="book-details-title-row">
+          <div className="book-details-title-row" style={{display:'flex', alignItems:'center', justifyContent:'space-between', gap:12}}>
             <h1 className="text-4xl book-details-title">{book.title}</h1>
-            {!isOwner && (
-              <button
-                className={`favorite-btn${isBookFavorite ? ' filled' : ''}`}
-                aria-label={isBookFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-                onClick={handleFavoriteClick}
-                disabled={favLoading}
-              >
-                <FaHeart className={`heart-icon${isBookFavorite ? ' filled' : ''}`} />
-              </button>
-            )}
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              {!isOwner && (
+                <button
+                  className={`favorite-btn${isBookFavorite ? ' filled' : ''}`}
+                  aria-label={isBookFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+                  onClick={handleFavoriteClick}
+                  disabled={favLoading}
+                >
+                  <FaHeart className={`heart-icon${isBookFavorite ? ' filled' : ''}`} />
+                </button>
+              )}
+              {isOwner && (
+                <>
+                  <button
+                    onClick={() => navigate(`/edit-book/${book.book_id || book.id}`)}
+                    className="text-white font-semibold py-1 px-4 rounded-md shadow text-sm mr-2"
+                    style={{background:'#2c3e50',marginRight:8,border:'none'}}
+                    onMouseOver={e => e.currentTarget.style.background='#1a232b'}
+                    onMouseOut={e => e.currentTarget.style.background='#2c3e50'}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="text-white font-semibold py-1 px-4 rounded-md shadow text-sm"
+                    style={{background:'#2c3e50',border:'none'}}
+                    onMouseOver={e => e.currentTarget.style.background='#1a232b'}
+                    onMouseOut={e => e.currentTarget.style.background='#2c3e50'}
+                  >
+                    Borrar
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
@@ -517,6 +541,9 @@ function BookDetails() {
       </div>
       <Footer />
 
+
+
+      {/* Modal de contacto vendedor */}
       {showConfirmModal && !isOwner && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-4 max-w-sm w-full">
