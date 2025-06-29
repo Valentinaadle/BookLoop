@@ -20,7 +20,10 @@ const BookCard = ({
   showVerDetalles = false,
   book_id,
   isAdmin = false,
-  onDelete
+  onDelete,
+  status,
+  onMarkAsSold,
+  markAsSoldLoading
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user } = useAuth();
@@ -188,7 +191,9 @@ const BookCard = ({
         </div>
         <div className="book-info">
           <h3 className="book-title">{titulo}</h3>
-          <p className="book-author">de {autor}</p>
+          {autor && autor !== 'Autor desconocido' ? (
+  <p className="book-author">de {autor}</p>
+) : null}
           <div className="book-price-container">
             <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
           </div>
@@ -208,8 +213,7 @@ const BookCard = ({
           {showVerDetalles && (
             <div className="book-actions">
               <button
-                className="buy-button"
-                style={{ background: '#2563eb' }}
+                className="buy-button ver-detalles-button"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/book/${book_id}`);
@@ -217,6 +221,7 @@ const BookCard = ({
               >
                 <FaEye style={{ marginRight: '8px' }} />Ver Detalles
               </button>
+              
             </div>
           )}
         </div>

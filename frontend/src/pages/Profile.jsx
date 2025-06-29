@@ -22,6 +22,64 @@ const INTERESES_PREDEFINIDOS = [
 const BOOKS_PER_PAGE = 9; // 3x3 grid
 
 function Profile() {
+  // ... existing state
+  const [markAsSoldLoadingId, setMarkAsSoldLoadingId] = useState(null);
+
+  const handleMarkAsSold = async (bookId) => {
+    setMarkAsSoldLoadingId(bookId);
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/books/${bookId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'vendido' })
+      });
+      const updatedBook = await res.json();
+      console.log('[DEBUG] PATCH status:', res.status, 'body:', updatedBook);
+      if (!res.ok) throw new Error('Error al actualizar el estado');
+      setPublishedBooks(prev => prev.map(book =>
+        book.book_id === bookId ? { ...book, ...updatedBook } : book
+      ));
+      setSuccess('Libro marcado como vendido');
+    } catch (err) {
+      setError('No se pudo cambiar el estado del libro');
+    } finally {
+      setMarkAsSoldLoadingId(null);
+    }
+  }
+  const [activeTab, setActiveTab] = useState('publicados'); // 'publicados', 'vendidos', 'solicitudes'
+const [solicitudes, setSolicitudes] = useState([]);
+const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
+  // --- hooks de estado principales ---
+  const [form, setForm] = useState({
+    nombre: '',
+    apellido: '',
+    email: '',
+    intereses: [],
+    photoUrl: '',
+    username: '',
+    bio: '',
+    stats: { publicados: 0, vendidos: 0, rating: 0 }
+  });
+  const [editMode, setEditMode] = useState(false);
+  const [showInteresesModal, setShowInteresesModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [tempIntereses, setTempIntereses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState(null);
+  const [publishedBooks, setPublishedBooks] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showBooksModal, setShowBooksModal] = useState(false);
+  const DEFAULT_BOOK_IMAGE = '/icono2.png';
+
+
+
+
+
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -52,7 +110,11 @@ function Profile() {
     setUserLoading(false);
   };
 
-  
+  const filteredBooks = publishedBooks.filter(book => {
+    if (activeTab === 'publicados') return (book.status === 'activo' || !book.status);
+    if (activeTab === 'vendidos') return book.status === 'vendido';
+    return true;
+  });
 
   const handleDeleteUser = async (id) => {
     setUserError(null);
@@ -74,29 +136,36 @@ function Profile() {
     setDeletingUserId(null);
   };
 
-  const [form, setForm] = useState({ 
-    nombre: '', 
-    apellido: '', 
-    email: '', 
-    intereses: [],
-    photoUrl: '',
-    username: '',
-    bio: '',
-    stats: { publicados: 0, vendidos: 0, rating: 0 }
-  });
-  const [editMode, setEditMode] = useState(false);
-  const [showInteresesModal, setShowInteresesModal] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [tempIntereses, setTempIntereses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(null);
-  const [error, setError] = useState(null);
-  const [publishedBooks, setPublishedBooks] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [bookToDelete, setBookToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showBooksModal, setShowBooksModal] = useState(false);
-  const DEFAULT_BOOK_IMAGE = '/icono2.png';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  useEffect(() => {
+    if (user && user.id && activeTab === 'solicitudes') {
+      setLoadingSolicitudes(true);
+      fetch(`${API_URL}/api/solicitudes/${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          setSolicitudes(Array.isArray(data) ? data : []);
+          setLoadingSolicitudes(false);
+        })
+        .catch(() => {
+          setSolicitudes([]);
+          setLoadingSolicitudes(false);
+        });
+    }
+  }, [user, activeTab]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -136,35 +205,62 @@ function Profile() {
   };
 
   const handleSave = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccess(null);
-    setError(null);
-    try {
-      const res = await fetch(`${API_URL}/api/users/${user.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: form.nombre,
-          apellido: form.apellido,
-          email: form.email,
-          photoUrl: form.photoUrl,
-          intereses: form.intereses,
-          username: form.username,
-          bio: form.bio
-        })
-      });
-      if (!res.ok) throw new Error('Error al actualizar el perfil');
-      setSuccess('Perfil actualizado correctamente');
-      setEditMode(false);
-    } catch (err) {
-      setError('Error al actualizar el perfil');
-    } finally {
-      setLoading(false);
-    }
-  };
+  e.preventDefault();
+  console.log("[DEBUG] handleSave ejecutado", form, user);
+  setLoading(true);
+  setSuccess(null);
+  setError(null);
 
-  
+  // Construir objeto updates solo con campos que cambiaron
+  const updates = {};
+  if (form.nombre !== user.nombre) updates.nombre = form.nombre;
+  if (form.apellido !== user.apellido) updates.apellido = form.apellido;
+  if (form.email !== user.email) updates.email = form.email;
+  if (form.username !== user.username) updates.username = form.username;
+  if (form.bio !== (user.bio || 'Vendedor/a de libros apasionado/a.')) updates.bio = form.bio;
+  // Enviar photoUrl siempre que sea base64 y no esté vacío
+  if (form.photoUrl && form.photoUrl.startsWith('data:image')) {
+    updates.photoUrl = form.photoUrl;
+  }
+  // No enviar intereses porque no existe en la base
+
+  // Si no hay cambios, mostrar mensaje y no hacer fetch
+  if (Object.keys(updates).length === 0) {
+    setError('No hay cambios para guardar.');
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    if (!res.ok) throw new Error('Error al actualizar el perfil');
+    setSuccess('Perfil actualizado correctamente');
+    setEditMode(false);
+    // Recargar datos del usuario tras guardar para reflejar bio y otros cambios
+    fetch(`${API_URL}/api/users/${user.id}`)
+      .then(res => res.json())
+      .then(data => {
+        setForm({
+          nombre: data.nombre || '',
+          apellido: data.apellido || '',
+          email: data.email || '',
+          intereses: [], // No existe en la base, pero lo dejamos vacío para el frontend
+          photoUrl: data.photoUrl || '',
+          username: data.username || '@usuario',
+          bio: data.bio || 'Vendedor/a de libros apasionado/a.',
+          stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
+        });
+      });
+  } catch (err) {
+    setError('Error al actualizar el perfil');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleOpenIntereses = () => {
     setTempIntereses([...form.intereses]);
@@ -226,9 +322,9 @@ function Profile() {
   };
 
   const handleTabClick = (tab) => {
-    if (tab === 'Favoritos') navigate('/favoritos');
-    if (tab === 'Publicar') navigate('/vender-page');
-    // Puedes agregar lógica para otros tabs si lo deseas
+    if (tab === 'Favoritos') return navigate('/favoritos');
+    if (tab === 'Publicar') return navigate('/vender-page');
+    setActiveTab(tab);
   };
 
   if (loading) return <div>Cargando perfil...</div>;
@@ -237,66 +333,72 @@ function Profile() {
     return (
       <>
         <Header />
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '60vh', paddingTop: '40px' }}>
-          <div style={{ background: '#fff', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', padding: '32px', minWidth: '700px', maxWidth: '95vw' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '24px', color: '#394B60', fontSize: '2.2rem', fontWeight: 700 }}>Gestión de usuarios</h2>
-            {userError && <div className="error-message">{userError}</div>}
-            {userLoading ? (
-              <div className="loading">Cargando usuarios...</div>
-            ) : (
-              <>
-                <table className="users-table" style={{ width: '100%', borderCollapse: 'collapse', margin: '0 auto' }}>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nombre</th>
-                      <th>Apellido</th>
-                      <th>Email</th>
-                      <th>Rol</th>
-                      <th className="actions-column">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allUsers.filter(u => u.role === 'user').map(u => (
-                      <tr key={u.user_id || u.id}>
-                        <td>{u.user_id || u.id}</td>
-                        <td>{u.nombre || u.first_name || '-'}</td>
-                        <td>{u.apellido || u.last_name || '-'}</td>
-                        <td>{u.email}</td>
-                        <td>{u.role || 'usuario'}</td>
-                        <td className="actions-column">
-                          <div className="user-action-buttons">
-                            <button
-                               onClick={() => {
-                                 setDeletingUserId(u.user_id || u.id);
-                                 setShowDeleteUserModal(true);
-                               }}
-                               className="delete-button"
-                               disabled={deletingUserId === (u.user_id || u.id)}
-                             >
-                              Desactivar
-                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {showDeleteUserModal && (
-                  <div className="modal-overlay" style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                    <div className="modal-content" style={{background:'#fff',padding:32,borderRadius:8,minWidth:320,boxShadow:'0 2px 12px rgba(0,0,0,0.15)'}}>
-                      <h3 style={{marginBottom:24}}>¿Estás seguro que quieres desactivar este usuario?</h3>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: 24 }}>
-                        <button onClick={handleCancelDeleteUser} className="cancel-button" style={{background:'#eee',border:'none',padding:'8px 18px',borderRadius:4,cursor:'pointer'}}>Cancelar</button>
-                        <button onClick={() => handleDeleteUser(deletingUserId)} className="delete-button" style={{background:'#d32f2f',color:'#fff',border:'none',padding:'8px 18px',borderRadius:4,cursor:'pointer'}} autoFocus>Desactivar</button>
-                      </div>
-                    </div>
+        <div className="users-table-responsive">
+  <div className="users-table-card">
+    <h2 className="users-table-title">Gestión de usuarios</h2>
+    {userError && <div className="error-message">{userError}</div>}
+    {userLoading ? (
+      <div className="loading">Cargando usuarios...</div>
+    ) : (
+      <>
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th className="actions-column">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allUsers.filter(u => u.role === 'user').map(u => (
+              <tr key={u.user_id || u.id}>
+                <td>{u.user_id || u.id}</td>
+                <td>{u.nombre || u.first_name || '-'}</td>
+                <td>{u.apellido || u.last_name || '-'}</td>
+                <td>
+                  <Link to={`/usuario/${u.user_id || u.id}`} style={{color:'#394B60', textDecoration:'underline', cursor:'pointer'}}>
+                    {u.username}
+                  </Link>
+                </td>
+                <td>{u.email}</td>
+                <td>{u.role || 'usuario'}</td>
+                <td className="actions-column">
+                  <div className="user-action-buttons">
+                    <button
+                      onClick={() => {
+                        setDeletingUserId(u.user_id || u.id);
+                        setShowDeleteUserModal(true);
+                      }}
+                      className="delete-button"
+                      disabled={deletingUserId === (u.user_id || u.id)}
+                    >
+                      Desactivar
+                    </button>
                   </div>
-                )}
-              </>
-            )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {showDeleteUserModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>¿Estás seguro que quieres desactivar este usuario?</h3>
+              <div className="modal-actions">
+                <button onClick={handleCancelDeleteUser} className="cancel-button">Cancelar</button>
+                <button onClick={() => handleDeleteUser(deletingUserId)} className="delete-button" autoFocus>Desactivar</button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+      </>
+    )}
+  </div>
+</div>
         <Footer />
       </>
     );
@@ -325,11 +427,11 @@ function Profile() {
           </div>
           <div className="profile-sidebar-stats">
             <div className="profile-sidebar-stat">
-              <span className="profile-sidebar-stat-value">{publishedBooks.length}</span>
+              <span className="profile-sidebar-stat-value">{publishedBooks.filter(book => book.status === 'activo' || !book.status).length}</span>
               <span className="profile-sidebar-stat-label">Libros en venta</span>
             </div>
             <div className="profile-sidebar-stat">
-              <span className="profile-sidebar-stat-value">{form.stats.vendidos}</span>
+              <span className="profile-sidebar-stat-value">{publishedBooks.filter(book => book.status === 'vendido').length}</span>
               <span className="profile-sidebar-stat-label">Vendidos</span>
             </div>
           </div>
@@ -340,200 +442,264 @@ function Profile() {
         </aside>
         {/* Main */}
         <main className="profile-main">
+          {/* Tabs for book status */}
           <div className="profile-main-tabs">
-            <button className="profile-main-tab active">Libros Publicados</button>
-            <button className="profile-main-tab">Libros Vendidos</button>
-            <button className="profile-main-tab">Solicitudes</button>
+            <button
+              className={`profile-main-tab${activeTab === 'publicados' ? ' active' : ''}`}
+              onClick={() => setActiveTab('publicados')}
+            >
+              Libros Publicados
+            </button>
+            <button
+              className={`profile-main-tab${activeTab === 'vendidos' ? ' active' : ''}`}
+              onClick={() => handleTabClick('vendidos')}
+            >
+              Libros Vendidos
+            </button>
+            <button
+              className={`profile-main-tab${activeTab === 'solicitudes' ? ' active' : ''}`}
+              onClick={() => handleTabClick('solicitudes')}
+            >
+              Solicitudes
+            </button>
             <button className="profile-main-tab">Reseñas</button>
             <button className="profile-main-tab" onClick={() => handleTabClick('Favoritos')}>Favoritos</button>
           </div>
           <div className="profile-main-content">
-            {publishedBooks.length === 0 ? (
+            {activeTab === 'solicitudes' ? (
+              loadingSolicitudes ? (
+                <div className="profile-main-empty-card">
+                  <span>Cargando solicitudes...</span>
+                </div>
+              ) : solicitudes.length === 0 ? (
+                <div className="profile-main-empty-card">
+                  <img src="/Assets/book-empty.png" alt="No solicitudes" className="profile-main-empty-img" />
+                  <h3>No tienes solicitudes aún</h3>
+                  <p className="profile-main-empty-desc">Aquí aparecerán los libros que te solicitaron otros usuarios.</p>
+                </div>
+              ) : (
+                <div className="profile-main-books-grid">
+                  {solicitudes.map((sol) => (
+                    <div className="profile-main-book-card" key={sol.id}>
+                      <BookCard
+                        book_id={sol.book_id}
+                        titulo={sol.books?.title || 'Sin título'}
+                        autor={sol.books?.author || 'Autor desconocido'}
+                        precio={sol.books?.price}
+                        img={getBookImage(sol.books, API_URL)}
+                        showVerDetalles={true}
+                        status={sol.books?.status}
+                      />
+                      <div className="solicitud-info">
+                        <span style={{fontSize:'0.95em',color:'#394B60'}}>Solicitado por <b>{
+  sol.users?.nombre && sol.users?.apellido
+    ? sol.users.nombre + ' ' + sol.users.apellido
+    : sol.users?.nombre
+      ? sol.users.nombre
+      : sol.users?.username
+        ? sol.users.username
+        : 'Usuario'
+}</b></span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
+            ) : filteredBooks.length === 0 ? (
               <div className="profile-main-empty-card">
                 <img src="/Assets/book-empty.png" alt="No books" className="profile-main-empty-img" />
-                <h3>Aún no has publicado ningún libro</h3>
-                <p className="profile-main-empty-desc">Es hora de compartir tus tesoros literarios con el mundo. Publica tu primer libro y conéctate con otros amantes de la lectura.</p>
-                <button className="profile-main-add-btn" onClick={() => handleTabClick('Publicar')}><i className="fas fa-plus-circle"></i> Publicar un libro</button>
+                <h3>{activeTab === 'publicados' ? 'Aún no has publicado ningún libro' : 'Aún no has vendido ningún libro'}</h3>
+                <p className="profile-main-empty-desc">{activeTab === 'publicados' ? 'Es hora de compartir tus tesoros literarios con el mundo. Publica tu primer libro y conéctate con otros amantes de la lectura.' : 'Cuando vendas un libro, aparecerá aquí.'}</p>
+                {activeTab === 'publicados' && (
+                  <button className="profile-main-add-btn" onClick={() => handleTabClick('Publicar')}><i className="fas fa-plus-circle"></i> Publicar un libro</button>
+                )}
               </div>
             ) : (
               <>
-                <h3 className="profile-main-section-title">Libros Recientes</h3>
+                <h3 className="profile-main-section-title">{activeTab === 'publicados' ? 'Libros Activos' : 'Libros Vendidos'}</h3>
                 <div className="profile-main-books-grid">
-                  {publishedBooks.map(book => (
+                  {filteredBooks.map(book => (
                     <BookCard
                       key={book.book_id}
-                      book_id={book.book_id}
-                      titulo={book.title || book.titulo || 'Sin título'}
-                      autor={book.author || book.autor || 'Autor desconocido'}
-                      precio={book.price || book.precio}
                       img={getBookImage(book, API_URL)}
+                      titulo={book.titulo || book.title || 'Sin título'}
+                      autor={book.autor || book.author || (book.authors ? book.authors[0] : '') || ''}
+                      precio={book.precio || book.price || ''}
+                      book_id={book.book_id}
+                      status={book.status}
                       showVerDetalles={true}
+                      onMarkAsSold={book.status === 'activo' ? () => handleMarkAsSold(book.book_id) : undefined}
+                      markAsSoldLoading={markAsSoldLoadingId === book.book_id}
                     />
                   ))}
-                  <div className="profile-main-book-card add-new-book" onClick={() => handleTabClick('Publicar')} style={{cursor:'pointer'}}>
-                    <div className="profile-main-add-icon"><i className="fas fa-plus-circle"></i></div>
-                    <p className="profile-main-add-text">Publicar nuevo libro</p>
-                  </div>
+                  {activeTab === 'publicados' && (
+                    <div className="profile-main-book-card add-new-book" onClick={() => handleTabClick('Publicar')} style={{cursor:'pointer'}}>
+                      <div className="profile-main-add-icon"><i className="fas fa-plus-circle"></i></div>
+                      <p className="profile-main-add-text">Publicar nuevo libro</p>
+                    </div>
+                  )}
                 </div>
               </>
             )}
           </div>
         </main>
       </div>
-      {/* Modal de edición de perfil ordenado y claro */}
-      {editMode && (
-        <div className="modal-overlay">
-          <div className="modal-content edit-profile-modal-minimal">
-            <form onSubmit={handleSave}>
-              <div className="edit-profile-avatar-section">
-                <label htmlFor="profile-photo-upload" className="edit-profile-avatar-label">
-                  {form.photoUrl ? (
-                    <img src={form.photoUrl} alt="Foto de perfil" className="edit-profile-avatar-img" />
-                  ) : (
-                    <span className="edit-profile-avatar-initial">{(form.nombre?.[0]) || 'U'}</span>
-                  )}
-                  <input
-                    id="profile-photo-upload"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={e => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = ev => setForm(prev => ({ ...prev, photoUrl: ev.target.result }));
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  <span className="edit-profile-avatar-upload-icon"><i className="fas fa-camera"></i></span>
-                </label>
-              </div>
-              <div className="form-group-minimal">
-                <label htmlFor="nombre">Nombre</label>
-                <input 
-                  id="nombre"
-                  type="text" 
-                  name="nombre" 
-                  value={form.nombre} 
-                  onChange={handleChange} 
-                  required 
-                  className="form-input-minimal"
-                  placeholder="Nombre"
-                />
-              </div>
-              <div className="form-group-minimal">
-                <label htmlFor="apellido">Apellido</label>
-                <input 
-                  id="apellido"
-                  type="text" 
-                  name="apellido" 
-                  value={form.apellido} 
-                  onChange={handleChange} 
-                  required 
-                  className="form-input-minimal"
-                  placeholder="Apellido"
-                />
-              </div>
-              <div className="form-group-minimal">
-                <label htmlFor="email">Email</label>
-                <input 
-                  id="email"
-                  type="email" 
-                  name="email" 
-                  value={form.email} 
-                  onChange={handleChange} 
-                  required 
-                  className="form-input-minimal"
-                  placeholder="Email"
-                />
-              </div>
-              <div className="form-group-minimal">
-                <label htmlFor="bio">Biografía</label>
-                <textarea
-                  id="bio"
-                  name="bio"
-                  value={form.bio}
-                  onChange={handleChange}
-                  className="form-input-minimal"
-                  placeholder="Biografía"
-                  rows={3}
-                />
-              </div>
-              <div className="form-group-minimal">
-                <label>Intereses</label>
-                <button 
-                  type="button" 
-                  onClick={handleOpenIntereses}
-                  className="select-intereses-button-minimal"
-                >
-                  <i className="fas fa-tags"></i> Seleccionar intereses
-                </button>
-                <div className="edit-profile-intereses-tags">
-                  {form.intereses.map((interes, idx) => (
-                    <span key={idx} className="edit-profile-interes-tag">{interes}</span>
-                  ))}
+      {/* Modals condicionales envueltos en un fragmento para evitar error de JSX adyacente */}
+      <>
+        {editMode && (
+          <div className="modal-overlay">
+            <div className="modal-content edit-profile-modal-minimal">
+              <form onSubmit={handleSave}>
+                <div className="edit-profile-avatar-section">
+                  <label htmlFor="profile-photo-upload" className="edit-profile-avatar-label">
+                    {form.photoUrl ? (
+                      <img src={form.photoUrl} alt="Foto de perfil" className="edit-profile-avatar-img" />
+                    ) : (
+                      <span className="edit-profile-avatar-initial">{(form.nombre?.[0]) || 'U'}</span>
+                    )}
+                    <input
+                      id="profile-photo-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={e => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = ev => setForm(prev => ({ ...prev, photoUrl: ev.target.result }));
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                    <span className="edit-profile-avatar-upload-icon"><i className="fas fa-camera"></i></span>
+                  </label>
                 </div>
+                <div className="form-group-minimal">
+                  <label htmlFor="nombre">Nombre</label>
+                  <input 
+                    id="nombre"
+                    type="text" 
+                    name="nombre" 
+                    value={form.nombre} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input-minimal"
+                    placeholder="Nombre"
+                  />
+                </div>
+                <div className="form-group-minimal">
+                  <label htmlFor="apellido">Apellido</label>
+                  <input 
+                    id="apellido"
+                    type="text" 
+                    name="apellido" 
+                    value={form.apellido} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input-minimal"
+                    placeholder="Apellido"
+                  />
+                </div>
+                <div className="form-group-minimal">
+                  <label htmlFor="email">Email</label>
+                  <input 
+                    id="email"
+                    type="email" 
+                    name="email" 
+                    value={form.email} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input-minimal"
+                    placeholder="Email"
+                  />
+                </div>
+                <div className="form-group-minimal">
+                  <label htmlFor="bio">Biografía</label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    value={form.bio}
+                    onChange={handleChange}
+                    className="form-input-minimal"
+                    placeholder="Biografía"
+                    rows={3}
+                  />
+                </div>
+                <div className="form-group-minimal">
+                  <label>Intereses</label>
+                  <button 
+                    type="button" 
+                    onClick={handleOpenIntereses}
+                    className="select-intereses-button-minimal"
+                  >
+                    <i className="fas fa-tags"></i> Seleccionar intereses
+                  </button>
+                  <div className="edit-profile-intereses-tags">
+                    {form.intereses.map((interes, idx) => (
+                      <span key={idx} className="edit-profile-interes-tag">{interes}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="edit-buttons-minimal">
+                  <button type="submit" className="save-btn-minimal">
+                    <i className="fas fa-save"></i> Guardar
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setEditMode(false)} 
+                    className="cancel-btn-minimal"
+                  >
+                    <i className="fas fa-times"></i> Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+        {/* Modal de intereses visual y funcional */}
+        {showInteresesModal && (
+          <div className="modal-overlay">
+            <div className="modal-content intereses-modal">
+              <h3>Seleccionar Intereses</h3>
+              <div className="intereses-list">
+                {INTERESES_PREDEFINIDOS.map((interes) => (
+                  <div key={interes} className="interes-item">
+                    <label className="interes-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={tempIntereses.includes(interes)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setTempIntereses(prev => [...prev, interes]);
+                          } else {
+                            setTempIntereses(prev => prev.filter(i => i !== interes));
+                          }
+                        }}
+                      />
+                      <span className="checkbox-custom"></span>
+                      <span className="interes-text">{interes}</span>
+                    </label>
+                  </div>
+                ))}
               </div>
-              <div className="edit-buttons-minimal">
-                <button type="submit" className="save-btn-minimal">
-                  <i className="fas fa-save"></i> Guardar
+              <div className="modal-buttons">
+                <button 
+                  onClick={handleSaveIntereses} 
+                  className="save-btn-minimal"
+                >
+                  <i className="fas fa-check"></i> Confirmar
                 </button>
                 <button 
-                  type="button" 
-                  onClick={() => setEditMode(false)} 
+                  onClick={() => setShowInteresesModal(false)} 
                   className="cancel-btn-minimal"
                 >
                   <i className="fas fa-times"></i> Cancelar
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-      {/* Modal de intereses visual y funcional */}
-      {showInteresesModal && (
-        <div className="modal-overlay">
-          <div className="modal-content intereses-modal">
-            <h3>Seleccionar Intereses</h3>
-            <div className="intereses-list">
-              {INTERESES_PREDEFINIDOS.map((interes) => (
-                <div key={interes} className="interes-item">
-                  <label className="interes-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={tempIntereses.includes(interes)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setTempIntereses(prev => [...prev, interes]);
-                        } else {
-                          setTempIntereses(prev => prev.filter(i => i !== interes));
-                        }
-                      }}
-                    />
-                    <span className="checkbox-custom"></span>
-                    <span className="interes-text">{interes}</span>
-                  </label>
-                </div>
-              ))}
-            </div>
-            <div className="modal-buttons">
-              <button 
-                onClick={handleSaveIntereses} 
-                className="save-btn-minimal"
-              >
-                <i className="fas fa-check"></i> Confirmar
-              </button>
-              <button 
-                onClick={() => setShowInteresesModal(false)} 
-                className="cancel-btn-minimal"
-              >
-                <i className="fas fa-times"></i> Cancelar
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </>
       <Footer />
     </>
   );

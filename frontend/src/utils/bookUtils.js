@@ -1,6 +1,6 @@
 // Función para obtener la URL de la imagen del libro
 export function getBookImage(book, API_URL = 'http://localhost:5000') {
-  const DEFAULT_BOOK_IMAGE = '/icono2.png';
+  const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';
 
   // 1. Usar coverimageurl si existe
   if (book.coverimageurl) {
@@ -32,6 +32,10 @@ export function getBookImage(book, API_URL = 'http://localhost:5000') {
     return `${API_URL}${book.imagen}`;
   }
   // 5. Si no hay ninguna imagen, usar la imagen por defecto
+  // Si alguna ruta apunta a 'book-empty.png', forzar default
+  if (book.coverimageurl === 'book-empty.png' || book.imageurl === 'book-empty.png' || book.imagen === 'book-empty.png') {
+    return DEFAULT_BOOK_IMAGE;
+  }
   return DEFAULT_BOOK_IMAGE;
 }
 

@@ -35,7 +35,7 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
     const updateVisibleCount = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setVisibleCount(2); // mostrar 2 en móviles
+        setVisibleCount(1); // mostrar SOLO 1 en móviles
       } else {
         setVisibleCount(4); // mostrar 4 en pantallas grandes
       }
@@ -54,7 +54,7 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
 
   return (
     <section className={`ofertas ${extraClass}`}>
-      <h2>{titulo}</h2>
+      <div className="carrusel-titulo-con-margen"><h2>{titulo}</h2></div>
       <div className="carousel-container">
         {total > visibleCount && (
           <button className="carousel-arrow left" onClick={handlePrev} aria-label="Anterior"><FaChevronLeft /></button>
@@ -116,7 +116,7 @@ function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomenda
         onClick={onVerRecomendaciones}
         disabled={!generoSeleccionado}
         style={{
-          marginTop: '1.2rem',
+          paddingTop: '1.2rem',
           background: '#394B60',
           color: '#fff',
           border: 'none',
@@ -272,7 +272,6 @@ export default function Portada() {
               }}
             />
 
-            <Cuestionario onFinalizar={manejarFinalizacionCuestionario} />
             {recomendaciones.length > 0 && <Recomendados libros={recomendaciones} />}
 
             

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import Header from '../components/Header';
@@ -27,6 +27,7 @@ function BookDetails() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editForm, setEditForm] = useState({ title: '', authors: '', description: '', price: '', stock: '', pagecount: '' });
   const [success, setSuccess] = useState(null);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const [isBookFavorite, setIsBookFavorite] = useState(false);
@@ -124,6 +125,7 @@ function BookDetails() {
         },
         body: JSON.stringify({
           bookId: book.book_id || book.id,
+          buyerId: user.id,
           buyerName: `${user.nombre} ${user.apellido}`,
           buyerEmail: user.email
         })
@@ -149,8 +151,10 @@ function BookDetails() {
 
   const handleUpdateBook = async (e) => {
     e.preventDefault();
+    setSending(true);
+    setSuccess(null);
+    setError(null);
     try {
-      // Convierte pagecount a número si existe
       const formToSend = {
         ...editForm,
         pagecount: editForm.pagecount ? Number(editForm.pagecount) : null
@@ -163,12 +167,15 @@ function BookDetails() {
       if (!response.ok) throw new Error('Error al actualizar el libro');
       
       const updatedBook = await response.json();
-      setBook(updatedBook); // Actualizar el estado del libro directamente
+      if (!response.ok) throw new Error('Error al actualizar libro: ' + response.statusText);
       setSuccess('Libro actualizado correctamente');
       setShowEditModal(false);
-      setTimeout(() => navigate(`/books/${updatedBook.book_id || updatedBook.id}`), 1200);
+      // Refresca los datos del libro en la UI para mostrar el nuevo estado
+      await fetchBookDetails();
     } catch (err) {
       setError('Error al actualizar el libro');
+    } finally {
+      setSending(false);
     }
   };
 
@@ -311,48 +318,6 @@ function BookDetails() {
               </button>
             )}
           </div>
-          {(isAdmin || isOwner) && book && (
-            <div style={{ position: 'absolute', top: 10, right: 10, display: 'flex', gap: '8px', zIndex: 10 }}>
-              <button
-                title="Editar libro"
-                onClick={() => navigate(`/edit-book/${book.book_id || book.id}`)}
-                aria-label="Editar libro"
-                style={{
-                  background: 'none',
-                  color: '#2c3e50',
-                  border: 'none',
-                  padding: 0,
-                  width: 28,
-                  height: 28,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path></svg>
-              </button>
-              <button
-                title="Borrar libro"
-                onClick={() => setShowDeleteModal(true)}
-                aria-label="Borrar libro"
-                style={{
-                  background: 'none',
-                  color: '#2c3e50',
-                  border: 'none',
-                  padding: 0,
-                  width: 28,
-                  height: 28,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-              </button>
-            </div>
-          )}
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -402,7 +367,13 @@ function BookDetails() {
                 </p>
                 <p className="text-slate-700 font-inter text-sm">
                   <span className="font-semibold text-slate-800">Vendido por:</span>{' '}
-                  {book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'}
+                  {book.seller && book.seller.id ? (
+                    <Link to={`/usuario/${book.seller.id}`} className="seller-link" style={{ color: '#2563eb', textDecoration: 'underline', cursor: 'pointer' }}>
+                      {`${book.seller.nombre} ${book.seller.apellido || ''}`}
+                    </Link>
+                  ) : (
+                    book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'
+                  )}
                 </p>
                 <p className="text-2xl font-bold text-slate-800">
                   {book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'No especificado'}
@@ -421,16 +392,96 @@ function BookDetails() {
           </div>
 
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-2xl font-semibold text-slate-800 mb-4 font-playfair">Detalles del libro:</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6" style={{position: 'relative'}}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <h2 className="text-2xl font-semibold text-slate-800 font-playfair">Detalles del libro:</h2>
+                {isOwner && (
+                  <div style={{ position: 'relative' }}>
+                    <button
+                      onClick={() => setShowStatusDropdown(v => !v)}
+                      style={{
+                        background: book.status === 'vendido' ? '#e53e3e' : '#38a169',
+                        color: '#fff',
+                        border: 'none',
+                        padding: '6px 18px 6px 12px',
+                        borderRadius: '6px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        fontSize: '0.95em',
+                        transition: 'background 0.2s',
+                        minWidth: 90,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                      title="Cambiar estado"
+                      type="button"
+                    >
+                      {book.status === 'vendido' ? 'Vendido' : 'Activo'}
+                      <svg width="18" height="18" style={{marginLeft:4}} viewBox="0 0 20 20"><path fill="#fff" d="M5.25 7.25a.75.75 0 0 1 1.06 0L10 10.94l3.69-3.69a.75.75 0 1 1 1.06 1.06l-4.22 4.22a.75.75 0 0 1-1.06 0L5.25 8.31a.75.75 0 0 1 0-1.06z"></path></svg>
+                    </button>
+                    {showStatusDropdown && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '110%',
+                        right: 0,
+                        background: '#fff',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: 6,
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                        zIndex: 1000,
+                        minWidth: 110
+                      }}>
+                        {['activo', 'vendido'].map(option => (
+                          <button
+                            key={option}
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              padding: '8px 12px',
+                              background: option === book.status ? (option === 'vendido' ? '#fee2e2' : '#d1fae5') : 'transparent',
+                              color: option === 'vendido' ? '#b91c1c' : '#166534',
+                              border: 'none',
+                              textAlign: 'left',
+                              cursor: option === book.status ? 'default' : 'pointer',
+                              fontWeight: option === book.status ? 700 : 400
+                            }}
+                            disabled={option === book.status}
+                            onClick={async () => {
+                              setShowStatusDropdown(false);
+                              if (option === book.status) return;
+                              try {
+                                const response = await fetch(`${API_URL}/api/books/${book.book_id || book.id}`, {
+                                  method: 'PUT',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ status: option })
+                                });
+                                if (!response.ok) throw new Error('Error al actualizar el estado');
+                                await fetchBookDetails(); // Refresca el estado completo del libro
+                              } catch (err) {
+                                alert('Error al actualizar el estado del libro.');
+                              }
+                            }}
+                          >
+                            {option === 'vendido' ? 'Vendido' : 'Activo'}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               <div className="details-grid grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                 <div>
                   <p className="text-xs text-slate-500">Editorial</p>
                   <p className="text-sm text-slate-800">{book.publisher || 'No especificado'}</p>
                 </div>
-                <div>
-                  <p className="text-xs text-slate-500">Categoría</p>
-                  <p className="text-sm text-slate-800">{book.Category?.category_name || book.category?.category_name || book.categoria || book.category || 'No especificado'}</p>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <p className="text-xs text-slate-500">Categoría</p>
+                    <p className="text-sm text-slate-800">{book.Category?.category_name || book.category?.category_name || book.categoria || book.category || 'No especificado'}</p>
+                  </div>
+
                 </div>
                 <div>
                   <p className="text-xs text-slate-500">Número de páginas</p>
@@ -470,47 +521,7 @@ function BookDetails() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg p-4 max-w-sm w-full">
             <h3 className="text-xl font-semibold text-slate-800 mb-3">Contactar al vendedor</h3>
-            <p className="text-slate-600 text-sm mb-4">¿Estás seguro de que deseas contactar al vendedor?</p>
-            <label className="block mb-2">
-              <span className="text-gray-700 text-sm font-medium">Número de páginas</span>
-              <input
-                type="number"
-                name="pagecount"
-                value={editForm.pagecount}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-200 focus:ring-opacity-50 text-sm"
-                placeholder="Ej: 320"
-                min="1"
-              />
-            </label>
-
-            {/* Galería de imágenes para editar */}
-            {Array.isArray(editForm.images) && editForm.images.length > 0 && (
-              <div className="flex flex-wrap gap-3 mb-4 relative">
-                {editForm.images.map((img, idx) => (
-                  <div key={idx} style={{ position: 'relative', display: 'inline-block' }}>
-                    <img
-                      src={img}
-                      alt={`Imagen ${idx + 1}`}
-                      style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '1px solid #e5e7eb' }}
-                    />
-                    <button
-                      type="button"
-                      title="Eliminar"
-                      style={{ position: 'absolute', top: 2, right: 2, background: '#fff', border: 'none', borderRadius: '50%', padding: '2px 6px', cursor: 'pointer', fontWeight: 'bold', fontSize: 16, color: '#c00', lineHeight: 1 }}
-                      onClick={() => {
-                        setEditForm(prev => ({
-                          ...prev,
-                          images: prev.images.filter((_, i) => i !== idx)
-                        }));
-                      }}
-                    >
-                      ✖
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+            <p className="text-slate-600 text-sm mb-6">¿Estás seguro de que deseas contactar al vendedor?</p>
             <div className="flex gap-3">
               <button
                 className="flex-1 bg-sky-600 text-white py-2 px-3 rounded-md hover:bg-sky-700 transition-colors text-sm"

@@ -17,6 +17,7 @@ import Comprar from './pages/Comprar';
 import Favoritos from './pages/Favoritos';
 import FAQQuestions from './components/FAQQuestion';
 import About from './pages/About';
+import PublicProfile from './pages/PublicProfile';
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
@@ -98,6 +99,7 @@ function App() {
                 <About />
               </ProtectedRoute>
             } />
+            <Route path="/usuario/:id" element={<PublicProfile />} />
           </Routes>
         </Router>
         

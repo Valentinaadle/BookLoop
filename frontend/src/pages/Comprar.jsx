@@ -67,7 +67,9 @@ const Comprar = () => {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
-      setBooks(Array.isArray(data) ? data : []);
+      // Filtrar libros vendidos en el frontend por si acaso
+      const filtered = Array.isArray(data) ? data.filter(book => book.status !== 'vendido') : [];
+      setBooks(filtered);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching books:', error);
