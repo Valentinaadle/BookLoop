@@ -14,6 +14,9 @@ import QuieroVender from './pages/QuieroVender';
 import EditBook from './pages/EditBook';
 import EditBookUser from './pages/EditBookUser';
 import Comprar from './pages/Comprar';
+import ComprarResponsive from './pages/ComprarResponsive';
+import TestFilters from './pages/TestFilters';
+import SimpleMobileTest from './pages/SimpleMobileTest';
 import Favoritos from './pages/Favoritos';
 import FAQQuestions from './components/FAQQuestion';
 import About from './pages/About';
@@ -49,6 +52,13 @@ function App() {
                 <Comprar />
               </ProtectedRoute>
             } />
+            <Route path="/comprar-responsive" element={
+              <ProtectedRoute>
+                <ComprarResponsive />
+              </ProtectedRoute>
+            } />
+            <Route path="/test-filters" element={<TestFilters />} />
+            <Route path="/mobile-test" element={<SimpleMobileTest />} />
             <Route path="/search" element={
               <ProtectedRoute>
                 <Search />
