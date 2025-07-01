@@ -25,6 +25,45 @@ import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+const TypewriterEffect = ({ text, speed = 100, cursorStyle = "|", cursorColor = "#000" }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayedText(text.substring(0, i + 1));
+        i++;
+      } else {
+        clearInterval(typingInterval);
+        // Cursor parpadeante
+        const cursorInterval = setInterval(() => {
+          setShowCursor(prev => !prev);
+        }, 500);
+        return () => clearInterval(cursorInterval);
+      }
+    }, speed);
+
+    return () => clearInterval(typingInterval);
+  }, [text, speed]);
+
+  return (
+    <>
+      {displayedText}
+      <span 
+        style={{ 
+          opacity: showCursor ? 1 : 0,
+          color: cursorColor,
+          fontWeight: 'bold'
+        }}
+      >
+        {cursorStyle}
+      </span>
+    </>
+  );
+};
+
 const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) => {
   const [startIdx, setStartIdx] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4); // cambia dinámicamente
@@ -231,27 +270,52 @@ export default function Portada() {
           <Header />
           <div className="portada">
             <section className="hero">
-              <div className="overlay">
-                <div className="hero-content">
-                  <motion.h1
-                    initial={{ opacity: 0, y: 60 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 2, ease: [0.6, 0.01, 0.05, 0.95] }}
+          <div className="overlay">
+            <div className="hero-content">
+              <motion.h1
+                className="hero-title"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9 }}
+              >
+                <TypewriterEffect 
+                  text="¡Dale una segunda vida a tus libros con BookLoop!"
+                  speed={100}
+                  cursorStyle="|"
+                  cursorColor="#394B60"
+                />
+              </motion.h1>
+              
+              <div className="hero-buttons">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                >
+                  <Link 
+                    to="/comprar" 
+                    className="btn-compra"
                   >
-                   ¡Dale una segunda vida a tus libros con BookLoop!
-                  </motion.h1>
-                  <div className="hero-buttons">
-                      
-                      <Link to="/vender-page" className="btn-white">
-                          <FaBookOpen /> Publicar mi libro
-                      </Link>
-                      <Link to="/comprar" className="btn-orange">
-                          <FaShoppingCart /> Explorar descuentos
-                      </Link>
-                  </div>
-                </div>
+                    <FaShoppingCart /> Quiero Comprar
+                  </Link>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                >
+                  <Link 
+                    to="/vender-page" 
+                    className="btn-venta"
+                  >
+                    <FaBookOpen /> Quiero Vender
+                  </Link>
+                </motion.div>
               </div>
-            </section>
+            </div>
+          </div>
+        </section>
 
             <motion.section
               initial={{ opacity: 0, y: 40 }}
