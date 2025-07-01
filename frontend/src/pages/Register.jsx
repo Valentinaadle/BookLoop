@@ -27,7 +27,6 @@ function Register() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-    // Limpiar mensaje de error cuando el usuario empieza a escribir
     if (error) setError('');
   };
 
@@ -58,14 +57,6 @@ function Register() {
     setLoading(true);
 
     try {
-      console.log('Enviando datos de registro:', {
-        nombre: formData.nombre,
-        apellido: formData.apellido,
-        email: formData.email,
-        username: formData.username,
-        password: formData.password
-      });
-
       const response = await axios.post('http://localhost:5000/api/users/registro', {
         nombre: formData.nombre,
         apellido: formData.apellido,
@@ -74,11 +65,8 @@ function Register() {
         password: formData.password
       });
 
-      console.log('Respuesta del servidor:', response.data);
       navigate('/login');
     } catch (error) {
-      console.error('Error completo:', error);
-      console.error('Respuesta del servidor:', error.response?.data);
       setError(
         error.response?.data?.message || 
         error.response?.data?.error || 
@@ -92,120 +80,145 @@ function Register() {
   return (
     <>
       <Header />
-      <main>
-        <div className="register-container">
-          <div className="form-header">
-            <h2>Registrarse en BookLoop</h2>
-            <p>Regístrate para empezar a descubrir y compartir libros.</p>
+      <main className="register-main-container-refined">
+        <div className="register-content-wrapper">
+          <div className="register-text-content-refined">
+            <div className="logo-custom">BOOKLOOP</div>
+            <div className="blue-divider"></div>
+            <h1 className="slogan-refined">Descubre tu próxima lectura favorita</h1>
+            <p className="subtitle-refined">Unite a nuestra comunidad y promove la economia circular.</p>
           </div>
-          {error && <div className="error-message">{error}</div>}
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="nombre">Nombre</label>
-              <input 
-                id="nombre"
-                type="text" 
-                name="nombre" 
-                placeholder="Escribe tu nombre"
-                required
-                value={formData.nombre}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="apellido">Apellido</label>
-              <input 
-                id="apellido"
-                type="text" 
-                name="apellido" 
-                placeholder="Escribe tu apellido"
-                required
-                value={formData.apellido}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Correo electrónico</label>
-              <input 
-                id="email"
-                type="email" 
-                name="email" 
-                placeholder="ejemplo@correo.com"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                disabled={loading}
-              />
-              <p className="info-text">Tu correo se usará para iniciar sesión y recibir notificaciones.</p>
-            </div>
-            <div className="form-group">
-              <label htmlFor="username">Nombre de usuario</label>
-              <input 
-                id="username"
-                type="text" 
-                name="username" 
-                placeholder="Elige un nombre de usuario"
-                required
-                value={formData.username}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Contraseña</label>
-              <input 
-                id="password"
-                type="password" 
-                name="password" 
-                placeholder="Crea una contraseña segura"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                disabled={loading}
-              />
-              <p className="info-text">Debe tener al menos 8 caracteres.</p>
-            </div>
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirmar contraseña</label>
-              <input 
-                id="confirmPassword"
-                type="password" 
-                name="confirmPassword" 
-                placeholder="Vuelve a escribir la contraseña"
-                required
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </div>
 
-            <div className="terms">
-              <input 
-                type="checkbox" 
-                id="terminos"
-                name="terminos" 
-                required
-                checked={formData.terminos}
-                onChange={handleChange}
+          <div className="register-form-container-refined">
+            <div className="form-header-refined">
+              <h3>Registrarse en BookLoop</h3>
+              <p>Regístrate para empezar a descubrir y compartir libros.</p>
+            </div>
+            
+            {error && <div className="error-message-refined">{error}</div>}
+            
+            <form onSubmit={handleSubmit}>
+              <div className="form-row-refined">
+                <div className="form-group-refined">
+                  <label htmlFor="nombre">Nombre</label>
+                  <input 
+                    id="nombre"
+                    type="text" 
+                    name="nombre" 
+                    className="input-refined"
+                    placeholder="Escribe tu nombre"
+                    required
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+                <div className="form-group-refined">
+                  <label htmlFor="apellido">Apellido</label>
+                  <input 
+                    id="apellido"
+                    type="text" 
+                    name="apellido" 
+                    className="input-refined"
+                    placeholder="Escribe tu apellido"
+                    required
+                    value={formData.apellido}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group-refined">
+                <label htmlFor="email">Correo electrónico</label>
+                <input 
+                  id="email"
+                  type="email" 
+                  name="email" 
+                  className="input-refined"
+                  placeholder="ejemplo@correo.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+                <p className="info-text-refined">Tu correo se usará para iniciar sesión y recibir notificaciones.</p>
+              </div>
+
+              <div className="form-group-refined">
+                <label htmlFor="username">Nombre de usuario</label>
+                <input 
+                  id="username"
+                  type="text" 
+                  name="username" 
+                  className="input-refined"
+                  placeholder="Elige un nombre de usuario"
+                  required
+                  value={formData.username}
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="form-row-refined">
+                <div className="form-group-refined">
+                  <label htmlFor="password">Contraseña</label>
+                  <input 
+                    id="password"
+                    type="password" 
+                    name="password" 
+                    className="input-refined"
+                    placeholder="Crea una contraseña segura"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                  <p className="info-text-refined">Debe tener al menos 8 caracteres.</p>
+                </div>
+                <div className="form-group-refined">
+                  <label htmlFor="confirmPassword">Confirmar contraseña</label>
+                  <input 
+                    id="confirmPassword"
+                    type="password" 
+                    name="confirmPassword" 
+                    className="input-refined"
+                    placeholder="Vuelve a escribir la contraseña"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              <div className="terms-refined">
+                <input 
+                  type="checkbox" 
+                  id="terminos"
+                  name="terminos" 
+                  className="checkbox-refined"
+                  required
+                  checked={formData.terminos}
+                  onChange={handleChange}
+                  disabled={loading}
+                /> 
+                <label htmlFor="terminos">Acepto los términos y condiciones</label>
+              </div>
+
+              <button 
+                type="submit"
+                className="submit-btn-refined"
                 disabled={loading}
-              /> 
-              <label htmlFor="terminos">Acepto los términos y condiciones</label>
-            </div>
+              >
+                {loading ? 'Registrando...' : <>Registrarse <span className="arrow-animation">→</span></>}
+              </button>
 
-            <button 
-              type="submit"
-              className="submit-btn"
-              disabled={loading}
-            >
-              {loading ? 'Registrando...' : 'Registrarse →'}
-            </button>
-
-            <div className="switch-form-link">
-              <Link to="/login">¿Ya tienes cuenta? Inicia sesión</Link>
-            </div>
-          </form>
+              <div className="switch-form-link-refined">
+                ¿Ya tienes cuenta? <Link to="/login" className="login-link">Inicia sesión</Link>
+              </div>
+            </form>
+          </div>
         </div>
       </main>
       <Footer />

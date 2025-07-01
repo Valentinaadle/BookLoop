@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import '../Assets/css/login.css';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
+//import loginBg from '../Assets/login.png';
 
 function Login() {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ function Login() {
       console.log('Respuesta del servidor:', response.data);
       
       if (response.data.user) {
-        // Usar el contexto de autenticación para guardar el usuario
         login(response.data.user);
         navigate('/');
       } else {
@@ -59,51 +59,69 @@ function Login() {
   return (
     <>
       <Header />
-      <main>
-        <div className="login-container">
-          <div className="form-header">
-            <h2>Bienvenido de nuevo</h2>
-            <p>Inicia sesión para continuar explorando BookLoop.</p>
+      <main className="login-main-container-refined">
+        <div className="login-content-wrapper">
+          <div className="login-text-content-refined">
+            <h1 className="logo-custom">BOOKLOOP</h1>
+            <div className="blue-divider"></div>
+            <h2 className="slogan-refined">Explora Nuevas Historias</h2>
+            <p className="subtitle-refined">Donde los libros encuentran nuevos lectores</p>
           </div>
-          {error && <div className="error-message">{error}</div>}
-          <form id="loginForm" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="email">Correo electrónico</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                placeholder="ejemplo@correo.com"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                disabled={loading}
-              />
+          
+          <div className="login-form-container-refined">
+            <div className="form-header-refined">
+              <h3>Bienvenido de nuevo</h3>
+              <p>Inicia sesión para continuar explorando BookLoop.</p>
             </div>
-            <div className="form-group">
-              <label htmlFor="password">Contraseña</label>
-              <input 
-                type="password" 
-                id="password" 
-                name="password" 
-                placeholder="Introduce tu contraseña"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                disabled={loading}
-              />
-            </div>
+            {error && <div className="error-message-refined">{error}</div>}
+            <form id="loginForm" onSubmit={handleSubmit}>
+              <div className="form-group-refined">
+                <label htmlFor="email">Correo electrónico</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  placeholder="ejemplo@correo.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="input-refined"
+                />
+              </div>
+              <div className="form-group-refined">
+                <label htmlFor="password">Contraseña</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  placeholder="Introduce tu contraseña"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="input-refined"
+                />
+              </div>
               <button 
                 type="submit" 
-                className="submit-btn"
+                className="submit-btn-refined"
                 disabled={loading}
               >
-                {loading ? 'Iniciando sesión...' : 'Ingresar →'}
+                {loading ? (
+                  <span className="loading-dots">
+                    <span>.</span><span>.</span><span>.</span>
+                  </span>
+                ) : (
+                  <>Ingresar <span className="arrow-animation">→</span></>
+                )}
               </button>
-              <div className="switch-form-link">
-              <Link to="/register">¿No tienes una cuenta? Regístrate</Link>
-            </div>
-          </form>
+              <div className="switch-form-link-refined">
+                <span>¿No tienes una cuenta?</span>
+                <Link to="/register" className="register-link-refined">Regístrate</Link>
+              </div>
+            </form>
+          </div>
         </div>
       </main>
       <Footer />
