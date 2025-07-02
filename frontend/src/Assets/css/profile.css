@@ -8,7 +8,15 @@
   margin-top: 0.5rem;
   padding-bottom: 2.5rem;
   align-items: stretch;
+  justify-items: center;
 }
+
+.profile-main-books-grid:has(.profile-main-empty-card) {
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 900px) {
   .profile-main-books-grid {
     grid-template-columns: 1fr;

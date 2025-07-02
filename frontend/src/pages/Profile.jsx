@@ -22,6 +22,7 @@ const INTERESES_PREDEFINIDOS = [
 const BOOKS_PER_PAGE = 9; // 3x3 grid
 
 function Profile() {
+  const { favorites } = useFavorites();
   // ... existing state
   const [markAsSoldLoadingId, setMarkAsSoldLoadingId] = useState(null);
 
@@ -463,7 +464,12 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
               Solicitudes
             </button>
             <button className="profile-main-tab">Reseñas</button>
-            <button className="profile-main-tab" onClick={() => handleTabClick('Favoritos')}>Favoritos</button>
+            <button
+  className={`profile-main-tab${activeTab === 'favoritos' ? ' active' : ''}`}
+  onClick={() => setActiveTab('favoritos')}
+>
+  Wishlist
+</button>
           </div>
           <div className="profile-main-content">
             {activeTab === 'solicitudes' ? (
@@ -504,6 +510,32 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                     </div>
                   ))}
                 </div>
+              )
+            ) : activeTab === 'favoritos' ? (
+              favorites.length === 0 ? (
+                <div className="profile-main-empty-card">
+                  <img src="/Assets/book-empty.png" alt="No favoritos" className="profile-main-empty-img" />
+                  <h3>No tienes favoritos aún</h3>
+                  <p className="profile-main-empty-desc">Cuando marques libros como favoritos, aparecerán aquí.</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="profile-main-section-title">Wishlist</h3>
+                  <div className="profile-main-books-grid">
+                    {favorites.map(book => (
+                      <BookCard
+                        key={book.book_id}
+                        img={book.img || getBookImage(book, API_URL)}
+                        titulo={book.titulo || book.title || 'Sin título'}
+                        autor={book.autor || book.author || (book.authors ? book.authors[0] : '') || ''}
+                        precio={book.precio || book.price || ''}
+                        book_id={book.book_id}
+                        favorito={true}
+                        showVerDetalles={true}
+                      />
+                    ))}
+                  </div>
+                </>
               )
             ) : filteredBooks.length === 0 ? (
               <div className="profile-main-empty-card">

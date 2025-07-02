@@ -30,12 +30,12 @@ export default function Favoritos() {
       <div className="favoritos-bg">
         <main className="favoritos-container">
           <div className="favoritos-header">
-            <h1 className="favoritos-title">Favoritos</h1>
+            <h1 className="favoritos-title">Wishlist</h1>
             <div className="favoritos-header-actions">
               <button className={'favorites-tab active'}>Libros</button>
               {favorites.length > 0 && (
                 <button className="agregar-favorito-btn" onClick={()=>navigate('/comprar')}>
-                  Agregar más favoritos
+                  Agregar más libros
                 </button>
               )}
             </div>

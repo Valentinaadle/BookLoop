@@ -110,9 +110,10 @@ export default function PublicProfile() {
           {activeTab === 'publicados' && (
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'activo' || !book.status).length === 0 ? (
-                <div style={{ textAlign: 'center', width: '100%' }}>
-                  <p>Este usuario no tiene libros publicados.</p>
-                </div>
+                <div className="profile-main-empty-card">
+  <h3>Este usuario no tiene libros publicados.</h3>
+  <p className="profile-main-empty-desc">Cuando publique un libro, aparecerá aquí.</p>
+</div>
               ) : (
                 books.filter(book => book.status === 'activo' || !book.status).map(book => (
                   <BookCard
@@ -135,9 +136,10 @@ export default function PublicProfile() {
           {activeTab === 'vendidos' && (
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'vendido').length === 0 ? (
-                <div style={{ textAlign: 'center', width: '100%' }}>
-                  <p>Aún no ha vendido ningún libro.</p>
-                </div>
+                <div className="profile-main-empty-card">
+  <h3>Aún no ha vendido ningún libro.</h3>
+  <p className="profile-main-empty-desc">Cuando venda un libro, aparecerá aquí.</p>
+</div>
               ) : (
                 books.filter(book => book.status === 'vendido').map(book => (
                   <BookCard
