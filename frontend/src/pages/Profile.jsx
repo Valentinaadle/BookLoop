@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 import BookCard from '../components/BookCard';
 import { useFavorites } from '../context/FavoritesContext';
+import { Heart, Star, Plus, Edit3, BookOpen, ShoppingBag, MessageSquare, Eye, Share2, Grid, List } from "lucide-react";
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -420,10 +421,10 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
               )}
             </div>
             <h2 className="profile-sidebar-name">{form.nombre} {form.apellido}</h2>
-            <p className="profile-sidebar-username">{form.username}</p>
+            <p className="profile-sidebar-username">@{form.username.replace(/^@/, '')}</p>
             <p className="profile-sidebar-bio">{form.bio}</p>
             <button className="profile-sidebar-edit-btn" onClick={() => setEditMode(true)}>
-              <i className="fas fa-edit"></i> Editar perfil
+              <Edit3 size={18} style={{marginRight:6, marginBottom:-2}} /> Editar perfil
             </button>
           </div>
           <div className="profile-sidebar-stats">
@@ -436,9 +437,20 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
               <span className="profile-sidebar-stat-label">Vendidos</span>
             </div>
           </div>
-          <div className="profile-sidebar-bio-card">
-            <h3>Biografía</h3>
-            <p>{form.bio}</p>
+          <div className="profile-sidebar-genres-card">
+            <h3>Géneros favoritos</h3>
+            {form.intereses && form.intereses.length > 0 ? (
+              <ul className="profile-sidebar-genres-list">
+                {form.intereses.map((genero, idx) => (
+                  <li key={idx} className="profile-sidebar-genre-item">{genero}</li>
+                ))}
+              </ul>
+            ) : (
+              <>
+                <p className="profile-sidebar-no-genres">Aún no seleccionaste tus géneros favoritos.</p>
+                <button className="choose-genres-btn" onClick={() => setShowInteresesModal(true)}>Elegir géneros</button>
+              </>
+            )}
           </div>
         </aside>
         {/* Main */}
@@ -463,23 +475,26 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             >
               Solicitudes
             </button>
-            <button className="profile-main-tab">Reseñas</button>
+            <button className="profile-main-tab">
+              Reseñas
+            </button>
             <button
-  className={`profile-main-tab${activeTab === 'favoritos' ? ' active' : ''}`}
-  onClick={() => setActiveTab('favoritos')}
->
-  Wishlist
-</button>
+              className={`profile-main-tab${activeTab === 'favoritos' ? ' active' : ''}`}
+              onClick={() => setActiveTab('favoritos')}
+            >
+              Wishlist
+            </button>
           </div>
           <div className="profile-main-content">
             {activeTab === 'solicitudes' ? (
               loadingSolicitudes ? (
                 <div className="profile-main-empty-card">
+                  <MessageSquare size={48} color="#000" style={{marginBottom:12}} />
                   <span>Cargando solicitudes...</span>
                 </div>
               ) : solicitudes.length === 0 ? (
                 <div className="profile-main-empty-card">
-                  <img src="/Assets/book-empty.png" alt="No solicitudes" className="profile-main-empty-img" />
+                  <MessageSquare size={48} color="#000" style={{marginBottom:12}} />
                   <h3>No tienes solicitudes aún</h3>
                   <p className="profile-main-empty-desc">Aquí aparecerán los libros que te solicitaron otros usuarios.</p>
                 </div>
@@ -514,7 +529,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             ) : activeTab === 'favoritos' ? (
               favorites.length === 0 ? (
                 <div className="profile-main-empty-card">
-                  <img src="/Assets/book-empty.png" alt="No favoritos" className="profile-main-empty-img" />
+                  <Heart size={48} color="#000" style={{marginBottom:12}} />
                   <h3>No tienes favoritos aún</h3>
                   <p className="profile-main-empty-desc">Cuando marques libros como favoritos, aparecerán aquí.</p>
                 </div>
@@ -539,11 +554,15 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
               )
             ) : filteredBooks.length === 0 ? (
               <div className="profile-main-empty-card">
-                <img src="/Assets/book-empty.png" alt="No books" className="profile-main-empty-img" />
+                {activeTab === 'publicados' ? (
+                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                ) : (
+                  <ShoppingBag size={48} color="#000" style={{marginBottom:12}} />
+                )}
                 <h3>{activeTab === 'publicados' ? 'Aún no has publicado ningún libro' : 'Aún no has vendido ningún libro'}</h3>
                 <p className="profile-main-empty-desc">{activeTab === 'publicados' ? 'Es hora de compartir tus tesoros literarios con el mundo. Publica tu primer libro y conéctate con otros amantes de la lectura.' : 'Cuando vendas un libro, aparecerá aquí.'}</p>
                 {activeTab === 'publicados' && (
-                  <button className="profile-main-add-btn" onClick={() => handleTabClick('Publicar')}><i className="fas fa-plus-circle"></i> Publicar un libro</button>
+                  <button className="profile-main-add-btn" onClick={() => handleTabClick('Publicar')}><Plus size={20} style={{marginRight:4}} /> Publicar un libro</button>
                 )}
               </div>
             ) : (
@@ -566,7 +585,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                   ))}
                   {activeTab === 'publicados' && (
                     <div className="profile-main-book-card add-new-book" onClick={() => handleTabClick('Publicar')} style={{cursor:'pointer'}}>
-                      <div className="profile-main-add-icon"><i className="fas fa-plus-circle"></i></div>
+                      <div className="profile-main-add-icon"><Plus size={20} style={{marginRight:4}} /></div>
                       <p className="profile-main-add-text">Publicar nuevo libro</p>
                     </div>
                   )}
@@ -603,7 +622,6 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                         }
                       }}
                     />
-                    <span className="edit-profile-avatar-upload-icon"><i className="fas fa-camera"></i></span>
                   </label>
                 </div>
                 <div className="form-group-minimal">
@@ -657,31 +675,16 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                     rows={3}
                   />
                 </div>
-                <div className="form-group-minimal">
-                  <label>Intereses</label>
-                  <button 
-                    type="button" 
-                    onClick={handleOpenIntereses}
-                    className="select-intereses-button-minimal"
-                  >
-                    <i className="fas fa-tags"></i> Seleccionar intereses
-                  </button>
-                  <div className="edit-profile-intereses-tags">
-                    {form.intereses.map((interes, idx) => (
-                      <span key={idx} className="edit-profile-interes-tag">{interes}</span>
-                    ))}
-                  </div>
-                </div>
                 <div className="edit-buttons-minimal">
                   <button type="submit" className="save-btn-minimal">
-                    <i className="fas fa-save"></i> Guardar
+                    Guardar
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setEditMode(false)} 
                     className="cancel-btn-minimal"
                   >
-                    <i className="fas fa-times"></i> Cancelar
+                    Cancelar
                   </button>
                 </div>
               </form>
@@ -715,17 +718,12 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                 ))}
               </div>
               <div className="modal-buttons">
-                <button 
-                  onClick={handleSaveIntereses} 
-                  className="save-btn-minimal"
-                >
-                  <i className="fas fa-check"></i> Confirmar
-                </button>
+                <button onClick={handleSaveIntereses} className="save-btn-minimal">Confirmar</button>
                 <button 
                   onClick={() => setShowInteresesModal(false)} 
                   className="cancel-btn-minimal"
                 >
-                  <i className="fas fa-times"></i> Cancelar
+                  Cancelar
                 </button>
               </div>
             </div>
