@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import BookCard from '../components/BookCard';
 import { getBookImage } from '../utils/bookUtils';
 import '../Assets/css/profile.css';
+import { BookOpen } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -105,15 +106,14 @@ export default function PublicProfile() {
             </div>
           </div>
 
-
-
           {activeTab === 'publicados' && (
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'activo' || !book.status).length === 0 ? (
                 <div className="profile-main-empty-card">
-  <h3>Este usuario no tiene libros publicados.</h3>
-  <p className="profile-main-empty-desc">Cuando publique un libro, aparecerá aquí.</p>
-</div>
+                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                  <h3>Este usuario no tiene libros publicados.</h3>
+                  <p className="profile-main-empty-desc">Cuando publique un libro, aparecerá aquí.</p>
+                </div>
               ) : (
                 books.filter(book => book.status === 'activo' || !book.status).map(book => (
                   <BookCard
@@ -137,9 +137,10 @@ export default function PublicProfile() {
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'vendido').length === 0 ? (
                 <div className="profile-main-empty-card">
-  <h3>Aún no ha vendido ningún libro.</h3>
-  <p className="profile-main-empty-desc">Cuando venda un libro, aparecerá aquí.</p>
-</div>
+                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                  <h3>Aún no ha vendido ningún libro.</h3>
+                  <p className="profile-main-empty-desc">Cuando venda un libro, aparecerá aquí.</p>
+                </div>
               ) : (
                 books.filter(book => book.status === 'vendido').map(book => (
                   <BookCard

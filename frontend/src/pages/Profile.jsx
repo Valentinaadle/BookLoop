@@ -499,29 +499,22 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                   <p className="profile-main-empty-desc">Aquí aparecerán los libros que te solicitaron otros usuarios.</p>
                 </div>
               ) : (
-                <div className="profile-main-books-grid">
+                <div style={{padding: '0 0.5rem'}}>
+                  <div className="solicitud-title">Solicitudes de Compra</div>
                   {solicitudes.map((sol) => (
-                    <div className="profile-main-book-card" key={sol.id}>
-                      <BookCard
-                        book_id={sol.book_id}
-                        titulo={sol.books?.title || 'Sin título'}
-                        autor={sol.books?.author || 'Autor desconocido'}
-                        precio={sol.books?.price}
-                        img={getBookImage(sol.books, API_URL)}
-                        showVerDetalles={true}
-                        status={sol.books?.status}
+                    <div className="solicitud-card" key={sol.id}>
+                      <img
+                        className="solicitud-img"
+                        src={getBookImage(sol.books, API_URL) || '/Assets/book-empty.png'}
+                        alt={sol.books?.title || 'Sin título'}
+                        onError={e => e.target.src='/Assets/book-empty.png'}
                       />
                       <div className="solicitud-info">
-                        <span style={{fontSize:'0.95em',color:'#394B60'}}>Solicitado por <b>{
-  sol.users?.nombre && sol.users?.apellido
-    ? sol.users.nombre + ' ' + sol.users.apellido
-    : sol.users?.nombre
-      ? sol.users.nombre
-      : sol.users?.username
-        ? sol.users.username
-        : 'Usuario'
-}</b></span>
+                        <span className="solicitud-info-title">{sol.books?.title || 'Sin título'}</span>
+                        <span className="solicitud-info-precio">Precio: <b>${sol.books?.price || '---'}</b></span>
+                        <span className="solicitud-info-user">Solicitado por: <Link to={`/usuario/${sol.users?.id || sol.users?.user_id || ''}`} className="solicitud-link">{sol.users?.nombre || sol.users?.username || 'Usuario'}</Link></span>
                       </div>
+                      <button className="solicitud-contact-btn">Contactar</button>
                     </div>
                   ))}
                 </div>

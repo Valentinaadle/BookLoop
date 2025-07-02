@@ -231,6 +231,25 @@ body {
   flex-direction: column;
   gap: 2rem;
 }
+.profile-sidebar-card,
+.profile-sidebar-stats,
+.profile-sidebar-genres-card,
+.profile-main-empty-card,
+.profile-main-book-card,
+.solicitud-card {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  transition: box-shadow 0.22s, transform 0.22s;
+}
+.profile-sidebar-card:hover,
+.profile-sidebar-stats:hover,
+.profile-sidebar-genres-card:hover,
+.profile-main-empty-card:hover,
+.profile-main-book-card:hover,
+.solicitud-card:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.16);
+  transform: translateY(-4px) scale(1.02);
+  z-index: 2;
+}
 .profile-sidebar-card {
   background: #fff;
   border-radius: 18px;
@@ -534,14 +553,14 @@ body {
   margin-bottom: 0.3rem;
 }
 .profile-main-book-details {
-  background: #fff;
-  color: #000;
-  border: 1.5px solid #000;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  background: #000000;
+  color: #fff;
   font-weight: 500;
   font-size: 1rem;
+  border: none;
   border-radius: 8px;
   padding: 0.55rem 1.2rem;
   text-decoration: none;
@@ -551,7 +570,7 @@ body {
   justify-content: center;
 }
 .profile-main-book-details:hover {
-  background: #000;
+  background: #000000;
   color: #fff;
 }
 .profile-main-book-card.add-new-book {
@@ -887,11 +906,13 @@ body {
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1.2rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   margin-top: 0.7rem;
   cursor: pointer;
   transition: background 0.18s;
+  display: block;
+  margin: 0 auto;
 }
 .choose-genres-btn:hover {
   background: #222;
@@ -1032,4 +1053,111 @@ body {
     font-size: 0.93rem;
     padding: 0.4rem 0.7rem;
   }
+}
+
+.solicitud-card {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 1.5rem;
+  margin-bottom: 1.3rem;
+  border: 1.5px solid #ececec;
+  gap: 2.5rem;
+}
+.solicitud-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #f9fafb;
+  overflow: visible;
+}
+.solicitud-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 0.5rem;
+  justify-content: center;
+}
+.solicitud-info-title {
+  font-size: 1.30rem;
+  font-weight: 800;
+  color: #0d0d0e;
+  margin-bottom: 0.1rem;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.01rem;
+}
+.solicitud-info-precio {
+  font-size: 1.05rem;
+  color:#0d0d0e;
+
+}
+.solicitud-info-user {
+  font-size: 1rem;
+  color: #000000ea;
+}
+.solicitud-info-user a {
+  color: #d28219;
+  text-decoration: underline;
+}
+.solicitud-info-fecha {
+  font-size: 0.97rem;
+  color: #888;
+}
+.solicitud-contact-btn {
+  background: #f3f4f6;
+  color: #222;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.solicitud-contact-btn:hover {
+  background: #000000;
+  color: #fff;
+  border-color: #000000;
+}
+@media (max-width: 600px) {
+  .solicitud-img {
+    width: 100px;
+    height: 100px;
+  }
+  .solicitud-card {
+    gap: 1.2rem;
+  }
+  .solicitud-info {
+    padding-left: 0;
+  }
+  .solicitud-contact-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.solicitud-title {
+  font-size: 1.60rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #18181b;
+  
+}
+.solicitud-link {
+  color: #d28219;
+  text-decoration: underline;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.18s;
+}
+.solicitud-link:hover {
+  color: #d28219;
 }
