@@ -81,15 +81,23 @@ export default function Header() {
         </div>
 
         <div className="search-container">
-          <form className="search-bar" onSubmit={handleSearch}>
-            <FaSearch className="search-icon-form" />
-            <input
-              type="text"
-              placeholder="Buscar libros..."
-              value={query}
-              onChange={handleInputChange}
-            />
-          </form>
+          <form className="search-bar" onSubmit={handleSearch} style={{position:'relative', width:'100%'}}>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Buscar libros..."
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="search-icon-btn"
+            style={{position:'absolute', right:'8px', top:'50%', transform:'translateY(-50%)', background:'none', border:'none', padding:0, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center'}}
+            aria-label="Buscar"
+          >
+            <FaSearch style={{fontSize:'18px', color:'#888'}} />
+          </button>
+        </form>
         </div>
 
         <div className="header-actions">

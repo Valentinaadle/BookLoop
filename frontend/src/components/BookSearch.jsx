@@ -47,27 +47,29 @@ const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
     return isNaN(numPrice) ? '€99.99' : `€${numPrice.toFixed(2)}`;
   };
 
+  // Filtrar libros: solo mostrar los que tengan alguna palabra en el título que empiece con el query
+  const filteredBooks = books.filter(book => {
+    if (!query.trim()) return true;
+    const title = (book.title || book.titulo || '').toLowerCase();
+    const q = query.trim().toLowerCase();
+    const words = title.split(/\s+/);
+    // Coincide si alguna palabra empieza con el query, o si el título completo empieza con el query, o si el título completo es igual al query
+    return (
+      words.some(word => word.startsWith(q)) ||
+      title.startsWith(q) ||
+      title === q
+    );
+  });
+
   return (
     <div className="book-search">
-      <form onSubmit={searchBooks} className="search-form">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar libros..."
-          className="search-input"
-        />
-        <button type="submit" className="search-button" disabled={loading}>
-          {loading ? 'Buscando...' : 'Buscar'}
-        </button>
-      </form>
-
       {error && <div className="error-message">{error}</div>}
       {loading && <div className="loading">Buscando libros...</div>}
 
+      <h1 className="favoritos-title">Libros encontrados</h1>
       <div className="books-grid">
-        {books && books.length > 0 ? (
-          books.map((book) => (
+        {filteredBooks && filteredBooks.length > 0 ? (
+          filteredBooks.map((book) => (
             <BookCard
               key={book.book_id || book.id}
               descuento={null}

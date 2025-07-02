@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import BookSearch from '../components/BookSearch';
+import Header from '../components/Header';
 import '../Assets/css/Search.css';
 
 const Search = () => {
@@ -44,19 +45,18 @@ const Search = () => {
   };
 
   return (
-    <div className="search-page">
-      <h1>Buscar Libros</h1>
-      <p className="search-description">
-        Busca libros por título, autor o ISBN y agrégalos a tu biblioteca
-      </p>
-      {error && (
-        <div className="error-message">
-          {error}
-          <button onClick={() => setError(null)} className="close-error">×</button>
-        </div>
-      )}
-      <BookSearch onBookSelect={handleBookSelect} initialQuery={initialQuery} />
-    </div>
+    <>
+      <Header />
+      <div className="search-page">
+        {error && (
+          <div className="error-message">
+            {error}
+            <button onClick={() => setError(null)} className="close-error">×</button>
+          </div>
+        )}
+        <BookSearch onBookSelect={handleBookSelect} initialQuery={initialQuery} />
+      </div>
+    </>
   );
 };
 
