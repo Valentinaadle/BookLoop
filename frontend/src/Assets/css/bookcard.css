@@ -172,7 +172,9 @@
 
 .book-actions {
   width: 100%;
-  padding: 0 5px; /* Padding para alinear con book-info */
+  justify-content: center;
+  display: flex
+;
 }
 
 .buy-button {

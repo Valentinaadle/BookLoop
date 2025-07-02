@@ -159,7 +159,7 @@
 
   .book-card {
     flex: 0 0 50%; /* Cada libro ocupa la mitad del contenedor */
-    padding: 0 5px; /* Espaciado entre libros */
+/* Espaciado entre libros */
   }
 
   .carousel-arrow {
