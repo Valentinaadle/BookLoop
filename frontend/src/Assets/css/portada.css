@@ -378,53 +378,83 @@
 }
 /* Estilos responsive para el carrusel */
 @media (max-width: 768px) {
-  .carousel-container {
-    padding: 0 0px;
-    max-width: 100vw;
-    gap: 0.5rem;
-    overflow: visible;
-    position: relative;
+  .carousel-container{
+    display:flex;               /* mantiene las flechas a los lados */
+    align-items:center;
+    justify-content:center;
+    gap:.5rem;
+
+    max-width:100vw;
+    width:100%;
+    margin:0 auto;
+    padding:0;
+    box-sizing:border-box;
+    position:relative;
   }
-  .carousel-books {
-    gap: 0.3rem;
+
+  /* Lista de libros */
+  .carousel-books{
+    display:flex;               /* ¡flex, no block!  */
+    width:100%;
+    max-width:100vw;
+    margin:0 auto;
+    padding:0;
+    gap:.5rem;                  /* el mismo gap que arriba */
+    box-sizing:border-box;
+    justify-content:center;
+  }
+
+  /* Tarjeta individual */
+  .carousel-books .book-card{
+    flex:0 0 70vw;              /* ocupa casi todo el viewport */
+    max-width:430px;
+    height:450px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+
+    margin:0 auto;
+    padding:16px;
+    box-sizing:border-box;
+  }
+  .carousel-books .book-info {
     width: 100%;
-    justify-content: center;
-  }
-  .carousel-container {
-    max-width: 500px;
-    margin: 0 auto;
-    width: 100vw;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  .carousel-books {
-    width: 100%;
-    max-width: 100vw;
-    margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
-    display: block;
-  }
-  .carousel-books .book-card {
-    width: 99vw;
-    max-width: 430px;
-    margin: 0 auto;
-    height: 450px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    padding: 16px;
-    box-sizing: border-box;
-  }
-  .carousel-books .book-image-container {
-    width: 180px;
-    height: 260px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
+    text-align: center;
     justify-content: center;
+    padding: 0;
+    margin: 0;
   }
+  .carousel-books .book-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Wrap de la imagen (ya estaba bien) */
+  .carousel-books .book-image-container{
+    width:180px;
+    height:260px;
+    margin-bottom:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* 👉  CENTRAR LA IMAGEN  👈 */
+  .carousel-books .book-image{
+    margin:0 auto;              /* anula el antiguo 2 rem */
+    display:block;              /* por si heredaba inline */
+  }
+
   .carousel-books .book-actions {
     width: 100%;
     padding: 0 5px;
@@ -456,13 +486,17 @@
 }
 @media (min-width: 769px) {
   .carousel-books {
-    gap: 1.3rem;
     justify-content: center;
   }
-  /* Elimina cualquier override de .book-card en portada, para heredar 100% de bookcard.css */
-  .carousel-books .book-card {
-    /* Sin estilos aquí, hereda todo de bookcard.css */
+  .carousel-books .book-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
   }
+  /* Elimina cualquier override de .book-card en portada, para heredar 100% de bookcard.css */
 }
 @media (max-width: 700px) {
   .hero-animated-title {

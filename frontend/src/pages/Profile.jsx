@@ -514,7 +514,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                         <span className="solicitud-info-precio">Precio: <b>${sol.books?.price || '---'}</b></span>
                         <span className="solicitud-info-user">Solicitado por: <Link to={`/usuario/${sol.users?.id || sol.users?.user_id || ''}`} className="solicitud-link">{sol.users?.nombre || sol.users?.username || 'Usuario'}</Link></span>
                       </div>
-                      <button className="solicitud-contact-btn">Contactar</button>
+                      <button className="solicitud-contact-btn" onClick={() => navigate(`/book/${sol.books?.book_id || sol.books?.id}`)}>Ver libro</button>
                     </div>
                   ))}
                 </div>

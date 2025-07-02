@@ -4,7 +4,7 @@
 .profile-main-books-grid {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-  gap: 0.3rem !important;
+  gap: 2.2rem !important;
   margin-top: 0.5rem !important;
   padding-bottom: 2.5rem !important;
   align-items: stretch !important;
@@ -979,7 +979,44 @@ body {
   min-width: 120px;
 }
 
+/* —— Mobile —— */
 @media (max-width: 430px) {
+  .profile-main-section-title {
+    text-align: center !important;
+  }
+  .profile-main-books-grid {
+    justify-items: center !important;
+    justify-content: center !important;
+    gap: 3.5rem !important;
+  }
+  .profile-main-book-card, .book-card {
+    margin-bottom: 2.5rem !important;
+  }
+  .profile-main-books-grid {
+    justify-items: center !important;
+    justify-content: center !important;
+    gap: 3.5rem !important;
+  }
+  .profile-main-book-card {
+    margin-bottom: 2.2rem !important;
+  }
+  .profile-main-books-grid {
+    justify-items: center !important;
+    justify-content: center !important;
+    gap: 3.5rem !important;
+  }
+    .profile-main-tabs {
+        flex-direction: column;   /* de izquierda‑a‑derecha → arriba‑abajo */
+        gap: 0.4rem;              /* un pelín de aire entre pestañas */
+        overflow: visible;        /* ya no necesitamos el scroll horizontal */
+        padding-bottom: 0;        /* opcional: ajusta si hace falta */
+    }
+
+    /* Si querés que cada pestaña ocupe todo el ancho */
+    .profile-main-tabs > * {
+        width: 100%;
+    }
+
   .profile-dashboard-layout {
     flex-direction: column;
     gap: 0.5rem;
@@ -1144,12 +1181,11 @@ body {
   }
 }
 
-.solicitud-title {
+.solicitud-title, .profile-main-section-title {
   font-size: 1.60rem;
   font-weight: 600;
   margin-bottom: 1.2rem;
   color: #18181b;
-  
 }
 .solicitud-link {
   color: #d28219;
