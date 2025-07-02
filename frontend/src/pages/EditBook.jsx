@@ -278,10 +278,10 @@ function EditBook() {
     <>
       <Header />
       <main className="edit-book-container">
-        <div className="register-form-container-refined">
-          <div className="form-header-refined">
+        <div className="quierovender-form-container">
+          
             <h3>Editar Libro</h3>
-          </div>
+          
           {error && <div className="error-message-refined">{error}</div>}
           {success && <div className="error-message-refined" style={{color:'#27ae60',background:'#eafaf1',border:'1px solid #b2f2bb'}}>{success}</div>}
           <form className="edit-book-form" onSubmit={handleSubmit}>
