@@ -295,7 +295,7 @@ function BookDetails() {
             </li>
             <li className="flex items-center">
               <span className="material-icons text-xs">chevron_right</span>
-              <a href="/books" className="hover:text-slate-700">Libros</a>
+              <a href="/comprar" className="hover:text-slate-700">Libros</a>
             </li>
             <li className="flex items-center">
               <span className="material-icons text-xs">chevron_right</span>
