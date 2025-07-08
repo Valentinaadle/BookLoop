@@ -220,7 +220,8 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
       apellido: form.apellido,
       email: form.email,
       username: form.username,
-      bio: form.bio
+      bio: form.bio,
+      intereses: form.intereses
     };
 
     const userRes = await fetch(`${API_URL}/api/users/${user.id}`, {
@@ -282,12 +283,65 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
     setShowInteresesModal(true);
   };
 
-  const handleSaveIntereses = () => {
-    setForm(prev => ({
-      ...prev,
-      intereses: tempIntereses
-    }));
-    setShowInteresesModal(false);
+  const handleSaveIntereses = async () => {
+    try {
+      setLoading(true);
+      
+      // Actualizar intereses en la base de datos
+      const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intereses: tempIntereses })
+      });
+      
+      if (!res.ok) {
+        throw new Error('Error al actualizar intereses');
+      }
+      
+      // Actualizar estado local
+      setForm(prev => ({
+        ...prev,
+        intereses: tempIntereses
+      }));
+      
+      setShowInteresesModal(false);
+      setSuccess('Intereses actualizados correctamente');
+    } catch (error) {
+      setError('Error al actualizar intereses');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveInteres = async (interesAEliminar) => {
+    try {
+      setLoading(true);
+      
+      const nuevosIntereses = form.intereses.filter(interes => interes !== interesAEliminar);
+      
+      // Actualizar en la base de datos
+      const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intereses: nuevosIntereses })
+      });
+      
+      if (!res.ok) {
+        throw new Error('Error al eliminar interés');
+      }
+      
+      // Actualizar estado local
+      setForm(prev => ({
+        ...prev,
+        intereses: nuevosIntereses
+      }));
+      
+      setSuccess('Interés eliminado correctamente');
+    } catch (error) {
+      setError('Error al eliminar interés');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteConfirm = async () => {
@@ -453,11 +507,29 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
           <div className="profile-sidebar-genres-card">
             <h3>Géneros favoritos</h3>
             {form.intereses && form.intereses.length > 0 ? (
-              <ul className="profile-sidebar-genres-list">
-                {form.intereses.map((genero, idx) => (
-                  <li key={idx} className="profile-sidebar-genre-item">{genero}</li>
-                ))}
-              </ul>
+              <div className="profile-sidebar-genres-container">
+                <div className="profile-sidebar-genres-list">
+                  {form.intereses.map((genero, idx) => (
+                    <div key={idx} className="profile-sidebar-genre-tag">
+                      <span>{genero}</span>
+                      <button 
+                        className="genre-remove-btn"
+                        onClick={() => handleRemoveInteres(genero)}
+                        title="Eliminar género"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                  <button 
+                    className="add-genre-btn" 
+                    onClick={() => setShowInteresesModal(true)}
+                    title="Agregar más géneros"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
             ) : (
               <>
                 <p className="profile-sidebar-no-genres">Aún no seleccionaste tus géneros favoritos.</p>

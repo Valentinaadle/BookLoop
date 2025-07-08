@@ -855,22 +855,68 @@ body {
   font-size: 1.1rem;
   margin-bottom: 0.7rem;
 }
+.profile-sidebar-genres-container {
+  margin-top: 0.5rem;
+}
 .profile-sidebar-genres-list {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin: 0;
   padding: 0;
-  list-style: none;
 }
-.profile-sidebar-genre-item {
+.profile-sidebar-genre-tag {
   background: #e0e7ef;
   color: #000;
-  border-radius: 13px;
-  padding: 0.25rem 0.8rem;
+  border-radius: 18px;
+  padding: 0.3rem 0.4rem 0.3rem 0.8rem;
   font-size: 0.93rem;
   display: flex;
   align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+.profile-sidebar-genre-tag:hover {
+  background: #d1d5db;
+}
+.genre-remove-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.genre-remove-btn:hover {
+  background: #ff4444;
+  color: white;
+}
+.add-genre-btn {
+  background: #394B60;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+.add-genre-btn:hover {
+  background: #2a3749;
+  transform: translateY(-1px);
 }
 .profile-sidebar-no-genres {
   color: #6c757d;
@@ -1089,6 +1135,25 @@ body {
   .choose-genres-btn {
     font-size: 0.93rem;
     padding: 0.4rem 0.7rem;
+  }
+  
+  .profile-sidebar-genre-tag {
+    font-size: 0.88rem;
+    padding: 0.25rem 0.35rem 0.25rem 0.6rem;
+    border-radius: 16px;
+  }
+  
+  .genre-remove-btn {
+    width: 16px;
+    height: 16px;
+    font-size: 1rem;
+  }
+  
+  .add-genre-btn {
+    font-size: 0.9rem;
+    padding: 0.3rem;
+    width: 24px;
+    height: 24px;
   }
 }
 

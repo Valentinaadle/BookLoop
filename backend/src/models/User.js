@@ -42,7 +42,6 @@ async function createUser(user) {
 // Actualizar un usuario (hashea si cambia la contraseña)
 async function updateUser(id, updates) {
   let updatesToSend = { ...updates };
-  delete updatesToSend.intereses; // Campo que no existe en la base de datos
   
   if (Object.keys(updatesToSend).length === 0) {
     return await getUserById(id);
