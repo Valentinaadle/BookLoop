@@ -11,7 +11,7 @@ import BookCard from '../components/BookCard';
 import { useFavorites } from '../context/FavoritesContext';
 import { Heart, Star, Plus, Edit3, BookOpen, ShoppingBag, MessageSquare, Eye, Share2, Grid, List } from "lucide-react";
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000'; // Forzar URL absoluta para debugging
 
 // Lista predefinida de intereses
 const INTERESES_PREDEFINIDOS = [
@@ -37,7 +37,6 @@ function Profile() {
         body: JSON.stringify({ status: 'vendido' })
       });
       const updatedBook = await res.json();
-      console.log('[DEBUG] PATCH status:', res.status, 'body:', updatedBook);
       if (!res.ok) throw new Error('Error al actualizar el estado');
       setPublishedBooks(prev => prev.map(book =>
         book.book_id === bookId ? { ...book, ...updatedBook } : book
@@ -75,6 +74,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [showBooksModal, setShowBooksModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const DEFAULT_BOOK_IMAGE = '/icono2.png';
 
 
@@ -171,6 +171,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
 
   useEffect(() => {
     if (user && user.id) {
+      // Cargar datos del usuario directamente
       fetch(`${API_URL}/api/users/${user.id}`)
         .then(res => res.json())
         .then(data => {
@@ -179,7 +180,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             apellido: data.apellido || '',
             email: data.email || '',
             intereses: data.intereses || [],
-            photoUrl: data.photoUrl || '',
+            photoUrl: data.photo_url ? `${API_URL}${data.photo_url}` : '',
             username: data.username || '@usuario',
             bio: data.bio || 'Vendedor/a de libros apasionado/a.',
             stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
@@ -206,59 +207,71 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = async (e) => {
+    const handleSave = async (e) => {
   e.preventDefault();
-  console.log("[DEBUG] handleSave ejecutado", form, user);
   setLoading(true);
   setSuccess(null);
   setError(null);
 
-  // Construir objeto updates solo con campos que cambiaron
-  const updates = {};
-  if (form.nombre !== user.nombre) updates.nombre = form.nombre;
-  if (form.apellido !== user.apellido) updates.apellido = form.apellido;
-  if (form.email !== user.email) updates.email = form.email;
-  if (form.username !== user.username) updates.username = form.username;
-  if (form.bio !== (user.bio || 'Vendedor/a de libros apasionado/a.')) updates.bio = form.bio;
-  // Enviar photoUrl siempre que sea base64 y no esté vacío
-  if (form.photoUrl && form.photoUrl.startsWith('data:image')) {
-    updates.photoUrl = form.photoUrl;
-  }
-  // No enviar intereses porque no existe en la base
-
-  // Si no hay cambios, mostrar mensaje y no hacer fetch
-  if (Object.keys(updates).length === 0) {
-    setError('No hay cambios para guardar.');
-    setLoading(false);
-    return;
-  }
-
   try {
-    const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+    // 1. Actualizar datos de texto (sin foto)
+    const userUpdates = {
+      nombre: form.nombre,
+      apellido: form.apellido,
+      email: form.email,
+      username: form.username,
+      bio: form.bio
+    };
+
+    const userRes = await fetch(`${API_URL}/api/users/${user.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates)
+      body: JSON.stringify(userUpdates)
     });
-    if (!res.ok) throw new Error('Error al actualizar el perfil');
+    
+    if (!userRes.ok) {
+      throw new Error('Error al actualizar datos de usuario');
+    }
+
+    // 2. Subir foto si hay una nueva
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('photo', selectedFile);
+
+      const photoRes = await fetch(`${API_URL}/api/users/${user.id}/photo`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!photoRes.ok) {
+        throw new Error('Error al subir la foto de perfil');
+      }
+    }
+
     setSuccess('Perfil actualizado correctamente');
     setEditMode(false);
-    // Recargar datos del usuario tras guardar para reflejar bio y otros cambios
+    
+    // Recargar datos del usuario
     fetch(`${API_URL}/api/users/${user.id}`)
       .then(res => res.json())
       .then(data => {
-        setForm({
-          nombre: data.nombre || '',
-          apellido: data.apellido || '',
-          email: data.email || '',
-          intereses: [], // No existe en la base, pero lo dejamos vacío para el frontend
-          photoUrl: data.photoUrl || '',
-          username: data.username || '@usuario',
-          bio: data.bio || 'Vendedor/a de libros apasionado/a.',
-          stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
-        });
+         setForm({
+           nombre: data.nombre || '',
+           apellido: data.apellido || '',
+           email: data.email || '',
+           intereses: data.intereses || [],
+           photoUrl: data.photo_url ? `${API_URL}${data.photo_url}` : '',
+           username: data.username || '@usuario',
+           bio: data.bio || 'Vendedor/a de libros apasionado/a.',
+           stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
+         });
+         setSelectedFile(null);
+      })
+      .catch(() => {
+        setError('Error al recargar datos del perfil');
       });
   } catch (err) {
-    setError('Error al actualizar el perfil');
+    setError(err.message);
   } finally {
     setLoading(false);
   }
@@ -609,6 +622,10 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                       onChange={e => {
                         const file = e.target.files[0];
                         if (file) {
+                          // Guardar el archivo para subirlo después
+                          setSelectedFile(file);
+                          
+                          // Mostrar preview inmediata
                           const reader = new FileReader();
                           reader.onload = ev => setForm(prev => ({ ...prev, photoUrl: ev.target.result }));
                           reader.readAsDataURL(file);
@@ -674,7 +691,25 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
                   </button>
                   <button 
                     type="button" 
-                    onClick={() => setEditMode(false)} 
+                    onClick={() => {
+                      setEditMode(false);
+                      setSelectedFile(null);
+                      // Recargar datos originales
+                      fetch(`${API_URL}/api/users/${user.id}`)
+                        .then(res => res.json())
+                        .then(data => {
+                          setForm({
+                            nombre: data.nombre || '',
+                            apellido: data.apellido || '',
+                            email: data.email || '',
+                            intereses: data.intereses || [],
+                            photoUrl: data.photo_url ? `${API_URL}${data.photo_url}` : '',
+                            username: data.username || '@usuario',
+                            bio: data.bio || 'Vendedor/a de libros apasionado/a.',
+                            stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
+                          });
+                        });
+                    }} 
                     className="cancel-btn-minimal"
                   >
                     Cancelar

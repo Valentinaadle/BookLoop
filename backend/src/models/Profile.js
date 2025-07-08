@@ -14,6 +14,17 @@ async function getProfileById(id) {
   return data;
 }
 
+// Obtener perfil por userId
+async function getProfileByUserId(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('userid', userId)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 // Crear un perfil
 async function createProfile(profile) {
   const { data, error } = await supabase.from('profiles').insert([profile]).select().single();
@@ -28,6 +39,18 @@ async function updateProfile(id, updates) {
   return data;
 }
 
+// Actualizar perfil por userId
+async function updateProfileByUserId(userId, updates) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(updates)
+    .eq('userid', userId)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 // Eliminar un perfil
 async function deleteProfile(id) {
   const { error } = await supabase.from('profiles').delete().eq('id', id);
@@ -38,7 +61,9 @@ async function deleteProfile(id) {
 module.exports = {
   getAllProfiles,
   getProfileById,
+  getProfileByUserId,
   createProfile,
   updateProfile,
+  updateProfileByUserId,
   deleteProfile
 };

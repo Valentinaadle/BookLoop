@@ -1,19 +1,33 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { connectDB } = require('./config/db');
 const bookRoutes = require('./routes/bookRoutes');
 const userRoutes = require('./routes/userRoutes');
+const profileRoutes = require('./routes/profile.routes');
 
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// JSON y URL encoded para datos normales
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
+
+// Servir archivos estáticos (fotos de perfil)
+app.use('/uploads/profiles', express.static(path.join(__dirname, '../uploads/profiles')));
 
 // Rutas
 app.use('/api/books', bookRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Puerto
 const PORT = process.env.PORT || 5000;

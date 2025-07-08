@@ -41,20 +41,20 @@ async function createUser(user) {
 
 // Actualizar un usuario (hashea si cambia la contraseña)
 async function updateUser(id, updates) {
-  console.log('[DEBUG] updateUser - id:', id, 'updates:', updates);
   let updatesToSend = { ...updates };
-  // Eliminar campos que no existen en la base de datos
-  delete updatesToSend.intereses;
-  // Si no hay campos para actualizar, retornar null y evitar el update vacío
+  delete updatesToSend.intereses; // Campo que no existe en la base de datos
+  
   if (Object.keys(updatesToSend).length === 0) {
-    console.log('[DEBUG] updateUser - No hay campos para actualizar, no se realiza update.');
-    return null;
+    return await getUserById(id);
   }
+  
   if (updates.password) {
     updatesToSend.password = await bcrypt.hash(updates.password, 10);
   }
+  
   const { data, error } = await supabase.from('users').update(updatesToSend).eq('id', id).select().single();
   if (error) throw error;
+  
   return data;
 }
 

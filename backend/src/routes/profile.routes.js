@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { Profile, User } = require('../models');
+const { getAllProfiles, getProfileByUserId, updateProfileByUserId, createProfile } = require('../models/Profile');
+const { getUserById } = require('../models/User');
 
 // Ruta de diagnóstico - obtener todos los perfiles
 router.get('/', async (req, res) => {
     try {
-        const profiles = await Profile.findAll({
-            include: [{
-                model: User,
-                attributes: ['id', 'nombre', 'apellido', 'email', 'username']
-            }]
-        });
+        const profiles = await getAllProfiles();
         res.json(profiles);
     } catch (error) {
         console.error('Error al obtener perfiles:', error);
@@ -18,28 +14,51 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Obtener perfil de usuario
+// Obtener perfil de usuario con información del usuario
 router.get('/:userId', async (req, res) => {
     try {
         console.log('Buscando perfil para userId:', req.params.userId);
         
-        const profile = await Profile.findOne({
-            where: { UserId: req.params.userId },
-            include: [{
-                model: User,
-                attributes: ['nombre', 'apellido', 'email', 'username']
-            }]
-        });
-
-        console.log('Perfil encontrado:', profile);
-
-        if (!profile) {
-            console.log('Perfil no encontrado para userId:', req.params.userId);
+        // Obtener información del usuario
+        const user = await getUserById(req.params.userId);
+        if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        // Enviar el perfil encontrado
-        res.json(profile);
+        // Intentar obtener el perfil
+        let profile;
+        try {
+            profile = await getProfileByUserId(req.params.userId);
+        } catch (error) {
+            console.log('Perfil no encontrado, creando uno nuevo...');
+            // Si no existe el perfil, crear uno nuevo
+            profile = await createProfile({
+                userid: parseInt(req.params.userId),
+                direccion: null,
+                telefono: null,
+                ciudad: null,
+                pais: null,
+                codigopostal: null,
+                foto_perfil: null,
+                createdat: new Date(),
+                updatedat: new Date()
+            });
+        }
+
+        // Combinar información del usuario con el perfil
+        const response = {
+            ...profile,
+            User: {
+                id: user.id,
+                nombre: user.nombre,
+                apellido: user.apellido,
+                email: user.email,
+                username: user.username
+            }
+        };
+
+        console.log('Perfil encontrado:', response);
+        res.json(response);
    
     } catch (error) {
         console.error('Error al obtener perfil:', error);
@@ -50,30 +69,42 @@ router.get('/:userId', async (req, res) => {
 // Actualizar perfil
 router.put('/:userId', async (req, res) => {
     try {
-        const { foto_perfil, biografia, fecha_nacimiento, telefono, direccion } = req.body;
+        const { foto_perfil, biografia, telefono, direccion, ciudad, pais, codigopostal } = req.body;
         
-        const [updated] = await Profile.update({
+        const updates = {
             foto_perfil,
             biografia,
-            fecha_nacimiento,
             telefono,
-            direccion
-        }, {
-            where: { UserId: req.params.userId }
+            direccion,
+            ciudad,
+            pais,
+            codigopostal,
+            updatedat: new Date()
+        };
+
+        // Filtrar valores undefined/null para no sobreescribir con valores vacíos
+        Object.keys(updates).forEach(key => {
+            if (updates[key] === undefined) {
+                delete updates[key];
+            }
         });
 
-        if (updated) {
-            const updatedProfile = await Profile.findOne({
-                where: { UserId: req.params.userId },
-                include: [{
-                    model: User,
-                    attributes: ['nombre', 'apellido', 'email', 'username']
-                }]
-            });
-            res.json(updatedProfile);
-        } else {
-            res.status(404).json({ error: 'Perfil no encontrado' });
-        }
+        const updatedProfile = await updateProfileByUserId(req.params.userId, updates);
+        
+        // Obtener información del usuario para la respuesta
+        const user = await getUserById(req.params.userId);
+        const response = {
+            ...updatedProfile,
+            User: {
+                id: user.id,
+                nombre: user.nombre,
+                apellido: user.apellido,
+                email: user.email,
+                username: user.username
+            }
+        };
+
+        res.json(response);
    
     } catch (error) {
         console.error('Error al actualizar perfil:', error);

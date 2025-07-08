@@ -6,8 +6,10 @@ const {
   createUser,
   updateUser,
   deleteUser,
-  loginUser
+  loginUser,
+  uploadProfilePhoto
 } = require('../controllers/userController');
+const { uploadProfilePhoto: multerUpload } = require('../config/multer');
 
 router.get('/', getUsers);
 router.get('/:id', getUserById);
@@ -17,7 +19,7 @@ router.post('/login', loginUser);
 router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
-// Ruta para obtener todos los usuarios
-// (puedes dejarla si la usas en el admin o debug)
+// Ruta específica para upload de foto de perfil
+router.post('/:id/photo', multerUpload, uploadProfilePhoto);
 
 module.exports = router; 

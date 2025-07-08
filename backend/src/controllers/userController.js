@@ -32,27 +32,24 @@ const getUserById = async (req, res) => {
 // Login de usuario
 const loginUser = async (req, res) => {
   try {
-    console.log('Datos recibidos en login:', req.body);
     const { email, password } = req.body;
-    // Buscar usuario
+    
     const user = await User.getUserByEmail(email);
     if (!user) {
-      console.log('Usuario no encontrado con email:', email);
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
-    // Verificar contraseña
+    
     const validPassword = await User.validatePassword(user, password);
     if (!validPassword) {
-      console.log('Contraseña inválida para usuario:', email);
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
-    // Generar token JWT
+    
     const token = jwt.sign(
       { id: user.id, email: user.email },
       JWT_SECRET,
       { expiresIn: '24h' }
     );
-    console.log('Login exitoso para usuario:', user.username);
+    
     res.json({
       user: {
         id: user.id,
@@ -73,16 +70,14 @@ const loginUser = async (req, res) => {
 // Crear un nuevo usuario
 const createUser = async (req, res) => {
   try {
-    console.log('Datos recibidos en createUser:', req.body);
     const { username, email, password, nombre, apellido } = req.body;
-    // Verificar si el usuario ya existe
+    
     const existingUser = await User.getUserByEmail(email);
     if (existingUser) {
-      console.log('Usuario ya existe con email:', email);
       return res.status(400).json({ message: 'El email ya está registrado' });
     }
-    // Crear usuario
-    const user = await User.createUser({
+    
+    await User.createUser({
       username,
       email,
       password,
@@ -91,30 +86,54 @@ const createUser = async (req, res) => {
       role: 'user',
       activo: true
     });
-    console.log('Usuario creado exitosamente:', user.username);
+    
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error) {
-    console.error('Error detallado al crear usuario:', error);
-    res.status(500).json({ 
-      message: 'Error al crear usuario',
-      error: error.message
-    });
+    console.error('Error al crear usuario:', error);
+    res.status(500).json({ message: 'Error al crear usuario' });
   }
 };
 
-// Actualizar un usuario
+// Actualizar un usuario (datos de texto, sin foto)
 const updateUser = async (req, res) => {
   try {
     const user = await User.getUserById(req.params.id);
-    if (user) {
-      const updated = await User.updateUser(req.params.id, req.body);
-      res.json(updated);
-    } else {
-      res.status(404).json({ message: 'Usuario no encontrado' });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
     }
+
+    const { photo_url, ...updateData } = req.body; // Excluir photo_url
+    const updated = await User.updateUser(req.params.id, updateData);
+    res.json(updated);
   } catch (error) {
     console.error('Error al actualizar usuario:', error);
     res.status(500).json({ message: 'Error al actualizar usuario' });
+  }
+};
+
+// Subir foto de perfil
+const uploadProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No se recibió ningún archivo' });
+    }
+
+    const user = await User.getUserById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    const photoUrl = `/uploads/profiles/${req.file.filename}`;
+    const updated = await User.updateUser(req.params.id, { photo_url: photoUrl });
+    
+    res.json({
+      message: 'Foto de perfil actualizada correctamente',
+      photo_url: photoUrl,
+      user: updated
+    });
+  } catch (error) {
+    console.error('Error al subir foto de perfil:', error);
+    res.status(500).json({ message: 'Error al subir foto de perfil' });
   }
 };
 
@@ -140,5 +159,6 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  loginUser
+  loginUser,
+  uploadProfilePhoto
 }; 
