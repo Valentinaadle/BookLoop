@@ -25,19 +25,75 @@ import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+const TypewriterEffect = ({ text, speed = 100, cursorStyle = "|", cursorColor = "#000" }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayedText(text.substring(0, i + 1));
+        i++;
+      } else {
+        clearInterval(typingInterval);
+        // Cursor parpadeante
+        const cursorInterval = setInterval(() => {
+          setShowCursor(prev => !prev);
+        }, 500);
+        return () => clearInterval(cursorInterval);
+      }
+    }, speed);
+
+    return () => clearInterval(typingInterval);
+  }, [text, speed]);
+
+  return (
+    <>
+      {displayedText}
+      <span 
+        style={{ 
+          opacity: showCursor ? 1 : 0,
+          color: cursorColor,
+          fontWeight: 'bold'
+        }}
+      >
+        {cursorStyle}
+      </span>
+    </>
+  );
+};
+
 const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) => {
   const [startIdx, setStartIdx] = useState(0);
-  const visibleCount = 4;
+  const [visibleCount, setVisibleCount] = useState(4); // cambia dinámicamente
   const total = libros.length;
   const navigate = useNavigate();
-  const handlePrev = () => setStartIdx((prev) => (prev - 1 + total) % total);
-  const handleNext = () => setStartIdx((prev) => (prev + 1) % total);
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setVisibleCount(1); // mostrar SOLO 1 en móviles
+      } else {
+        setVisibleCount(4); // mostrar 4 en pantallas grandes
+      }
+    };
+
+    updateVisibleCount();
+    window.addEventListener('resize', updateVisibleCount);
+    return () => window.removeEventListener('resize', updateVisibleCount);
+  }, []);
+
+  const handlePrev = () => setStartIdx((prev) => (prev - visibleCount + total) % total);
+  const handleNext = () => setStartIdx((prev) => (prev + visibleCount) % total);
+
   const visibleBooks = Array.from({ length: visibleCount }, (_, i) => libros[(startIdx + i) % total])
     .filter(b => b && b.book_id);
 
   return (
     <section className={`ofertas ${extraClass}`}>
-      <h2>{titulo}</h2>
+      <div className="carrusel-titulo-con-margen"><h2>{titulo}</h2></div>
       <div className="carousel-container">
         {total > visibleCount && (
           <button className="carousel-arrow left" onClick={handlePrev} aria-label="Anterior"><FaChevronLeft /></button>
@@ -68,37 +124,63 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
   );
 };
 
-const opciones = ['Novela', 'Ciencia Ficción', 'Misterio', 'Fantasía', 'Poesía', 'Terror'];
 
-function PreferenciasUsuario({ onSeleccionar }) {
+const opciones = ['Realistas', 'Ciencia Ficción', 'Misterio', 'Drama', 'Romance', 'Terror'];
+
+function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomendaciones }) {
   return (
     <div className="preferencias-usuario">
-      <h3>Selecciona tus géneros favoritos:</h3>
-      {opciones.map(opcion => (
-        <button key={opcion} onClick={() => onSeleccionar(opcion)}>
-          {opcion}
-        </button>
-      ))}
+      <h3>Descubre tus intereses:</h3>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+        {opciones.map(opcion => (
+          <button
+            key={opcion}
+            onClick={() => onSeleccionar(opcion)}
+            style={{
+              background: generoSeleccionado === opcion ? '#394B60' : '#CBd9E6',
+              color: generoSeleccionado === opcion ? '#fff' : '#394B60',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '0.7rem 1.5rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            {opcion}
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={onVerRecomendaciones}
+        disabled={!generoSeleccionado}
+        style={{
+          paddingTop: '1.2rem',
+          background: '#394B60',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          padding: '0.9rem 2.2rem',
+          fontWeight: 700,
+          fontSize: '1.1rem',
+          cursor: generoSeleccionado ? 'pointer' : 'not-allowed',
+          opacity: generoSeleccionado ? 1 : 0.6,
+          transition: 'all 0.2s',
+        }}
+      >
+        Ver recomendaciones
+      </button>
     </div>
   );
 }
 
-function Recomendaciones({ libros, preferencias }) {
-  const librosRecomendados = libros.filter(libro => preferencias.includes(libro.genero));
 
-  return (
-    <div>
-      <h3>Recomendaciones para ti:</h3>
-      {librosRecomendados.map(libro => (
-        <BookCard key={libro.book_id} {...libro} />
-      ))}
-    </div>
-  );
-}
 
 export default function Portada() {
   const { user } = useAuth();
   const isAdmin = user && user.role === 'admin';
+  const navigate = useNavigate();
+  const [generoSeleccionado, setGeneroSeleccionado] = useState("");
 
   // Handler para eliminar libro (solo admin)
   const handleDeleteBook = async (bookId) => {
@@ -188,27 +270,52 @@ export default function Portada() {
           <Header />
           <div className="portada">
             <section className="hero">
-              <div className="overlay">
-                <div className="hero-content">
-                  <motion.h1
-                    initial={{ opacity: 0, y: 60 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 2, ease: [0.6, 0.01, 0.05, 0.95] }}
+          <div className="overlay">
+            <div className="hero-content">
+              <motion.h1
+                className="hero-title"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9 }}
+              >
+                <TypewriterEffect 
+                  text="¡Dale una segunda vida a tus libros con BookLoop!"
+                  speed={100}
+                  cursorStyle="|"
+                  cursorColor="#394B60"
+                />
+              </motion.h1>
+              
+              <div className="hero-buttons">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                >
+                  <Link 
+                    to="/comprar" 
+                    className="btn-compra"
                   >
-                   ¡Dale una segunda vida a tus libros con BookLoop!
-                  </motion.h1>
-                  <div className="hero-buttons">
-                      
-                      <Link to="/vender-page" className="btn-white">
-                          <FaBookOpen /> Publicar mi libro
-                      </Link>
-                      <Link to="/comprar" className="btn-orange">
-                          <FaShoppingCart /> Explorar descuentos
-                      </Link>
-                  </div>
-                </div>
+                    <FaShoppingCart /> Quiero Comprar
+                  </Link>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                >
+                  <Link 
+                    to="/vender-page" 
+                    className="btn-venta"
+                  >
+                    <FaBookOpen /> Quiero Vender
+                  </Link>
+                </motion.div>
               </div>
-            </section>
+            </div>
+          </div>
+        </section>
 
             <motion.section
               initial={{ opacity: 0, y: 40 }}
@@ -218,8 +325,17 @@ export default function Portada() {
             >
               <CarruselLibros libros={destacados} titulo="Nuevos ingresos" isAdmin={isAdmin} onDelete={handleDeleteBook} />
             </motion.section>
+            
+            <PreferenciasUsuario
+              generoSeleccionado={generoSeleccionado}
+              onSeleccionar={setGeneroSeleccionado}
+              onVerRecomendaciones={() => {
+                if (generoSeleccionado) {
+                  navigate(`/comprar?genero=${encodeURIComponent(generoSeleccionado)}`);
+                }
+              }}
+            />
 
-            <Cuestionario onFinalizar={manejarFinalizacionCuestionario} />
             {recomendaciones.length > 0 && <Recomendados libros={recomendaciones} />}
 
             

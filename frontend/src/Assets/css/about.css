@@ -146,4 +146,44 @@
     width: 80px;
     height: 80px;
   }
+  .carousel-container {
+    padding: 0 40px; /* Espacio para las flechas */
+    overflow: hidden;
+  }
+
+  .carousel-books {
+    display: flex;
+    width: 200%; /* Mostrar 2 libros a la vez */
+    transition: transform 0.5s ease;
+  }
+
+  .book-card {
+    flex: 0 0 50%; /* Cada libro ocupa la mitad del contenedor */
+/* Espaciado entre libros */
+  }
+
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .carousel-arrow.left {
+    left: 5px;
+  }
+
+  .carousel-arrow.right {
+    right: 5px;
+  }
 }

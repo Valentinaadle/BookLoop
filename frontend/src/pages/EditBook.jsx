@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
+import '../Assets/css/register.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -277,49 +278,44 @@ function EditBook() {
     <>
       <Header />
       <main className="edit-book-container">
-        <div className="edit-book-card">
-          <h2>Editar Libro</h2>
-          <div style={{textAlign:'center',marginBottom:16}}>
-            <div style={{display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center'}}>
-              {[...bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => ({
-                type: 'existing',
-                ...img,
-                image_url: img.image_url && !img.image_url.startsWith('http') ? `${API_URL}${img.image_url}` : img.image_url
-              })),
-              ...Array.isArray(newImages) ? newImages.filter(obj => obj && obj.file && obj.blobUrl).map(obj => ({ type: 'new', image_url: obj.blobUrl, file: obj.file })) : []
-              ].map((img, idx) => (
-                <div key={img.image_id || img.image_url || img.file?.name} style={{position:'relative',display:'inline-block'}}>
-                  <img src={img.image_url} alt={`Imagen ${idx+1}`} style={{width:80,height:110,objectFit:'cover',border:coverIndex===idx?'2px solid #007bff':'1px solid #ccc',borderRadius:6,cursor:'pointer'}} onClick={() => {
-  handleSetCover(idx, img.image_url);
-}} />
-                  <button type="button" title="Eliminar" style={{position:'absolute',top:2,right:2,background:'#fff',border:'none',borderRadius:'50%',padding:'2px 6px',cursor:'pointer',fontWeight:'bold',fontSize:16,color:'#c00',lineHeight:1}} onClick={()=> handleDeleteImage(img)}>
-                    ✖
-                  </button>
-                  {coverIndex===idx && <span style={{position:'absolute',bottom:2,left:2,background:'#007bff',color:'#fff',fontSize:10,padding:'2px 5px',borderRadius:3}}>Portada</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-          {error && <div className="error-message">{error}</div>}
-          {success && <div className="success-message">{success}</div>}
+        <div className="quierovender-form-container">
           
-          <form onSubmit={handleSubmit} className="edit-book-form" encType="multipart/form-data">
-            <div className="form-group">
-              <label>
-                <i className="fas fa-image"></i> Portada
+            <h3>Editar Libro</h3>
+          
+          {error && <div className="error-message-refined">{error}</div>}
+          {success && <div className="error-message-refined" style={{color:'#27ae60',background:'#eafaf1',border:'1px solid #b2f2bb'}}>{success}</div>}
+          <form className="edit-book-form" onSubmit={handleSubmit}>
+            <div style={{textAlign:'center',marginBottom:16}}>
+              <div style={{display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center'}}>
+                {[...bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => ({
+                  type: 'existing',
+                  ...img,
+                  image_url: img.image_url && !img.image_url.startsWith('http') ? `${API_URL}${img.image_url}` : img.image_url
+                })),
+                ...Array.isArray(newImages) ? newImages.filter(obj => obj && obj.file && obj.blobUrl).map(obj => ({ type: 'new', image_url: obj.blobUrl, file: obj.file })) : []
+                ].map((img, idx) => (
+                  <div key={img.image_id || img.image_url || img.file?.name} style={{position:'relative',display:'inline-block'}}>
+                    <img src={img.image_url} alt={`Imagen ${idx+1}`} style={{width:80,height:110,objectFit:'cover',border:coverIndex===idx?'2px solid #007bff':'1px solid #ccc',borderRadius:6,cursor:'pointer'}} onClick={() => {
+                      handleSetCover(idx, img.image_url);
+                    }} />
+                    <button type="button" title="Eliminar" style={{position:'absolute',top:2,right:2,background:'#fff',border:'none',borderRadius:'50%',padding:'2px 6px',cursor:'pointer',fontWeight:'bold',fontSize:16,color:'#c00',lineHeight:1}} onClick={()=> handleDeleteImage(img)}>✖</button>
+                    {coverIndex===idx && <span style={{position:'absolute',bottom:2,left:2,background:'#007bff',color:'#fff',fontSize:10,padding:'2px 5px',borderRadius:3}}>Portada</span>}
+                  </div>
+                ))}
+              </div>
+              <label style={{display:'block',marginTop:12}}>
+                <span style={{fontWeight:600,marginRight:8}}><i className="fas fa-image"></i> Portada</span>
                 <input
                   type="file"
-                  name="images"
                   accept="image/*"
                   multiple
                   onChange={handleAddImages}
-                  className="form-input"
-                  style={{marginBottom:8}}
+                  className="input-refined"
+                  style={{marginBottom:8,maxWidth:220}}
                 />
               </label>
             </div>
-
-            <div className="form-group">
+            <div className="form-group-refined">
               <label>
                 <i className="fas fa-book"></i> Título
                 <input
@@ -328,13 +324,12 @@ function EditBook() {
                   value={form.title}
                   onChange={handleChange}
                   required
-                  className="form-input"
+                  className="input-refined"
                   placeholder="Título del libro"
                 />
               </label>
             </div>
-
-            <div className="form-group">
+            <div className="form-group-refined">
               <label>
                 <i className="fas fa-user"></i> Autores
                 <input
@@ -343,28 +338,26 @@ function EditBook() {
                   value={form.authors}
                   onChange={handleChange}
                   required
-                  className="form-input"
+                  className="input-refined"
                   placeholder="Autores (separados por comas)"
                 />
               </label>
             </div>
-
-            <div className="form-group">
+            <div className="form-group-refined">
               <label>
                 <i className="fas fa-align-left"></i> Descripción
                 <textarea
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  className="form-input"
+                  className="input-refined"
                   placeholder="Descripción del libro"
                   rows="4"
                 />
               </label>
             </div>
-
             <div className="form-row">
-              <div className="form-group">
+              <div className="form-group-refined">
                 <label>
                   <i className="fas fa-dollar-sign"></i> Precio
                   <input
@@ -373,7 +366,7 @@ function EditBook() {
                     value={form.price}
                     onChange={handleChange}
                     required
-                    className="form-input"
+                    className="input-refined"
                     placeholder="Precio del libro"
                     min="0"
                     step="0.01"
@@ -381,7 +374,7 @@ function EditBook() {
                 </label>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-refined">
                 <label>
                   <i className="fas fa-bookmark"></i> Estado
                   <select
@@ -389,7 +382,7 @@ function EditBook() {
                     value={form.condition}
                     onChange={handleChange}
                     required
-                    className="form-input"
+                    className="input-refined"
                   >
                     <option value="">Seleccionar estado</option>
                     <option value="Nuevo">Nuevo</option>
@@ -402,7 +395,7 @@ function EditBook() {
             </div>
 
             <div className="form-row">
-              <div className="form-group">
+              <div className="form-group-refined">
                 <label>
                   <i className="fas fa-language"></i> Idioma
                   <input
@@ -410,13 +403,13 @@ function EditBook() {
                     name="language"
                     value={form.language}
                     onChange={handleChange}
-                    className="form-input"
+                    className="input-refined"
                     placeholder="Idioma del libro"
                   />
                 </label>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-refined">
                 <label>
                   <i className="fas fa-file-alt"></i> Número de páginas
                   <input
@@ -424,7 +417,7 @@ function EditBook() {
                     name="pageCount"
                     value={form.pageCount}
                     onChange={handleChange}
-                    className="form-input"
+                    className="input-refined"
                     placeholder="Número de páginas"
                     min="0"
                   />
@@ -433,7 +426,7 @@ function EditBook() {
             </div>
 
             <div className="form-row">
-              <div className="form-group">
+              <div className="form-group-refined">
                 <label>
                   <i className="fas fa-calendar"></i> Fecha de publicación
                   <input
@@ -441,12 +434,12 @@ function EditBook() {
                     name="publication_date"
                     value={form.publication_date}
                     onChange={handleChange}
-                    className="form-input"
+                    className="input-refined"
                   />
                 </label>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-refined">
                 <label>
                   <i className="fas fa-building"></i> Editorial
                   <input
@@ -454,14 +447,14 @@ function EditBook() {
                     name="publisher"
                     value={form.publisher}
                     onChange={handleChange}
-                    className="form-input"
+                    className="input-refined"
                     placeholder="Editorial"
                   />
                 </label>
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-group-refined">
               <label>
                 <i className="fas fa-layer-group"></i> Categoría
                 <select
@@ -469,7 +462,7 @@ function EditBook() {
                   value={form.category_id}
                   onChange={handleChange}
                   required
-                  className="form-input"
+                  className="input-refined"
                 >
                   <option value="">Selecciona una categoría</option>
                   {categories.map(cat => (
@@ -480,10 +473,10 @@ function EditBook() {
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="save-button" disabled={loading}>
+              <button type="submit" className="submit-btn-refined" disabled={loading}>
                 <i className="fas fa-save"></i> Guardar cambios
               </button>
-              <button type="button" className="cancel-button" onClick={() => navigate('/profile')}>
+              <button type="button" className="submit-btn-refined cancel-btn-refined" onClick={() => navigate('/profile')}>
                 <i className="fas fa-times"></i> Cancelar
               </button>
             </div>

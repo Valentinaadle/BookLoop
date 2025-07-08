@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import '../Assets/css/bookcard.css';
-import { FaShoppingCart, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaShoppingCart, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';
@@ -17,9 +17,13 @@ const BookCard = ({
   precio,
   showFavorito = true,
   showComprar = true,
+  showVerDetalles = false,
   book_id,
   isAdmin = false,
-  onDelete
+  onDelete,
+  status,
+  onMarkAsSold,
+  markAsSoldLoading
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user } = useAuth();
@@ -187,11 +191,13 @@ const BookCard = ({
         </div>
         <div className="book-info">
           <h3 className="book-title">{titulo}</h3>
-          <p className="book-author">de {autor}</p>
+          {autor && autor !== 'Autor desconocido' ? (
+  <p className="book-author">de {autor}</p>
+) : null}
           <div className="book-price-container">
             <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
           </div>
-          {showComprar && (
+          {showComprar && !showVerDetalles && (
             <div className="book-actions">
               <button 
                 className="buy-button"
@@ -204,7 +210,20 @@ const BookCard = ({
               </button>
             </div>
           )}
-
+          {showVerDetalles && (
+            <div className="book-actions">
+              <button
+                className="buy-button ver-detalles-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/book/${book_id}`);
+                }}
+              >
+                <FaEye style={{ marginRight: '8px' }} />Ver Detalles
+              </button>
+              
+            </div>
+          )}
         </div>
       </div>
 

@@ -8,6 +8,8 @@ import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 import BookCard from '../components/BookCard';
+import { useFavorites } from '../context/FavoritesContext';
+import { Heart, Star, Plus, Edit3, BookOpen, ShoppingBag, MessageSquare, Eye, Share2, Grid, List } from "lucide-react";
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -21,6 +23,65 @@ const INTERESES_PREDEFINIDOS = [
 const BOOKS_PER_PAGE = 9; // 3x3 grid
 
 function Profile() {
+  const { favorites } = useFavorites();
+  // ... existing state
+  const [markAsSoldLoadingId, setMarkAsSoldLoadingId] = useState(null);
+
+  const handleMarkAsSold = async (bookId) => {
+    setMarkAsSoldLoadingId(bookId);
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/books/${bookId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'vendido' })
+      });
+      const updatedBook = await res.json();
+      console.log('[DEBUG] PATCH status:', res.status, 'body:', updatedBook);
+      if (!res.ok) throw new Error('Error al actualizar el estado');
+      setPublishedBooks(prev => prev.map(book =>
+        book.book_id === bookId ? { ...book, ...updatedBook } : book
+      ));
+      setSuccess('Libro marcado como vendido');
+    } catch (err) {
+      setError('No se pudo cambiar el estado del libro');
+    } finally {
+      setMarkAsSoldLoadingId(null);
+    }
+  }
+  const [activeTab, setActiveTab] = useState('publicados'); // 'publicados', 'vendidos', 'solicitudes'
+const [solicitudes, setSolicitudes] = useState([]);
+const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
+  // --- hooks de estado principales ---
+  const [form, setForm] = useState({
+    nombre: '',
+    apellido: '',
+    email: '',
+    intereses: [],
+    photoUrl: '',
+    username: '',
+    bio: '',
+    stats: { publicados: 0, vendidos: 0, rating: 0 }
+  });
+  const [editMode, setEditMode] = useState(false);
+  const [showInteresesModal, setShowInteresesModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [tempIntereses, setTempIntereses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState(null);
+  const [publishedBooks, setPublishedBooks] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showBooksModal, setShowBooksModal] = useState(false);
+  const DEFAULT_BOOK_IMAGE = '/icono2.png';
+
+
+
+
+
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -51,7 +112,11 @@ function Profile() {
     setUserLoading(false);
   };
 
-  
+  const filteredBooks = publishedBooks.filter(book => {
+    if (activeTab === 'publicados') return (book.status === 'activo' || !book.status);
+    if (activeTab === 'vendidos') return book.status === 'vendido';
+    return true;
+  });
 
   const handleDeleteUser = async (id) => {
     setUserError(null);
@@ -73,29 +138,39 @@ function Profile() {
     setDeletingUserId(null);
   };
 
-  const [form, setForm] = useState({ 
-    nombre: '', 
-    apellido: '', 
-    email: '', 
-    intereses: [] 
-  });
-  const [editMode, setEditMode] = useState(false);
-  const [showInteresesModal, setShowInteresesModal] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [tempIntereses, setTempIntereses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(null);
-  const [error, setError] = useState(null);
-  const [publishedBooks, setPublishedBooks] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [bookToDelete, setBookToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showBooksModal, setShowBooksModal] = useState(false);
-  const DEFAULT_BOOK_IMAGE = '/icono2.png';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  useEffect(() => {
+    if (user && user.id && activeTab === 'solicitudes') {
+      setLoadingSolicitudes(true);
+      fetch(`${API_URL}/api/solicitudes/${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          setSolicitudes(Array.isArray(data) ? data : []);
+          setLoadingSolicitudes(false);
+        })
+        .catch(() => {
+          setSolicitudes([]);
+          setLoadingSolicitudes(false);
+        });
+    }
+  }, [user, activeTab]);
 
   useEffect(() => {
     if (user && user.id) {
-      // Cargar datos del perfil
       fetch(`${API_URL}/api/users/${user.id}`)
         .then(res => res.json())
         .then(data => {
@@ -103,7 +178,11 @@ function Profile() {
             nombre: data.nombre || '',
             apellido: data.apellido || '',
             email: data.email || '',
-            intereses: data.intereses || []
+            intereses: data.intereses || [],
+            photoUrl: data.photoUrl || '',
+            username: data.username || '@usuario',
+            bio: data.bio || 'Vendedor/a de libros apasionado/a.',
+            stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
           });
           setLoading(false);
         })
@@ -111,15 +190,12 @@ function Profile() {
           setError('No se pudo cargar el perfil');
           setLoading(false);
         });
-
-      // Cargar libros publicados
       fetch(`${API_URL}/api/books/user/${user.id}`)
         .then(res => res.json())
         .then(data => {
           setPublishedBooks(Array.isArray(data) ? data : []);
         })
-        .catch(err => {
-          console.error('Error al cargar libros:', err);
+        .catch(() => {
           setError('Error al cargar los libros publicados');
         });
     }
@@ -131,31 +207,62 @@ function Profile() {
   };
 
   const handleSave = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccess(null);
-    setError(null);
-    try {
-      const res = await fetch(`${API_URL}/api/users/${user.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: form.nombre,
-          apellido: form.apellido,
-          email: form.email,
-        })
-      });
-      if (!res.ok) throw new Error('Error al actualizar el perfil');
-      setSuccess('Perfil actualizado correctamente');
-      setEditMode(false);
-    } catch (err) {
-      setError('Error al actualizar el perfil');
-    } finally {
-      setLoading(false);
-    }
-  };
+  e.preventDefault();
+  console.log("[DEBUG] handleSave ejecutado", form, user);
+  setLoading(true);
+  setSuccess(null);
+  setError(null);
 
-  
+  // Construir objeto updates solo con campos que cambiaron
+  const updates = {};
+  if (form.nombre !== user.nombre) updates.nombre = form.nombre;
+  if (form.apellido !== user.apellido) updates.apellido = form.apellido;
+  if (form.email !== user.email) updates.email = form.email;
+  if (form.username !== user.username) updates.username = form.username;
+  if (form.bio !== (user.bio || 'Vendedor/a de libros apasionado/a.')) updates.bio = form.bio;
+  // Enviar photoUrl siempre que sea base64 y no esté vacío
+  if (form.photoUrl && form.photoUrl.startsWith('data:image')) {
+    updates.photoUrl = form.photoUrl;
+  }
+  // No enviar intereses porque no existe en la base
+
+  // Si no hay cambios, mostrar mensaje y no hacer fetch
+  if (Object.keys(updates).length === 0) {
+    setError('No hay cambios para guardar.');
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    if (!res.ok) throw new Error('Error al actualizar el perfil');
+    setSuccess('Perfil actualizado correctamente');
+    setEditMode(false);
+    // Recargar datos del usuario tras guardar para reflejar bio y otros cambios
+    fetch(`${API_URL}/api/users/${user.id}`)
+      .then(res => res.json())
+      .then(data => {
+        setForm({
+          nombre: data.nombre || '',
+          apellido: data.apellido || '',
+          email: data.email || '',
+          intereses: [], // No existe en la base, pero lo dejamos vacío para el frontend
+          photoUrl: data.photoUrl || '',
+          username: data.username || '@usuario',
+          bio: data.bio || 'Vendedor/a de libros apasionado/a.',
+          stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
+        });
+      });
+  } catch (err) {
+    setError('Error al actualizar el perfil');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleOpenIntereses = () => {
     setTempIntereses([...form.intereses]);
@@ -216,72 +323,84 @@ function Profile() {
     navigate('/');
   };
 
+  const handleTabClick = (tab) => {
+    if (tab === 'Favoritos') return navigate('/favoritos');
+    if (tab === 'Publicar') return navigate('/vender-page');
+    setActiveTab(tab);
+  };
+
   if (loading) return <div>Cargando perfil...</div>;
 
   if (user && user.role === 'admin') {
     return (
       <>
         <Header />
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '60vh', paddingTop: '40px' }}>
-          <div style={{ background: '#fff', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', padding: '32px', minWidth: '700px', maxWidth: '95vw' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '24px', color: '#394B60', fontSize: '2.2rem', fontWeight: 700 }}>Gestión de usuarios</h2>
-            {userError && <div className="error-message">{userError}</div>}
-            {userLoading ? (
-              <div className="loading">Cargando usuarios...</div>
-            ) : (
-              <>
-                <table className="users-table" style={{ width: '100%', borderCollapse: 'collapse', margin: '0 auto' }}>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nombre</th>
-                      <th>Apellido</th>
-                      <th>Email</th>
-                      <th>Rol</th>
-                      <th className="actions-column">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allUsers.filter(u => u.role === 'user').map(u => (
-                      <tr key={u.user_id || u.id}>
-                        <td>{u.user_id || u.id}</td>
-                        <td>{u.nombre || u.first_name || '-'}</td>
-                        <td>{u.apellido || u.last_name || '-'}</td>
-                        <td>{u.email}</td>
-                        <td>{u.role || 'usuario'}</td>
-                        <td className="actions-column">
-                          <div className="user-action-buttons">
-                            <button
-                               onClick={() => {
-                                 setDeletingUserId(u.user_id || u.id);
-                                 setShowDeleteUserModal(true);
-                               }}
-                               className="delete-button"
-                               disabled={deletingUserId === (u.user_id || u.id)}
-                             >
-                              Desactivar
-                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {showDeleteUserModal && (
-                  <div className="modal-overlay" style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                    <div className="modal-content" style={{background:'#fff',padding:32,borderRadius:8,minWidth:320,boxShadow:'0 2px 12px rgba(0,0,0,0.15)'}}>
-                      <h3 style={{marginBottom:24}}>¿Estás seguro que quieres desactivar este usuario?</h3>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: 24 }}>
-                        <button onClick={handleCancelDeleteUser} className="cancel-button" style={{background:'#eee',border:'none',padding:'8px 18px',borderRadius:4,cursor:'pointer'}}>Cancelar</button>
-                        <button onClick={() => handleDeleteUser(deletingUserId)} className="delete-button" style={{background:'#d32f2f',color:'#fff',border:'none',padding:'8px 18px',borderRadius:4,cursor:'pointer'}} autoFocus>Desactivar</button>
-                      </div>
-                    </div>
+        <div className="users-table-responsive">
+  <div className="users-table-card">
+    <h2 className="users-table-title">Gestión de usuarios</h2>
+    {userError && <div className="error-message">{userError}</div>}
+    {userLoading ? (
+      <div className="loading">Cargando usuarios...</div>
+    ) : (
+      <>
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th className="actions-column">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allUsers.filter(u => u.role === 'user').map(u => (
+              <tr key={u.user_id || u.id}>
+                <td>{u.user_id || u.id}</td>
+                <td>{u.nombre || u.first_name || '-'}</td>
+                <td>{u.apellido || u.last_name || '-'}</td>
+                <td>
+                  <Link to={`/usuario/${u.user_id || u.id}`} style={{color:'#394B60', textDecoration:'underline', cursor:'pointer'}}>
+                    {u.username}
+                  </Link>
+                </td>
+                <td>{u.email}</td>
+                <td>{u.role || 'usuario'}</td>
+                <td className="actions-column">
+                  <div className="user-action-buttons">
+                    <button
+                      onClick={() => {
+                        setDeletingUserId(u.user_id || u.id);
+                        setShowDeleteUserModal(true);
+                      }}
+                      className="delete-button"
+                      disabled={deletingUserId === (u.user_id || u.id)}
+                    >
+                      Desactivar
+                    </button>
                   </div>
-                )}
-              </>
-            )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {showDeleteUserModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>¿Estás seguro que quieres desactivar este usuario?</h3>
+              <div className="modal-actions">
+                <button onClick={handleCancelDeleteUser} className="cancel-button">Cancelar</button>
+                <button onClick={() => handleDeleteUser(deletingUserId)} className="delete-button" autoFocus>Desactivar</button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+      </>
+    )}
+  </div>
+</div>
         <Footer />
       </>
     );
@@ -290,144 +409,282 @@ function Profile() {
   return (
     <>
       <Header />
-      <div className="profile-container">
-        <div className="profile-card">
-          <div className="header-background"></div>
-          <div className="profile-top">
-            <div className="avatar-circle">{(form.nombre?.[0]) || 'U'}</div>
-            <div className="info">
-              <h2>
-                {form.nombre} {form.apellido}
-              </h2>
-              <p>{form.email}</p>
-              <div className="stats">
-                <span className="stat-item">
-                  <i className="fas fa-book"></i> {publishedBooks.length} libros publicados
-                </span>
-              </div>
-              <div className="intereses-container">
-                {form.intereses.map((interes, index) => (
-                  <span key={index} className="interes-tag">
-                    {interes}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="profile-actions">
-              {(!user || (user.role !== 'admin')) && (
-                <button onClick={() => setEditMode(true)} className="edit-button">
-                  <i className="fas fa-edit"></i>
-                </button>
+      <div className="profile-dashboard-layout">
+        {/* Sidebar */}
+        <aside className="profile-sidebar">
+          <div className="profile-sidebar-card">
+            <div className="profile-sidebar-avatar">
+              {form.photoUrl ? (
+                <img src={form.photoUrl} alt="Foto de perfil" />
+              ) : (
+                <span>{(form.nombre?.[0]) || 'U'}</span>
               )}
-              <button onClick={handleLogout} className="logout-button" title="Cerrar sesión">
-                <i className="fas fa-sign-out-alt"></i>
-              </button>
+            </div>
+            <h2 className="profile-sidebar-name">{form.nombre} {form.apellido}</h2>
+            <p className="profile-sidebar-username">@{form.username.replace(/^@/, '')}</p>
+            <p className="profile-sidebar-bio">{form.bio}</p>
+            <button className="profile-sidebar-edit-btn" onClick={() => setEditMode(true)}>
+              <Edit3 size={18} style={{marginRight:6, marginBottom:-2}} /> Editar perfil
+            </button>
+          </div>
+          <div className="profile-sidebar-stats">
+            <div className="profile-sidebar-stat">
+              <span className="profile-sidebar-stat-value">{publishedBooks.filter(book => book.status === 'activo' || !book.status).length}</span>
+              <span className="profile-sidebar-stat-label">Libros en venta</span>
+            </div>
+            <div className="profile-sidebar-stat">
+              <span className="profile-sidebar-stat-value">{publishedBooks.filter(book => book.status === 'vendido').length}</span>
+              <span className="profile-sidebar-stat-label">Vendidos</span>
             </div>
           </div>
-        </div>
-
-        {/* Sección de Libros Publicados */}
-        <div className="published-books-section">
-          <h2>Mis Libros Publicados</h2>
-          {publishedBooks.length > 0 ? (
-            <div className="books-grid">
-              {publishedBooks.map(book => (
-                <div key={book.book_id} style={{ position: 'relative' }}>
-                  <BookCard
-                    descuento={null}
-                    img={getBookImage(book, API_URL)}
-                    titulo={book.title || book.titulo || 'Sin título'}
-                    autor={getBookAuthor(book)}
-                    precio={book.price || book.precio}
-                    book_id={book.book_id}
-                    showFavorito={false}
-                    showComprar={true}
-                  />
+          <div className="profile-sidebar-genres-card">
+            <h3>Géneros favoritos</h3>
+            {form.intereses && form.intereses.length > 0 ? (
+              <ul className="profile-sidebar-genres-list">
+                {form.intereses.map((genero, idx) => (
+                  <li key={idx} className="profile-sidebar-genre-item">{genero}</li>
+                ))}
+              </ul>
+            ) : (
+              <>
+                <p className="profile-sidebar-no-genres">Aún no seleccionaste tus géneros favoritos.</p>
+                <button className="choose-genres-btn" onClick={() => setShowInteresesModal(true)}>Elegir géneros</button>
+              </>
+            )}
+          </div>
+        </aside>
+        {/* Main */}
+        <main className="profile-main">
+          {/* Tabs for book status */}
+          <div className="profile-main-tabs">
+            <button
+              className={`profile-main-tab${activeTab === 'publicados' ? ' active' : ''}`}
+              onClick={() => setActiveTab('publicados')}
+            >
+              Libros Publicados
+            </button>
+            <button
+              className={`profile-main-tab${activeTab === 'vendidos' ? ' active' : ''}`}
+              onClick={() => handleTabClick('vendidos')}
+            >
+              Libros Vendidos
+            </button>
+            <button
+              className={`profile-main-tab${activeTab === 'solicitudes' ? ' active' : ''}`}
+              onClick={() => handleTabClick('solicitudes')}
+            >
+              Solicitudes
+            </button>
+            <button className="profile-main-tab">
+              Reseñas
+            </button>
+            <button
+              className={`profile-main-tab${activeTab === 'favoritos' ? ' active' : ''}`}
+              onClick={() => setActiveTab('favoritos')}
+            >
+              Wishlist
+            </button>
+          </div>
+          <div className="profile-main-content">
+            {activeTab === 'solicitudes' ? (
+              loadingSolicitudes ? (
+                <div className="profile-main-empty-card">
+                  <MessageSquare size={48} color="#000" style={{marginBottom:12}} />
+                  <span>Cargando solicitudes...</span>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="no-books">
-              <p>No has publicado ningún libro todavía.</p>
-              <Link to="/search" className="add-book-link">
-                Publicar un libro
-              </Link>
-            </div>
-          )}
-        </div>
-
+              ) : solicitudes.length === 0 ? (
+                <div className="profile-main-empty-card">
+                  <MessageSquare size={48} color="#000" style={{marginBottom:12}} />
+                  <h3>No tienes solicitudes aún</h3>
+                  <p className="profile-main-empty-desc">Aquí aparecerán los libros que te solicitaron otros usuarios.</p>
+                </div>
+              ) : (
+                <div style={{padding: '0 0.5rem'}}>
+                  <div className="solicitud-title">Solicitudes de Compra</div>
+                  {solicitudes.map((sol) => (
+                    <div className="solicitud-card" key={sol.id}>
+                      <img
+                        className="solicitud-img"
+                        src={getBookImage(sol.books, API_URL) || '/Assets/book-empty.png'}
+                        alt={sol.books?.title || 'Sin título'}
+                        onError={e => e.target.src='/Assets/book-empty.png'}
+                      />
+                      <div className="solicitud-info">
+                        <span className="solicitud-info-title">{sol.books?.title || 'Sin título'}</span>
+                        <span className="solicitud-info-precio">Precio: <b>${sol.books?.price || '---'}</b></span>
+                        <span className="solicitud-info-user">Solicitado por: <Link to={`/usuario/${sol.users?.id || sol.users?.user_id || ''}`} className="solicitud-link">{sol.users?.nombre || sol.users?.username || 'Usuario'}</Link></span>
+                      </div>
+                      <button className="solicitud-contact-btn" onClick={() => navigate(`/book/${sol.books?.book_id || sol.books?.id}`)}>Ver libro</button>
+                    </div>
+                  ))}
+                </div>
+              )
+            ) : activeTab === 'favoritos' ? (
+              favorites.length === 0 ? (
+                <div className="profile-main-empty-card">
+                  <Heart size={48} color="#000" style={{marginBottom:12}} />
+                  <h3>No tienes favoritos aún</h3>
+                  <p className="profile-main-empty-desc">Cuando marques libros como favoritos, aparecerán aquí.</p>
+                </div>
+              ) : (
+                <>
+                  <h3 className="profile-main-section-title">Wishlist</h3>
+                  <div className="profile-main-books-grid">
+                    {favorites.map(book => (
+                      <BookCard
+                        key={book.book_id}
+                        img={book.img || getBookImage(book, API_URL)}
+                        titulo={book.titulo || book.title || 'Sin título'}
+                        autor={book.autor || book.author || (book.authors ? book.authors[0] : '') || ''}
+                        precio={book.precio || book.price || ''}
+                        book_id={book.book_id}
+                        favorito={true}
+                        showVerDetalles={true}
+                      />
+                    ))}
+                  </div>
+                </>
+              )
+            ) : filteredBooks.length === 0 ? (
+              <div className="profile-main-empty-card">
+                {activeTab === 'publicados' ? (
+                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                ) : (
+                  <ShoppingBag size={48} color="#000" style={{marginBottom:12}} />
+                )}
+                <h3>{activeTab === 'publicados' ? 'Aún no has publicado ningún libro' : 'Aún no has vendido ningún libro'}</h3>
+                <p className="profile-main-empty-desc">{activeTab === 'publicados' ? 'Es hora de compartir tus tesoros literarios con el mundo. Publica tu primer libro y conéctate con otros amantes de la lectura.' : 'Cuando vendas un libro, aparecerá aquí.'}</p>
+                {activeTab === 'publicados' && (
+                  <button className="profile-main-add-btn" onClick={() => handleTabClick('Publicar')}><Plus size={20} style={{marginRight:4}} /> Publicar un libro</button>
+                )}
+              </div>
+            ) : (
+              <>
+                <h3 className="profile-main-section-title">{activeTab === 'publicados' ? 'Libros Activos' : 'Libros Vendidos'}</h3>
+                <div className="profile-main-books-grid">
+                  {filteredBooks.map(book => (
+                    <BookCard
+                      key={book.book_id}
+                      img={getBookImage(book, API_URL)}
+                      titulo={book.titulo || book.title || 'Sin título'}
+                      autor={book.autor || book.author || (book.authors ? book.authors[0] : '') || ''}
+                      precio={book.precio || book.price || ''}
+                      book_id={book.book_id}
+                      status={book.status}
+                      showVerDetalles={true}
+                      onMarkAsSold={book.status === 'activo' ? () => handleMarkAsSold(book.book_id) : undefined}
+                      markAsSoldLoading={markAsSoldLoadingId === book.book_id}
+                    />
+                  ))}
+                  {activeTab === 'publicados' && (
+                    <div className="profile-main-book-card add-new-book" onClick={() => handleTabClick('Publicar')} style={{cursor:'pointer'}}>
+                      <div className="profile-main-add-icon"><Plus size={20} style={{marginRight:4}} /></div>
+                      <p className="profile-main-add-text">Publicar nuevo libro</p>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </main>
+      </div>
+      {/* Modals condicionales envueltos en un fragmento para evitar error de JSX adyacente */}
+      <>
         {editMode && (
           <div className="modal-overlay">
-            <div className="modal-content edit-profile-modal">
+            <div className="modal-content edit-profile-modal-minimal">
               <form onSubmit={handleSave}>
-                <div className="form-group">
-                  <label>
-                    <i className="fas fa-user"></i> Nombre
-                    <input 
-                      type="text" 
-                      name="nombre" 
-                      value={form.nombre} 
-                      onChange={handleChange} 
-                      required 
-                      className="form-input"
+                <div className="edit-profile-avatar-section">
+                  <label htmlFor="profile-photo-upload" className="edit-profile-avatar-label">
+                    {form.photoUrl ? (
+                      <img src={form.photoUrl} alt="Foto de perfil" className="edit-profile-avatar-img" />
+                    ) : (
+                      <span className="edit-profile-avatar-initial">{(form.nombre?.[0]) || 'U'}</span>
+                    )}
+                    <input
+                      id="profile-photo-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={e => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = ev => setForm(prev => ({ ...prev, photoUrl: ev.target.result }));
+                          reader.readAsDataURL(file);
+                        }
+                      }}
                     />
                   </label>
                 </div>
-                <div className="form-group">
-                  <label>
-                    <i className="fas fa-user"></i> Apellido
-                    <input 
-                      type="text" 
-                      name="apellido" 
-                      value={form.apellido} 
-                      onChange={handleChange} 
-                      required 
-                      className="form-input"
-                    />
-                  </label>
+                <div className="form-group-minimal">
+                  <label htmlFor="nombre">Nombre</label>
+                  <input 
+                    id="nombre"
+                    type="text" 
+                    name="nombre" 
+                    value={form.nombre} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input-minimal"
+                    placeholder="Nombre"
+                  />
                 </div>
-                <div className="form-group">
-                  <label>
-                    <i className="fas fa-envelope"></i> Email
-                    <input 
-                      type="email" 
-                      name="email" 
-                      value={form.email} 
-                      onChange={handleChange} 
-                      required 
-                      className="form-input"
-                    />
-                  </label>
+                <div className="form-group-minimal">
+                  <label htmlFor="apellido">Apellido</label>
+                  <input 
+                    id="apellido"
+                    type="text" 
+                    name="apellido" 
+                    value={form.apellido} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input-minimal"
+                    placeholder="Apellido"
+                  />
                 </div>
-                <div className="form-group">
-                  <label>
-                    <i className="fas fa-heart"></i> Intereses
-                  </label>
-                  <button 
-                    type="button" 
-                    onClick={handleOpenIntereses}
-                    className="select-intereses-button"
-                  >
-                    Seleccionar Intereses
-                  </button>
+                <div className="form-group-minimal">
+                  <label htmlFor="email">Email</label>
+                  <input 
+                    id="email"
+                    type="email" 
+                    name="email" 
+                    value={form.email} 
+                    onChange={handleChange} 
+                    required 
+                    className="form-input-minimal"
+                    placeholder="Email"
+                  />
                 </div>
-                <div className="modal-buttons">
-                  <button type="submit" className="save-button">
-                    <i className="fas fa-save"></i> Guardar
+                <div className="form-group-minimal">
+                  <label htmlFor="bio">Biografía</label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    value={form.bio}
+                    onChange={handleChange}
+                    className="form-input-minimal"
+                    placeholder="Biografía"
+                    rows={3}
+                  />
+                </div>
+                <div className="edit-buttons-minimal">
+                  <button type="submit" className="save-btn-minimal">
+                    Guardar
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setEditMode(false)} 
-                    className="cancel-button"
+                    className="cancel-btn-minimal"
                   >
-                    <i className="fas fa-times"></i> Cancelar
+                    Cancelar
                   </button>
                 </div>
               </form>
             </div>
           </div>
         )}
-
+        {/* Modal de intereses visual y funcional */}
         {showInteresesModal && (
           <div className="modal-overlay">
             <div className="modal-content intereses-modal">
@@ -454,182 +711,18 @@ function Profile() {
                 ))}
               </div>
               <div className="modal-buttons">
-                <button 
-                  onClick={handleSaveIntereses} 
-                  className="save-button"
-                >
-                  <i className="fas fa-check"></i> Confirmar
-                </button>
+                <button onClick={handleSaveIntereses} className="save-btn-minimal">Confirmar</button>
                 <button 
                   onClick={() => setShowInteresesModal(false)} 
-                  className="cancel-button"
+                  className="cancel-btn-minimal"
                 >
-                  <i className="fas fa-times"></i> Cancelar
+                  Cancelar
                 </button>
               </div>
             </div>
           </div>
         )}
-        
-        {success && <div className="success-message">{success}</div>}
-        {error && <div className="error-message">{error}</div>}
-      </div>
-
-      {/* Modal de Libros */}
-      {showBooksModal && (
-        <div className="modal-overlay">
-          <div className="modal-content books-modal">
-            <div className="books-modal-header">
-              <h2>Mis Libros Publicados</h2>
-              <button onClick={() => setShowBooksModal(false)} className="close-modal" aria-label="Cerrar">
-                &times;
-              </button>
-            </div>
-            
-            {publishedBooks.length === 0 ? (
-              <p className="no-books">No tienes libros publicados</p>
-            ) : (
-              <>
-                <div className="books-grid-modal">
-                  {getCurrentPageBooks().map(book => {
-                    let imageUrl = DEFAULT_BOOK_IMAGE;
-                    if (book.Images && Array.isArray(book.Images) && book.Images.length > 0 && book.Images[0].image_url) {
-                      if (book.Images[0].image_url.startsWith('/Assets')) {
-                        imageUrl = book.Images[0].image_url;
-                      } else if (book.Images[0].image_url.startsWith('http')) {
-                        imageUrl = book.Images[0].image_url;
-                      } else {
-                        imageUrl = `${API_URL}${book.Images[0].image_url}`;
-                      }
-                    } else if (book.imageUrl) {
-                      if (book.imageUrl.startsWith('/Assets')) {
-                        imageUrl = book.imageUrl;
-                      } else if (book.imageUrl.startsWith('http')) {
-                        imageUrl = book.imageUrl;
-                      } else {
-                        imageUrl = `${API_URL}${book.imageUrl}`;
-                      }
-                    }
-                    
-                    return (
-                      <div key={book.book_id} className="book-card-modal">
-                        <img 
-                          src={imageUrl} 
-                          alt={book.title}
-                          className="book-cover-modal"
-                          onError={e => { e.target.src = DEFAULT_BOOK_IMAGE; }}
-                        />
-                        <div className="book-info-modal">
-                          <h4>{book.title}</h4>
-                          <p className="book-author-modal">
-                            {(() => {
-                              if (Array.isArray(book.authors)) {
-                                return book.authors.join(', ');
-                              } else if (typeof book.authors === 'string') {
-                                try {
-                                  const parsed = JSON.parse(book.authors);
-                                  if (Array.isArray(parsed)) {
-                                    return parsed.join(', ');
-                                  }
-                                  return parsed;
-                                } catch {
-                                  return book.authors;
-                                }
-                              } else {
-                                return 'Autor no especificado';
-                              }
-                            })()}
-                          </p>
-                          <p className="book-price-modal">
-                            ${parseFloat(book.price).toFixed(2)}
-                          </p>
-                          <div className="book-actions-modal">
-                            <Link to={`/book/${book.book_id}`} className="view-button">
-                              <i className="fas fa-eye"></i> Ver
-                            </Link>
-                            <Link to={`/edit-book-user/${book.book_id}`} className="edit-button">
-                              <i className="fas fa-edit"></i> Editar
-                            </Link>
-                            <button 
-                              className="delete-button"
-                              onClick={() => openDeleteModal(book.book_id)}
-                            >
-                              <i className="fas fa-trash"></i> Eliminar
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                {/* Paginación */}
-                <div className="pagination">
-                  <button 
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="pagination-button"
-                  >
-                    <i className="fas fa-chevron-left"></i>
-                  </button>
-                  
-                  {[...Array(totalPages)].map((_, index) => (
-                    <button
-                      key={index + 1}
-                      onClick={() => handlePageChange(index + 1)}
-                      className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                  
-                  <button 
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="pagination-button"
-                  >
-                    <i className="fas fa-chevron-right"></i>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {showDeleteModal && (
-        <div className="modal-overlay">
-          <div className="modal-content delete-confirm-modal">
-            <h2>Confirmar Eliminación</h2>
-            <p>¿Estás seguro de que deseas eliminar este libro? Esta acción no se puede deshacer.</p>
-            <div className="modal-buttons">
-              <button onClick={handleDeleteConfirm} className="delete-button">
-                <i className="fas fa-trash"></i> Sí, Eliminar
-              </button>
-              <button onClick={() => setShowDeleteModal(false)} className="cancel-button">
-                <i className="fas fa-times"></i> Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showLogoutModal && (
-        <div className="modal-overlay">
-          <div className="modal-content logout-confirm-modal">
-            <h2>Confirmar cierre de sesión</h2>
-            <p>¿Estás seguro de que deseas cerrar sesión?</p>
-            <div className="modal-buttons">
-              <button onClick={confirmLogout} className="confirm-button">
-                <i className="fas fa-sign-out-alt"></i> Sí, cerrar sesión
-              </button>
-              <button onClick={() => setShowLogoutModal(false)} className="cancel-button">
-                <i className="fas fa-times"></i> Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </>
       <Footer />
     </>
   );

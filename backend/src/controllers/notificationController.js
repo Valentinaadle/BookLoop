@@ -1,10 +1,11 @@
 const { Book, User } = require('../models');
 const { sendInterestEmail } = require('../services/emailService');
+const Solicitud = require('../models/Solicitud');
 
 const notifySeller = async (req, res) => {
   try {
     console.log('Recibida petición de notificación:', req.body);
-    const { bookId, buyerName, buyerEmail } = req.body;
+    const { bookId, buyerName, buyerEmail, buyerId } = req.body;
 
     if (!bookId || !buyerName || !buyerEmail) {
       console.log('Faltan datos requeridos:', { bookId, buyerName, buyerEmail });
@@ -30,6 +31,13 @@ const notifySeller = async (req, res) => {
     console.log('Datos del vendedor:', {
       email: book.seller.email,
       bookTitle: book.title
+    });
+
+    // Guardar la solicitud en la base de datos
+    await Solicitud.createSolicitud({
+      book_id: bookId,
+      seller_id: book.seller.id,
+      buyer_id: buyerId // ahora sí, el id del comprador real
     });
 
     // Enviar email al vendedor

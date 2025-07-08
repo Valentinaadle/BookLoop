@@ -127,3 +127,49 @@ button.bg-sky-600:hover {
   /* This block is intentionally left empty to override previous general rules if needed, without using unset */
 }
 
+.book-details-header-row {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.book-details-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  width: 100%;
+}
+.book-details-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: #22223b;
+  margin: 0;
+}
+.favorite-btn {
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin-left: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.18s;
+  
+}
+.heart-icon {
+  font-size: 2.1rem;
+  color: #222;
+  transition: color 0.18s;
+}
+.favorite-btn.filled .heart-icon,
+.favorite-btn .heart-icon.filled {
+  color: #e53935;
+}
+.favorite-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+

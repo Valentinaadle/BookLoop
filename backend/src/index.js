@@ -16,12 +16,29 @@ const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
+const solicitudRoutes = require('./routes/solicitudRoutes');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Log global de todas las peticiones
+app.use((req, res, next) => {
+
+  next();
+});
+
+// Middleware para capturar errores de JSON inválido
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    console.error('Error de JSON:', err.message);
+    return res.status(400).json({ message: 'JSON inválido', error: err.message });
+  }
+  next();
+});
+
 app.use('/uploads', express.static(__dirname + '/../uploads'));
 
 // Variables de entorno
@@ -32,6 +49,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/solicitudes', solicitudRoutes);
 
 // Ruta básica
 app.get('/', (req, res) => {

@@ -3,7 +3,7 @@ const supabase = require('../config/db');
 
 // Obtener todos los libros
 async function getAllBooks() {
-  const { data, error } = await supabase.from('books').select('*');
+  const { data, error } = await supabase.from('books').select('*').neq('status', 'vendido');
   if (error) throw error;
   return data;
 }

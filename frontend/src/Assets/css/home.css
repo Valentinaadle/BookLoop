@@ -145,3 +145,51 @@ body {
   text-overflow: ellipsis;
   min-height: 1.2em;
 }
+
+/* === Estilos para los tabs de perfil === */
+
+.profile-main-books-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  margin-top: 0.5rem;
+  padding-bottom: 2.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 700px) {
+  .profile-main-books-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 1.2rem;
+  border-bottom: 2px solid #e0e7ef;
+  margin-bottom: 1.5rem;
+}
+
+.profile-tabs .profile-tab {
+  background: none !important;
+  border: none !important;
+  color: #6c757d !important;
+  font-size: 1.08rem !important;
+  font-weight: 500 !important;
+  padding: 0.9rem 1.5rem 0.7rem 1.5rem !important;
+  border-bottom: 2px solid transparent !important;
+  cursor: pointer !important;
+  transition: color 0.18s, border-color 0.18s !important;
+  display: inline-block !important;
+}
+
+.profile-tabs .profile-tab.profile-tab-active {
+  color: #2563eb !important;
+  border-bottom: 2.5px solid #2563eb !important;
+  font-weight: 700 !important;
+  background: #f7f8fa !important;
+}
+
+.profile-tabs .profile-tab:hover {
+  color: #2563eb !important;
+}
