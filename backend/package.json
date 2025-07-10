@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +26,14 @@
     "multer": "^2.0.1",
     "node-fetch": "^2.7.0",
     "nodemailer": "^7.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3",
+    "nodemon": "^3.1.0",
+    "@jest/globals": "^29.5.0",
+    "chai": "^4.3.10",
+    "sinon": "^17.0.1",
+    "proxyquire": "^2.1.3"
   }
 }

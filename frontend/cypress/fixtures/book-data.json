@@ -1,0 +1,33 @@
+{
+  "sampleBooks": [
+    {
+      "isbn": "9788423974047",
+      "title": "El Camino del Lobo",
+      "author": "Autor Ejemplo",
+      "condition": "Como nuevo",
+      "category": "1",
+      "price": "25.99",
+      "description": "Una historia fascinante de aventuras"
+    },
+    {
+      "isbn": "9788437604947",
+      "title": "El Camino del Lobo",
+      "author": "Autor Ejemplo",
+      "condition": "Buen estado",
+      "category": "2",
+      "price": "18.50",
+      "description": "Una historia fascinante de aventuras"
+    }
+  ],
+  "searchQueries": [
+    "El Camino del Lobo",
+    "Camino",
+    "Lobo",
+    "aventuras",
+    "xyzabc123456789noexiste"
+  ],
+  "testUser": {
+    "email": "silcimolina@gmail.com",
+    "password": "12345678"
+  }
+} 
