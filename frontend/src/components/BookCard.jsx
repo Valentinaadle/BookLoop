@@ -101,43 +101,21 @@ const BookCard = ({
     navigate(`/book/${book_id}`);
   };
 
-  const handleMouseMove = (e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    const rotateX = (y - centerY) / 20;
-    const rotateY = (centerX - x) / 20;
-
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-  };
-
-  const handleMouseLeave = (e) => {
-    const card = e.currentTarget;
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-  };
-
   return (
     <>
       <div 
         className="book-card" 
         onClick={handleBookClick} 
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
       >
-        <div className="book-image-container">
-          {descuento && <div className="discount-badge">{`-${descuento}%`}</div>}
-          
+        <div className="book-image-container modern">
+          {/* Ícono de favorito flotante en la esquina superior derecha */}
           {showFavorito && !isAdmin && (
             <button
-              className={`favorite-btn ${isBookFavorite ? 'filled' : ''}`}
+              className={`favorite-btn-modern ${isBookFavorite ? 'filled' : ''}`}
               onClick={handleFavoriteClick}
               disabled={isLoading}
               aria-label={isBookFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+              style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}
             >
               {isBookFavorite ? <AiFillHeart className="heart-icon filled" /> : <AiOutlineHeart className="heart-icon" />}
             </button>
@@ -186,34 +164,34 @@ const BookCard = ({
               e.target.src = DEFAULT_BOOK_IMAGE;
               e.target.onerror = null;
             }}
-            className="book-image"
+            className="book-image-modern"
           />
         </div>
-        <div className="book-info">
-          <h3 className="book-title">{titulo}</h3>
+        <div className="book-info-modern">
+          <h3 className="book-title-modern">{titulo}</h3>
           {autor && autor !== 'Autor desconocido' ? (
-  <p className="book-author">de {autor}</p>
-) : null}
-          <div className="book-price-container">
-            <span className="book-price">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
+            <p className="book-author-modern">de {autor}</p>
+          ) : null}
+          <div className="book-price-container-modern">
+            <span className="book-price-modern">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
           </div>
           {showComprar && !showVerDetalles && (
-            <div className="book-actions">
+            <div className="book-actions-modern">
               <button 
-                className="buy-button"
+                className="buy-button-modern"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/book/${book_id}`);
                 }}
               >
-                {isAdmin ? 'Ver detalles' : (<><FaShoppingCart style={{ marginRight: '8px' }} />Comprar</>)}
+                <FaShoppingCart style={{ marginRight: '8px' }} />Comprar
               </button>
             </div>
           )}
           {showVerDetalles && (
-            <div className="book-actions">
+            <div className="book-actions-modern">
               <button
-                className="buy-button ver-detalles-button"
+                className="buy-button-modern ver-detalles-button"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/book/${book_id}`);
@@ -221,7 +199,6 @@ const BookCard = ({
               >
                 <FaEye style={{ marginRight: '8px' }} />Ver Detalles
               </button>
-              
             </div>
           )}
         </div>

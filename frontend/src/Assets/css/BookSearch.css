@@ -111,3 +111,73 @@
   background-color: #f8f9fa;
   border-radius: 5px;
 } 
+
+.book-search .search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.book-search .search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.book-search .search-input:focus {
+  outline: none;
+  border-color: #394B60;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.book-search .books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.book-search .book-card {
+  /* Estilos específicos para las tarjetas DENTRO de la búsqueda si son necesarios */
+}
+
+.book-search .error-message {
+  color: #d9534f;
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.book-search .loading,
+.book-search .no-results {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 3rem;
+  min-height: 100px;
+}
+
+/* Ajustes para el book-info específico de la búsqueda */
+.book-search .book-info {
+  text-align: left; /* Mantiene el texto a la izquierda SOLO en la búsqueda */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .book-search .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .book-search .search-input {
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+  }
+} 
