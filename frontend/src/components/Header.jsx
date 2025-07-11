@@ -67,8 +67,7 @@ export default function Header() {
         <div className="logo-and-nav">
           <div className="logo">
             <Link to="/">
-              <img src="/icons/iconoe.png" className="icon logo-icon" alt="icon" />
-              <span className="logo-text">BookLoop</span>
+              <img src="/4.png" className="icon logo-icon" alt="icon" />
             </Link>
           </div>
           <nav className="header-nav">

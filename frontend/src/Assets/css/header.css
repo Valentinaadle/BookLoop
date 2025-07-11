@@ -18,7 +18,8 @@
 .logo-and-nav {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
+  
 }
 
 .logo a {
@@ -26,19 +27,19 @@
   align-items: center;
   text-decoration: none;
   color: var(--text-color, #333);
+  
+  
 }
 
 .logo-icon {
   height: 32px;
   width: auto;
+  transform: scale(4.5); 
+  margin-left: -1px;
+  margin-right: 0.5rem;
+  
 }
 
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-left: 0.5rem;
-  font-family: 'Playfair Display', serif;
-}
 
 .header-nav .nav-links {
   list-style: none;
