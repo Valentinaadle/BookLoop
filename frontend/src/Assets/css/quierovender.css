@@ -44,9 +44,12 @@
 }
 
 .paso-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+ 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.337);
+  transform: translateY(-10px) rotateX(5deg) scale(1.03);
+  
 }
+
 
 .paso-icono {
   width: 48px;
@@ -62,6 +65,7 @@
   font-weight: 600;
   color: #343a40;
   margin-bottom: 8px;
+  transform: translateY(-10px) rotateX(5deg) scale(1.03);
 }
 
 .paso-card p {
@@ -71,7 +75,9 @@
   line-height: 1.5;
   max-width: 200px;
   margin: 0 auto;
+  
 }
+
 
 /* === MODERNIZED FORM STYLES === */
 
@@ -212,16 +218,17 @@
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
+  width:90%;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   margin-top: 16px;
-  align-self: flex-end; /* Align button to the right */
+  align-self: center; /* Align button to the right */
 }
 
 .quierovender-form-container .submit-btn:hover:not(:disabled) {
   background-color: #000000 !important; /* Slightly darker on hover */
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(57, 75, 96, 0.2); /* Enhanced shadow on hover */
+  
+  box-shadow: 0 6px 16px rgba(9, 11, 14, 0.636); /* Enhanced shadow on hover */
 }
 
 .quierovender-form-container .submit-btn:disabled {
@@ -231,6 +238,166 @@
   transform: none;
   box-shadow: none;
 }
+
+/* ==================== */
+/* ANIMACIONES AGREGADAS */
+/* ==================== */
+
+/* 1. Animación de aparición suave para las tarjetas de pasos */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.paso-card {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0; /* Inicia invisible */
+  transform: scale(1.1) rotate(5deg);
+}
+
+.paso-card:nth-child(1) { animation-delay: 0.1s; }
+.paso-card:nth-child(2) { animation-delay: 0.3s; }
+.paso-card:nth-child(3) { animation-delay: 0.5s; }
+.paso-card:nth-child(4) { animation-delay: 0.7s; }
+
+/* 2. Efecto hover mejorado para iconos */
+.paso-icono {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.paso-card:hover .paso-icono {
+  filter: grayscale(0);
+  opacity: 1;
+  transform: scale(1.1) rotate(5deg);
+}
+.paso-card:hover h3{
+transform: scale(1.1) perspective(500px) ;
+
+}
+.paso-card:hover p{
+transform: scale(1.1) perspective(500px);
+}
+
+
+
+
+
+
+
+/* 4. Efecto de carga para formulario */
+@keyframes shimmer {
+  0% { background-position: -468px 0 }
+  100% { background-position: 468px 0 }
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: linear-gradient(to right, #f1f2f4 8%, #e9ecef 18%, #f1f2f4 33%) !important;
+  background-size: 800px 104px !important;
+  animation: shimmer 1.5s infinite linear !important;
+}
+
+/* 5. Efecto de flotación para el contenedor del formulario */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.quierovender-form-container {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 6. Transición para labels al enfocar inputs */
+.form-group label {
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus + label,
+.form-group select:focus + label,
+.form-group textarea:focus + label {
+  color: #394B60;
+  transform: translateX(5px);
+}
+
+/* 7. Efecto de borde animado para campos requeridos */
+.form-group input:required,
+.form-group select:required,
+.form-group textarea:required {
+  position: relative;
+}
+
+.form-group input:required:valid,
+.form-group select:required:valid,
+.form-group textarea:required:valid {
+  border-left: 4px solid #3c35f7ab !important;
+}
+
+.form-group input:required:invalid:not(:placeholder-shown),
+.form-group select:required:invalid,
+.form-group textarea:required:invalid:not(:placeholder-shown) {
+  border-left: 4px solid #3c35f7ab !important;
+}
+
+/* 8. Animación de zoom sutil al enfocar textarea */
+.form-group textarea {
+  transform-origin: center top;
+  transition: transform 0.3s ease;
+}
+
+.form-group textarea:focus {
+  transform: scale(1.02);
+}
+
+/* 9. Efecto de transición para el título principal */
+.vender-container > h2 {
+  position: relative;
+  display: block;
+}
+
+.vender-container > h2:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  bottom: -5px;
+  left: 0;
+  background-color: #394B60;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.vender-container > h2:hover:after {
+  transform: scaleX(1);
+}
+
+/* 10. Efecto de parpadeo para campos importantes */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(57, 75, 96, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(57, 75, 96, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(57, 75, 96, 0); }
+}
+
+.form-group input:focus:required,
+.form-group select:focus:required,
+.form-group textarea:focus:required {
+  animation: pulse 1.5s infinite;
+}
+
+
+
+
+
+
+
+
+
 
 /* === RESPONSIVE ADJUSTMENTS === */
 

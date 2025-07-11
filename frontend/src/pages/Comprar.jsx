@@ -392,7 +392,7 @@ const Comprar = () => {
                 borderRadius: '6px',
                 padding: '10px'
               }}>
-                {["Nuevo", "Como Nuevo", "Buen Estado", "Usado", "Aceptable", "Muy bueno"].map(condition => (
+                {["Nuevo", "Como Nuevo", "Buen Estado", "Aceptable", ].map(condition => (
                   <label 
                     key={condition} 
                     style={{ 
@@ -545,7 +545,7 @@ const Comprar = () => {
             <div className="filter-header" onClick={() => toggle("estado")}>Estado <span>{collapsed.estado ? "-" : "+"}</span></div>
             <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
               {[
-                "Nuevo", "Como Nuevo", "Buen Estado", "Usado", "Aceptable", "Muy bueno"
+                "Nuevo", "Como Nuevo", "Buen Estado", "Aceptable"
               ].map((state) => (
                 <label key={state}>
                   <input
@@ -607,7 +607,7 @@ const Comprar = () => {
               <option value="default">Ordenar por</option>
               <option value="price-asc">Menor precio</option>
               <option value="price-desc">Mayor precio</option>
-              <option value="most-sold">Más vendidos</option>
+              <option value="most-sold">Recien ingresados </option>
             </select>
           </div>
           {error && (
