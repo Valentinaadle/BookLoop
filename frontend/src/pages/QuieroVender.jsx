@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 
 const pasos = [
   {
-    titulo: 'Registrate',
-    descripcion: 'Crea tu cuenta en BookLoop para poder iniciar la venta de tu libro.',
+    titulo: 'Registrate en BookLoop.',
+    descripcion: 'Crea tu cuenta y luego inicia sesión para poder iniciar la venta de tu libro.',
     icono: '/icons/register.jpg'
   },
   {
@@ -22,8 +22,8 @@ const pasos = [
     icono: '/icons/estado.png'
   },
   {
-    titulo: 'Pone un precio',
-    descripcion: 'Elegi un precio razonable para la venta de tu libro y publicalo!',
+    titulo: 'Elegi un precio razonable',
+    descripcion: 'Por ultimo, pone un precio adecuado a tu libro y publicalo!',
     icono: '/icons/precio.webp'
   }
 ];

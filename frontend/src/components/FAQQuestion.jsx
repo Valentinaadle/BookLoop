@@ -5,7 +5,7 @@ const FAQQuestions = () => {
   const faqs = [
     {
       question: '¿Cómo realizo una compra en Bookloop?',
-      answer: 'Para comprar, selecciona el libro que te interese y haz clic en "Contactar al vendedor". Automáticamente se enviará un email al vendedor con tus datos para que coordinen el pago y envío. Bookloop facilita el contacto, pero la transacción final se acuerda directamente entre las partes.'
+      answer: 'Para comprar, primero necesitas registrarte como usuario, luego selecciona el libro que te guste y haz clic en "Contactar al vendedor". Automáticamente se enviará un email al vendedor con tus datos para que coordinen el pago y envío. Bookloop facilita el contacto, pero la transacción final se acuerda directamente entre las partes.'
     },
     {
       question: '¿Cuánto cuesta publicar un libro?',

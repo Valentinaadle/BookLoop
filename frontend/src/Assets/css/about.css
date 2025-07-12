@@ -1,189 +1,256 @@
-/* about.css */
+/* ====================== */
+/* ABOUT US - MODERNO 2024 */
+/* ====================== */
 
-/* Estilos generales */
-.about-us-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Arial', sans-serif;
+/* Variables CSS */
+:root {
+  --primary-color: #394B60;
+  --secondary-color: #567C8D;
+  --accent-color: #4FACFE;
+  --text-dark: #121416;
+  --text-medium: #2c3e50;
+  --text-light: #6c757d;
+  --bg-light: #f8f9fa;
+  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Contenedores principales */
+/* Estilos base modernizados */
+.about-us-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+}
+
+/* Encabezado principal */
+.about-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.5px;
+}
+
+.about-header p {
+  font-size: 1.25rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Secciones - Diseño de tarjetas modernas */
 .content-section {
   display: flex;
   gap: 3rem;
-  margin-bottom: 3rem;
-  padding: 2.5rem;
+  margin-bottom: 4rem;
+  padding: 3rem;
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s ease;
-  border: 1px solid #f0f0f0;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(57, 75, 96, 0.08);
+  transition: var(--transition);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.content-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: var(--transition);
 }
 
 .content-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-  border-color: #e0e0e0;
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(57, 75, 96, 0.15);
 }
 
-/* Encabezado de sección */
+.content-section:hover::before {
+  transform: scaleX(1);
+}
+
+/* Encabezado de sección mejorado */
 .section-header {
-  flex: 0 0 220px;
+  flex: 0 0 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding: 1.5rem;
+  background: rgba(79, 172, 254, 0.05);
+  border-radius: 16px;
+  transition: var(--transition);
 }
 
-/* Iconos */
+.content-section:hover .section-header {
+  background: rgba(79, 172, 254, 0.1);
+}
+
+/* Iconos modernizados */
 .section-icon {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 1.5rem;
-  transition: transform 0.3s ease;
-  /* Para PNG: gris oscuro #2c3e50 */
-  filter: brightness(0) saturate(100%) invert(22%) sepia(10%) saturate(1326%) hue-rotate(169deg) brightness(93%) contrast(93%);
-}
-/* Para SVGs: usar fill="#394B60" en el SVG */
-
-.content-section:hover .section-icon {
-  transform: scale(1.1) rotate(5deg);
-}
-
-.contact-icon {
   width: 90px;
   height: 90px;
-  background: transparent !important;
-  filter: brightness(0) saturate(100%) invert(22%) sepia(10%) saturate(1326%) hue-rotate(169deg) brightness(93%) contrast(93%);
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  transition: var(--transition);
+  filter: none;
 }
 
-/* Títulos */
+.content-section:hover .section-icon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 5px 15px rgba(79, 172, 254, 0.3));
+}
+
+/* Títulos con efecto mejorado */
 .section-title {
-  font-size: 1.8rem;
-  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
   margin: 0;
   position: relative;
   padding-bottom: 0.5rem;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 25%;
-  width: 50%;
-  height: 3px;
-  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.content-section:hover .section-title::after {
-  transform: scaleX(1);
-}
-
-/* Contenido */
+/* Contenido moderno */
 .section-content {
   flex: 1;
-  padding-top: 0.8rem;
+  padding-top: 0;
 }
 
 .section-text {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8;
-  color: #555;
-  margin-bottom: 1.5rem;
+  color: var(--text-medium);
+  margin-bottom: 1.8rem;
+  position: relative;
 }
 
-/* Contacto */
+/* Sección de contacto premium */
 .contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
 }
 
 .contact-item {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  padding: 0.8rem;
-  background-color: #f8f9fa;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  transition: var(--transition);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .contact-item:hover {
-  background-color: #eef7ff;
-  transform: translateX(5px);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(57, 75, 96, 0.1);
+  border-color: rgba(79, 172, 254, 0.2);
+}
+
+.contact-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .contact-label {
-  font-weight: bold;
-  color: #2c3e50;
+  font-weight: 600;
+  color: var(--primary-color);
   margin-right: 0.5rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Efectos especiales */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating-icon {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Responsive - Diseño adaptativo premium */
+@media (max-width: 992px) {
   .content-section {
     flex-direction: column;
-    gap: 2rem;
-    padding: 1.8rem;
+    gap: 2.5rem;
+    padding: 2.5rem;
   }
   
   .section-header {
     flex: 1;
+    padding: 1.5rem 1rem;
   }
   
-  .section-icon {
-    width: 70px;
-    height: 70px;
-  }
-  
-  .contact-icon {
-    width: 80px;
-    height: 80px;
-  }
-  .carousel-container {
-    padding: 0 40px; /* Espacio para las flechas */
-    overflow: hidden;
-  }
-
-  .carousel-books {
-    display: flex;
-    width: 200%; /* Mostrar 2 libros a la vez */
-    transition: transform 0.5s ease;
-  }
-
-  .book-card {
-    flex: 0 0 50%; /* Cada libro ocupa la mitad del contenedor */
-/* Espaciado entre libros */
-  }
-
-  .carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-
-  .carousel-arrow.left {
-    left: 5px;
-  }
-
-  .carousel-arrow.right {
-    right: 5px;
+  .about-header h1 {
+    font-size: 2.8rem;
   }
 }
+
+@media (max-width: 768px) {
+  .about-us-container {
+    padding: 3rem 1.5rem;
+  }
+  
+  .about-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .content-section {
+    padding: 2rem;
+    border-radius: 16px;
+  }
+  
+  .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .section-text {
+    font-size: 1rem;
+  }
+}
+
+/* Efecto de aparición para scroll */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-section {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.content-section:nth-child(1) { animation-delay: 0.1s; }
+.content-section:nth-child(2) { animation-delay: 0.3s; }
+.content-section:nth-child(3) { animation-delay: 0.5s; }

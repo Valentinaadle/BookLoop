@@ -47,6 +47,7 @@
  
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.337);
   transform: translateY(-10px) rotateX(5deg) scale(1.03);
+  cursor:pointer;
   
 }
 
@@ -71,12 +72,14 @@
 .paso-card p {
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
-  color: #6c757d;
+  color: #394B60;
   line-height: 1.5;
   max-width: 200px;
   margin: 0 auto;
   
 }
+
+
 
 
 /* === MODERNIZED FORM STYLES === */
@@ -275,13 +278,16 @@
   filter: grayscale(0);
   opacity: 1;
   transform: scale(1.1) rotate(5deg);
+  
 }
 .paso-card:hover h3{
 transform: scale(1.1) perspective(500px) ;
+color:#305681
 
 }
 .paso-card:hover p{
 transform: scale(1.1) perspective(500px);
+color:#305681
 }
 
 
