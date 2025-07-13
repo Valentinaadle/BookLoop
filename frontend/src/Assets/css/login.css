@@ -51,27 +51,50 @@
   font-size: 2rem;
   margin-bottom: 15px;
   color: #ffffff;
+  max-width: 1000px; /* Aumentamos un poco más el ancho */
+  line-height: 1.6; /* Espaciado entre líneas para mejor legibilidad */
 }
 
 .subtitle-refined {
   font-family: 'Raleway', sans-serif;
   font-weight: 5000;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: #ffffff;
-  max-width: 400px;
   line-height: 1.6;
+  white-space: nowrap; /* Asegura que el texto no se divida */
 }
 
 .login-form-container-refined {
   width: 550px;
   padding: 50px 40px;
-  background: rgba(255, 255, 255, 0.379);
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   z-index: 2;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   position: relative;
-  left: -80px;
+  margin-top: 8vh;
+  margin-bottom: 8vh;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: unset;
+  max-height: calc(100vh - 16vh);
+  overflow-y: auto;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.login-form-container-refined:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.login-form-container-refined form {
+  width: 100%; /* Hacemos que el form ocupe todo el ancho */
+  display: flex;
+  flex-direction: column;
 }
 
 .form-header-refined {
@@ -97,6 +120,7 @@
 
 .form-group-refined {
   margin-bottom: 25px;
+  width: 100%; /* Aseguramos que el grupo ocupe todo el ancho */
 }
 
 .form-group-refined label {
@@ -121,16 +145,16 @@
 
 .input-refined:focus {
   outline: none;
-  border-color: #0984e3;
-  box-shadow: 0 0 0 2px rgba(9, 132, 227, 0.2);
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .submit-btn-refined {
   width: 100%;
   padding: 15px;
-  background: #0984e3;
+  background: #000000;
   border: none;
-  color: white;
+  color: rgb(0, 0, 0);
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -141,9 +165,9 @@
 }
 
 .submit-btn-refined:hover {
-  background: #0778ca;
+  background: #131920;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
+  box-shadow: 0 5px 15px rgba(186, 217, 241, 0.3);
 }
 
 .submit-btn-refined:disabled {
@@ -170,7 +194,7 @@
 }
 
 .register-link-refined {
-  color: #0984e3;
+  color: #394B60; /* Cambiamos al color azul principal */
   font-weight: 600;
   margin-left: 5px;
   text-decoration: none;

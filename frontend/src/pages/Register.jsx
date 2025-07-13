@@ -85,14 +85,14 @@ function Register() {
           <div className="register-text-content-refined">
             <div className="logo-custom">BOOKLOOP</div>
             <div className="blue-divider"></div>
-            <h1 className="slogan-refined">Descubre tu próxima lectura favorita</h1>
-            <p className="subtitle-refined">Unite a nuestra comunidad y promove la economia circular.</p>
+            <h1 className="slogan-refined">Descubrí tu próxima lectura favorita</h1>
+            <p className="subtitle-refined">Formá parte del cambio: vendé, comprá y reciclá libros.</p>
           </div>
 
           <div className="register-form-container-refined">
             <div className="form-header-refined">
-              <h3>Registrarse en BookLoop</h3>
-              <p>Regístrate para empezar a descubrir y compartir libros.</p>
+              <h3>Registrate en BookLoop</h3>
+              <p>Empezá a descubrir y compartir libros.</p>
             </div>
             
             {error && <div className="error-message-refined">{error}</div>}

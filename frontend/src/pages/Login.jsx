@@ -64,7 +64,7 @@ function Login() {
           <div className="login-text-content-refined">
             <h1 className="logo-custom">BOOKLOOP</h1>
             <div className="blue-divider"></div>
-            <h2 className="slogan-refined">Explora Nuevas Historias</h2>
+            <h2 className="slogan-refined">Accedé a tu cuenta y seguí impulsando la lectura circular.</h2>
             <p className="subtitle-refined">Donde los libros encuentran nuevos lectores</p>
           </div>
           

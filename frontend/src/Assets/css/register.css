@@ -40,31 +40,33 @@
 .blue-divider {
   width: 100px;
   height: 4px;
-  background: #0984e3;
+  background: #394B60;
   margin: 25px 0;
 }
 
 .slogan-refined {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 15px;
   color: #ffffff;
 }
 
 .subtitle-refined {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 500;
-  font-size: 1.4rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 1.3rem;
   color: #ffffff;
   max-width: 400px;
   line-height: 1.6;
+  white-space: nowrap; /* Asegura que el texto no se divida */
 }
 
 .register-form-container-refined {
   width: 550px;
   padding: 50px 40px;
-  background: rgba(255, 255, 255, 0.379);
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   z-index: 2;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -79,6 +81,12 @@
   min-height: unset;
   max-height: calc(100vh - 16vh);
   overflow-y: auto;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.register-form-container-refined:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
 }
 
 @media (max-width: 992px) {
@@ -120,10 +128,10 @@
 }
 
 .form-header-refined h3 {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 800;
+  font-family: 'Playfair Display', sans-serif;
+  font-weight: 700;
   font-size: 1.8rem;
-  color: rgb(255, 255, 255);
+  color: #ffffff;
   margin-bottom: 10px;
 }
 
@@ -146,10 +154,10 @@
 
 .form-group-refined label {
   display: block;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #2d3436;
+  font-family: 'Inter', sans-serif;
+  font-weight: 540;
+  font-size: 1rem;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
@@ -166,14 +174,14 @@
 
 .input-refined:focus {
   outline: none;
-  border-color: #0984e3;
+  border-color: #ffffff;
   box-shadow: 0 0 0 2px rgba(9, 132, 227, 0.2);
 }
 
 .info-text-refined {
   font-family: 'Raleway', sans-serif;
   font-size: 0.8rem;
-  color: #202223;
+  color: #394B60;
   margin-top: 5px;
 }
 
@@ -182,19 +190,19 @@
   align-items: center;
   margin: 20px 0;
   font-family: 'Raleway', sans-serif;
-  font-size: 0.9rem;
-  color: #2d3436;
+  font-size: 1rem;
+  color: #394B60;
 }
 
 .checkbox-refined {
   margin-right: 10px;
   width: 16px;
   height: 16px;
-  accent-color: #0984e3;
+  accent-color: #000000;
 }
 
 .terms-link {
-  color: #0984e3;
+  color: #000000;
   text-decoration: none;
   font-weight: 600;
 }
@@ -206,7 +214,7 @@
 .submit-btn-refined {
   width: 100%;
   padding: 15px;
-  background: #0984e3;
+  background: #394B60;
   border: none;
   color: white;
   font-family: 'Raleway', sans-serif;
@@ -218,7 +226,7 @@
 }
 
 .submit-btn-refined:hover:not(:disabled) {
-  background: #0778ca;
+  background: #394B60;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
 }
@@ -253,7 +261,7 @@
 }
 
 .login-link {
-  color: #0984e3;
+  color: #394B60;
   font-weight: 600;
   margin-left: 5px;
   text-decoration: none;
@@ -267,7 +275,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: #0984e3;
+  background: #394B60;
   transition: width 0.3s ease;
 }
 
@@ -311,17 +319,17 @@
 }
 
 .register-form-container-refined::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
 
 .register-form-container-refined::-webkit-scrollbar-thumb {
-  background: rgba(9, 132, 227, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 3px;
 }
 
 .register-form-container-refined::-webkit-scrollbar-thumb:hover {
-  background: #0984e3;
+  background: #000000;
 }
 
 /* Responsive */
@@ -362,6 +370,7 @@
   
   .blue-divider {
     margin: 20px auto;
+    
   }
   
   .form-row-refined {
