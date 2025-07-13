@@ -7,6 +7,8 @@ import { useAuth } from '../context/AuthContext';
 import '../Assets/css/login.css';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
+import AnimatedText from '../components/AnimatedText';
+import FadeInText from '../components/FadeInText';
 //import loginBg from '../Assets/login.png';
 
 function Login() {
@@ -62,10 +64,10 @@ function Login() {
       <main className="login-main-container-refined">
         <div className="login-content-wrapper">
           <div className="login-text-content-refined">
-            <h1 className="logo-custom">BOOKLOOP</h1>
+            <AnimatedText text="BOOKLOOP" className="logo-custom" delay={0.22} />
             <div className="blue-divider"></div>
-            <h2 className="slogan-refined">Accedé a tu cuenta y seguí impulsando la lectura circular.</h2>
-            <p className="subtitle-refined">Donde los libros encuentran nuevos lectores</p>
+            <FadeInText text="Accedé a tu cuenta y seguí impulsando la lectura circular." className="slogan-refined" delay={1.2} />
+            <FadeInText text="Donde los libros encuentran nuevos lectores" className="subtitle-refined" delay={1.8} />
           </div>
           
           <div className="login-form-container-refined">

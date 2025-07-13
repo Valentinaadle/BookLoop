@@ -47,7 +47,7 @@
 .slogan-refined {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   margin-bottom: 15px;
   color: #ffffff;
 }
@@ -59,7 +59,7 @@
   color: #ffffff;
   max-width: 400px;
   line-height: 1.6;
-  white-space: nowrap; /* Asegura que el texto no se divida */
+  /* white-space: nowrap; */
 }
 
 .register-form-container-refined {

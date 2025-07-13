@@ -61,7 +61,6 @@
   font-size: 1.2rem;
   color: #ffffff;
   line-height: 1.6;
-  white-space: nowrap; /* Asegura que el texto no se divida */
 }
 
 .login-form-container-refined {

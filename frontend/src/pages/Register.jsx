@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import '../Assets/css/register.css';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
+import AnimatedText from '../components/AnimatedText';
+import FadeInText from '../components/FadeInText';
 
 function Register() {
   const navigate = useNavigate();
@@ -83,10 +85,10 @@ function Register() {
       <main className="register-main-container-refined">
         <div className="register-content-wrapper">
           <div className="register-text-content-refined">
-            <div className="logo-custom">BOOKLOOP</div>
+            <AnimatedText text="BOOKLOOP" className="logo-custom" delay={0.22} />
             <div className="blue-divider"></div>
-            <h1 className="slogan-refined">Descubrí tu próxima lectura favorita</h1>
-            <p className="subtitle-refined">Formá parte del cambio: vendé, comprá y reciclá libros.</p>
+            <FadeInText text="Descubrí tu próxima lectura favorita" className="slogan-refined" delay={1.2} />
+            <FadeInText text="Formá parte del cambio: vendé, comprá y reciclá libros." className="subtitle-refined" delay={1.8} />
           </div>
 
           <div className="register-form-container-refined">
