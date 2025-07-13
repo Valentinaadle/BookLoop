@@ -491,7 +491,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             <p className="profile-sidebar-username">@{form.username.replace(/^@/, '')}</p>
             <p className="profile-sidebar-bio">{form.bio}</p>
             <button className="profile-sidebar-edit-btn" onClick={() => setEditMode(true)}>
-              <Edit3 size={18} style={{marginRight:6, marginBottom:-2}} /> Editar perfil
+              <Edit3 size={18} style={{marginRight:6, marginBottom:-2}} className="profile-icon" /> Editar perfil
             </button>
           </div>
           <div className="profile-sidebar-stats">
@@ -574,12 +574,12 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             {activeTab === 'solicitudes' ? (
               loadingSolicitudes ? (
                 <div className="profile-main-empty-card">
-                  <MessageSquare size={48} color="#000" style={{marginBottom:12}} />
+                  <MessageSquare size={48} className="profile-icon" style={{marginBottom:12}} />
                   <span>Cargando solicitudes...</span>
                 </div>
               ) : solicitudes.length === 0 ? (
                 <div className="profile-main-empty-card">
-                  <MessageSquare size={48} color="#000" style={{marginBottom:12}} />
+                  <MessageSquare size={48} className="profile-icon" style={{marginBottom:12}} />
                   <h3>No tienes solicitudes aún</h3>
                   <p className="profile-main-empty-desc">Aquí aparecerán los libros que te solicitaron otros usuarios.</p>
                 </div>
@@ -607,7 +607,7 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             ) : activeTab === 'favoritos' ? (
               favorites.length === 0 ? (
                 <div className="profile-main-empty-card">
-                  <Heart size={48} color="#000" style={{marginBottom:12}} />
+                  <Heart size={48} className="profile-icon" style={{marginBottom:12}} />
                   <h3>No tienes favoritos aún</h3>
                   <p className="profile-main-empty-desc">Cuando marques libros como favoritos, aparecerán aquí.</p>
                 </div>
@@ -633,9 +633,9 @@ const [loadingSolicitudes, setLoadingSolicitudes] = useState(false);
             ) : filteredBooks.length === 0 ? (
               <div className="profile-main-empty-card">
                 {activeTab === 'publicados' ? (
-                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                  <BookOpen size={48} className="profile-icon" style={{marginBottom:12}} />
                 ) : (
-                  <ShoppingBag size={48} color="#000" style={{marginBottom:12}} />
+                  <ShoppingBag size={48} className="profile-icon" style={{marginBottom:12}} />
                 )}
                 <h3>{activeTab === 'publicados' ? 'Aún no has publicado ningún libro' : 'Aún no has vendido ningún libro'}</h3>
                 <p className="profile-main-empty-desc">{activeTab === 'publicados' ? 'Es hora de compartir tus tesoros literarios con el mundo. Publica tu primer libro y conéctate con otros amantes de la lectura.' : 'Cuando vendas un libro, aparecerá aquí.'}</p>
