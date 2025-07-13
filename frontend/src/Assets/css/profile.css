@@ -50,6 +50,7 @@ body {
   align-items: flex-start;
   min-height: 60vh;
   padding-top: 40px;
+  padding-bottom: 40px;
   box-sizing: border-box;
 }
 .users-table-card {
@@ -433,7 +434,7 @@ body {
   background: #f7f8fa;
 }
 .profile-main-tab:hover {
-  color: #475f7a;
+  color: #303e50;
   background-color: #f0f0f0;
 }
 .profile-main-content {

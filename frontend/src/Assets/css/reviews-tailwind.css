@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700;900&display=swap');
+
+.reviews-tailwind-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.reviews-tailwind-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #fff;
+  padding: 1rem;
+  overflow-x: hidden;
+}
+
+.reviews-tailwind-card {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 1.25rem;
+}
+
+.reviews-tailwind-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reviews-tailwind-avatar {
+  background-position: center;
+  background-repeat: no-repeat;
+  aspect-ratio: 1/1;
+  background-size: cover;
+  border-radius: 9999px;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.reviews-tailwind-user {
+  flex: 1;
+}
+
+.reviews-tailwind-username {
+  color: #131416;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.reviews-tailwind-date {
+  color: #6b7580;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.reviews-tailwind-stars {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.reviews-tailwind-star {
+  color: #131416;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-flex;
+}
+
+.reviews-tailwind-star-empty {
+  color: #bfc4ca;
+}
+
+.reviews-tailwind-comment {
+  color: #131416;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.reviews-tailwind-actions {
+  display: flex;
+  gap: 2.25rem;
+  color: #6b7580;
+}
+
+.reviews-tailwind-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.reviews-tailwind-action-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: inherit;
+}

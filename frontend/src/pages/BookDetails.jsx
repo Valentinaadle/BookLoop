@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaEdit, FaTrash } from 'react-icons/fa';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import '../Assets/css/BookDetails.css';
@@ -308,7 +308,7 @@ function BookDetails() {
           <div className="book-details-title-row" style={{display:'flex', alignItems:'center', justifyContent:'space-between', gap:12}}>
             <h1 className="text-4xl book-details-title">{book.title}</h1>
             <div style={{display:'flex',alignItems:'center',gap:10}}>
-              {!isOwner && (
+              {!isOwner && !isAdmin && (
                 <button
                   className={`favorite-btn${isBookFavorite ? ' filled' : ''}`}
                   aria-label={isBookFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
@@ -318,7 +318,7 @@ function BookDetails() {
                   <FaHeart className={`heart-icon${isBookFavorite ? ' filled' : ''}`} />
                 </button>
               )}
-              {isOwner && (
+              {(isOwner || isAdmin) && (
                 <>
                   <button
                     onClick={() => navigate(`/edit-book/${book.book_id || book.id}`)}
@@ -327,7 +327,7 @@ function BookDetails() {
                     onMouseOver={e => e.currentTarget.style.background='#1a232b'}
                     onMouseOut={e => e.currentTarget.style.background='#2c3e50'}
                   >
-                    Editar
+                    <span style={{display:'flex', alignItems:'center', gap:6}}><FaEdit /> Editar</span>
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(true)}
@@ -336,7 +336,7 @@ function BookDetails() {
                     onMouseOver={e => e.currentTarget.style.background='#1a232b'}
                     onMouseOut={e => e.currentTarget.style.background='#2c3e50'}
                   >
-                    Borrar
+                    <span style={{display:'flex', alignItems:'center', gap:6}}><FaTrash /> Borrar</span>
                   </button>
                 </>
               )}

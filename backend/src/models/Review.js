@@ -30,9 +30,22 @@ async function updateReview(id, updates) {
 
 // Eliminar una review
 async function deleteReview(id) {
-  const { error } = await supabase.from('reviews').delete().eq('id', id);
+  const { error } = await supabase.from('reviews').delete().eq('review_id', id);
   if (error) throw error;
   return { success: true };
+}
+
+// Obtener reviews por vendedor (JOIN con books)
+async function getReviewsBySellerId(sellerId) {
+  // Trae reviews + info del libro y del comprador
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*, books:book_id(seller_id, title), buyers:buyer_id(nombre, apellido, username, photo_url)')
+    .order('review_date', { ascending: false });
+  if (error) throw error;
+  // Filtrar reviews donde el libro pertenece al vendedor
+  const filtered = (data || []).filter(r => r.books && r.books.seller_id === sellerId);
+  return filtered;
 }
 
 module.exports = {
@@ -40,5 +53,6 @@ module.exports = {
   getReviewById,
   createReview,
   updateReview,
-  deleteReview
+  deleteReview,
+  getReviewsBySellerId
 };

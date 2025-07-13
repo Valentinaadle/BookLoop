@@ -460,7 +460,6 @@
 
 /* Estilos para la selección de preferencias */
 .preferencias-usuario {
-  padding-bottom: 2.5rem;
   padding: 3rem;
   text-align: center;
   background-color: #F5EFEB;
@@ -528,7 +527,7 @@
 .btn-compra, .btn-venta {
   padding: 0.8rem 1.8rem;
   border-radius: 10px;
-  font-family: var(--heading-font);
+  font-family:'Inter', 'sans-serif';
   font-weight: 600;
   font-size: 1.1rem;
   display: inline-flex;

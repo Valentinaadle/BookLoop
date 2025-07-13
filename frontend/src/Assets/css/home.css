@@ -163,12 +163,16 @@ body {
   }
 }
 
+
 .profile-tabs {
-  display: flex;
-  gap: 1.2rem;
-  border-bottom: 2px solid #e0e7ef;
-  margin-bottom: 1.5rem;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    gap: 1.2rem;
+    border-bottom: 2px solid #e0e7ef;
+    margin-bottom: 1.5rem;
 }
+
 
 .profile-tabs .profile-tab {
   background: none !important;
@@ -184,12 +188,12 @@ body {
 }
 
 .profile-tabs .profile-tab.profile-tab-active {
-  color: #2563eb !important;
-  border-bottom: 2.5px solid #2563eb !important;
+  color: #303e50 !important;
+  border-bottom: 2.5px solid #303e50 !important;
   font-weight: 700 !important;
   background: #f7f8fa !important;
 }
 
 .profile-tabs .profile-tab:hover {
-  color: #2563eb !important;
+  color: #303e50 !important;
 }

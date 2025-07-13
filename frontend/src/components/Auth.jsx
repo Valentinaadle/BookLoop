@@ -12,6 +12,7 @@ const Auth = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [showTerms, setShowTerms] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -48,6 +49,29 @@ const Auth = () => {
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {!isLogin && (
+            <div className="mb-2">
+              <div style={{display:'flex',alignItems:'center',gap:8}}>
+                <input type="checkbox" id="terms" required style={{accentColor:'#6366f1'}} />
+                <label htmlFor="terms" style={{fontSize:'0.95rem',color:'#222'}}>
+                  Acepto los <button type="button" style={{color:'#6366f1',textDecoration:'underline',background:'none',border:'none',cursor:'pointer',padding:0}} onClick={()=>setShowTerms(s=>!s)}>Términos y Condiciones</button>
+                </label>
+              </div>
+              {showTerms && (
+                <div style={{background:'#f3f4f6',borderRadius:8,padding:'1rem',marginTop:8,fontSize:'0.92rem',color:'#222',boxShadow:'0 2px 8px #0001'}}>
+                  <strong>Términos y Condiciones de BookLoop</strong>
+                  <ul style={{margin:'0.5rem 0 0 1.2rem',padding:0}}>
+                    <li>BookLoop es solo una plataforma de contacto entre compradores y vendedores de libros usados.</li>
+                    <li>No intervenimos ni garantizamos el pago, la entrega ni la calidad de los libros.</li>
+                    <li>El dinero de la compra/venta se acuerda y transfiere directamente entre las partes.</li>
+                    <li>BookLoop no se hace responsable por fraudes, pérdidas, daños o cualquier inconveniente derivado de la transacción.</li>
+                    <li>Al registrarte, aceptas que eres responsable de verificar la identidad de la otra parte y de actuar con precaución.</li>
+                    <li>El uso de la plataforma implica la aceptación de estos términos.</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
           {!isLogin && (
             <>
               <div>

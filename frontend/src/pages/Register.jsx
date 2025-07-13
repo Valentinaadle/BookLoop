@@ -8,8 +8,10 @@ import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import AnimatedText from '../components/AnimatedText';
 import FadeInText from '../components/FadeInText';
+import TermsModal from '../components/TermsModal';
 
 function Register() {
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -205,8 +207,11 @@ function Register() {
                   onChange={handleChange}
                   disabled={loading}
                 /> 
-                <label htmlFor="terminos">Acepto los términos y condiciones</label>
+                <label htmlFor="terminos">
+                  Acepto los <button type="button" style={{color:'#2563eb',textDecoration:'underline',background:'none',border:'none',cursor:'pointer',padding:0}} onClick={()=>setShowTermsModal(true)}>términos y condiciones</button>
+                </label>
               </div>
+
 
               <button 
                 type="submit"
@@ -222,6 +227,7 @@ function Register() {
             </form>
           </div>
         </div>
+      <TermsModal open={showTermsModal} onClose={()=>setShowTermsModal(false)} />
       </main>
       <Footer />
     </>

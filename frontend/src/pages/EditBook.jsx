@@ -120,8 +120,7 @@ function EditBook() {
     // Si es imagen nueva (no subida aún)
     if (img.type === 'new' || img.file) {
       setNewImages(prev => {
-        // prev es [{file, blobUrl}, ...]
-        const filtered = prev.filter(obj => obj.file.name !== (img.file?.name || img.image_url));
+        const filtered = prev.filter(obj => obj.blobUrl !== img.image_url);
         setTimeout(() => {
           const allImgs = [
             ...bookImages.filter(img => !deletedImageIds.includes(img.image_id)),
@@ -137,7 +136,8 @@ function EditBook() {
         }, 0);
         return filtered;
       });
-    } else if (img.image_id) {
+    } else if (img.image_id !== undefined) {
+      // Imagen existente subida previamente
       setDeletedImageIds(prev => {
         const updated = [...prev, img.image_id];
         setTimeout(() => {
@@ -155,28 +155,8 @@ function EditBook() {
         }, 0);
         return updated;
       });
-      setBookImages(prev => prev.filter(i => i.image_id !== img.image_id));
-    } else if (img.image_url) {
-      setNewImages(prev => {
-        const filtered = prev.filter(f => f.name !== img.image_url);
-        setTimeout(() => {
-          const allImgs = [
-            ...bookImages.filter(img => !deletedImageIds.includes(img.image_id)),
-            ...filtered.map(file => ({ type: 'new', image_url: URL.createObjectURL(file), file }))
-          ];
-          if (allImgs.length === 0) {
-            setCoverIndex(0);
-            setCoverPreview(null);
-          } else if (coverIndex >= allImgs.length) {
-            setCoverIndex(allImgs.length - 1);
-            setCoverPreview(allImgs[allImgs.length - 1].image_url);
-          }
-        }, 0);
-        return filtered;
-      });
     }
   };
-
 
   const handleSetCover = (idx, previewUrl) => {
     setCoverIndex(idx);
@@ -273,7 +253,8 @@ function EditBook() {
     }
   };
 
-  if (loading) return <div>Cargando...</div>;
+  // Mostrar el formulario solo cuando los datos estén cargados o si hay error
+  if (!form.title && !error) return null;
   return (
     <>
       <Header />

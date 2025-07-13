@@ -171,6 +171,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   transition: all 0.3s ease;
+  color: #121416
 }
 
 .input-refined:focus {

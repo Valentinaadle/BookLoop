@@ -8,6 +8,14 @@ import { FaSignOutAlt, FaHeart, FaSearch } from 'react-icons/fa';
 import { CgProfile } from "react-icons/cg";
 
 export default function Header() {
+  const [logoSrc, setLogoSrc] = useState(window.innerWidth <= 700 ? '/logo-solo.png' : '/4.png');
+  React.useEffect(() => {
+    const handleResize = () => {
+      setLogoSrc(window.innerWidth <= 700 ? '/logo-solo.png' : '/4.png');
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -67,7 +75,7 @@ export default function Header() {
         <div className="logo-and-nav">
           <div className="logo">
             <Link to="/">
-              <img src="/4.png" className="icon logo-icon" alt="icon" />
+              <img src={logoSrc} className="icon logo-icon" alt="icon" />
             </Link>
           </div>
           <nav className="header-nav">

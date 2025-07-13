@@ -17,6 +17,7 @@ const bookRoutes = require('./routes/bookRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const solicitudRoutes = require('./routes/solicitudRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/api/books', bookRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/solicitudes', solicitudRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Ruta básica
 app.get('/', (req, res) => {

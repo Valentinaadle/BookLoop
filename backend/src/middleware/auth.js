@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const supabase = require('../config/db');
 
 const authenticateToken = async (req, res, next) => {
   try {
@@ -11,13 +11,12 @@ const authenticateToken = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'tu_clave_secreta');
-    const user = await User.findByPk(decoded.id);
-
-    if (!user) {
+    // Buscar usuario en Supabase
+    const { data: user, error } = await supabase.from('users').select('*').eq('id', decoded.id).single();
+    if (error || !user) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
-
-    req.user = user;
+    req.user = user; // user debe tener campo 'role'
     next();
   } catch (error) {
     console.error('Error de autenticación:', error);
@@ -25,4 +24,4 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticateToken }; 
+module.exports = { authenticateToken };
