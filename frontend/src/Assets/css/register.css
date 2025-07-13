@@ -1,5 +1,4 @@
-/* register.css (versión actualizada) */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap');
+
 
 .register-main-container-refined {
   flex: 1;
@@ -40,8 +39,9 @@
 .blue-divider {
   width: 100px;
   height: 4px;
-  background: #394B60;
+  background: #475f7a;
   margin: 25px 0;
+  
 }
 
 .slogan-refined {
@@ -132,14 +132,15 @@
   font-weight: 700;
   font-size: 1.8rem;
   color: #ffffff;
-  margin-bottom: 10px;
+  padding-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .form-header-refined p {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
   color: #f5f5f5;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 .form-row-refined {
@@ -167,7 +168,7 @@
   border: 1px solid #dfe6e9;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.8);
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
@@ -179,9 +180,8 @@
 }
 
 .info-text-refined {
-  font-family: 'Raleway', sans-serif;
-  font-size: 0.8rem;
-  color: #394B60;
+  font-family: 'Inter', sans-serif;
+  color: #303e50;
   margin-top: 5px;
 }
 
@@ -189,9 +189,9 @@
   display: flex;
   align-items: center;
   margin: 20px 0;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: #394B60;
+  color: #303e50;
 }
 
 .checkbox-refined {
@@ -217,7 +217,7 @@
   background: #394B60;
   border: none;
   color: white;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 1rem;
   border-radius: 6px;
@@ -255,8 +255,8 @@
 .switch-form-link-refined {
   text-align: center;
   margin-top: 25px;
-  font-family: 'Raleway', sans-serif;
-  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
   color: #fcfeff;
 }
 
@@ -291,7 +291,7 @@
   border-radius: 6px;
   margin-bottom: 20px;
   text-align: center;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
 }
 
