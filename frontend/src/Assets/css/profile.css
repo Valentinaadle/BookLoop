@@ -1253,6 +1253,7 @@ body {
 
 .solicitud-title, .profile-main-section-title {
   font-family: 'Playfair Display', serif;
+  text-align: center;
   font-size: 1.90rem;
   font-weight: 900;
   margin-bottom: 1.2rem;

@@ -11,7 +11,7 @@ export default function Header() {
   const [logoSrc, setLogoSrc] = useState(window.innerWidth <= 700 ? '/logo-solo.png' : '/4.png');
   React.useEffect(() => {
     const handleResize = () => {
-      setLogoSrc(window.innerWidth <= 700 ? '/logo-solo.png' : '/4.png');
+      setLogoSrc(window.innerWidth <= 480 ? '/logo-solo.png' : '/4.png');
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);

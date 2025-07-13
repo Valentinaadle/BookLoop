@@ -631,6 +631,7 @@ function Profile() {
               )
             ) : activeTab === 'resenas' ? (
               <div className="reviews-tailwind-root">
+                <div className="solicitud-title">Reseñas</div>
                 {reviewsLoading ? (
                   <p>Cargando reseñas...</p>
                 ) : reviews.length === 0 ? (

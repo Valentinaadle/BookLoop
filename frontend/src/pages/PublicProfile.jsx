@@ -247,6 +247,12 @@ function PublicProfile() {
             </div>
           </div>
 
+          <div className="solicitud-title">
+            {activeTab === 'publicados' && 'Libros Publicados'}
+            {activeTab === 'vendidos' && 'Libros Vendidos'}
+            {activeTab === 'resenas' && 'Reseñas'}
+          </div>
+
           {activeTab === 'publicados' && (
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'activo' || !book.status).length === 0 ? (
