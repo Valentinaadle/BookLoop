@@ -177,7 +177,7 @@ function PublicProfile() {
     src={(user.photo_url ? `${API_URL}${user.photo_url}` : user.photoUrl)}
     alt={user.nombre || user.username || 'avatar'}
     onError={e => { e.target.src = '/Assets/images/default-avatar.png'; e.target.onerror = null; }}
-    style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '50%' }}
+    className="profile-avatar-img"
   />
 ) : (
   <span>{user.nombre ? user.nombre[0] : (user.username ? user.username[0] : '?')}</span>
@@ -257,7 +257,7 @@ function PublicProfile() {
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'activo' || !book.status).length === 0 ? (
                 <div className="profile-main-empty-card">
-                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                  <BookOpen size={48} color="#000" className="profile-icon" />
                   <h3>Este usuario no tiene libros publicados.</h3>
                   <p className="profile-main-empty-desc">Cuando publique un libro, aparecerá aquí.</p>
                 </div>
@@ -284,7 +284,7 @@ function PublicProfile() {
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'vendido').length === 0 ? (
                 <div className="profile-main-empty-card">
-                  <BookOpen size={48} color="#000" style={{marginBottom:12}} />
+                  <BookOpen size={48} color="#000" className="profile-icon" />
                   <h3>Aún no ha vendido ningún libro.</h3>
                   <p className="profile-main-empty-desc">Cuando venda un libro, aparecerá aquí.</p>
                 </div>
@@ -316,7 +316,7 @@ function PublicProfile() {
                 <>
                   {reviews.length === 0 ? (
                     <div className="profile-main-empty-card">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-square profile-icon" aria-hidden="true" style={{marginBottom: 12}}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-square profile-icon" aria-hidden="true">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                       </svg>
                       <h3>No hay reseñas.</h3>
@@ -344,7 +344,7 @@ function PublicProfile() {
                             <div className="reviews-tailwind-header">
                               <div
                                 className="reviews-tailwind-avatar"
-                                style={reviewerFoto ? { backgroundImage: `url('${reviewerFoto}')` } : { background: '#f2f2f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                style={reviewerFoto ? { backgroundImage: `url('${reviewerFoto}')` } : {}}
                               >
                                 {!reviewerFoto && (
                                   <span style={{ fontWeight: 700, fontSize: '1.2rem', color: '#666' }}>{reviewerNombre[0]}</span>
@@ -358,7 +358,6 @@ function PublicProfile() {
                               {isAdmin && (
                                 <button
                                   className="reviews-tailwind-delete-btn"
-                                  style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#e11d48', cursor: 'pointer', fontSize: 18 }}
                                   title="Eliminar reseña"
                                   onClick={() => {
                                     setReviewToDelete(review);
@@ -414,23 +413,8 @@ function PublicProfile() {
                   {canReview && (
   <>
     <button
-      className="submit-btn"
+      className="submit-btn agregar-resena-btn"
       onClick={() => setShowReviewModal(true)}
-      style={{
-        backgroundColor: '#000',
-        color: '#fff',
-        fontSize: '17px',
-        border: 'none',
-        borderRadius: '8px',
-        padding: '14px 32px',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: 400,
-        letterSpacing: '0.5px',
-        cursor: 'pointer',
-        transition: 'all 0.2s ease-in-out',
-        marginTop: '16px',
-        alignSelf: 'center',
-      }}
     >
       + Agregar reseña
     </button>
@@ -444,7 +428,7 @@ function PublicProfile() {
           >
             ×
           </button>
-          <h2 className="text-lg font-bold text-center mb-2" style={{fontFamily: 'Inter, sans-serif'}}>Nueva Reseña</h2>
+          <h2 className="text-lg font-bold text-center mb-2 nueva-resena-heading">Nueva Reseña</h2>
           <form className="flex flex-col gap-2" onSubmit={handleSubmitReview} style={{width: '100%'}}>
             <div className="form-group-minimal">
               <label className="block text-[#22223b] text-sm mb-1 font-semibold">Libro:</label>

@@ -377,9 +377,9 @@ body {
   text-align: center;
 }
 .profile-sidebar-stat-value {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #22223b;
+  color: #1f2d3d;
   display: block;
 }
 .profile-sidebar-stat-label {
@@ -470,7 +470,7 @@ body {
   margin-bottom: 1.5rem;
 }
 .profile-main-add-btn {
-  background: #303e50;
+  background: #1f2d3d;
   color: #fff;
   font-weight: 600;
   font-size: 1.08rem;
@@ -486,7 +486,7 @@ body {
   justify-content: center;
 }
 .profile-main-add-btn:hover {
-  background: #000000;
+  background: #475f7a;
   box-shadow: 0 4px 16px rgba(37,99,235,0.13);
   color: #fff;
 }
@@ -739,7 +739,7 @@ body {
   font-weight: 500;
   align-items: center;
   gap: 0.4rem;
-  background: #000;
+  background: #1f2d3d;
   color: #fff;
   transition: background 0.2s;
   cursor: pointer;
@@ -749,7 +749,7 @@ body {
   color: #222;
 }
 .save-btn-minimal:hover {
-  background: #222;
+  background: #475f7a;
 }
 .cancel-btn-minimal:hover {
   background: #d1d5db;
@@ -855,7 +855,7 @@ body {
 .profile-sidebar-genres-card h3 {
   font-family: 'Playfair Display', serif;
   font-weight: 800;
-  color: #394B60;
+  color: #1f2d3d;
   font-size: 1.3rem;
   margin-bottom: 0.7rem;
 }
@@ -1257,7 +1257,7 @@ body {
   font-size: 1.90rem;
   font-weight: 900;
   margin-bottom: 1.2rem;
-  color: #303e50;
+  color: #1f2d3d;
   letter-spacing: 0.01rem;
 }
 .solicitud-link {
@@ -1278,4 +1278,96 @@ body {
 
 .profile-sidebar .choose-genres-btn {
   margin-top: 1rem;
+}
+
+.agregar-resena-btn {
+  background-color: #1f2d3d;
+  color: #fff;
+  font-size: 17px;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-top: 16px;
+  align-self: center;
+}
+
+.reviews-tailwind-card {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 1.25rem;
+  transform: perspective(1000px) rotateX(5deg);
+  transition: transform 0.3s ease;
+}
+
+.reviews-tailwind-card:hover {
+  transform: perspective(1000px) rotateX(0deg) translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.reviews-tailwind-card {
+  transform: perspective(800px) rotateX(3deg);
+  transition: transform 0.2s ease;
+}
+
+.reviews-tailwind-card:hover {
+  transform: perspective(800px) rotateX(0deg) translateY(-3px);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.agregar-resena-btn:hover {
+  background-color: #303e50;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.profile-avatar-img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.profile-icon {
+  margin-bottom: 12px;
+}
+
+.reviews-tailwind-avatar {
+  background: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reviews-tailwind-delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #e11d48;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.fixed-modal {
+  font-family: 'Inter', sans-serif;
+}
+
+.full-width-form {
+  width: 100%;
+}
+
+.error-message {
+  font-family: 'Inter', sans-serif;
+}
+
+.nueva-resena-heading {
+  color: #1f2d3d;
 }

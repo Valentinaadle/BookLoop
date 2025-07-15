@@ -1,6 +1,6 @@
 /* Footer */
 footer {
-    background-color: #1a1b1d;
+    background-color: #131c25;
     color: #FFFFFF;
     padding: 60px 20px;
     font-size: 14px;
@@ -27,7 +27,7 @@ footer {
   .footer-title {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
   }
   
   .footer-title .icon {
@@ -37,14 +37,14 @@ footer {
   
   .footer-title h4 {
     color: #FFFFFF;
-    font-size: 14px;
+    font-size: 16px;
     text-transform: uppercase;
     font-weight: bold;
     margin: 0;
   }
   
   .footer-box p {
-    font-size: 13px;
+    font-size: 15px;
     margin-bottom: 8px;
     color: #FFFFFF;
   }
@@ -53,7 +53,7 @@ footer {
     display: block;
     color: #FFFFFF;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 15px;
     margin-bottom: 8px;
   }
   
@@ -75,7 +75,7 @@ footer {
   footer p.copyright {
     text-align: center;
     margin-top: 50px;
-    font-size: 12px;
+    font-size: 14px;
     color: #FFFFFF;
     border-top: 1px solid #CBd9E6;
     padding-top: 20px;

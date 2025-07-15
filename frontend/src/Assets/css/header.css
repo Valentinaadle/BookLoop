@@ -60,7 +60,7 @@
 
 .header-nav .nav-links a:hover {
   transform: scale(1.1) perspective(800px) ;
-  color:#305681;
+  color:#475f7a ;
   font-size:medium;
   font-weight: 650;
 }
