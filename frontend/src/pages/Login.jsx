@@ -64,7 +64,7 @@ function Login() {
       <main className="login-main-container-refined">
         <div className="login-content-wrapper">
           <div className="login-text-content-refined">
-            <AnimatedText text="BOOKLOOP" className="logo-custom" delay={0.22} />
+            <AnimatedText text="BookLoop" className="logo-custom" delay={0.22} />
             <div className="blue-divider"></div>
             <FadeInText text="Accedé a tu cuenta y seguí impulsando la lectura circular." className="slogan-refined" delay={1.2} />
             <FadeInText text="Donde los libros encuentran nuevos lectores" className="subtitle-refined" delay={1.8} />

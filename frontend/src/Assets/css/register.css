@@ -182,7 +182,7 @@
 
 .info-text-refined {
   font-family: 'Inter', sans-serif;
-  color: #303e50;
+  color: #1f2d3d;
   margin-top: 5px;
 }
 
@@ -215,7 +215,7 @@
 .submit-btn-refined {
   width: 100%;
   padding: 15px;
-  background: #394B60;
+  background: #1f2d3d;
   border: none;
   color: white;
   font-family: 'Inter', sans-serif;
@@ -262,7 +262,7 @@
 }
 
 .login-link {
-  color: #394B60;
+  color: #1f2d3d;
   font-weight: 600;
   margin-left: 5px;
   text-decoration: none;
@@ -276,7 +276,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: #394B60;
+  background: #1f2d3d;
   transition: width 0.3s ease;
 }
 

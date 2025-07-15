@@ -87,7 +87,7 @@ function Register() {
       <main className="register-main-container-refined">
         <div className="register-content-wrapper">
           <div className="register-text-content-refined">
-            <AnimatedText text="BOOKLOOP" className="logo-custom" delay={0.22} />
+            <AnimatedText text="BookLoop" className="logo-custom" delay={0.22} />
             <div className="blue-divider"></div>
             <FadeInText text="Descubrí tu próxima lectura favorita" className="slogan-refined" delay={1.2} />
             <FadeInText text="Formá parte del cambio: vendé, comprá y reciclá libros." className="subtitle-refined" delay={1.8} />
