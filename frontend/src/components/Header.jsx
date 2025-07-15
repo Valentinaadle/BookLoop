@@ -79,12 +79,18 @@ export default function Header() {
             </Link>
           </div>
           <nav className="header-nav">
-            <ul className="nav-links">
-                <li><Link to="/vender-page">Quiero vender</Link></li>
-                <li><Link to="/comprar">Quiero comprar</Link></li>
-                <li><Link to="/nosotros">Sobre Nosotros</Link></li>
-            </ul>
-          </nav>
+          <ul className="nav-links">
+            <li>
+              <Link to="/vender-page" className="nav-link">Quiero vender</Link>
+            </li>
+            <li>
+              <Link to="/comprar" className="nav-link">Quiero comprar</Link>
+            </li>
+            <li>
+              <Link to="/nosotros" className="nav-link">Sobre Nosotros</Link>
+            </li>
+          </ul>
+        </nav>
         </div>
 
         <div className="search-container">

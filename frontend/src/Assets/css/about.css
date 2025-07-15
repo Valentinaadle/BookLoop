@@ -103,8 +103,9 @@
 }
 
 .infobox:hover .infobox-icon-image {
-  transform: scale(1.1);
+
   transition: transform 0.3s ease;
+  transform: scale(1.1) rotate(5deg);
 }
 
 .infobox-content {
@@ -444,7 +445,7 @@
 .contact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -460,8 +461,8 @@
 }
 
 .contact-icon-container {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 50px;
   display: flex;
   justify-content: center; /* Centra horizontalmente */
   align-items: center; /* Centra verticalmente */
@@ -477,19 +478,22 @@
   display: block; /* Elimina espacio fantasma debajo de la imagen */
   margin: 0 auto; /* Doble seguridad para centrado */
 }
-
-.contact-card:hover {
+.contact-card:hover .contact-icon-image {
+  transform: scale(1.1) rotate(7deg);
+}
+.contact-card:hover  {
   transform: translateY(-8px) scale(1.02);
   border-color: rgba(9, 117, 218, 0.15);
   transform: scale(1.1) perspective(300px) ;
   cursor: pointer;
+  
 }
 
 
 .contact-card:hover .contact-icon {
   background: #3360a3;
   color: white;
-  transform: rotate(5deg);
+  
   
 }
 

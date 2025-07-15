@@ -51,6 +51,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: 'Inter', serif;
   font-size: 1.1rem;
   font-weight: 600;
   color: #2c3e50;
@@ -72,6 +73,7 @@
 .faq-answer p {
   color: #34495e;
   margin: 0;
+  font-family: 'Inter', serif;
 }
 .faq-answer.open {
   max-height: 500px;
