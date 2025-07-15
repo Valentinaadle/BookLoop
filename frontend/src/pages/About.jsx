@@ -2,63 +2,97 @@ import React from 'react';
 import '../Assets/css/about.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import valentinaImg from '../Assets/persona.jpg';
 
 const About = () => {
+  // Datos del equipo
+  const teamMembers = [
+    { id: 1, name: "Valentina", role: "Fundadora", img: valentinaImg },
+    { id: 2, name: "Alessandro", role: "Logística", img: valentinaImg },
+    { id: 3, name: "Candelaria", role: "Atención al cliente", img: valentinaImg },
+    { id: 4, name: "Lucas", role: "Servicio tecnico", img: valentinaImg },
+    { id: 5, name: "Andres", role: "RR.HH", img: valentinaImg },
+  ];
+
+  // Datos de contacto
+  const contactInfo = [
+    { id: 1, icon: "✉️", label: "Email", info: "itsbookloop@gmail.com" },
+    { id: 2, icon: "📞", label: "Teléfono", info: "(+54) 3815699499" },
+    { id: 3, icon: "🕒", label: "Horario", info: "Lunes a Sábado de 8:00 a 21:00" },
+  ];
+
   return (
     <>
       <Header />
-      
-      <div className="about-us-container">
-        {/* Sección Misión */}
-        <section className="content-section mission-section">
-          <div className="section-header">
-            <img src="/icons/mision.png" alt="Icono Misión" className="section-icon" />
-            <h2 className="section-title">Nuestra Misión</h2>
-          </div>
-          <div className="section-content">
-            <p className="section-text">
-              En BookLoop, nuestra misión es fomentar la lectura y la sostenibilidad a través de la venta de libros usados. 
-              Creemos que cada libro tiene una historia que contar y queremos ayudar a que esas historias encuentren nuevos hogares.<br />
-              Reducir el desperdicio de libros y promover una economía circular donde cada libro pueda ser reutilizado y disfrutado por nuevas generaciones.
-            </p>
-          </div>
-        </section>
-
-        {/* Sección Equipo */}
-        <section className="content-section team-section">
-          <div className="section-header">
-            <img src="/icons/equipo.png" alt="Icono Equipo" className="section-icon" />
-            <h2 className="section-title">Nuestro Equipo</h2>
-          </div>
-          <div className="section-content">
-            <p className="section-text">
-              Somos un grupo de apasionados por los libros, el planeta y la educación. 
-              Nuestro equipo trabaja incansablemente para reducir el desperdicio y promover una economía circular. <br />
-              Nos une el amor por las historias, pero también la convicción de que la educación debe ser accesible y respetuosa con el planeta.
-            </p>
-          </div>
-        </section>
-
-        {/* Sección Contacto */}
-        <section className="content-section contact-section">
-          <div className="section-header">
-            <img src="/icons/whatsapp.png" alt="Icono WhatsApp" className="section-icon contact-icon" />
-            <h2 className="section-title">Contacto</h2>
-          </div>
-          <div className="section-content">
-            <p className="section-text">¿Tenés dudas o sugerencias? ¡Estamos para ayudarte!</p>
-            
-            <div className="contact-info">
-              <div className="contact-item">
-                <span className="contact-label">Email:</span> itsbookloop@gmail.com
+      <div className="about-container">
+        {/* Sección Hero unificada con Misión */}
+        <section className="unified-hero-mission">
+          <div className="hero-content">
+            <h1>BookLoop: Donde los libros renacen</h1>
+            <div className="mission-infoboxes">
+              <div className="infobox">
+                <div className="infobox-icon">📚</div>
+                <p>Fomentamos la sostenibilidad a través de la venta de libros usados</p>
               </div>
-              <div className="contact-item">
-                <span className="contact-label">Teléfono:</span> (+54) 3815699499
+              <div className="infobox">
+                <div className="infobox-icon">🔄</div>
+                <p>Creemos que cada libro tiene una historia que contar</p>
               </div>
-              <div className="contact-item">
-                <span className="contact-label">Horario:</span> Lunes a Sábado de 8:00 a 21:00
+              <div className="infobox">
+                <div className="infobox-icon">🌱</div>
+                <p>Promovemos una economía circular para reducir el desperdicio</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Equipo */}
+        <section className="team-section">
+  <div className="team-header">
+    
+    <h2>Nuestro Equipo</h2>
+  
+  </div>
+  
+  <div className="team-container">
+    <div className="team-content">
+      <div className="team-description">
+        <p>
+          Somos un grupo de apasionados por los libros, el planeta y la educación. 
+          Nos une el amor por las historias y la convicción de que la educación debe ser accesible y respetuosa con el planeta.
+        </p>
+      </div>
+      
+      <div className="team-grid">
+        {teamMembers.map((member) => (
+          <div key={member.id} className="team-member-card">
+            <div className="member-image-container">
+              <img src={member.img} alt={member.name} className="member-image" />
+              
+            </div>
+            <div className="member-details">
+              <span className="member-name">{member.name}</span>
+              <span className="member-role">{member.role}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+        {/* Contacto */}
+        <section className="contact-section">
+          <h2>Contacto</h2>
+          <p className="contact-description">¿Tenés dudas o sugerencias? ¡Estamos para ayudarte!</p>
+          <div className="contact-grid">
+            {contactInfo.map((contact) => (
+              <div key={contact.id} className="contact-card">
+                <span className="contact-icon">{contact.icon}</span>
+                <h3>{contact.label}</h3>
+                <p>{contact.info}</p>
+              </div>
+            ))}
           </div>
         </section>
       </div>
