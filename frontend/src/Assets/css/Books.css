@@ -162,3 +162,16 @@
   font-size: 18px;
   color: #666;
 }
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .book-card {
+    min-width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}

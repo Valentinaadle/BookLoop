@@ -168,31 +168,26 @@
 
 .carousel-books {
   display: flex;
-  gap: 1.5rem;
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
+  gap: 10px;
 }
 
 .carousel-arrow {
-  background: #fff;
+  background-color: #fff;
   border: none;
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  padding: 5px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  color: #000000;
-  z-index: 2;
+  transition: box-shadow 0.2s, transform 0.2s;
+  width: 30px;
+  height: 30px;
 }
 
 .carousel-arrow:hover {
-  background: #f1f1f1;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 16px rgba(31,45,61,0.13);
+  transform: scale(1.1);
 }
 
 .categorias-destacadas {
@@ -550,6 +545,7 @@
   background: rgba(255,255,255,0.9);
   color: #394B60;
   border: 2px solid white;
+  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
 }
 
@@ -576,5 +572,32 @@
   .btn-compra, .btn-venta {
     padding: 1rem 1.8rem;
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  .carousel-arrow.left {
+    left: 10px;
+  }
+
+  .carousel-arrow.right {
+    right: 10px;
+  }
+  .carousel-arrow {
+    top: 40%;
   }
 }

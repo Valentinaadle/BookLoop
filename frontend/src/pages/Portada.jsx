@@ -74,9 +74,9 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
     const updateVisibleCount = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setVisibleCount(1); // mostrar SOLO 1 en móviles
+        setVisibleCount(2); // Mostrar 2 en pantallas pequeñas
       } else {
-        setVisibleCount(4); // mostrar 4 en pantallas grandes
+        setVisibleCount(4); // Mostrar 4 en pantallas grandes
       }
     };
 
@@ -87,6 +87,13 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
 
   const handlePrev = () => setStartIdx((prev) => (prev - visibleCount + total) % total);
   const handleNext = () => setStartIdx((prev) => (prev + visibleCount) % total);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4000); 
+    return () => clearInterval(interval);
+  }, [visibleCount, total]);
 
   const visibleBooks = Array.from({ length: visibleCount }, (_, i) => libros[(startIdx + i) % total])
     .filter(b => b && b.book_id);
