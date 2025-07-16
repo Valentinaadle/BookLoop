@@ -29,6 +29,8 @@ function Login() {
     }));
   };
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -36,11 +38,11 @@ function Login() {
 
     try {
       console.log('Enviando datos de login:', formData);
-      const response = await axios.post('http://localhost:5000/api/users/login', formData);
+      const response = await axios.post(`${API_URL}/api/users/login`, formData);
       console.log('Respuesta del servidor:', response.data);
       
-      if (response.data.user) {
-        login(response.data.user);
+      if (response.data.user && response.data.token) {
+        login(response.data.user, response.data.token);
         navigate('/');
       } else {
         setError('Error en la respuesta del servidor');
