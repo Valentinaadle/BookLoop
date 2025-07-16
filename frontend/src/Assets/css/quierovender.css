@@ -342,13 +342,13 @@ color:#305681
 .form-group input:required:valid,
 .form-group select:required:valid,
 .form-group textarea:required:valid {
-  border-left: 4px solid #3c35f7ab !important;
+  border-left: 4px solid #3360a3 !important;
 }
 
 .form-group input:required:invalid:not(:placeholder-shown),
 .form-group select:required:invalid,
 .form-group textarea:required:invalid:not(:placeholder-shown) {
-  border-left: 4px solid #3c35f7ab !important;
+  border-left: 4px solid #3360a3 !important;
 }
 
 /* 8. Animación de zoom sutil al enfocar textarea */

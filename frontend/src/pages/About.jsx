@@ -2,7 +2,11 @@ import React from 'react';
 import '../Assets/css/about.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import valentinaImg from '../Assets/persona.jpg';
+import andresImg from '../Assets/team/andres.jpg';
+import lucasImg from '../Assets/team/lucas.jpg';
+import candeImg from '../Assets/team/cande.jpg';
+import aleImg from '../Assets/team/ale.jpg';
+import valeImg from '../Assets/team/vale.jpg';
 import emailIcon from '../Assets/mail.jpg';
 import phoneIcon from '../Assets/wp.jpg';
 import horarioIcon from '../Assets/hora.jpg';
@@ -10,11 +14,11 @@ import horarioIcon from '../Assets/hora.jpg';
 const About = () => {
   // Datos del equipo
   const teamMembers = [
-    { id: 1, name: "Valentina", role: "Fundadora", descripcion:"La mente creativa detrás del proyecto, impulsa la visión y dirige cada paso del emprendimiento.", img: valentinaImg },
-    { id: 2, name: "Alessandro", role: "Logística", descripcion:"Supervisa el correcto funcionamiento de la plataforma y procesos entre las partes.", img: valentinaImg },
-    { id: 3, name: "Candelaria", role: "Atención al cliente", descripcion:"Resuelve dudas y acompaña a cada cliente para brindar una experiencia excelente.", img: valentinaImg },
-    { id: 4, name: "Lucas", role: "Servicio tecnico", descripcion:"Garantiza el correcto funcionamiento de la pagina y soluciones técnicas.", img: valentinaImg },
-    { id: 5, name: "Andres", role: "RR.HH", descripcion:"Se ocupa de nuestro equipo, cuidando el talento y fomentando un buen clima laboral.", img: valentinaImg },
+    { id: 1, name: "Valentina", role: "Fundadora", descripcion:"La mente creativa detrás del proyecto, impulsa la visión y dirige cada paso del emprendimiento.", img: valeImg },
+    { id: 2, name: "Alessandro", role: "Logística", descripcion:"Supervisa el correcto funcionamiento de la plataforma y procesos entre las partes.", img: aleImg },
+    { id: 3, name: "Candelaria", role: "Atención al cliente", descripcion:"Resuelve dudas y acompaña a cada cliente para brindar una experiencia excelente.", img: candeImg },
+    { id: 4, name: "Lucas", role: "Servicio tecnico", descripcion:"Garantiza el correcto funcionamiento de la pagina y soluciones técnicas.", img: lucasImg },
+    { id: 5, name: "Andres", role: "RR.HH", descripcion:"Se ocupa de nuestro equipo, cuidando el talento y fomentando un buen clima laboral.", img: andresImg },
   ];
 
   // Datos de contacto
