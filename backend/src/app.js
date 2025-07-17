@@ -27,7 +27,15 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ limit: '1mb', extended: true }));
 
 // Servir archivos estáticos (fotos de perfil)
-app.use('/uploads/profiles', express.static(path.join(__dirname, '../uploads/profiles')));
+app.use('/uploads/profiles', cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://bookloop-dusky.vercel.app',
+    'https://bookloop.com.ar'
+  ],
+  credentials: true,
+}), express.static(path.join(__dirname, '../uploads/profiles')));
 
 // Rutas
 app.use('/api/books', bookRoutes);
