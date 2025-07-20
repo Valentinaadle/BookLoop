@@ -199,17 +199,53 @@
 }
 
 @media (max-width: 767px) {
-  .book-card {
-    min-width: 45%;
-    max-width: 45%;
-    margin: 0 2.5%;
+  .book-container {
+    display: inline-block;
+    flex-wrap: wrap;
+  
+    gap: 10px; /* Espacio entre cards */
+    padding: 5px;
   }
 
-  .book-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
+  .book-card {
+    width: calc(40% - 5px); /* 2 cards por fila (resta el gap) */
+    min-width: 140px; /* Ancho mínimo para evitar que se encojan */
+    max-width: 200px; /* Ancho máximo fijo para todas */
+    margin: 0;
+    padding: 6px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: white; /* Fondo sólido para uniformidad */
+  }
+
+  /* Asegura que el contenido no desborde */
+  .book-card h3 {
+    font-size: 1.05rem;
+   
+    
+ 
+  }
+
+  .book-card p {
+    margin: 3px 0;
+    font-size: 0.95rem;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .book-card .price {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 8px 0;
+  }
+
+  .book-card button {
+
+    padding: 10px;
+    font-size: 0.9rem;
   }
 }
 
