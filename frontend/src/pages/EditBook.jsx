@@ -193,7 +193,7 @@ function EditBook() {
         ...supabaseImageUrls
       ];
       console.log('finalImages:', finalImages);
-      const allSupabase = finalImages.every(url => typeof url === 'string' && url.startsWith('https://pghjljkqjzvfhqjzjvhn.supabase.co/'));
+      const allSupabase = finalImages.every(url => typeof url === 'string' && url.startsWith('https://tdsbsdsexuhilidpwpcl.supabase.co/'));
       if (!allSupabase) {
         setError('Todas las imágenes deben ser URLs públicas de Supabase.');
         setLoading(false);

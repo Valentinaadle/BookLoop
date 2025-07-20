@@ -41,6 +41,7 @@ const uploadImage = [
         .from('book-images')
         .getPublicUrl(fileName);
       const imageurl = publicUrlData.publicUrl;
+      console.log('URL pública generada:', imageurl); // <-- debug log
       res.json({ imageurl });
     } catch (err) {
       console.error('Error al subir imagen:', err);
@@ -320,6 +321,11 @@ const updateBook = async (req, res) => {
 
     // Determinar la portada
     let finalCoverUrl = coverimageurl;
+    let currentUrls = [];
+    if (Array.isArray(images)) {
+      const currentImages = await Image.getImagesByBook(book.book_id);
+      currentUrls = currentImages.map(img => img.image_url);
+    }
     if (coverimageurl && currentUrls && currentUrls.includes(coverimageurl)) {
       finalCoverUrl = coverimageurl;
     } else if (Array.isArray(images) && images.length > 0) {
