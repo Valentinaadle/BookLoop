@@ -71,7 +71,15 @@ const getBooks = async (req, res) => {
           console.error('Error sincronizando imageurl con tabla images:', err);
         }
       }
-      const coverimageurl = book.coverimageurl || (images.length > 0 ? images[images.length - 1].image_url : book.imageurl || null);
+      // SIEMPRE usar como portada la que está en book.coverimageurl si existe y está en las imágenes
+      let coverimageurl = null;
+      if (book.coverimageurl && images.some(img => img.image_url === book.coverimageurl)) {
+        coverimageurl = book.coverimageurl;
+      } else if (images.length > 0) {
+        coverimageurl = images[images.length - 1].image_url;
+      } else {
+        coverimageurl = book.imageurl || null;
+      }
       return {
         ...book,
         coverimageurl,
@@ -111,7 +119,15 @@ const getBookById = async (req, res) => {
         console.error('Error sincronizando imageurl con tabla images:', err);
       }
     }
-    const coverimageurl = book.coverimageurl || (images.length > 0 ? images[images.length - 1].image_url : null);
+    // SIEMPRE usar como portada la que está en book.coverimageurl si existe y está en las imágenes
+    let coverimageurl = null;
+    if (book.coverimageurl && images.some(img => img.image_url === book.coverimageurl)) {
+      coverimageurl = book.coverimageurl;
+    } else if (images.length > 0) {
+      coverimageurl = images[images.length - 1].image_url;
+    } else {
+      coverimageurl = book.imageurl || null;
+    }
     res.json({
       ...book,
       coverimageurl,
