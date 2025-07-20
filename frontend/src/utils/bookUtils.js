@@ -20,16 +20,7 @@ export function getBookImage(book) {
     );
     if (invalidImg) return DEFAULT_BOOK_IMAGE;
   }
-  // 1. Usar la primera imagen válida del array images
-  if (book.images && Array.isArray(book.images)) {
-    // Buscar primero una URL absoluta
-    const validImg = book.images.find(isValidUrl);
-    if (validImg) return validImg;
-    // Si no, buscar una ruta relativa de Supabase
-    const supaImg = book.images.find(isSupabaseRelative);
-    if (supaImg) return SUPABASE_BOOKS_BASE_URL + supaImg.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
-  }
-  // 2. Usar coverimageurl si es válida
+  // 1. Usar coverimageurl si es válida
   if (typeof book.coverimageurl === 'string' && (book.coverimageurl.startsWith('/uploads/') || book.coverimageurl.startsWith('blob:'))) {
     return DEFAULT_BOOK_IMAGE;
   }
@@ -38,6 +29,13 @@ export function getBookImage(book) {
   }
   if (isSupabaseRelative(book.coverimageurl)) {
     return SUPABASE_BOOKS_BASE_URL + book.coverimageurl.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
+  }
+  // 2. Usar la primera imagen válida del array images
+  if (book.images && Array.isArray(book.images)) {
+    const validImg = book.images.find(isValidUrl);
+    if (validImg) return validImg;
+    const supaImg = book.images.find(isSupabaseRelative);
+    if (supaImg) return SUPABASE_BOOKS_BASE_URL + supaImg.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
   }
   // 3. Usar imageurl si es válida
   if (typeof book.imageurl === 'string' && (book.imageurl.startsWith('/uploads/') || book.imageurl.startsWith('blob:'))) {
