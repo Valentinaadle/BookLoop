@@ -40,8 +40,6 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.use('/uploads', express.static(__dirname + '/../uploads'));
-
 // Variables de entorno
 const PORT = process.env.PORT || 5000;
 

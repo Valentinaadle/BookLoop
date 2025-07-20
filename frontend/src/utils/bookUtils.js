@@ -1,43 +1,39 @@
 // Función para obtener la URL de la imagen del libro
-export function getBookImage(book, API_URL = 'http://localhost:5000') {
+export function getBookImage(book) {
   const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';
 
-  // 1. Usar coverimageurl si existe
-  if (book.coverimageurl) {
-    if (book.coverimageurl.startsWith('http') || book.coverimageurl.startsWith('/Assets')) {
-      return book.coverimageurl;
-    }
-    return `${API_URL}${book.coverimageurl}`;
+  // Helper para decidir si es URL absoluta válida (solo http/https)
+  const isValidUrl = (url) => typeof url === 'string' && url.startsWith('http');
+
+  // 1. Usar la primera imagen válida del array images
+  if (book.images && Array.isArray(book.images)) {
+    const validImg = book.images.find(isValidUrl);
+    if (validImg) return validImg;
   }
-  // 2. Usar la primera imagen del array images
-  if (book.images && Array.isArray(book.images) && book.images.length > 0) {
-    const imgUrl = book.images[0];
-    if (imgUrl.startsWith('http') || imgUrl.startsWith('/Assets')) {
-      return imgUrl;
-    }
-    return `${API_URL}${imgUrl}`;
+  // 2. Usar coverimageurl si es válida
+  if (isValidUrl(book.coverimageurl)) {
+    return book.coverimageurl;
   }
-  // 3. Usar imageurl si existe
-  if (book.imageurl) {
-    if (book.imageurl.startsWith('http') || book.imageurl.startsWith('/Assets')) {
-      return book.imageurl;
-    }
-    return `${API_URL}${book.imageurl}`;
+  // 3. Usar imageurl si es válida
+  if (isValidUrl(book.imageurl)) {
+    return book.imageurl;
   }
-  // 4. Usar campo "imagen" si existe
-  if (book.imagen) {
-    if (book.imagen.startsWith('http') || book.imagen.startsWith('/Assets')) {
-      return book.imagen;
-    }
-    return `${API_URL}${book.imagen}`;
+  // 4. Usar campo "imagen" si es válida
+  if (isValidUrl(book.imagen)) {
+    return book.imagen;
   }
-  // 5. Si no hay ninguna imagen, usar la imagen por defecto
-  // Si alguna ruta apunta a 'book-empty.png', forzar default
-  if (book.coverimageurl === 'book-empty.png' || book.imageurl === 'book-empty.png' || book.imagen === 'book-empty.png') {
+  // 5. Si alguna ruta apunta explícitamente a 'book-empty.png', forzar default
+  if (
+    book.coverimageurl === 'book-empty.png' ||
+    book.imageurl === 'book-empty.png' ||
+    book.imagen === 'book-empty.png'
+  ) {
     return DEFAULT_BOOK_IMAGE;
   }
+  // Siempre devolver la ruta relativa para la imagen por defecto
   return DEFAULT_BOOK_IMAGE;
 }
+
 
 // Función para obtener el autor formateado
 export function getBookAuthor(book) {

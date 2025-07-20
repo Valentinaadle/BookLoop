@@ -111,7 +111,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-// Subir foto de perfil
+// Subir foto de perfil (ahora en Supabase Storage)
 const uploadProfilePhoto = async (req, res) => {
   try {
     if (!req.file) {
@@ -123,9 +123,30 @@ const uploadProfilePhoto = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    const photoUrl = `/uploads/profiles/${req.file.filename}`;
+    // Subir a Supabase Storage
+    const fileExt = req.file.originalname.split('.').pop();
+    const fileName = `profile_${user.id}_${Date.now()}.${fileExt}`;
+    const fileBuffer = req.file.buffer;
+    const { data, error } = await supabase.storage
+      .from('profile-photos')
+      .upload(fileName, fileBuffer, {
+        contentType: req.file.mimetype,
+        upsert: true
+      });
+    if (error) {
+      console.error('Error al subir a Supabase Storage:', error);
+      return res.status(500).json({ message: 'Error al subir imagen a storage' });
+    }
+
+    // Obtener URL pública
+    const { data: publicUrlData } = supabase.storage
+      .from('profile-photos')
+      .getPublicUrl(fileName);
+    const photoUrl = publicUrlData.publicUrl;
+
+    // Actualizar usuario
     const updated = await User.updateUser(req.params.id, { photo_url: photoUrl });
-    
+
     res.json({
       message: 'Foto de perfil actualizada correctamente',
       photo_url: photoUrl,

@@ -19,22 +19,44 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+    // Puedes personalizar el nombre del archivo aquí
+    cb(null, file.originalname); // O usa tu lógica personalizada
   }
 });
 const upload = multer({ storage });
 
-// Endpoint para subir una imagen y devolver la URL
+// Endpoint para subir una imagen y devolver la URL (ahora en Supabase Storage)
 const uploadImage = [
   upload.single('image'),
-  (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No se subió ninguna imagen' });
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'No se subió ninguna imagen' });
+      }
+      // Subir a Supabase Storage
+      const fileExt = req.file.originalname.split('.').pop();
+      const fileName = `book_${Date.now()}_${Math.floor(Math.random()*1e6)}.${fileExt}`;
+      const fileBuffer = req.file.buffer;
+      const { data, error } = await supabase.storage
+        .from('book-images')
+        .upload(fileName, fileBuffer, {
+          contentType: req.file.mimetype,
+          upsert: true
+        });
+      if (error) {
+        console.error('Error al subir a Supabase Storage:', error);
+        return res.status(500).json({ message: 'Error al subir imagen a storage' });
+      }
+      // Obtener URL pública
+      const { data: publicUrlData } = await supabase.storage
+        .from('book-images')
+        .getPublicUrl(fileName);
+      const imageurl = publicUrlData.publicUrl;
+      res.json({ imageurl });
+    } catch (err) {
+      console.error('Error al subir imagen:', err);
+      res.status(500).json({ message: 'Error al subir imagen' });
     }
-    // Devolver la URL relativa
-    const imageurl = `/uploads/${req.file.filename}`;
-    res.json({ imageurl });
   }
 ];
 
