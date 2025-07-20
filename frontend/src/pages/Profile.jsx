@@ -165,7 +165,7 @@ function Profile() {
             apellido: data.apellido || '',
             email: data.email || '',
             intereses: data.intereses || [],
-            photoUrl: data.photo_url ? `${API_URL}${data.photo_url}` : '',
+            photoUrl: data.photo_url || '',
             username: data.username || '@usuario',
             bio: data.bio || 'Vendedor/a de libros apasionado/a.',
             stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
@@ -259,7 +259,7 @@ function Profile() {
             apellido: data.apellido || '',
             email: data.email || '',
             intereses: data.intereses || [],
-            photoUrl: data.photo_url ? `${API_URL}${data.photo_url}` : '',
+            photoUrl: data.photo_url || '',
             username: data.username || '@usuario',
             bio: data.bio || 'Vendedor/a de libros apasionado/a.',
             stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }
@@ -882,7 +882,7 @@ function Profile() {
                             apellido: data.apellido || '',
                             email: data.email || '',
                             intereses: data.intereses || [],
-                            photoUrl: data.photo_url ? `${API_URL}${data.photo_url}` : '',
+                            photoUrl: data.photo_url || '',
                             username: data.username || '@usuario',
                             bio: data.bio || 'Vendedor/a de libros apasionado/a.',
                             stats: data.stats || { publicados: 0, vendidos: 0, rating: 0 }

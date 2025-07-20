@@ -1,4 +1,5 @@
 const axios = require('axios');
+const supabase = require('../supabaseClient');
 const { Book } = require('../models');
 const { Op } = require('sequelize');
 const Image = require('../models/Image');
@@ -10,19 +11,7 @@ const multer = require('multer');
 const GOOGLE_BOOKS_API_URL = 'https://www.googleapis.com/books/v1/volumes';
 
 // Configuración de multer para guardar archivos en /uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../../uploads');
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath);
-    }
-    cb(null, uploadPath);
-  },
-  filename: function (req, file, cb) {
-    // Puedes personalizar el nombre del archivo aquí
-    cb(null, file.originalname); // O usa tu lógica personalizada
-  }
-});
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Endpoint para subir una imagen y devolver la URL (ahora en Supabase Storage)

@@ -1,21 +1,7 @@
 /* === DASHBOARD MARKETPLACE PROFILE === */
 
 /* Grilla de libros: 2 columnas en desktop, 1 en mobile */
-.profile-main-books-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-  gap: 2.2rem !important;
-  margin-top: 0.5rem !important;
-  padding-bottom: 2.5rem !important;
-  align-items: stretch !important;
-  justify-items: start !important;
-  justify-content: start !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-  box-sizing: border-box !important;
-}
+
 
 .profile-main-books-grid:has(.profile-main-empty-card) {
   justify-content: center;
@@ -490,14 +476,7 @@ body {
   box-shadow: 0 4px 16px rgba(37,99,235,0.13);
   color: #fff;
 }
-.profile-main-books-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2.5rem;
-  margin-top: 0.5rem;
-  padding-bottom: 2.5rem;
-  align-items: stretch;
-}
+
 .profile-main-book-card {
   background: #fff;
   border-radius: 14px;
@@ -1040,7 +1019,7 @@ body {
     justify-content: center !important;
     gap: 3.5rem !important;
   }
-  .profile-main-book-card, .book-card {
+  .profile-main-book-card {
     margin-bottom: 2.5rem !important;
   }
   .profile-main-books-grid {

@@ -74,9 +74,9 @@ const CarruselLibros = ({ libros, titulo, extraClass = "", isAdmin, onDelete }) 
     const updateVisibleCount = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setVisibleCount(2); // Mostrar 2 en pantallas pequeñas
+        setVisibleCount(1); // Mostrar solo 1 libro en mobile
       } else {
-        setVisibleCount(4); // Mostrar 4 en pantallas grandes
+        setVisibleCount(4); // Mostrar 4 en desktop
       }
     };
 

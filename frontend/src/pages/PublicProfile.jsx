@@ -174,13 +174,13 @@ function PublicProfile() {
             <div className="profile-sidebar-avatar">
               {user.photo_url || user.photoUrl ? (
   <img
-    src={(user.photo_url ? `${API_URL}${user.photo_url}` : user.photoUrl)}
+    src={user.photo_url || user.photoUrl}
     alt={user.nombre || user.username || 'avatar'}
     onError={e => { e.target.src = '/Assets/images/default-avatar.png'; e.target.onerror = null; }}
     className="profile-avatar-img"
   />
 ) : (
-  <span>{user.nombre ? user.nombre[0] : (user.username ? user.username[0] : '?')}</span>
+  <span>{user.nombre ? user.nombre[0] : (user.username ? user.username[0] : '?' )}</span>
 )}
             </div>
             <h2 className="profile-sidebar-name">{user.nombre} {user.apellido}</h2>

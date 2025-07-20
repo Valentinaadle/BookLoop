@@ -1,26 +1,47 @@
 // Función para obtener la URL de la imagen del libro
+// URL base pública del bucket de Supabase (ajustar si cambia el dominio o el bucket)
+const SUPABASE_BOOKS_BASE_URL = "https://pghjljkqjzvfhqjzjvhn.supabase.co/storage/v1/object/public/book-images/";
+
 export function getBookImage(book) {
   const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';
 
   // Helper para decidir si es URL absoluta válida (solo http/https)
+  // Valida si es una URL absoluta
   const isValidUrl = (url) => typeof url === 'string' && url.startsWith('http');
+  // Valida si es una ruta relativa de Supabase
+  const isSupabaseRelative = (url) => typeof url === 'string' && (
+    url.startsWith('book-images/') || url.startsWith('public/book-images/')
+  );
 
   // 1. Usar la primera imagen válida del array images
   if (book.images && Array.isArray(book.images)) {
+    // Buscar primero una URL absoluta
     const validImg = book.images.find(isValidUrl);
     if (validImg) return validImg;
+    // Si no, buscar una ruta relativa de Supabase
+    const supaImg = book.images.find(isSupabaseRelative);
+    if (supaImg) return SUPABASE_BOOKS_BASE_URL + supaImg.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
   }
   // 2. Usar coverimageurl si es válida
   if (isValidUrl(book.coverimageurl)) {
     return book.coverimageurl;
   }
+  if (isSupabaseRelative(book.coverimageurl)) {
+    return SUPABASE_BOOKS_BASE_URL + book.coverimageurl.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
+  }
   // 3. Usar imageurl si es válida
   if (isValidUrl(book.imageurl)) {
     return book.imageurl;
   }
+  if (isSupabaseRelative(book.imageurl)) {
+    return SUPABASE_BOOKS_BASE_URL + book.imageurl.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
+  }
   // 4. Usar campo "imagen" si es válida
   if (isValidUrl(book.imagen)) {
     return book.imagen;
+  }
+  if (isSupabaseRelative(book.imagen)) {
+    return SUPABASE_BOOKS_BASE_URL + book.imagen.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
   }
   // 5. Si alguna ruta apunta explícitamente a 'book-empty.png', forzar default
   if (
