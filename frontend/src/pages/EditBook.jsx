@@ -163,75 +163,49 @@ function EditBook() {
     setCoverPreview(previewUrl);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(null);
     try {
-      let autoresArray = form.authors;
-      if (typeof autoresArray === 'string') {
-        try {
-          const parsed = JSON.parse(autoresArray);
-          if (Array.isArray(parsed)) {
-            autoresArray = parsed;
-          } else {
-            autoresArray = [autoresArray];
-          }
-        } catch {
-          autoresArray = autoresArray.split(',').map(a => a.trim());
+      // Subir imágenes nuevas a Supabase y obtener URLs públicas
+      const supabaseImageUrls = [];
+      for (const imgObj of newImages) {
+        if (imgObj.file) {
+          const formDataImg = new FormData();
+          formDataImg.append('image', imgObj.file);
+          const res = await fetch(`${API_URL}/api/books/upload-image`, {
+            method: 'POST',
+            body: formDataImg
+          });
+          if (!res.ok) throw new Error('Error al subir la imagen');
+          const data = await res.json();
+          supabaseImageUrls.push(data.url);
         }
       }
-      if (Array.isArray(autoresArray)) {
-        autoresArray = autoresArray.flat(Infinity).map(a => typeof a === 'string' ? a.trim() : a).filter(Boolean);
+      // Combina imágenes existentes (no eliminadas) y nuevas URLs públicas
+      const finalImages = [
+        ...bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => img.image_url),
+        ...supabaseImageUrls
+      ];
+      // Validación final
+      const allSupabase = finalImages.every(url => typeof url === 'string' && url.startsWith('https://pghjljkqjzvfhqjzjvhn.supabase.co/'));
+      if (!allSupabase) {
+        setError('Todas las imágenes deben ser URLs públicas de Supabase.');
+        setLoading(false);
+        return;
       }
-
-      // Subir imágenes nuevas y obtener URLs
-      let uploadedUrls = [];
-      for (const obj of newImages) {
-        const formDataImg = new FormData();
-        formDataImg.append('image', obj.file);
-        const res = await fetch(`${API_URL}/api/books/upload-image`, {
-          method: 'POST',
-          body: formDataImg
-        });
-        if (!res.ok) throw new Error('Error al subir la imagen');
-        const imgData = await res.json();
-        uploadedUrls.push(imgData.imageurl);
-      }
-      // Preparar todas las URLs de imágenes a mantener
-      const existingUrls = bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => img.image_url);
-      const allImages = [...existingUrls, ...uploadedUrls];
-
-      // Determinar correctamente la portada:
-      // 1. Si la portada seleccionada era una imagen nueva, su URL en bookImages es un blob local, pero después de subirlas tenemos la URL real en uploadedUrls.
-      // 2. Si la portada seleccionada era una imagen existente, su URL está en existingUrls.
-      let coverUrl = null;
-      if (coverIndex < bookImages.length && bookImages[coverIndex]?.image_url?.startsWith('blob')) {
-        // Es una imagen nueva. Buscar su índice en newImages para mapearlo a uploadedUrls
-        const blobUrl = bookImages[coverIndex].image_url;
-        const idxInNew = newImages.findIndex(obj => obj.blobUrl === blobUrl);
-        coverUrl = idxInNew !== -1 ? uploadedUrls[idxInNew] : allImages[0] || null;
-      } else {
-        // Es una imagen existente
-        coverUrl = allImages[coverIndex] || allImages[0] || null;
-      }
-
+      // Construir payload usando finalImages
       const payload = {
         ...form,
-        authors: autoresArray,
-        images: allImages,
+        images: finalImages,
         deletedImageIds,
-        coverimageurl: coverUrl, // usar minúscula para backend
-        category_id: form.category_id
+        coverIndex
       };
-      console.log('Payload a enviar:', payload);
       const response = await fetch(`${API_URL}/api/books/${id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       if (!response.ok) {
@@ -239,10 +213,8 @@ function EditBook() {
         throw new Error(errorData.message || 'Error al actualizar el libro');
       }
       setSuccess('¡Libro actualizado exitosamente!');
-      // Limpiar estados relacionados
       setNewImages([]);
       setDeletedImageIds([]);
-      // Redirigir a /comprar tras breve delay
       setTimeout(() => {
         navigate('/comprar');
       }, 800);

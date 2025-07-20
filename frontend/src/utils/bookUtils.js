@@ -13,6 +13,13 @@ export function getBookImage(book) {
     url.startsWith('book-images/') || url.startsWith('public/book-images/')
   );
 
+  // Si alguna imagen es /uploads/ o blob, ignorar y no mostrar
+  if (book.images && Array.isArray(book.images)) {
+    const invalidImg = book.images.find(img =>
+      typeof img === 'string' && (img.startsWith('/uploads/') || img.startsWith('blob:'))
+    );
+    if (invalidImg) return DEFAULT_BOOK_IMAGE;
+  }
   // 1. Usar la primera imagen válida del array images
   if (book.images && Array.isArray(book.images)) {
     // Buscar primero una URL absoluta
@@ -23,6 +30,9 @@ export function getBookImage(book) {
     if (supaImg) return SUPABASE_BOOKS_BASE_URL + supaImg.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
   }
   // 2. Usar coverimageurl si es válida
+  if (typeof book.coverimageurl === 'string' && (book.coverimageurl.startsWith('/uploads/') || book.coverimageurl.startsWith('blob:'))) {
+    return DEFAULT_BOOK_IMAGE;
+  }
   if (isValidUrl(book.coverimageurl)) {
     return book.coverimageurl;
   }
@@ -30,6 +40,9 @@ export function getBookImage(book) {
     return SUPABASE_BOOKS_BASE_URL + book.coverimageurl.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
   }
   // 3. Usar imageurl si es válida
+  if (typeof book.imageurl === 'string' && (book.imageurl.startsWith('/uploads/') || book.imageurl.startsWith('blob:'))) {
+    return DEFAULT_BOOK_IMAGE;
+  }
   if (isValidUrl(book.imageurl)) {
     return book.imageurl;
   }
@@ -37,6 +50,9 @@ export function getBookImage(book) {
     return SUPABASE_BOOKS_BASE_URL + book.imageurl.replace(/^book-images\//, '').replace(/^public\/book-images\//, '');
   }
   // 4. Usar campo "imagen" si es válida
+  if (typeof book.imagen === 'string' && (book.imagen.startsWith('/uploads/') || book.imagen.startsWith('blob:'))) {
+    return DEFAULT_BOOK_IMAGE;
+  }
   if (isValidUrl(book.imagen)) {
     return book.imagen;
   }

@@ -133,7 +133,14 @@ export default function QuieroVender() {
         });
         if (!res.ok) throw new Error('Error al subir la imagen');
         const data = await res.json();
-        imageUrls.push(data.imageUrl);
+        imageUrls.push(data.url);
+      }
+      // Validar que todas las imágenes sean URLs públicas de Supabase
+      const allSupabase = imageUrls.every(url => typeof url === 'string' && url.startsWith('https://pghjljkqjzvfhqjzjvhn.supabase.co/'));
+      if (!allSupabase) {
+        setError('Todas las imágenes deben subirse correctamente a Supabase. Intenta de nuevo.');
+        setLoading(false);
+        return;
       }
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
         method: 'POST',
@@ -371,4 +378,3 @@ export default function QuieroVender() {
     </>
   );
 }
-
