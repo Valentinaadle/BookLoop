@@ -336,14 +336,16 @@ const updateBook = async (req, res) => {
     }
 
     // Determinar la portada
+    // Log de depuración para ver URLs
+    console.log('[DEBUG] coverimageurl recibido:', coverimageurl);
+    console.log('[DEBUG] currentUrls:', currentUrls);
     let finalCoverUrl = coverimageurl;
-    let currentUrls = [];
-    if (Array.isArray(images)) {
-      const currentImages = await Image.getImagesByBook(book.book_id);
-      currentUrls = currentImages.map(img => img.image_url);
-    }
-    if (coverimageurl && currentUrls && currentUrls.includes(coverimageurl)) {
-      finalCoverUrl = coverimageurl;
+    // Normalizar comparación: ignorar mayúsculas/minúsculas y espacios
+    const normalize = url => (url || '').trim().toLowerCase();
+    const normalizedCover = normalize(coverimageurl);
+    const normalizedUrls = currentUrls.map(normalize);
+    if (normalizedCover && normalizedUrls.includes(normalizedCover)) {
+      finalCoverUrl = currentUrls[normalizedUrls.indexOf(normalizedCover)];
     } else if (Array.isArray(images) && images.length > 0) {
       finalCoverUrl = images[images.length - 1];
     } else if (currentUrls && currentUrls.length > 0) {
