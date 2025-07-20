@@ -184,12 +184,15 @@ function EditBook() {
           supabaseImageUrls.push(data.imageurl); // <- usar la clave correcta del backend
         }
       }
-      // Combina imágenes existentes (no eliminadas) y nuevas URLs públicas
+      // DEBUG: Loggear imágenes antes de validar
+      console.log('bookImages:', bookImages);
+      console.log('deletedImageIds:', deletedImageIds);
+      console.log('supabaseImageUrls:', supabaseImageUrls);
       const finalImages = [
         ...bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => img.image_url),
         ...supabaseImageUrls
       ];
-      // Validación final
+      console.log('finalImages:', finalImages);
       const allSupabase = finalImages.every(url => typeof url === 'string' && url.startsWith('https://pghjljkqjzvfhqjzjvhn.supabase.co/'));
       if (!allSupabase) {
         setError('Todas las imágenes deben ser URLs públicas de Supabase.');
