@@ -96,9 +96,9 @@
 .book-title-modern {
   font-family: 'Playfair Display', serif;
   font-weight: 900;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   line-height: 1.2;
-  margin: 15px 0 6px 0;
+  margin: 20px 0px 0px 0px;
   color: #222b3a;
   max-height: 2.5em;
   overflow: hidden;
@@ -196,22 +196,10 @@
     cursor: pointer;
   }
   
- 
-  
-  
-  
-
-  /* Asegura que el contenido no desborde */
-  .book-card h3 {
-    font-size: 1.05rem;
-   
-    
- 
-  }
 
   .book-card p {
     margin: 3px 0;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     color: #555;
     white-space: nowrap;
     overflow: hidden;
