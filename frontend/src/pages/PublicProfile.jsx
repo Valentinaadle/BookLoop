@@ -47,6 +47,12 @@ function PublicProfile() {
   const [reviewToDelete, setReviewToDelete] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+  // Edición de reseña
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editReviewData, setEditReviewData] = useState(null);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editError, setEditError] = useState(null);
+  const [editSuccess, setEditSuccess] = useState(null);
 
   // Cargar reseñas apenas se monta el perfil público (para mostrar rating siempre)
   useEffect(() => {
@@ -355,18 +361,33 @@ function PublicProfile() {
                                 <p className="reviews-tailwind-date">{fechaStr || 'Sin fecha'}</p>
                               </div>
                               {/* Delete button only for admin */}
-                              {isAdmin && (
-                                <button
-                                  className="reviews-tailwind-delete-btn"
-                                  title="Eliminar reseña"
-                                  onClick={() => {
-                                    setReviewToDelete(review);
-                                    setShowDeleteModal(true);
-                                  }}
-                                >
-                                  🗑️
-                                </button>
-                              )}
+                              {(isAdmin || (currentUser && review.buyer_id === currentUser.id)) && (
+  <>
+    <button
+      className="reviews-tailwind-delete-btn"
+      title="Eliminar reseña"
+      onClick={() => {
+        setReviewToDelete(review);
+        setShowDeleteModal(true);
+      }}
+    >
+      🗑️
+    </button>
+    {currentUser && review.buyer_id === currentUser.id && (
+      <button
+        className="reviews-tailwind-edit-btn"
+        title="Editar reseña"
+        onClick={() => {
+          setEditReviewData({ ...review });
+          setShowEditModal(true);
+        }}
+        style={{ marginLeft: 8 }}
+      >
+        ✏️
+      </button>
+    )}
+  </>
+)}
                             </div>
                             <div className="reviews-tailwind-stars">
                               {[...Array(5)].map((_, i) => (
@@ -444,9 +465,9 @@ function PublicProfile() {
   .filter(book => {
     // Solo mostrar libros vendidos
     const vendido = book.status === 'vendido' || book.estado === 'vendido';
-    // No mostrar si ya existe reseña para ese libro y ese comprador
-    const yaResenado = reviews.some(r => r.book_id === book.book_id && r.reviewer_id === currentUser.id);
-    return vendido && !yaResenado;
+    // No mostrar si ya existe alguna reseña para ese libro, sin importar el usuario
+    const yaTieneResena = reviews.some(r => r.book_id === book.book_id);
+    return vendido && !yaTieneResena;
   })
   .map(book => (
     <option key={book.book_id} value={book.book_id}>{book.titulo || book.title || 'Sin título'}</option>
@@ -557,9 +578,121 @@ function PublicProfile() {
           {deleteError}
         </div>
       )}
+      {/* Modal de edición de reseña */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" style={{fontFamily: 'Inter, sans-serif'}}>
+          <div className="bg-white rounded-2xl shadow-lg max-w-lg w-full p-6 relative animate-fade-in" style={{fontFamily: 'Inter, sans-serif'}}>
+            <button
+              className="absolute top-3 right-3 text-[#6b7580] text-2xl font-bold hover:text-[#131416]"
+              onClick={() => {
+                setShowEditModal(false);
+                setEditReviewData(null);
+                setEditError(null);
+                setEditSuccess(null);
+              }}
+              aria-label="Cerrar"
+            >
+              ×
+            </button>
+            <h2 className="text-lg font-bold text-center mb-2">Editar Reseña</h2>
+            <form className="flex flex-col gap-2" onSubmit={async (e) => {
+              e.preventDefault();
+              setEditLoading(true);
+              setEditError(null);
+              setEditSuccess(null);
+              try {
+                if (!editReviewData || !editReviewData.review_id) {
+                  setEditError('Faltan datos de la reseña');
+                  setEditLoading(false);
+                  return;
+                }
+                const token = getToken();
+                const res = await fetch(`${API_URL}/api/reviews/${editReviewData.review_id || editReviewData.id}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
+                  },
+                  body: JSON.stringify({
+                    experience_rate: editReviewData.experience_rate,
+                    seller_rate: editReviewData.seller_rate,
+                    comment: editReviewData.comment
+                  })
+                });
+                if (!res.ok) {
+                  const errData = await res.json();
+                  throw new Error(errData.message || 'Error al editar reseña');
+                }
+                const updated = await res.json();
+                setReviews(reviews => reviews.map(r => (r.review_id === updated.review_id || r.id === updated.id) ? { ...r, ...updated } : r));
+                setEditSuccess('¡Reseña editada exitosamente!');
+                setTimeout(() => {
+                  setShowEditModal(false);
+                  setEditReviewData(null);
+                  setEditSuccess(null);
+                }, 1000);
+              } catch (err) {
+                setEditError('No se pudo editar la reseña: ' + (err.message || err));
+              } finally {
+                setEditLoading(false);
+              }
+            }} style={{width: '100%'}}>
+              <div className="form-group-minimal">
+                <label className="block text-[#22223b] text-sm mb-1 font-semibold">Calificación experiencia:</label>
+                <div className="flex gap-1">
+                  {[1,2,3,4,5].map(n => (
+                    <span
+                      key={n}
+                      onClick={() => setEditReviewData(r => ({ ...r, experience_rate: n }))}
+                      className={`cursor-pointer text-2xl ${editReviewData.experience_rate >= n ? 'text-[#131416]' : 'text-[#dee0e3]'}`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="form-group-minimal">
+                <label className="block text-[#22223b] text-sm mb-1 font-semibold">Calificación vendedor:</label>
+                <div className="flex gap-1">
+                  {[1,2,3,4,5].map(n => (
+                    <span
+                      key={n}
+                      onClick={() => setEditReviewData(r => ({ ...r, seller_rate: n }))}
+                      className={`cursor-pointer text-2xl ${editReviewData.seller_rate >= n ? 'text-[#131416]' : 'text-[#dee0e3]'}`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="form-group-minimal">
+                <label className="block text-[#22223b] text-sm mb-1 font-semibold">Comentario:</label>
+                <textarea
+                  name="comment"
+                  value={editReviewData.comment}
+                  onChange={e => setEditReviewData(r => ({ ...r, comment: e.target.value }))}
+                  required
+                  maxLength={500}
+                  placeholder="Edita tu reseña"
+                  className="form-input-minimal min-h-[90px] text-base"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={editLoading}
+                className="save-btn-minimal mt-2"
+                style={{width: '100%'}}
+              >
+                {editLoading ? 'Guardando...' : 'Guardar cambios'}
+              </button>
+              {editError && <div className="review-error text-red-600 text-sm mt-2">{editError}</div>}
+              {editSuccess && <div className="review-success text-green-600 text-sm mt-2">{editSuccess}</div>}
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
 export default PublicProfile;
-                        

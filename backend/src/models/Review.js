@@ -9,7 +9,7 @@ async function getAllReviews() {
 
 // Obtener una review por ID
 async function getReviewById(id) {
-  const { data, error } = await supabase.from('reviews').select('*').eq('id', id).single();
+  const { data, error } = await supabase.from('reviews').select('*').eq('review_id', id).single();
   if (error) throw error;
   return data;
 }
@@ -23,7 +23,7 @@ async function createReview(review) {
 
 // Actualizar una review
 async function updateReview(id, updates) {
-  const { data, error } = await supabase.from('reviews').update(updates).eq('id', id).select().single();
+  const { data, error } = await supabase.from('reviews').update(updates).eq('review_id', id).select().single();
   if (error) throw error;
   return data;
 }

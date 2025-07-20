@@ -615,9 +615,9 @@ function Profile() {
                     <div className="solicitud-card" key={sol.id}>
                       <img
                         className="solicitud-img"
-                        src={getBookImage(sol.books, API_URL) || '/Assets/book-empty.png'}
+                        src={getBookImage(sol.books, API_URL) || '/icons/sets/book-empty.png'}
                         alt={sol.books?.title || 'Sin título'}
-                        onError={e => e.target.src='/Assets/book-empty.png'}
+                        onError={e => e.target.src="/icons/sets/book-empty.png"}
                       />
                       <div className="solicitud-info">
                         <span className="solicitud-info-title">{sol.books?.title || 'Sin título'}</span>

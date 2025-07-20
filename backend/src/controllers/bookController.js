@@ -205,6 +205,14 @@ const createBook = async (req, res) => {
       }
     }
 
+    // Validación: debe haber al menos una imagen (subida o de Google Books)
+    const hayImagenesSubidas = Array.isArray(images) && images.length > 0;
+    if (!hayImagenesSubidas && !finalImageUrl) {
+      return res.status(400).json({
+        message: 'Debes agregar por lo menos una imagen (subida o de Google Books)'
+      });
+    }
+
     const now = new Date();
     const book = await Book.createBook({
       title,

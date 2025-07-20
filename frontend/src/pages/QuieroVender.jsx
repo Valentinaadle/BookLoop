@@ -122,6 +122,12 @@ export default function QuieroVender() {
     setError(null);
     setSuccess(null);
     try {
+      // Validación: debe haber al menos una imagen antes de crear el libro
+      if (!images || images.length === 0) {
+        setError('Debes agregar por lo menos una imagen');
+        setLoading(false);
+        return;
+      }
       // Subir imágenes al backend y obtener las URLs
       const imageUrls = [];
       for (const file of images) {
@@ -133,14 +139,10 @@ export default function QuieroVender() {
         });
         if (!res.ok) throw new Error('Error al subir la imagen');
         const data = await res.json();
-        imageUrls.push(data.url);
-      }
-      // Validar que todas las imágenes sean URLs públicas de Supabase
-      const allSupabase = imageUrls.every(url => typeof url === 'string' && url.startsWith('https://pghjljkqjzvfhqjzjvhn.supabase.co/'));
-      if (!allSupabase) {
-        setError('Todas las imágenes deben subirse correctamente a Supabase. Intenta de nuevo.');
-        setLoading(false);
-        return;
+        // SOPORTE MULTI-BACKEND: usar data.url o data.imageurl según cuál exista
+        const url = data.url || data.imageurl;
+        if (!url) throw new Error('No se pudo obtener la URL pública de la imagen');
+        imageUrls.push(url);
       }
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
         method: 'POST',
@@ -153,7 +155,7 @@ export default function QuieroVender() {
           images: imageUrls,
           isbn_code: formData.isbn,
           language: formData.idioma,
-          pageCount: formData.paginas,
+          pagecount: formData.paginas,
           publication_date: formData.publicacion,
           price: formData.precio,
           condition: formData.estado,

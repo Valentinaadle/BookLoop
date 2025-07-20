@@ -60,7 +60,7 @@ const About = () => {
         <div className="infobox">
           <div className="infobox-top"> {/* Nuevo contenedor */}
             <img 
-              src="/Icons/sustentable.jpg" 
+              src="/icons/sustentable.jpg" 
               alt="Sostenibilidad" 
               className="infobox-icon-image"
             />
@@ -72,7 +72,7 @@ const About = () => {
         <div className="infobox">
           <div className="infobox-top">
             <img 
-              src="/Icons/libro.jpg" 
+              src="/icons/libro.jpg" 
               alt="Historias" 
               className="infobox-icon-image"
             />
@@ -84,7 +84,7 @@ const About = () => {
         <div className="infobox">
           <div className="infobox-top">
             <img 
-              src="/Icons/reciclar.jpg" 
+              src="/icons/reciclar.jpg" 
               alt="Economía Circular" 
               className="infobox-icon-image"
             />

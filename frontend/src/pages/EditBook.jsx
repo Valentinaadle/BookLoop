@@ -193,19 +193,28 @@ function EditBook() {
         ...supabaseImageUrls
       ];
       console.log('finalImages:', finalImages);
-      const allSupabase = finalImages.every(url => typeof url === 'string' && url.startsWith('https://tdsbsdsexuhilidpwpcl.supabase.co/'));
-      if (!allSupabase) {
-        setError('Todas las imágenes deben ser URLs públicas de Supabase.');
+      if (finalImages.length === 0) {
+        setError('Debes agregar por lo menos una imagen');
         setLoading(false);
         return;
       }
+      // Validación de URLs públicas de imágenes (removida)
+      // const allSupabase = finalImages.every(url =>
+      //   typeof url === 'string' && url.includes('.supabase.co/storage/v1/object/public/book-images/')
+      // );
+      // if (!allSupabase) {
+      //   setError('Todas las imágenes deben ser URLs públicas de Supabase.');
+      //   setLoading(false);
+      //   return;
+      // }
       // Construir payload usando finalImages
       const payload = {
         ...form,
         images: finalImages,
         deletedImageIds,
         coverIndex,
-        coverimageurl: finalImages[coverIndex] || finalImages[0] || null
+        coverimageurl: finalImages[coverIndex] || finalImages[0] || null,
+        pagecount: form.pageCount,
       };
       const response = await fetch(`${API_URL}/api/books/${id}`, {
         method: 'PUT',
