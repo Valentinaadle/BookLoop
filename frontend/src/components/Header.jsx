@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeButton from './ThemeButton';
+import LogoutConfirmModal from './LogoutConfirmModal';
 import '../Assets/css/SearchModal.css';
 import '../Assets/css/header.css';
 import { FaSignOutAlt, FaHeart, FaSearch } from 'react-icons/fa';
@@ -22,6 +23,7 @@ export default function Header() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const isAdmin = user && user.role === 'admin';
 
@@ -125,9 +127,16 @@ export default function Header() {
                 <Link to="/profile" title="Perfil" className="action-link profile-link">
                    {renderProfilePicture()}
                 </Link>
-                <button onClick={logout} className="logout-btn" title="Cerrar Sesión">
+                <button onClick={() => setShowLogoutModal(true)} className="logout-btn" title="Cerrar Sesión">
                   <FaSignOutAlt className="icon action-icon" />
                 </button>
+                <LogoutConfirmModal
+                  open={showLogoutModal}
+                  title="Cerrar sesión"
+                  message="¿Estás seguro que quieres cerrar sesión?"
+                  onCancel={() => setShowLogoutModal(false)}
+                  onConfirm={() => { setShowLogoutModal(false); logout(); }}
+                />
               </>
             ) : (
               <>
