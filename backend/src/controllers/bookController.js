@@ -288,33 +288,9 @@ const updateBook = async (req, res) => {
     if (Array.isArray(authors)) {
       authors = authors.flat(Infinity).map(a => typeof a === 'string' ? a.trim() : a).filter(Boolean);
     }
-    // Handle image deletions
-    if (Array.isArray(deletedImageIds) && deletedImageIds.length > 0) {
-      // (removido: no usar destroy, solo deleteImage por ID)
-    }
-    // Handle images: ensure all URLs in 'images' exist for this book
-    if (Array.isArray(images)) {
-      // Get current images from DB
-      const currentImages = await Image.getImagesByBook(book.book_id);
-      const currentUrls = currentImages.map(img => img.image_url);
-      // Add new images
-      for (const imgUrl of images) {
-        if (!currentUrls.includes(imgUrl)) {
-          await Image.createImage({ book_id: book.book_id, image_url: imgUrl });
-        }
-      }
-      // Remove images not in the new images array (borrar realmente de la DB)
-      for (const img of currentImages) {
-        if (!images.includes(img.image_url)) {
-          await Image.deleteImage(img.image_id);
-        }
-      }
-    }
-    // Obtener imágenes actuales de la DB
-    let currentImages = await Image.getImagesByBook(book.book_id);
-    let currentUrls = currentImages.map(img => img.image_url);
 
-    // Manejar eliminación y sincronización de imágenes
+    // Manejo robusto de imágenes nuevas y eliminadas
+    // 1. Eliminar imágenes marcadas explícitamente (deletedImageIds)
     if (Array.isArray(deletedImageIds) && deletedImageIds.length > 0) {
       for (let imgId of deletedImageIds) {
         if (typeof imgId === 'object' && imgId.image_id) imgId = imgId.image_id;
@@ -323,30 +299,32 @@ const updateBook = async (req, res) => {
           await Image.deleteImage(imgId);
         }
       }
-      // Refrescar imágenes
-      currentImages = await Image.getImagesByBook(book.book_id);
-      currentUrls = currentImages.map(img => img.image_url);
     }
-
-    // Agregar nuevas imágenes
+    // 2. Sincronizar imágenes nuevas: crear solo las que no existen para este libro
     if (Array.isArray(images)) {
+      // Obtener imágenes actuales
+      const currentImages = await Image.getImagesByBook(book.book_id);
+      const currentUrls = currentImages.map(img => img.image_url);
       for (const imgUrl of images) {
         if (!currentUrls.includes(imgUrl)) {
           await Image.createImage({ book_id: book.book_id, image_url: imgUrl });
         }
       }
-      // Refrescar imágenes
-      currentImages = await Image.getImagesByBook(book.book_id);
-      currentUrls = currentImages.map(img => img.image_url);
+      // Eliminar imágenes que ya no están en el array images
+      for (const img of currentImages) {
+        if (!images.includes(img.image_url)) {
+          await Image.deleteImage(img.image_id);
+        }
+      }
     }
 
     // Determinar la portada
     let finalCoverUrl = coverimageurl;
-    if (coverimageurl && currentUrls.includes(coverimageurl)) {
+    if (coverimageurl && currentUrls && currentUrls.includes(coverimageurl)) {
       finalCoverUrl = coverimageurl;
     } else if (Array.isArray(images) && images.length > 0) {
       finalCoverUrl = images[images.length - 1];
-    } else if (currentUrls.length > 0) {
+    } else if (currentUrls && currentUrls.length > 0) {
       finalCoverUrl = currentUrls[currentUrls.length - 1];
     } else {
       finalCoverUrl = book.coverimageurl || book.imageurl || null;

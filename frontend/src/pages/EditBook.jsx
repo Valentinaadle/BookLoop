@@ -181,7 +181,7 @@ function EditBook() {
           });
           if (!res.ok) throw new Error('Error al subir la imagen');
           const data = await res.json();
-          supabaseImageUrls.push(data.url);
+          supabaseImageUrls.push(data.imageurl); // <- usar la clave correcta del backend
         }
       }
       // Combina imágenes existentes (no eliminadas) y nuevas URLs públicas
