@@ -317,11 +317,11 @@ const updateBook = async (req, res) => {
         }
       }
     }
-    // 2. Sincronizar imágenes nuevas: crear solo las que no existen para este libro
+    let currentUrls = [];
     if (Array.isArray(images)) {
       // Obtener imágenes actuales
       const currentImages = await Image.getImagesByBook(book.book_id);
-      const currentUrls = currentImages.map(img => img.image_url);
+      currentUrls = currentImages.map(img => img.image_url);
       for (const imgUrl of images) {
         if (!currentUrls.includes(imgUrl)) {
           await Image.createImage({ book_id: book.book_id, image_url: imgUrl });
@@ -381,6 +381,7 @@ const updateBook = async (req, res) => {
     let updatedBook;
     try {
       updatedBook = await Book.updateBook(book.book_id, updates);
+      console.log('[DEBUG] Respuesta de updateBook:', updatedBook);
     } catch (updateErr) {
       console.error('Error en modelo/updateBook:', updateErr);
       return res.status(400).json({ message: 'Error en la actualización', error: updateErr.message });

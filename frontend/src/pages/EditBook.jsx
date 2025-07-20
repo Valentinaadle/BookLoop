@@ -204,7 +204,8 @@ function EditBook() {
         ...form,
         images: finalImages,
         deletedImageIds,
-        coverIndex
+        coverIndex,
+        coverimageurl: finalImages[coverIndex] || finalImages[0] || null
       };
       const response = await fetch(`${API_URL}/api/books/${id}`, {
         method: 'PUT',

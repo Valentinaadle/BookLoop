@@ -28,9 +28,11 @@ async function createBook(book) {
 
 // Actualizar un libro
 async function updateBook(book_id, updates) {
-  const { data, error } = await supabase.from('books').update(updates).eq('book_id', book_id).select().single();
+  const { data, error } = await supabase.from('books').update(updates).eq('book_id', book_id).select();
   if (error) throw error;
-  return data;
+  // Si no hay filas actualizadas, devolver null en vez de lanzar error por .single()
+  if (!data || data.length === 0) return null;
+  return data[0];
 }
 
 // Eliminar un libro
