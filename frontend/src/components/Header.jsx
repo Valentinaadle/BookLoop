@@ -144,7 +144,6 @@ export default function Header() {
                 <Link to="/register" className="register-button">Registrarse</Link>
               </>
             )}
-             <ThemeButton />
           </div>
         </div>
       </div>
