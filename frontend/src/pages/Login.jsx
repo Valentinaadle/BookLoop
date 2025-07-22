@@ -20,6 +20,7 @@ function Login() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,14 +69,13 @@ function Login() {
           <div className="login-text-content-refined">
             <AnimatedText text="BookLoop" className="logo-custom" delay={0.22} />
             <div className="blue-divider"></div>
-            <FadeInText text="Accedé a tu cuenta y seguí impulsando la lectura circular." className="slogan-refined" delay={1.2} />
-            <FadeInText text="Donde los libros encuentran nuevos lectores" className="subtitle-refined" delay={1.8} />
+            <FadeInText text="Accedé a tu cuenta y seguí impulsando la lectura circular" className="slogan-refined" delay={1.2} />
           </div>
           
           <div className="login-form-container-refined">
             <div className="form-header-refined">
               <h3>Bienvenido de nuevo</h3>
-              <p>Inicia sesión para continuar explorando BookLoop.</p>
+              <p className="form-subtitle">Inicia sesión para continuar explorando BookLoop.</p>
             </div>
             {error && <div className="error-message-refined">{error}</div>}
             <form id="loginForm" onSubmit={handleSubmit}>
@@ -95,17 +95,27 @@ function Login() {
               </div>
               <div className="form-group-refined">
                 <label htmlFor="password">Contraseña</label>
-                <input 
-                  type="password" 
-                  id="password" 
-                  name="password" 
-                  placeholder="Introduce tu contraseña"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  disabled={loading}
-                  className="input-refined"
-                />
+                <div className="password-input-wrapper">
+                  <input 
+                    type={showPassword ? 'text' : 'password'} 
+                    id="password" 
+                    name="password" 
+                    placeholder="Introduce tu contraseña"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={loading}
+                    className="input-refined"
+                  />
+                  <button 
+                    type="button" 
+                    className="toggle-password-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  >
+                    {showPassword ? 'Ocultar' : 'Mostrar'}
+                  </button>
+                </div>
               </div>
               <button 
                 type="submit" 
@@ -117,7 +127,7 @@ function Login() {
                     <span>.</span><span>.</span><span>.</span>
                   </span>
                 ) : (
-                  <>Ingresar <span className="arrow-animation">→</span></>
+                  <>Ingresar <span className="arrow-animation"></span></>
                 )}
               </button>
               <div className="switch-form-link-refined">

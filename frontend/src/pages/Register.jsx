@@ -15,6 +15,8 @@ function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -90,13 +92,12 @@ function Register() {
             <AnimatedText text="BookLoop" className="logo-custom" delay={0.22} />
             <div className="blue-divider"></div>
             <FadeInText text="Descubrí tu próxima lectura favorita" className="slogan-refined" delay={1.2} />
-            <FadeInText text="Formá parte del cambio: vendé, comprá y reciclá libros." className="subtitle-refined" delay={1.8} />
           </div>
 
           <div className="register-form-container-refined">
             <div className="form-header-refined">
               <h3>Registrate en BookLoop</h3>
-              <p>Empezá a descubrir y compartir libros.</p>
+              <p className="form-subtitle">Empezá a descubrir y compartir libros.</p>
             </div>
             
             {error && <div className="error-message-refined">{error}</div>}
@@ -167,32 +168,52 @@ function Register() {
               <div className="form-row-refined">
                 <div className="form-group-refined">
                   <label htmlFor="password">Contraseña</label>
-                  <input 
-                    id="password"
-                    type="password" 
-                    name="password" 
-                    className="input-refined"
-                    placeholder="Crea una contraseña segura"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    disabled={loading}
-                  />
+                  <div className="password-input-wrapper">
+                    <input 
+                      id="password"
+                      type={showPassword ? 'text' : 'password'} 
+                      name="password" 
+                      className="input-refined"
+                      placeholder="Crea una contraseña segura"
+                      required
+                      value={formData.password}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                    <button 
+                      type="button" 
+                      className="toggle-password-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    >
+                      {showPassword ? 'Ocultar' : 'Mostrar'}
+                    </button>
+                  </div>
                   <p className="info-text-refined">Debe tener al menos 8 caracteres.</p>
                 </div>
                 <div className="form-group-refined">
                   <label htmlFor="confirmPassword">Confirmar contraseña</label>
-                  <input 
-                    id="confirmPassword"
-                    type="password" 
-                    name="confirmPassword" 
-                    className="input-refined"
-                    placeholder="Vuelve a escribir la contraseña"
-                    required
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    disabled={loading}
-                  />
+                  <div className="password-input-wrapper">
+                    <input 
+                      id="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'} 
+                      name="confirmPassword" 
+                      className="input-refined"
+                      placeholder="Vuelve a escribir la contraseña"
+                      required
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                    <button 
+                      type="button" 
+                      className="toggle-password-btn"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    >
+                      {showConfirmPassword ? 'Ocultar' : 'Mostrar'}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -208,7 +229,7 @@ function Register() {
                   disabled={loading}
                 /> 
                 <label htmlFor="terminos">
-                  Acepto los <button type="button" style={{color:'#2563eb',textDecoration:'underline',background:'none',border:'none',cursor:'pointer',padding:0}} onClick={()=>setShowTermsModal(true)}>términos y condiciones</button>
+                  Acepto los <button type="button" className="terms-button" onClick={()=>setShowTermsModal(true)}>términos y condiciones</button>
                 </label>
               </div>
 
@@ -218,7 +239,7 @@ function Register() {
                 className="submit-btn-refined"
                 disabled={loading}
               >
-                {loading ? 'Registrando...' : <>Registrarse <span className="arrow-animation">→</span></>}
+                {loading ? 'Registrando...' : <>Registrarse <span className="arrow-animation"></span></>}
               </button>
 
               <div className="switch-form-link-refined">

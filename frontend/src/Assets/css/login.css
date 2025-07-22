@@ -1,10 +1,10 @@
 /* login.css (versión refinada) */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&family=Inter:wght@400;600;800&display=swap');
 
 .login-main-container-refined {
   flex: 1;
-  display: flex;
-  min-height: 100vh;
+  display: grid;
+  place-items: center;
   background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), 
               url('../login.jpg') center/cover no-repeat;
   position: relative;
@@ -15,9 +15,9 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5%;
+  padding: 4rem 5%;
   align-items: center;
-  height: 100vh;
+  box-sizing: border-box;
 }
 
 .login-text-content-refined {
@@ -26,6 +26,10 @@
   color: #2d3436;
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .logo-custom {
@@ -42,11 +46,11 @@
   width: 100px;
   height: 4px;
   background: #0984e3;
-  margin: 25px 0;
+  margin: 10px 0;
 }
 
 .slogan-refined {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 2rem;
   margin-bottom: 15px;
@@ -55,18 +59,10 @@
   line-height: 1.6; /* Espaciado entre líneas para mejor legibilidad */
 }
 
-.subtitle-refined {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 5000;
-  font-size: 1.2rem;
-  color: #ffffff;
-  line-height: 1.6;
-}
-
 .login-form-container-refined {
   width: 550px;
   padding: 50px 40px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   z-index: 2;
@@ -83,6 +79,7 @@
   max-height: calc(100vh - 16vh);
   overflow-y: auto;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  margin-top: 6rem;
 }
 
 .login-form-container-refined:hover {
@@ -97,14 +94,14 @@
 }
 
 .form-header-refined {
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
 .form-header-refined h3 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 800;
-  font-size: 1.8rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 2.2rem;
   color: rgb(255, 255, 255);
   margin-bottom: 10px;
 }
@@ -115,6 +112,12 @@
   color: #f5f5f5;
   
   font-size: 0.9rem;
+}
+
+.form-subtitle {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 1.5rem !important;
 }
 
 .form-group-refined {
@@ -148,23 +151,49 @@
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-wrapper .input-refined {
+  padding-right: 80px; 
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px;
+  line-height: 1;
+}
+
 .submit-btn-refined {
   width: 100%;
   padding: 15px;
-  background: #000000;
+  background: #0e1a2b;
   border: none;
-  color: rgb(0, 0, 0);
+  color: #ffffff;
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
   font-size: 1rem;
   border-radius: 6px;
   cursor: pointer;
   margin-top: 20px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.submit-btn-refined:hover {
-  background: #131920;
+.submit-btn-refined:hover:not(:disabled) {
+  background: #1c2b45;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(186, 217, 241, 0.3);
 }
@@ -249,7 +278,7 @@
 @media (max-width: 992px) {
   .login-content-wrapper {
     flex-direction: column;
-    padding: 40px 20px;
+    padding: 2.5rem 1.5rem;
     height: auto;
   }
   
@@ -262,7 +291,7 @@
   .login-form-container-refined {
     width: 100%;
     left: 0;
-    padding: 40px 20px;
+    padding: 2.5rem 1.5rem;
   }
   
   .logo-custom {
