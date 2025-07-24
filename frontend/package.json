@@ -56,9 +56,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@cypress/webpack-dev-server": "^3.10.1",
     "@types/react-router-dom": "^5.3.3",
-    "cypress": "^13.6.0",
-    "start-server-and-test": "^2.0.3",
-    "@cypress/webpack-dev-server": "^3.10.1"
+    "cypress": "^13.17.0",
+    "start-server-and-test": "^2.0.3"
   }
 }

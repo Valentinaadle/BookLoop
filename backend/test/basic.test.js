@@ -16,6 +16,13 @@ describe('Basic Tests', () => {
     expect(arr).to.have.length(5);
     expect(arr.includes(3)).to.be.true;
   });
+
+  it('should test object operations', () => {
+    const obj = { name: 'Test', value: 42 };
+    expect(obj).to.have.property('name');
+    expect(obj.name).to.equal('Test');
+    expect(obj.value).to.be.a('number');
+  });
 });
 
 describe('Environment Variables', () => {
@@ -23,5 +30,10 @@ describe('Environment Variables', () => {
     expect(process.env.NODE_ENV).to.equal('test');
     expect(process.env.JWT_SECRET).to.exist;
     expect(process.env.SUPABASE_URL).to.exist;
+  });
+
+  it('should have correct test values', () => {
+    expect(process.env.JWT_SECRET).to.equal('test_secret_key');
+    expect(process.env.SUPABASE_URL).to.equal('https://test.supabase.co');
   });
 }); 
