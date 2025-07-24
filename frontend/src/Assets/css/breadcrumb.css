@@ -1,0 +1,22 @@
+.breadcrumb-nav {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .breadcrumb-link {
+    color: #475f7a ; /* Azul claro */
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .breadcrumb-link:hover {
+    color: #1f2d3d ; /* Azul más oscuro para el hover */
+  }
+  
+  .breadcrumb-current {
+    color: #1f2d3d; /* Azul oscuro */
+    font-weight: 600;
+  }
+  
+  .breadcrumb-nav .material-icons {
+    color: #94a3b8; /* Un gris azulado para los separadores */
+  } 

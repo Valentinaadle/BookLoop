@@ -174,3 +174,21 @@ button.bg-sky-600:hover {
   cursor: not-allowed;
 }
 
+.seller-link {
+  color: #475f7a;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.seller-link:hover {
+  color: #1f2d3d; 
+}
+
+.details-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+

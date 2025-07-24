@@ -30,12 +30,15 @@ export default function Favoritos() {
       <div className="favoritos-bg">
         <main className="favoritos-container">
           <div className="favoritos-header">
-            <h1 className="favoritos-title">Favoritos</h1>
-              {favorites.length > 0 && (
-                <button className="agregar-favorito-btn" onClick={()=>navigate('/comprar')}>
-                  Agregar más libros
-                </button>
-              )}
+            <div className="favoritos-header-text">
+              <h1 className="favoritos-title">Tus Favoritos</h1>
+              <p className="favoritos-subtitle">Tu colección personal de libros. Volve a visitarlos cuando quieras.</p>
+            </div>
+            {favorites.length > 0 && (
+              <button className="agregar-favorito-btn" onClick={() => navigate('/comprar')}>
+                Agregar más libros
+              </button>
+            )}
           </div>
           {favorites.length === 0 ? (
             <div className="favoritos-empty">

@@ -8,6 +8,7 @@ import { FaHeart, FaEdit, FaTrash } from 'react-icons/fa';
 import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import '../Assets/css/BookDetails.css';
+import '../Assets/css/breadcrumb.css';
 
 function BookDetails() {
   // Detecta admin robustamente
@@ -288,18 +289,18 @@ function BookDetails() {
     <>
       <Header />
       <div className="container mx-auto p-4 max-w-6xl">
-        <nav aria-label="Breadcrumb" className="mb-4 text-xs text-slate-500">
-          <ol className="list-none p-0 inline-flex space-x-2">
+        <nav aria-label="Breadcrumb" className="breadcrumb-nav mb-4 text-sm">
+          <ol className="list-none p-0 inline-flex items-center space-x-2">
             <li className="flex items-center">
-              <a href="/" className="hover:text-slate-700">Inicio</a>
+              <Link to="/" className="breadcrumb-link">Inicio</Link>
             </li>
             <li className="flex items-center">
-              <span className="material-icons text-xs">chevron_right</span>
-              <a href="/comprar" className="hover:text-slate-700">Libros</a>
+              <span className="material-icons text-slate-400 text-xs">chevron_right</span>
+              <Link to="/comprar" className="breadcrumb-link">Libros</Link>
             </li>
             <li className="flex items-center">
-              <span className="material-icons text-xs">chevron_right</span>
-              <span className="text-slate-700">{book.Category?.category_name || 'Categoría'}</span>
+              <span className="material-icons text-slate-400 text-xs">chevron_right</span>
+              <span className="breadcrumb-current">{book.Category?.category_name || 'Categoría'}</span>
             </li>
           </ol>
         </nav>
@@ -322,8 +323,8 @@ function BookDetails() {
                 <>
                   <button
                     onClick={() => navigate(`/edit-book/${book.book_id || book.id}`)}
-                    className="text-white font-semibold py-1 px-4 rounded-md shadow text-sm mr-2"
-                    style={{background:'#2c3e50',marginRight:8,border:'none'}}
+                    className="text-white font-semibold py-2 px-4 rounded-md shadow text-sm"
+                    style={{background:'#2c3e50', border:'none', height: '36.5px', boxSizing: 'border-box'}}
                     onMouseOver={e => e.currentTarget.style.background='#1a232b'}
                     onMouseOut={e => e.currentTarget.style.background='#2c3e50'}
                   >
@@ -331,8 +332,8 @@ function BookDetails() {
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="text-white font-semibold py-1 px-4 rounded-md shadow text-sm"
-                    style={{background:'#2c3e50',border:'none'}}
+                    className="text-white font-semibold py-2 px-4 rounded-md shadow text-sm"
+                    style={{background:'#2c3e50', border:'none', height: '36.5px', boxSizing: 'border-box'}}
                     onMouseOver={e => e.currentTarget.style.background='#1a232b'}
                     onMouseOut={e => e.currentTarget.style.background='#2c3e50'}
                   >
@@ -340,98 +341,19 @@ function BookDetails() {
                   </button>
                 </>
               )}
-            </div>
-          </div>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
-              <div className="book-cover-detail flex flex-col items-center">
-  <div className="relative w-full flex items-center justify-center">
-    {bookImages.length > 1 && (
-      <button
-        onClick={() => setActiveImage((activeImage - 1 + bookImages.length) % bookImages.length)}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-sky-100 transition z-10"
-        aria-label="Anterior"
-        style={{ left: -16 }}
-      >
-        <svg width="24" height="24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-    )}
-    <img
-      src={bookImages.length > 0 ? bookImages[activeImage] : '/icono2.png'}
-      alt={`Imagen ${activeImage + 1} de ${book.title}`}
-      onError={e => { e.target.src = '/icono2.png'; e.target.onerror = null; }}
-      className="w-full h-64 object-contain rounded mb-2 select-none"
-      style={{ maxWidth: 320 }}
-    />
-    {bookImages.length > 1 && (
-      <button
-        onClick={() => setActiveImage((activeImage + 1) % bookImages.length)}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-sky-100 transition z-10"
-        aria-label="Siguiente"
-        style={{ right: -16 }}
-      >
-        <svg width="24" height="24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
-    )}
-  </div>
-
-</div>
-              <div className="space-y-2">
-                <p className="text-slate-700 font-inter text-sm">
-                  <span className="font-semibold text-slate-800">Autor:</span> {
-  Array.isArray(book.authors)
-    ? book.authors.join(', ')
-    : (typeof book.authors === 'string' && book.authors.trim().startsWith('['))
-      ? JSON.parse(book.authors).join(', ')
-      : (book.authors ? book.authors : (book.author || 'No especificado'))
-}
-                </p>
-                <p className="text-slate-700 font-inter text-sm">
-                  <span className="font-semibold text-slate-800">Vendido por:</span>{' '}
-                  {book.seller && book.seller.id ? (
-                    <Link to={`/usuario/${book.seller.id}`} className="seller-link" style={{ color: '#2563eb', textDecoration: 'underline', cursor: 'pointer' }}>
-                      {`${book.seller.nombre} ${book.seller.apellido || ''}`}
-                    </Link>
-                  ) : (
-                    book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'
-                  )}
-                </p>
-                <p className="text-2xl font-bold text-slate-800">
-                  {book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'No especificado'}
-                </p>
-              </div>
-              {!isOwner && !isAdmin && (
-                <button
-                  onClick={handleContactSeller}
-                  className="mt-4 w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-4 rounded-md shadow-sm hover:shadow transition-all duration-300 ease-in-out flex items-center justify-center text-sm"
-                >
-                  <i className="fas fa-envelope mr-2"></i>
-                  Contactar Vendedor
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6" style={{position: 'relative'}}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <h2 className="text-2xl font-semibold text-slate-800 font-playfair">Detalles del libro:</h2>
-                {isOwner && (
-                  <div style={{ position: 'relative' }}>
+              {isOwner && (
+                  <div className="status-dropdown-container" style={{ position: 'relative', marginLeft: '8px' }}>
                     <button
                       onClick={() => setShowStatusDropdown(v => !v)}
                       style={{
                         background: book.status === 'vendido' ? '#e53e3e' : '#38a169',
                         color: '#fff',
                         border: 'none',
-                        padding: '6px 18px 6px 12px',
+                        padding: '8px 18px 8px 12px',
                         borderRadius: '6px',
                         fontWeight: 600,
                         cursor: 'pointer',
-                        fontSize: '0.95em',
+                        fontSize: '0.9em',
                         transition: 'background 0.2s',
                         minWidth: 90,
                         display: 'flex',
@@ -494,6 +416,85 @@ function BookDetails() {
                     )}
                   </div>
                 )}
+            </div>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
+              <div className="book-cover-detail flex flex-col items-center">
+  <div className="relative w-full flex items-center justify-center">
+    {bookImages.length > 1 && (
+      <button
+        onClick={() => setActiveImage((activeImage - 1 + bookImages.length) % bookImages.length)}
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-sky-100 transition z-10"
+        aria-label="Anterior"
+        style={{ left: -16 }}
+      >
+        <svg width="24" height="24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+    )}
+    <img
+      src={bookImages.length > 0 ? bookImages[activeImage] : '/icono2.png'}
+      alt={`Imagen ${activeImage + 1} de ${book.title}`}
+      onError={e => { e.target.src = '/icono2.png'; e.target.onerror = null; }}
+      className="w-full h-64 object-contain rounded mb-2 select-none"
+      style={{ maxWidth: 320 }}
+    />
+    {bookImages.length > 1 && (
+      <button
+        onClick={() => setActiveImage((activeImage + 1) % bookImages.length)}
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full shadow p-2 hover:bg-sky-100 transition z-10"
+        aria-label="Siguiente"
+        style={{ right: -16 }}
+      >
+        <svg width="24" height="24" fill="none" stroke="#2c3e50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    )}
+  </div>
+
+</div>
+              <div className="space-y-2">
+                <p className="text-slate-700 font-inter text-sm">
+                  <span className="font-semibold text-slate-800">Autor:</span> {
+  Array.isArray(book.authors)
+    ? book.authors.join(', ')
+    : (typeof book.authors === 'string' && book.authors.trim().startsWith('['))
+      ? JSON.parse(book.authors).join(', ')
+      : (book.authors ? book.authors : (book.author || 'No especificado'))
+}
+                </p>
+                <p className="text-slate-700 font-inter text-sm">
+                  <span className="font-semibold text-slate-800">Vendido por:</span>{' '}
+                  {book.seller && book.seller.id ? (
+                    <Link to={`/usuario/${book.seller.id}`} className="seller-link">
+                      {`${book.seller.nombre} ${book.seller.apellido || ''}`}
+                    </Link>
+                  ) : (
+                    book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'
+                  )}
+                </p>
+                <p className="text-2xl font-bold text-slate-800">
+                  {book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'No especificado'}
+                </p>
+              </div>
+              {!isOwner && !isAdmin && (
+                <button
+                  onClick={handleContactSeller}
+                  className="mt-4 w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-4 rounded-md shadow-sm hover:shadow transition-all duration-300 ease-in-out flex items-center justify-center text-sm"
+                >
+                  <i className="fas fa-envelope mr-2"></i>
+                  Contactar Vendedor
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-lg shadow-sm p-6" style={{position: 'relative'}}>
+              <div className="details-header">
+                <h2 className="text-2xl font-semibold text-slate-800 font-playfair">Detalles del libro:</h2>
               </div>
               <div className="details-grid grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                 <div>
