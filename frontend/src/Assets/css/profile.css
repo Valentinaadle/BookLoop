@@ -437,6 +437,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 200px;
 }
 .profile-main-empty-img {
   width: 120px;
@@ -987,10 +989,59 @@ body {
   gap: 0.5rem;
   cursor: pointer;
   line-height: 1.2;
+  position: relative;
+  padding-left: 28px; /* Espacio para el checkbox custom */
 }
+
 .interes-checkbox input[type="checkbox"] {
-  margin-top: 2px;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
+
+.checkbox-custom {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background-color: #f0f0f0;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.interes-checkbox:hover input[type="checkbox"] ~ .checkbox-custom {
+  background-color: #e0e0e0;
+}
+
+.interes-checkbox input[type="checkbox"]:checked ~ .checkbox-custom {
+  background-color: #394B60; /* Color principal del sitio */
+  border-color: #394B60;
+}
+
+.checkbox-custom:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.interes-checkbox input[type="checkbox"]:checked ~ .checkbox-custom:after {
+  display: block;
+}
+
+.interes-checkbox .checkbox-custom:after {
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 .interes-text {
   color: #22223b;
   font-size: 1.05rem;
@@ -1171,7 +1222,7 @@ body {
 .solicitud-info-title {
   font-size: 1.30rem;
   font-weight: 800;
-  color: #0d0d0e;
+  color: #1f2d3d;
   margin-bottom: 0.1rem;
   font-family: 'Playfair Display', serif;
   letter-spacing: 0.01rem;
@@ -1183,10 +1234,10 @@ body {
 }
 .solicitud-info-user {
   font-size: 1rem;
-  color: #000000ea;
+  color: #000000;
 }
 .solicitud-info-user a {
-  color: #d28219;
+  color: #1f2d3d;
   text-decoration: underline;
 }
 .solicitud-info-fecha {
@@ -1209,9 +1260,9 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 .solicitud-contact-btn:hover {
-  background: #000000;
+  background: #1f2d3d;
   color: #fff;
-  border-color: #000000;
+  border-color: #1f2d3d;
 }
 @media (max-width: 600px) {
   .solicitud-img {
@@ -1240,14 +1291,14 @@ body {
   letter-spacing: 0.01rem;
 }
 .solicitud-link {
-  color: #d28219;
+  color: #1f2d3d;
   text-decoration: underline;
   font-size: 1rem;
   font-weight: 500;
   transition: color 0.18s;
 }
 .solicitud-link:hover {
-  color: #d28219;
+  color: #1f2d3d;
 }
 
 .profile-icon {

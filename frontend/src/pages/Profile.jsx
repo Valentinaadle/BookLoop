@@ -630,16 +630,16 @@ function Profile() {
                 </div>
               )
             ) : activeTab === 'resenas' ? (
-              <div className="reviews-tailwind-root">
-                <div className="solicitud-title">Reseñas</div>
-                {reviewsLoading ? (
-                  <p>Cargando reseñas...</p>
-                ) : reviews.length === 0 ? (
-                  <div className="profile-main-empty-card">
-                    <h3>No hay reseñas.</h3>
-                    <p className="profile-main-empty-desc">Cuando alguien deje una reseña, aparecerá aquí.</p>
-                  </div>
-                ) : (
+              reviewsLoading ? (
+                <p>Cargando reseñas...</p>
+              ) : reviews.length === 0 ? (
+                <div className="profile-main-empty-card">
+                  <Star size={48} className="profile-icon" style={{marginBottom:12}} />
+                  <h3>No hay reseñas.</h3>
+                  <p className="profile-main-empty-desc">Cuando alguien deje una reseña, aparecerá aquí.</p>
+                </div>
+              ) : (
+                <div className="reviews-tailwind-root">
                   <div className="reviews-tailwind-list">
                     {reviews.map((review) => {
                       const key = review.id || review.review_id || `${review.buyer_id}-${review.book_id}-${review.review_date}`;
@@ -709,8 +709,8 @@ function Profile() {
                       );
                     })}
                   </div>
-                )}
-              </div>
+                </div>
+              )
             ) : activeTab === 'favoritos' ? (
               favorites.length === 0 ? (
                 <div className="profile-main-empty-card">

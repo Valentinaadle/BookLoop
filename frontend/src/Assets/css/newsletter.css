@@ -1,107 +1,132 @@
-/* Newsletter styles */
+/* Newsletter - Final Redesign to match reference image */
 .newsletter-container {
-  background: #f6f4f1;
-  border-radius: 16px;
-  padding: 1.2rem 3.5rem 1.2rem 2.5rem;
+  background: #fdfbf9; /* Light cream/off-white background */
+  border-radius: 1.25rem;
+  padding: 2.5rem 3rem; /* Generous padding */
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-  margin: 2.5rem auto 0 auto;
-  max-width: 1100px;
-  width: 100%;
+  flex-direction: row; /* Key change: Horizontal layout */
+  justify-content: space-between; /* Pushes text left, form right */
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+  margin: 4rem auto -40px auto; /* Overlap with footer */
+  max-width: 1050px; /* Wider layout */
+  width: calc(100% - 2rem);
   position: relative;
   z-index: 10;
-  margin-bottom: -40px; /* Aumentado para subirlo más */
-  min-height: unset;
-  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.newsletter-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+.newsletter-text-content {
+  text-align: left; /* Left-align the text block */
 }
 
 .newsletter-title {
-  font-size: 1.4rem; /* Título más grande */
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.1rem;
-  color: #222;
-  font-family:'Playfair Display', serif;
+  margin-bottom: 0.25rem;
+  color: #1F2937;
 }
 
 .newsletter-desc {
-  font-size: 0.98rem;
-  color: #444;
-  margin-bottom: 0.7rem;
+  font-size: 1rem;
+  color: #4B5563;
   font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  margin: 0;
 }
 
 .newsletter-form {
-  display: flex;
+  flex-shrink: 0;
   width: 100%;
-  gap: 1rem;
+  max-width: 550px;
+}
+
+.newsletter-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .newsletter-input {
-  flex: 1;
-  padding: 0.7rem 1.2rem;
-  border-radius: 999px;
-  border: none;
+  flex-grow: 1;
+  padding: 0.9rem 1.75rem;
   font-size: 1rem;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  border-radius: 9999px; /* This is the main pill shape */
+  border: 1px solid #E5E7EB;
+  background-color: #fff;
+  color: #1F2937;
   outline: none;
-  transition: box-shadow 0.2s;
-  min-width: 0;
-  font-family: 'Inter', sans-serif; /* Aplicar Inter */
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  padding-right: 180px; /* Make space for the button */
 }
+
+.newsletter-input::placeholder {
+  color: #9CA3AF;
+}
+
 .newsletter-input:focus {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  border-color: #2C3E50;
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
 }
 
 .newsletter-btn {
-  background: #1f2d3d;
-  color: #fff;
+  position: absolute; /* Place the button inside the input area */
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+  background-color: #2C3E50;
+  color: white;
+  font-weight: 500;
+  padding: 0 2rem;
+  border-radius: 9999px; /* The button is its own pill */
   border: none;
-  border-radius: 999px;
-  padding: 0 2.1rem;
-  font-size: 1rem;
-  font-weight: 550;
   cursor: pointer;
-  transition: background 0.2s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  letter-spacing: 0.03em;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  font-family: 'Inter', sans-serif; /* Aplicar Inter */
-  letter-spacing: 0.05em;
-}
-.newsletter-btn:hover {
-  background: #475f7a;
+  transition: background-color 0.2s;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.025em;
+  font-size: 0.9rem;
 }
 
+.newsletter-btn:hover {
+  background-color: #34495E;
+}
+
+/* Responsive adjustments */
 @media (max-width: 900px) {
   .newsletter-container {
-    max-width: 98vw;
-    padding: 1.2rem 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem;
   }
-}
-@media (max-width: 600px) {
-  .newsletter-container {
-    padding: 1.2rem 1rem; /* Reducir padding para un look más compacto */
-    margin-bottom: -30px;
-    max-width: 90vw; /* Asegura que el contenedor no toque los bordes */
+  .newsletter-text-content {
+    text-align: center;
   }
   .newsletter-form {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 600px) {
+  .newsletter-container {
+    padding: 2rem 1rem;
+    margin: 3rem auto;
+    max-width: calc(100% - 2rem); /* Ensure it doesn't touch the edges */
+    width: 100%;
+  }
+  .newsletter-input-group {
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.75rem;
+  }
+  .newsletter-input {
+    width: 100%;
+    padding-right: 1.5rem; /* Reset padding */
+    text-align: center;
   }
   .newsletter-btn {
-    width: auto; /* El botón se ajusta al contenido */
-    align-self: center; /* Centra el botón en el contenedor flex */
-    padding: 0.8rem 2rem; /* Padding ajustado para el botón */
-    height: auto;
+    position: static; /* Stack on mobile */
+    padding: 0.9rem;
+    width: 100%;
   }
 } 

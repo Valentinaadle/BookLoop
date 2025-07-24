@@ -37,9 +37,11 @@ const Newsletter = () => {
 
   return (
     <div className="newsletter-container">
-      <div className="newsletter-title">Suscríbete a las novedades</div>
-      <div className="newsletter-desc">
-        Recibe nuestro newsletter para estar al día con todas las novedades.
+      <div className="newsletter-text-content">
+        <h2 className="newsletter-title">Suscríbete a las novedades</h2>
+        <p className="newsletter-desc">
+          Recibe nuestro newsletter para estar al día con todas las novedades.
+        </p>
       </div>
       {success && (
         <div style={{ color: "#2e7d32", fontWeight: 600, marginTop: "1rem" }}>
@@ -53,18 +55,20 @@ const Newsletter = () => {
       )}
       {!submitted && (
         <form className="newsletter-form" onSubmit={handleSubmit}>
-          <input
-            className="newsletter-input"
-            type="email"
-            placeholder="Ingresa tu email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={loading}
-          />
-          <button className="newsletter-btn" type="submit" disabled={loading}>
-            {loading ? "Enviando..." : "SUSCRIBIRME"}
-          </button>
+          <div className="newsletter-input-group">
+            <input
+              className="newsletter-input"
+              type="email"
+              placeholder="Ingresa tu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={loading}
+            />
+            <button className="newsletter-btn" type="submit" disabled={loading}>
+              {loading ? "Enviando..." : "SUSCRIBIRME"}
+            </button>
+          </div>
         </form>
       )}
     </div>

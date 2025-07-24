@@ -66,9 +66,8 @@ const BookCard = ({
 
     try {
       if (isBookFavorite) {
-        setShowConfirmModal(true);
-        setIsLoading(false);
-        return;
+        await removeFavorite(book_id);
+        setIsBookFavorite(false);
       } else {
         const success = await addFavorite(bookData);
         if (success) {
@@ -80,22 +79,6 @@ const BookCard = ({
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleConfirmRemove = async (e) => {
-    e.stopPropagation();
-    try {
-      await removeFavorite(book_id);
-      setIsBookFavorite(false);
-      setShowConfirmModal(false);
-    } catch (error) {
-      console.error('Error al eliminar favorito:', error);
-    }
-  };
-
-  const handleCancelRemove = (e) => {
-    e.stopPropagation();
-    setShowConfirmModal(false);
   };
 
   const handleBookClick = () => {
@@ -168,24 +151,6 @@ const BookCard = ({
           )}
         </div>
       </div>
-
-      {/* Modal de confirmación */}
-      {showConfirmModal && (
-        <div className="modal-overlay" onClick={handleCancelRemove}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <h3>¿Quitar de favoritos?</h3>
-            <p>¿Estás seguro de que deseas quitar "{titulo}" de tus favoritos?</p>
-            <div className="modal-actions">
-              <button className="modal-button cancel" onClick={handleCancelRemove}>
-                Cancelar
-              </button>
-              <button className="modal-button confirm" onClick={handleConfirmRemove}>
-                Confirmar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
