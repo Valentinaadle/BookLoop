@@ -16,11 +16,12 @@ async function getSolicitudesBySeller(seller_id) {
     .select('*, books(*), users!buyer_id(*)')
     .eq('seller_id', seller_id)
     .order('created_at', { ascending: false });
+  
+  if (error) throw error;
+  
   // Filtrar solicitudes cuyo libro está vendido
   const filtered = (data || []).filter(solicitud => solicitud.books?.status !== 'vendido');
   return filtered;
-  if (error) throw error;
-  return data;
 }
 
 module.exports = {
