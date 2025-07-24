@@ -74,7 +74,7 @@
 }
 .favorite-btn-modern .heart-icon {
   font-size: 22px;
-  color: #6c757d;
+  color: #e74c3c;
   transition: color 0.2s;
 }
 .favorite-btn-modern .heart-icon.filled {
