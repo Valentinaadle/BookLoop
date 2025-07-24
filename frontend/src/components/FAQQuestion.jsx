@@ -34,14 +34,14 @@ const FAQQuestions = () => {
 
   return (
     <div className="faq-container">
-      <h1 className="faq-title">Preguntas Comunes sobre BookLoop</h1>
-      <p className="faq-subtitle">Encuentra respuestas a las dudas más frecuentes sobre cómo vender y comprar libros usados en nuestra plataforma.</p>
+      <h1 className="faq-title">Preguntas frecuentes sobre BookLoop</h1>
+      <p className="faq-subtitle">Encontrá respuestas a las dudas más frecuentes sobre cómo vender y comprar libros usados en nuestra plataforma.</p>
       
       {faqs.map((faq, index) => (
         <div className={`faq-item ${openIndex === index ? 'open' : ''}`} key={index}>
           <button className="faq-question" onClick={() => toggleFAQ(index)}>
             {faq.question}
-            <span className={`faq-arrow ${openIndex === index ? 'open' : ''}`}>▼</span>
+            <span className={`faq-arrow ${openIndex === index ? 'open' : ''}`}></span>
           </button>
           <div className={`faq-answer ${openIndex === index ? 'open' : ''}`}>
             {openIndex === index && <p>{faq.answer}</p>}

@@ -192,3 +192,26 @@ button.bg-sky-600:hover {
   margin-bottom: 1rem;
 }
 
+@media (max-width: 1023px) {
+  .book-details-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .book-main-info,
+  .book-secondary-info {
+    width: 100%;
+    max-width: none;
+  }
+
+  .book-main-info .sticky {
+    position: static;
+  }
+
+  .book-details-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+

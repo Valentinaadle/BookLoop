@@ -420,8 +420,8 @@ function BookDetails() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
+        <div className="book-details-container grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="book-main-info lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-4 sticky top-4">
               <div className="book-cover-detail flex flex-col items-center">
   <div className="relative w-full flex items-center justify-center">
@@ -491,7 +491,7 @@ function BookDetails() {
             </div>
           </div>
 
-          <div className="lg:col-span-2 space-y-6">
+          <div className="book-secondary-info lg:col-span-2 space-y-6">
             <div className="bg-white rounded-lg shadow-sm p-6" style={{position: 'relative'}}>
               <div className="details-header">
                 <h2 className="text-2xl font-semibold text-slate-800 font-playfair">Detalles del libro:</h2>
