@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Book, Facebook, Twitter, Instagram } from 'lucide-react'; // Usando lucide-react para íconos
+import { Book, Facebook, Twitter, Instagram, BookOpen } from 'lucide-react'; // Usando lucide-react para íconos
 
 export default function Footer() {
   return (
@@ -11,11 +11,7 @@ export default function Footer() {
           <div className="footer-brand">
             <div>
               <Link to="/" className="brand-logo">
-                {/* Ícono de libro SVG */}
-                <svg width="22" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
+                <BookOpen />
                 <h3>Bookloop</h3>
               </Link>
               <p className="brand-description">

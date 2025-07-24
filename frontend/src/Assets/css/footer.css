@@ -53,6 +53,11 @@
   font-size: 24px; /* Un poco más pequeño */
   font-weight: 700;
   color: var(--footer-heading);
+  border-bottom: none; /* Eliminamos el borde inferior */
+}
+
+.brand-logo svg {
+  transform: translateY(-15px) !important; /* Mueve el ícono hacia arriba */
 }
 
 .brand-description {
@@ -60,6 +65,7 @@
   line-height: 1.7; /* leading-relaxed */
   max-width: 256px; /* max-w-xs */
   margin-bottom: 24px;
+  margin-top: -40px;
 }
 
 /* Íconos sociales (Punto 2) */

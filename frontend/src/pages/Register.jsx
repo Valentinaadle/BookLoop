@@ -97,7 +97,7 @@ function Register() {
           <div className="register-form-container-refined">
             <div className="form-header-refined">
               <h3>Registrate en BookLoop</h3>
-              <p className="form-subtitle">Empezá a descubrir y compartir libros.</p>
+              <p className="form-subtitle">Empezá a explorar y compartir libros</p>
             </div>
             
             {error && <div className="error-message-refined">{error}</div>}
@@ -147,7 +147,7 @@ function Register() {
                   onChange={handleChange}
                   disabled={loading}
                 />
-                <p className="info-text-refined">Tu correo se usará para iniciar sesión y recibir notificaciones.</p>
+                <p className="info-text-refined">Se usará para iniciar sesión</p>
               </div>
 
               <div className="form-group-refined">
