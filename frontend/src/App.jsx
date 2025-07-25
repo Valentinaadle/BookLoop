@@ -21,7 +21,7 @@ import Favoritos from './pages/Favoritos';
 import FAQQuestions from './components/FAQQuestion';
 import About from './pages/About';
 import PublicProfile from './pages/PublicProfile';
-
+import TerminosYCondiciones from './components/TerminosYCondiciones';
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -109,6 +109,7 @@ function App() {
                 <About />
               </ProtectedRoute>
             } />
+            <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
             <Route path="/usuario/:id" element={<PublicProfile />} />
           </Routes>
         </Router>

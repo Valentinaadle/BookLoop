@@ -33,6 +33,7 @@ const FAQQuestions = () => {
   };
 
   return (
+    <div className="faq-page">
     <div className="faq-container">
       <h1 className="faq-title">Preguntas frecuentes sobre BookLoop</h1>
       <p className="faq-subtitle">Encontrá respuestas a las dudas más frecuentes sobre cómo vender y comprar libros usados en nuestra plataforma.</p>
@@ -48,6 +49,7 @@ const FAQQuestions = () => {
           </div>
         </div>
       ))}
+    </div>
     </div>
   );
 };

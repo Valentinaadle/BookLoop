@@ -1,38 +1,21 @@
 import React, { useState } from "react";
 import "../Assets/css/newsletter.css";
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
 const Newsletter = () => {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
     setLoading(true);
-    try {
-      const res = await fetch(`${API_URL}/api/newsletter`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Error al suscribirse");
-      } else {
-        setSuccess(data.message || "¡Gracias por suscribirte!");
-        setSubmitted(true);
-      }
-    } catch (err) {
-      setError("Error de conexión. Intenta nuevamente.");
-    } finally {
+
+    // Simulamos una llamada al backend
+    setTimeout(() => {
       setLoading(false);
-    }
+      setEmail(""); // opcional, limpiar input
+      setShowModal(true); // mostramos el modal
+    }, 1000); // simula 1 segundo de espera
   };
 
   return (
@@ -43,33 +26,33 @@ const Newsletter = () => {
           Recibe nuestro newsletter para estar al día con todas las novedades.
         </p>
       </div>
-      {success && (
-        <div style={{ color: "#2e7d32", fontWeight: 600, marginTop: "1rem" }}>
-          {success}
+
+      <form className="newsletter-form" onSubmit={handleSubmit}>
+        <div className="newsletter-input-group">
+          <input
+            className="newsletter-input"
+            type="email"
+            placeholder="Ingresa tu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={loading}
+          />
+          <button className="newsletter-btn" type="submit" disabled={loading}>
+            {loading ? "Enviando..." : "SUSCRIBIRME"}
+          </button>
         </div>
-      )}
-      {error && (
-        <div style={{ color: "#c62828", fontWeight: 600, marginTop: "1rem" }}>
-          {error}
-        </div>
-      )}
-      {!submitted && (
-        <form className="newsletter-form" onSubmit={handleSubmit}>
-          <div className="newsletter-input-group">
-            <input
-              className="newsletter-input"
-              type="email"
-              placeholder="Ingresa tu email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-            />
-            <button className="newsletter-btn" type="submit" disabled={loading}>
-              {loading ? "Enviando..." : "SUSCRIBIRME"}
-            </button>
+      </form>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>¡Suscripción exitosa!</h3>
+            <p>Gracias por suscribirte a nuestro newsletter. Pronto recibirás novedades en tu correo.</p>
+            <button onClick={() => setShowModal(false)}>Cerrar</button>
           </div>
-        </form>
+        </div>
       )}
     </div>
   );

@@ -60,6 +60,7 @@ export default function Footer() {
               <Link to="/preguntas">Preguntas Frecuentes</Link>
               <Link to="/nosotros">Sobre Nosotros</Link>
               <a href="mailto:itsbookloop@gmail.com">Contacto</a>
+              <Link to="/terminos-y-condiciones">Terminos y Condiciones</Link>
             </div>
           </div>
         </div>
