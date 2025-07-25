@@ -44,12 +44,12 @@ export default function Footer() {
 
           {/* Columna de Categorías */}
           <div className="footer-section">
-            <h4>Categorías</h4>
+            <h4>Categorías Destacadas</h4>
             <div className="footer-links">
               <Link to="/comprar?genero=Terror">Terror</Link>
               <Link to="/comprar?genero=Romance">Romance</Link>
-              <Link to="/comprar?genero=Ciencia+Ficción">Ciencia Ficción</Link>
-              <Link to="/comprar?genero=Fantasía">Fantasía</Link>
+              <Link to="/comprar?genero=Drama">Drama</Link>
+              <Link to="/comprar?genero=Salud">Salud</Link>
             </div>
           </div>
           
