@@ -471,7 +471,7 @@ const Comprar = () => {
                 style={{
                   width: '100%',
                   padding: '12px',
-                  backgroundColor: '#10B981',
+                  backgroundColor: '#353b5fff',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -509,65 +509,7 @@ const Comprar = () => {
       )}
 
       <main className="home-container">
-        <aside className="sidebar hidden lg:block">
-          <h3 className="sidebar-title">Filtrar</h3>
-          <div className="filter-group">
-            <div className="filter-header" onClick={() => toggle("genero")}>Género <span>{collapsed.genero ? "-" : "+"}</span></div>
-            <div className={`filter-options ${collapsed.genero ? "" : "collapsed"}`}>
-              {categories.map((category) => (
-                <label key={category.category_id}>
-                  <input
-                    type="checkbox"
-                    value={category.category_name}
-                    onChange={() => handleGenreChange(category.category_name)}
-                    checked={selectedGenres.includes(category.category_name)}
-                  /> {category.category_name}
-                </label>
-              ))}
-            </div>
-          </div>
-          <div className="filter-group">
-            <div className="filter-header" onClick={() => toggle("idioma")}>Idioma <span>{collapsed.idioma ? "-" : "+"}</span></div>
-            <div className={`filter-options ${collapsed.idioma ? "" : "collapsed"}`}>
-              {Object.keys(languageMap).map((langCode) => (
-                <label key={langCode}>
-                  <input
-                    type="checkbox"
-                    value={languageMap[langCode]}
-                    onChange={() => handleLanguageChange(languageMap[langCode])}
-                    checked={selectedLanguages.includes(languageMap[langCode])}
-                  /> {languageMap[langCode]}
-                </label>
-              ))}
-            </div>
-          </div>
-          <div className="filter-group">
-            <div className="filter-header" onClick={() => toggle("estado")}>Estado <span>{collapsed.estado ? "-" : "+"}</span></div>
-            <div className={`filter-options ${collapsed.estado ? "" : "collapsed"}`}>
-              {[
-                "Nuevo", "Como Nuevo", "Buen Estado", "Aceptable"
-              ].map((state) => (
-                <label key={state}>
-                  <input
-                    type="checkbox"
-                    value={state}
-                    onChange={() => handleConditionChange(state)}
-                    checked={selectedConditions.includes(state)}
-                  /> {state}
-                </label>
-              ))}
-            </div>
-          </div>
-          <div className="filter-group">
-            <div className="filter-header" onClick={() => toggle("precio")}>Rango de Precio <span>{collapsed.precio ? "-" : "+"}</span></div>
-            <div className={`filter-options ${collapsed.precio ? "" : "collapsed"}`}>
-              <div className="price-range">
-                <input type="number" placeholder="Desde" value={priceRange.min} onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))} />
-                <input type="number" placeholder="Hasta" value={priceRange.max} onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))} />
-              </div>
-            </div>
-          </div>
-        </aside>
+        
         <section className="main-content">
           <div className="sort-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
             {/* BOTÓN FILTROS MÓVIL */}
