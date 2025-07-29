@@ -2,8 +2,8 @@ const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3000',
-    supportFile: 'cypress/support/e2e.ts',
+    baseUrl: 'https://bookloop.com.ar',
+    supportFile: 'cypress/support/e2e.js',
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     fixturesFolder: 'cypress/fixtures',
     screenshotsFolder: 'cypress/screenshots',
@@ -36,7 +36,7 @@ module.exports = defineConfig({
     },
     env: {
       // Environment variables for tests
-      apiUrl: 'http://localhost:5000',
+      apiUrl: 'https://bookloop.com.ar',
       testUser: {
         email: 'silcimolina@gmail.com',
         password: '12345678'

@@ -6,8 +6,8 @@ describe('Comprar libro filtrando por categoría', () => {
     cy.viewport(1280, 720);
     cy.visit('/login');
 
-    cy.get('input[name="email"]').type('silcimolina@gmail.com');
-    cy.get('input[name="password"]').type('12345678');
+    cy.get('input[name="email"]').type('valentinaadle1@gmail.com');
+    cy.get('input[name="password"]').type('Honduras760');
 
     // Cambiamos submit por clic en el botón que diga "Ingresar"
     cy.contains('button', 'Ingresar').click();

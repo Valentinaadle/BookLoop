@@ -144,9 +144,7 @@
   margin: 0 auto;
 }
 
-.book-search .book-card {
-  /* Estilos específicos para las tarjetas DENTRO de la búsqueda si son necesarios */
-}
+
 
 .book-search .error-message {
   color: #d9534f;

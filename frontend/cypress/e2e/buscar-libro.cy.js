@@ -7,8 +7,8 @@ describe('Login y búsqueda en la barra superior', () => {
     cy.visit('/login');
 
     // Completar formulario de login con tu email y contraseña indicados
-    cy.get('input[name="email"]').type('silcimolina@gmail.com');
-    cy.get('input[name="password"]').type('12345678');
+    cy.get('input[name="email"]').type('valentinaadle1@gmail.com');
+    cy.get('input[name="password"]').type('Honduras760');
 
     // Hacer clic en el botón "Ingresar" de forma estable
     cy.contains('button', 'Ingresar').click();

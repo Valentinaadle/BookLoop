@@ -7,8 +7,8 @@ describe('Login y navegación básica', () => {
     cy.visit('/login');
 
     // 2. Completar formulario
-    cy.get('input[name="email"]').type('silcimolina@gmail.com');
-    cy.get('input[name="password"]').type('12345678');
+    cy.get('input[name="email"]').type('valentinaadle1@gmail.com');
+    cy.get('input[name="password"]').type('Honduras760');
 
     // 3. Hacer clic en "Ingresar"
     cy.contains('button', 'Ingresar').click();

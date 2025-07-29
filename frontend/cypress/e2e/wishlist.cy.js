@@ -6,8 +6,8 @@ describe('Login y marcar y desmarcar un libro como favorito', () => {
     cy.viewport(1280, 720);
     cy.visit('/login');
 
-    cy.get('input[name="email"]').type('silcimolina@gmail.com');
-    cy.get('input[name="password"]').type('12345678');
+    cy.get('input[name="email"]').type('valentinaadle1@gmail.com');
+    cy.get('input[name="password"]').type('Honduras760');
     cy.contains('button', 'Ingresar').click();
 
     // 2. Verificar login exitoso

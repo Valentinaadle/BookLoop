@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -28,10 +28,10 @@
 // declare global {
 //   namespace Cypress {
 //     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+//       login(email, password): Chainable<void>
+//       drag(subject, options): Chainable<Element>
+//       dismiss(subject, options): Chainable<Element>
+//       visit(originalFn, url, options): Chainable<Element>
 //     }
 //   }
 // }
@@ -41,7 +41,7 @@
 // ***********************************************
 
 // Comando para iniciar sesión
-Cypress.Commands.add('loginToBookLoop', (email = 'silcimolina@gmail.com', password = '12345678') => {
+Cypress.Commands.add('loginToBookLoop', (email, password) => {
   cy.visit('/login');
   cy.get('input[name="email"]').type(email);
   cy.get('input[name="password"]').type(password);
@@ -51,7 +51,7 @@ Cypress.Commands.add('loginToBookLoop', (email = 'silcimolina@gmail.com', passwo
 });
 
 // Comando para buscar libros desde la barra superior
-Cypress.Commands.add('searchFromTopBar', (searchTerm: string) => {
+Cypress.Commands.add('searchFromTopBar', (searchTerm) => {
   cy.get('input[placeholder="Buscar libros..."]', { timeout: 10000 })
     .should('be.visible')
     .click()
@@ -66,7 +66,7 @@ Cypress.Commands.add('goToSellPage', () => {
 });
 
 // Comando para completar formulario de venta básico
-Cypress.Commands.add('fillBookForm', (bookData: any) => {
+Cypress.Commands.add('fillBookForm', (bookData) => {
   if (bookData.isbn) {
     cy.get('input[name="isbn"]').type(bookData.isbn);
     cy.get('input[name="isbn"]').blur();
@@ -150,7 +150,7 @@ Cypress.Commands.add('setupBookLoopInterceptors', () => {
 });
 
 // Comando para navegar a secciones principales
-Cypress.Commands.add('goToSection', (section: string) => {
+Cypress.Commands.add('goToSection', (section) => {
   cy.contains(section).click();
   
   switch (section) {
@@ -170,7 +170,7 @@ Cypress.Commands.add('goToSection', (section: string) => {
 });
 
 // Comando para verificar que un libro aparece en los resultados
-Cypress.Commands.add('verifyBookInResults', (bookTitle: string, shouldExist = true) => {
+Cypress.Commands.add('verifyBookInResults', (bookTitle, shouldExist) => {
   if (shouldExist) {
     cy.contains(bookTitle, { timeout: 10000 }).should('be.visible');
   } else {
@@ -179,29 +179,14 @@ Cypress.Commands.add('verifyBookInResults', (bookTitle: string, shouldExist = tr
 });
 
 // Comando para simular carga de imagen
-Cypress.Commands.add('uploadBookImage', (filename = 'example.json') => {
+Cypress.Commands.add('uploadBookImage', (filename) => {
   cy.get('input[type="file"]').selectFile(`cypress/fixtures/${filename}`, { force: true });
 });
 
 // Comando para verificar mensajes de éxito/error
-Cypress.Commands.add('verifyMessage', (message: string, type: 'success' | 'error' = 'success') => {
+Cypress.Commands.add('verifyMessage', (message, type) => {
   const className = type === 'success' ? '.success-message' : '.error-message';
   cy.get(className).should('contain', message);
 });
 
-// Declaraciones de tipos para TypeScript
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      loginToBookLoop(email?: string, password?: string): Chainable<void>
-      searchFromTopBar(searchTerm: string): Chainable<void>
-      goToSellPage(): Chainable<void>
-      fillBookForm(bookData: any): Chainable<void>
-      setupBookLoopInterceptors(): Chainable<void>
-      goToSection(section: string): Chainable<void>
-      verifyBookInResults(bookTitle: string, shouldExist?: boolean): Chainable<void>
-      uploadBookImage(filename?: string): Chainable<void>
-      verifyMessage(message: string, type?: 'success' | 'error'): Chainable<void>
-    }
-  }
-}
+// Declaraciones de tipos para JavaScript
