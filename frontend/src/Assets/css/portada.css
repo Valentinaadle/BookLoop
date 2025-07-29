@@ -488,7 +488,7 @@
   font-family: var(--heading-font);
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #394B60;
+  color: #1F2D3D;
   font-weight: 700;
 }
 
@@ -501,13 +501,23 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 0.5rem;
-  background-color: #CBd9E6;
-  color: #394B60;
+  background-color: #CBd9E6; /* Color claro por defecto */
+  color: #394B60; /* Texto oscuro por defecto */
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .preferencias-usuario button:hover {
-  background-color: #b9c7d4;
+  color: #2f3c4d; /* Texto azul más oscuro al pasar el mouse */
+}
+
+.preferencias-usuario button.selected {
+  background-color: #394B60; /* Color oscuro al seleccionar */
+  color: #fff; /* Texto blanco al seleccionar */
+}
+
+.preferencias-usuario button.ver-recomendaciones {
+  background-color: #394B60; /* Oscuro desde el inicio */
+  color: #fff;
 }
 
 /* Estilos para la sección de recomendaciones */

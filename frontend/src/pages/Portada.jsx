@@ -137,22 +137,13 @@ const opciones = ['Realistas', 'Ciencia Ficción', 'Misterio', 'Drama', 'Romance
 function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomendaciones }) {
   return (
     <div className="preferencias-usuario">
-      <h3>Descubre tus intereses:</h3>
+      <h3>Selecciona tus intereses:</h3>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
         {opciones.map(opcion => (
           <button
             key={opcion}
             onClick={() => onSeleccionar(opcion)}
-            style={{
-              background: generoSeleccionado === opcion ? '#394B60' : '#CBd9E6',
-              color: generoSeleccionado === opcion ? '#fff' : '#394B60',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '0.7rem 1.5rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
+            className={generoSeleccionado === opcion ? 'selected' : ''} // Add class based on selection
           >
             {opcion}
           </button>
@@ -161,10 +152,9 @@ function PreferenciasUsuario({ generoSeleccionado, onSeleccionar, onVerRecomenda
       <button
         onClick={onVerRecomendaciones}
         disabled={!generoSeleccionado}
+        className="ver-recomendaciones"
         style={{
           paddingTop: '1.2rem',
-          background: '#394B60',
-          color: '#fff',
           border: 'none',
           borderRadius: '8px',
           padding: '0.9rem 2.2rem',

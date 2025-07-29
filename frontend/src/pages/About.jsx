@@ -98,7 +98,7 @@ const About = () => {
         {/* Equipo - Versión cards alargadas */}
 <section className="team-section">
   <div className="team-header">
-    <h2>Conozca a nuestro equipo</h2>
+    <h2>Conocé a nuestro equipo</h2>
     <p>Somos un grupo de apasionados que trabajamos cada día para que tu experiencia en nuestra plataforma sea única. </p>
     <p>Promovemos la economía circular, dándole una nueva vida a los productos y fomentando un consumo más responsable.</p>
   </div>
