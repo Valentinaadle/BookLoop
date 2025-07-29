@@ -8,22 +8,22 @@ import { useNavigate } from 'react-router-dom';
 const pasos = [
   {
     titulo: 'Registrate en BookLoop.',
-    descripcion: 'Crea tu cuenta y luego inicia sesión para poder iniciar la venta de tu libro.',
+    descripcion: 'Creá tu cuenta y luego iniciá sesión para poder empezar a vender tu libro.',
     icono: '/icons/register.jpg'
   },
   {
-    titulo: 'Ingresa el codigo ISBN',
-    descripcion: 'Para encontrar el codigo, busca en la tapa del libro, junto al codigo de barras',
+    titulo: 'Ingresá el código ISBN',
+    descripcion: 'Para encontrar el código, buscá en la tapa del libro, junto al código de barras.',
     icono: '/icons/images.png'
   },
   {
-    titulo: 'Selecciona un estado',
-    descripcion: 'Selecciona el estado de tu libro, desplega la lista y elegi el estado indicado.',
+    titulo: 'Seleccioná un estado',
+    descripcion: 'Seleccioná el estado de tu libro, desplegá la lista y elegí el estado adecuado.',
     icono: '/icons/estado.png'
   },
   {
-    titulo: 'Elegi un precio razonable',
-    descripcion: 'Por ultimo, pone un precio adecuado a tu libro y publicalo!',
+    titulo: 'Elegí un precio razonable',
+    descripcion: 'Por último, poné un precio adecuado a tu libro y publicalo!',
     icono: '/icons/precio.webp'
   }
 ];
@@ -276,7 +276,6 @@ export default function QuieroVender() {
                   <option value="Como nuevo">Como nuevo</option>
                   <option value="Buen estado">Buen estado</option>
                   <option value="Aceptable">Aceptable</option>
-                  <option value="Usado">Usado</option>
                 </select>
               </div>
               <div className="form-group">

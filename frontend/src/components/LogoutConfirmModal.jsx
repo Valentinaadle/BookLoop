@@ -1,26 +1,23 @@
 import React from 'react';
+import '../Assets/css/LogoutConfirmModal.css';
 
 export default function LogoutConfirmModal({ open, title, message, onConfirm, onCancel }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
-        <h2 className="text-lg font-bold mb-2" style={{ color: '#131416', textAlign: 'center' }}>{title || 'Cerrar sesión'}</h2>
-        <p className="mb-4" style={{ color: '#131416', textAlign: 'center' }}>{message}</p>
-        <div className="flex justify-center gap-3 mt-4">
+    <div className="logout-modal-overlay">
+      <div className="logout-modal-content">
+        <h2 className="logout-modal-title">{title || 'Cerrar sesión'}</h2>
+        <p className="logout-modal-message">{message}</p>
+        <div className="logout-modal-actions">
           <button
             onClick={onCancel}
-            style={{ color: '#131416', border: '1px solid #131416', background: 'transparent', padding: '8px 20px', borderRadius: '6px', fontWeight: 500, transition: 'background 0.2s' }}
-            onMouseOver={e => (e.currentTarget.style.background = '#f2f2f2')}
-            onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
+            className="logout-modal-button cancel"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            style={{ color: '#fff', background: '#131416', border: '1px solid #131416', padding: '8px 20px', borderRadius: '6px', fontWeight: 600, transition: 'background 0.2s' }}
-            onMouseOver={e => (e.currentTarget.style.background = '#23262a')}
-            onMouseOut={e => (e.currentTarget.style.background = '#131416')}
+            className="logout-modal-button confirm"
           >
             Sí, cerrar
           </button>

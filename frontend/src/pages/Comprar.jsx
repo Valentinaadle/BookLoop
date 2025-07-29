@@ -515,7 +515,7 @@ const Comprar = () => {
             {/* BOTÓN FILTROS MÓVIL */}
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="block lg:hidden"
+              className="block lg:hidden filter-sort-button"
               style={{
                 backgroundColor: 'transparent',
                 color: 'var(--primary-color, #000000)',
@@ -545,7 +545,7 @@ const Comprar = () => {
               ☰ Filtros
             </button>
             
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sort-select">
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sort-select filter-sort-button">
               <option value="default">Ordenar por</option>
               <option value="price-asc">Menor precio</option>
               <option value="price-desc">Mayor precio</option>

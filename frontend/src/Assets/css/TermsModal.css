@@ -1,0 +1,59 @@
+/* Styles for TermsModal */
+
+.terms-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.terms-modal-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.terms-modal-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #1F2D3D;
+}
+
+.terms-modal-list {
+  margin: 0.5rem 0 0 1.2rem;
+  padding: 0;
+  color: #222;
+  font-size: 1rem;
+  text-align: left;
+  list-style-type: disc;
+  list-style-position: inside;
+  line-height: 1.6;
+}
+
+.terms-modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.terms-modal-button {
+  padding: 8px 32px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: white;
+  background: #1F2D3D;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.terms-modal-button:hover {
+  background: #33475b;
+} 

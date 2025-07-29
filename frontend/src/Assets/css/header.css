@@ -68,7 +68,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #3360a3; /* Color del subrayado */
+  background-color: #1f2d3d; /* New color for underline */
   transition: width 0.3s ease;
 }
 

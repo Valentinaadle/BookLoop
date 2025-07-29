@@ -81,3 +81,9 @@
   gap: 8px;
 }
 
+.filter-sort-button {
+  width: 180px; /* Ajustar según sea necesario */
+  text-align: center;
+  justify-content: center;
+}
+

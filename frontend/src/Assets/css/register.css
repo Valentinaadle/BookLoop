@@ -151,22 +151,23 @@
   margin-bottom: 4px;
 }
 
+/* Adjust form input styles for color only */
+
 .input-refined {
-  width: 100%;
-  padding: 8px 10px;
+  background-color: #fffffff1;
   border: 1px solid #dfe6e9;
+  color: #121416;
+  padding: 8px 10px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.8);
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
-  transition: all 0.3s ease;
-  color: #121416
+  width: 100%;
+  transition: border-color 0.2s ease;
 }
 
 .input-refined:focus {
+  border-color: #1f2d3d;
   outline: none;
-  border-color: #ffffff;
-  box-shadow: 0 0 0 2px rgba(9, 132, 227, 0.2);
 }
 
 .info-text-refined {
@@ -241,6 +242,8 @@
   font-weight: 600;
 }
 
+
+
 .submit-btn-refined {
   width: 100%;
   padding: 10px;
@@ -252,13 +255,11 @@
   font-size: 1rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .submit-btn-refined:hover:not(:disabled) {
-  background: #2d3e50;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
+  background: #243447;
 }
 
 .submit-btn-refined:disabled {
@@ -296,6 +297,11 @@
   margin-left: 5px;
   text-decoration: none;
   position: relative;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover {
+  color: #243447;
 }
 
 .login-link::after {
@@ -310,7 +316,7 @@
 }
 
 .login-link:hover::after {
-  width: 100%;
+  width: 0;
 }
 
 .error-message-refined {
