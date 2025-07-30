@@ -353,7 +353,7 @@ function EditBook() {
                     <option value="">Seleccionar estado</option>
                     <option value="Nuevo">Nuevo</option>
                     <option value="Como nuevo">Como nuevo</option>
-                    <option value="Bueno">Bueno</option>
+                    <option value="Buen estado">Buen estado</option>
                     <option value="Aceptable">Aceptable</option>
                   </select>
                 </label>
