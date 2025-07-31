@@ -237,12 +237,13 @@ const Comprar = () => {
           />
           
           <div
+            className="mobile-filters"
             style={{
               position: 'fixed',
               top: 0,
               left: 0,
-              width: '320px',
-              maxWidth: '85vw',
+              width: '280px',
+              maxWidth: '75vw',
               height: '100vh',
               backgroundColor: 'white',
               zIndex: 99999,
@@ -531,7 +532,7 @@ const Comprar = () => {
             {/* BOTÓN FILTROS MÓVIL */}
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="block lg:hidden filter-sort-button"
+              className="block lg:hidden filter-sort-button mobile-filters"
               style={{
                 backgroundColor: 'transparent',
                 color: 'var(--primary-color, #000000)',
@@ -545,7 +546,8 @@ const Comprar = () => {
                 transition: 'all 0.2s ease-in-out',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem'
+                gap: '0.5rem',
+                marginLeft: '20px'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = '#f8f8f8';

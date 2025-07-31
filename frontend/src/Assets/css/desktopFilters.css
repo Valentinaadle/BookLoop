@@ -180,6 +180,20 @@
   }
 }
 
+/* Ocultar filtro responsive en pantallas grandes */
+@media (min-width: 1024px) {
+  .mobile-filters {
+    display: none !important;
+  }
+}
+
+/* Ajustes para filtro móvil */
+@media (max-width: 1023px) {
+  .mobile-filters {
+    margin-left: 10px;
+  }
+}
+
 /* Animaciones suaves */
 .filter-content {
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
