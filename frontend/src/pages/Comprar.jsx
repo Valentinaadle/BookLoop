@@ -7,7 +7,9 @@ import "../Assets/css/header.css";
 import "../Assets/css/footer.css";
 import "../Assets/css/filtro.css";
 import "../Assets/css/bookcard.css";
+import "../Assets/css/desktopFilters.css";
 import BookCard from '../components/BookCard';
+import DesktopFilters from '../components/DesktopFilters';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +44,6 @@ const Comprar = () => {
   const languageMap = {
     'en': 'Inglés',
     'es': 'Español',
-    'fr': 'Francés',
   };
 
   // Leer el query param 'genero' al cargar la página
@@ -509,6 +510,21 @@ const Comprar = () => {
       )}
 
       <main className="home-container">
+        {/* SIDEBAR CON FILTROS DE DESKTOP */}
+        <aside className="hidden lg:block">
+          <DesktopFilters
+            categories={categories}
+            selectedGenres={selectedGenres}
+            selectedLanguages={selectedLanguages}
+            selectedConditions={selectedConditions}
+            priceRange={priceRange}
+            onGenreChange={handleGenreChange}
+            onLanguageChange={handleLanguageChange}
+            onConditionChange={handleConditionChange}
+            onPriceChange={setPriceRange}
+            languageMap={languageMap}
+          />
+        </aside>
         
         <section className="main-content">
           <div className="sort-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>

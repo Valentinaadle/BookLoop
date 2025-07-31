@@ -25,13 +25,28 @@ body {
 /* Books Grid */
 .home-container .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   justify-items: center;
   align-items: stretch;
   width: 100%;
   margin: 0 auto;
   padding: 2rem 0;
+}
+
+/* Responsive para móviles */
+@media (max-width: 1023px) {
+  .home-container .books-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container .books-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 
 .no-books {
@@ -111,7 +126,7 @@ body {
 }
 
 .sort-select:focus {
-  border-color: #6c63ff;
+  border-color: #394B60;
   outline: none;
   background-color: #fff;
 }
