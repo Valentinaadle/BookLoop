@@ -214,8 +214,8 @@
 
 .login-button {
   background-color: transparent;
-  color: var(--primary-color, #000000);
-  border: 1px solid var(--primary-color, #000000);
+  color: var(--primary-color, #1f2d3d);
+  border: 1px solid var(--primary-color, #1f2d3d);
 }
 
 .login-button:hover {
@@ -225,13 +225,13 @@
 }
 
 .register-button {
-  background-color: var(--primary-color, #000000);
+  background-color:#1f2d3d;
   color: #fff;
   border: 1px solid transparent;
 }
 
 .register-button:hover {
-  background-color: #333;
+  background-color: #475f7a;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }

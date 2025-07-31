@@ -475,6 +475,18 @@ function BookDetails() {
                     book.seller ? `${book.seller.nombre} ${book.seller.apellido || ''}` : 'No especificado'
                   )}
                 </p>
+                <p className="text-slate-700 font-inter text-sm">
+                  <span className="font-semibold text-slate-800">Estado:</span>{' '}
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                    (book.estado || book.condition) === 'Nuevo' 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : (book.estado || book.condition) === 'Usado' 
+                        ? 'bg-orange-100 text-orange-800' 
+                        : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {book.estado || book.condition || 'No especificado'}
+                  </span>
+                </p>
                 <p className="text-2xl font-bold text-slate-800">
                   {book.price ? `$${parseFloat(book.price).toFixed(2)}` : 'No especificado'}
                 </p>
@@ -523,10 +535,6 @@ function BookDetails() {
                 <div>
                   <p className="text-xs text-slate-500">Idioma</p>
                   <p className="text-sm text-slate-800">{book.language || book.idioma || 'No especificado'}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-slate-500">Estado</p>
-                  <p className="text-sm text-slate-800">{book.estado || book.condition || 'No especificado'}</p>
                 </div>
               </div>
             </div>

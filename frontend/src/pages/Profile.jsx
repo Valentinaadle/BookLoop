@@ -452,7 +452,7 @@ function Profile() {
                   </tbody>
                 </table>
                 {showDeleteUserModal && (
-                  <div className="modal-overlay">
+                  <div className="modal-overlay profile-modal">
                     <div className="modal-content">
                       <h3>¿Estás seguro que quieres desactivar este usuario?</h3>
                       <div className="modal-actions">
@@ -592,7 +592,7 @@ function Profile() {
               className={`profile-main-tab${activeTab === 'favoritos' ? ' active' : ''}`}
               onClick={() => setActiveTab('favoritos')}
             >
-              Wishlist
+              Favoritos
             </button>
           </div>
           <div className="profile-main-content">
@@ -720,7 +720,6 @@ function Profile() {
                 </div>
               ) : (
                 <>
-                  <h3 className="profile-main-section-title">Wishlist</h3>
                   <div className="profile-main-books-grid">
                     {favorites.map(book => (
                       <BookCard
@@ -783,7 +782,7 @@ function Profile() {
       {/* Modals condicionales envueltos en un fragmento para evitar error de JSX adyacente */}
       <>
         {editMode && (
-          <div className="modal-overlay">
+          <div className="modal-overlay profile-modal">
             <div className="modal-content edit-profile-modal-minimal">
               <form onSubmit={handleSave}>
                 <div className="edit-profile-avatar-section">

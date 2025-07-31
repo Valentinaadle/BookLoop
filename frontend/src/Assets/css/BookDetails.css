@@ -58,7 +58,7 @@ h1.text-4xl {
 
 /* Author, Seller, and Price styling */
 .lg\:col-span-1 .text-slate-700 {
-  font-size: 0.9rem !important;
+  font-size: 1rem !important;
   color: #6c757d !important;
 }
 .lg\:col-span-1 .text-slate-800 {
@@ -67,8 +67,8 @@ h1.text-4xl {
 }
 .lg\:col-span-1 .text-2xl.font-bold { /* Price */
   font-family: 'Inter', serif !important;
-  font-size: 1.85rem !important;
-  font-weight: 700 !important;
+  font-size: 2rem !important;
+  font-weight: 550 !important;
   color: #1f2d3d !important;
   margin-top: 16px !important;
 }
@@ -212,6 +212,29 @@ button.bg-sky-600:hover {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  /* Improve title appearance on mobile */
+  .book-details-title {
+    font-size: 2.2rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.2 !important;
+    width: 100% !important;
+  }
+
+  /* Add visual connection between title and content */
+  .book-details-header-row {
+    margin-bottom: 2rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 2px solid #e9ecef !important;
+  }
+
+  /* Improve button layout on mobile */
+  .book-details-title-row > div {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
   }
 }
 

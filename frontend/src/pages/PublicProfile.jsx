@@ -253,12 +253,6 @@ function PublicProfile() {
             </div>
           </div>
 
-          <div className="solicitud-title">
-            {activeTab === 'publicados' && 'Libros Publicados'}
-            {activeTab === 'vendidos' && 'Libros Vendidos'}
-            {activeTab === 'resenas' && 'Reseñas'}
-          </div>
-
           {activeTab === 'publicados' && (
             <div className="profile-main-books-grid">
               {books.filter(book => book.status === 'activo' || !book.status).length === 0 ? (
@@ -322,11 +316,20 @@ function PublicProfile() {
                 <>
                   {reviews.length === 0 ? (
                     <div className="profile-main-empty-card">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-square profile-icon" aria-hidden="true">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star profile-icon" aria-hidden="true">
+                        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
                       </svg>
                       <h3>No hay reseñas.</h3>
                       <p className="profile-main-empty-desc">Cuando alguien deje una reseña, aparecerá aquí.</p>
+                                             {canReview && (
+                         <button
+                           className="submit-btn agregar-resena-btn"
+                           onClick={() => setShowReviewModal(true)}
+                           style={{ marginTop: '8px' }}
+                         >
+                           + Agregar reseña
+                         </button>
+                       )}
                     </div>
                   ) : (
                     <div className="reviews-tailwind-list">
@@ -431,37 +434,29 @@ function PublicProfile() {
                       })}
                     </div>
                   )}
-                  {canReview && (
-  <>
-    <button
-      className="submit-btn agregar-resena-btn"
-      onClick={() => setShowReviewModal(true)}
-    >
-      + Agregar reseña
-    </button>
-    {showReviewModal && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" style={{fontFamily: 'Inter, sans-serif'}}>
-        <div className="bg-white rounded-2xl shadow-lg max-w-lg w-full p-6 relative animate-fade-in" style={{fontFamily: 'Inter, sans-serif'}}>
-          <button
-            className="absolute top-3 right-3 text-[#6b7580] text-2xl font-bold hover:text-[#131416]"
-            onClick={() => setShowReviewModal(false)}
-            aria-label="Cerrar"
-          >
-            ×
-          </button>
-          <h2 className="text-lg font-bold text-center mb-2 nueva-resena-heading">Nueva Reseña</h2>
-          <form className="flex flex-col gap-2" onSubmit={handleSubmitReview} style={{width: '100%'}}>
-            <div className="form-group-minimal">
-              <label className="block text-[#22223b] text-sm mb-1 font-semibold">Libro:</label>
-              <select
-                className="form-input-minimal"
-                name="book_id"
-                value={newReview.book_id}
-                onChange={e => setNewReview(r => ({ ...r, book_id: e.target.value }))}
-                required
-              >
-                <option value="">Seleccionar</option>
-                {books
+                  {canReview && showReviewModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" style={{fontFamily: 'Inter, sans-serif'}}>
+                      <div className="bg-white rounded-2xl shadow-lg max-w-lg w-full p-6 relative animate-fade-in" style={{fontFamily: 'Inter, sans-serif'}}>
+                        <button
+                          className="absolute top-3 right-3 text-[#6b7580] text-2xl font-bold hover:text-[#131416]"
+                          onClick={() => setShowReviewModal(false)}
+                          aria-label="Cerrar"
+                        >
+                          ×
+                        </button>
+                        <h2 className="text-lg font-bold text-center mb-2 nueva-resena-heading">Nueva Reseña</h2>
+                        <form className="flex flex-col gap-2" onSubmit={handleSubmitReview} style={{width: '100%'}}>
+                          <div className="form-group-minimal">
+                            <label className="block text-[#22223b] text-sm mb-1 font-semibold">Libro:</label>
+                            <select
+                              className="form-input-minimal"
+                              name="book_id"
+                              value={newReview.book_id}
+                              onChange={e => setNewReview(r => ({ ...r, book_id: e.target.value }))}
+                              required
+                            >
+                              <option value="">Seleccionar</option>
+                              {books
   .filter(book => {
     // Solo mostrar libros vendidos
     const vendido = book.status === 'vendido' || book.estado === 'vendido';
@@ -472,63 +467,61 @@ function PublicProfile() {
   .map(book => (
     <option key={book.book_id} value={book.book_id}>{book.titulo || book.title || 'Sin título'}</option>
   ))}
-              </select>
-            </div>
-            <div className="form-group-minimal">
-              <label className="block text-[#22223b] text-sm mb-1 font-semibold">Calificación experiencia:</label>
-              <div className="flex gap-1">
-                {[1,2,3,4,5].map(n => (
-                  <span
-                    key={n}
-                    onClick={() => setNewReview(r => ({ ...r, experience_rate: n }))}
-                    className={`cursor-pointer text-2xl ${newReview.experience_rate >= n ? 'text-[#131416]' : 'text-[#dee0e3]'}`}
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="form-group-minimal">
-              <label className="block text-[#22223b] text-sm mb-1 font-semibold">Calificación vendedor:</label>
-              <div className="flex gap-1">
-                {[1,2,3,4,5].map(n => (
-                  <span
-                    key={n}
-                    onClick={() => setNewReview(r => ({ ...r, seller_rate: n }))}
-                    className={`cursor-pointer text-2xl ${newReview.seller_rate >= n ? 'text-[#131416]' : 'text-[#dee0e3]'}`}
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="form-group-minimal">
-              <label className="block text-[#22223b] text-sm mb-1 font-semibold">Comentario:</label>
-              <textarea
-                name="comment"
-                value={newReview.comment}
-                onChange={e => setNewReview(r => ({ ...r, comment: e.target.value }))}
-                required
-                maxLength={500}
-                placeholder="Escribe tu reseña"
-                className="form-input-minimal min-h-[90px] text-base"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={reviewSubmitting}
-              className="save-btn-minimal mt-2"
-              style={{width: '100%'}}
-            >
-              {reviewSubmitting ? 'Enviando...' : 'Enviar reseña'}
-            </button>
-            {reviewSubmitError && <div className="review-error text-red-600 text-sm mt-2">{reviewSubmitError}</div>}
-          </form>
-        </div>
-      </div>
-    )}
-  </>
-)}
+                            </select>
+                          </div>
+                          <div className="form-group-minimal">
+                            <label className="block text-[#22223b] text-sm mb-1 font-semibold">Calificación experiencia:</label>
+                            <div className="flex gap-1">
+                              {[1,2,3,4,5].map(n => (
+                                <span
+                                  key={n}
+                                  onClick={() => setNewReview(r => ({ ...r, experience_rate: n }))}
+                                  className={`cursor-pointer text-2xl ${newReview.experience_rate >= n ? 'text-[#131416]' : 'text-[#dee0e3]'}`}
+                                >
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="form-group-minimal">
+                            <label className="block text-[#22223b] text-sm mb-1 font-semibold">Calificación vendedor:</label>
+                            <div className="flex gap-1">
+                              {[1,2,3,4,5].map(n => (
+                                <span
+                                  key={n}
+                                  onClick={() => setNewReview(r => ({ ...r, seller_rate: n }))}
+                                  className={`cursor-pointer text-2xl ${newReview.seller_rate >= n ? 'text-[#131416]' : 'text-[#dee0e3]'}`}
+                                >
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="form-group-minimal">
+                            <label className="block text-[#22223b] text-sm mb-1 font-semibold">Comentario:</label>
+                            <textarea
+                              name="comment"
+                              value={newReview.comment}
+                              onChange={e => setNewReview(r => ({ ...r, comment: e.target.value }))}
+                              required
+                              maxLength={500}
+                              placeholder="Escribe tu reseña"
+                              className="form-input-minimal min-h-[90px] text-base"
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            disabled={reviewSubmitting}
+                            className="save-btn-minimal mt-2"
+                            style={{width: '100%'}}
+                          >
+                            {reviewSubmitting ? 'Enviando...' : 'Enviar reseña'}
+                          </button>
+                          {reviewSubmitError && <div className="review-error text-red-600 text-sm mt-2">{reviewSubmitError}</div>}
+                        </form>
+                      </div>
+                    </div>
+                  )}
                 </> 
               )}
             </div>

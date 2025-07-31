@@ -122,7 +122,7 @@
 .filter-checkbox {
   width: 16px;
   height: 16px;
-  accent-color: #394B60;
+  accent-color: #1f2d3d;
   cursor: pointer;
 }
 
@@ -163,7 +163,7 @@
 }
 
 .desktop-filters .price-input:focus {
-  border-color: #394B60;
+  border-color: #1f2d3d;
   box-shadow: 0 0 0 3px rgba(57, 75, 96, 0.1);
   background: #fff;
 }
@@ -201,6 +201,11 @@
   }
 }
 
+/* Estilos para checkboxes del filtro móvil */
+.mobile-filters input[type="checkbox"] {
+  accent-color: #1f2d3d !important;
+}
+
 /* Animaciones suaves */
 .filter-content {
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
@@ -209,7 +214,7 @@
 
 /* Estados activos */
 .filter-checkbox:checked + .filter-label {
-  color: #394B60;
+  color: #1f2d3d;
   font-weight: 500;
 }
 
