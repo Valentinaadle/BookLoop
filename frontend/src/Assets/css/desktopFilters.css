@@ -194,6 +194,13 @@
   }
 }
 
+/* Ajustes para pantallas grandes */
+@media (min-width: 1024px) {
+  .sort-select {
+    margin-left: auto !important;
+  }
+}
+
 /* Animaciones suaves */
 .filter-content {
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
