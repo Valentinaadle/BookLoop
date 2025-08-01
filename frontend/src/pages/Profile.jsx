@@ -11,6 +11,7 @@ import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 import BookCard from '../components/BookCard';
 import { useFavorites } from '../context/FavoritesContext';
 import { Heart, Star, Plus, Edit3, BookOpen, ShoppingBag, MessageSquare, Eye, Share2, Grid, List } from "lucide-react";
+import ConfirmModal from '../components/ConfirmModal';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -451,17 +452,13 @@ function Profile() {
                     ))}
                   </tbody>
                 </table>
-                {showDeleteUserModal && (
-                  <div className="modal-overlay profile-modal">
-                    <div className="modal-content">
-                      <h3>¿Estás seguro que quieres desactivar este usuario?</h3>
-                      <div className="modal-actions">
-                        <button onClick={handleCancelDeleteUser} className="cancel-button">Cancelar</button>
-                        <button onClick={() => handleDeleteUser(deletingUserId)} className="delete-button" autoFocus>Desactivar</button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <ConfirmModal
+                  open={showDeleteUserModal}
+                  title="Desactivar usuario"
+                  message="¿Estás seguro que deseas desactivar este usuario? Esta acción no se puede deshacer."
+                  onConfirm={() => handleDeleteUser(deletingUserId)}
+                  onCancel={() => setShowDeleteUserModal(false)}
+                />
               </>
             )}
           </div>
@@ -610,6 +607,7 @@ function Profile() {
                 </div>
               ) : (
                 <div style={{padding: '0 0.5rem'}}>
+                
                   <div className="solicitud-title">Solicitudes de Compra</div>
                   {solicitudes.map((sol) => (
                     <div className="solicitud-card" key={sol.id}>
@@ -751,7 +749,7 @@ function Profile() {
               </div>
             ) : (
               <>
-                <h3 className="profile-main-section-title">{activeTab === 'publicados' ? 'Libros Activos' : 'Libros Vendidos'}</h3>
+                
                 <div className="profile-main-books-grid">
                   {filteredBooks.map(book => (
                     <BookCard
@@ -935,6 +933,14 @@ function Profile() {
             </div>
           </div>
         )}
+        {/* Modal de confirmación para desactivar usuario (admin) con estilos unificados */}
+        <ConfirmModal
+          open={showDeleteUserModal}
+          title="Desactivar usuario"
+          message="¿Estás seguro que deseas desactivar este usuario? Esta acción no se puede deshacer."
+          onConfirm={() => handleDeleteUser(deletingUserId)}
+          onCancel={() => setShowDeleteUserModal(false)}
+        />
       </>
       <Footer />
     </>

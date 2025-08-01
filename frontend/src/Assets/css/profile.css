@@ -88,7 +88,7 @@ body {
   justify-content: center;
 }
 .delete-button {
-  background: #d32f2f;
+  background: rgb(19, 20, 22);
   color: #fff;
   border: none;
   border-radius: 7px;

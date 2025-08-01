@@ -17,13 +17,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 0.6rem;
 }
 
 .filters-header h3 {
   margin: 0;
-  font-size: 22px;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #333;
   font-family: 'Playfair Display', serif;
@@ -63,6 +63,7 @@
 
 .filter-header span {
   font-weight: 600;
+  font-size: 1rem;
 }
 
 .filter-content {
@@ -80,8 +81,6 @@
 
 .filter-options {
   padding: 10px 0;
-  max-height: 200px;
-  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #c1c1c1 #f1f1f1;
 }
@@ -130,6 +129,7 @@
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
+  font-size: 1rem;
 }
 
 .desktop-filters .price-range {
@@ -187,12 +187,7 @@
   }
 }
 
-/* Ajustes para filtro móvil */
-@media (max-width: 1023px) {
-  .mobile-filters {
-    margin-left: 10px;
-  }
-}
+/* Ajustes para filtro móvil *
 
 /* Ajustes para pantallas grandes */
 @media (min-width: 1024px) {

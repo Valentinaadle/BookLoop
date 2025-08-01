@@ -249,7 +249,7 @@ const Comprar = () => {
               zIndex: 99999,
               padding: '20px',
               paddingBottom: '40px',
-              overflowY: 'auto',
+              overflowY: 'scroll',
               boxShadow: '2px 0 15px rgba(0,0,0,0.3)',
               display: 'flex',
               flexDirection: 'column'
@@ -315,7 +315,7 @@ const Comprar = () => {
               </h3>
               <div style={{ 
                 maxHeight: '200px', 
-                overflowY: 'auto',
+                overflowY: 'scroll',
                 border: '1px solid #e0e0e0',
                 borderRadius: '6px',
                 padding: '10px'
@@ -535,8 +535,8 @@ const Comprar = () => {
               className="block lg:hidden filter-sort-button mobile-filters"
               style={{
                 backgroundColor: 'transparent',
-                color: 'var(--primary-color, #000000)',
-                border: '1px solid var(--primary-color, #000000)',
+                color: '#333',
+                border: '1.5px solid #bdbdbd',
                 borderRadius: '20px',
                 padding: '0.5rem 1rem',
                 fontSize: '14px',

@@ -5,7 +5,7 @@
   align-items: flex-start;
   max-width: 1200px;
   margin: auto;
-  padding: 40px 30px 30px 0px;
+  padding-top: 40px;
   gap: 20px;
 }
 
@@ -78,8 +78,6 @@
   border: 1.5px solid #bdbdbd;
   border-radius: 18px;
   padding: 7px 14px;
-  width: 70px;
-  margin: 0 5px;
   font-size: 0.98rem;
   outline: none;
   transition: border-color 0.2s;

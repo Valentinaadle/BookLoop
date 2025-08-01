@@ -130,6 +130,7 @@ const getBookById = async (req, res) => {
     }
     res.json({
       ...book,
+      pageCount: book.pagecount, // <-- Agrega esto para el frontend
       coverimageurl,
       images: images.map(img => img.image_url),
       vendedor: book.seller ? `${book.seller.nombre || ''} ${book.seller.apellido || ''}`.trim() || book.seller.username || book.seller.email : 'No especificado',
@@ -258,8 +259,10 @@ const createBook = async (req, res) => {
     // Guardar todas las imágenes
     allImages = await Promise.all(imagePromises);
 
-    // Actualiza la portada en el libro
-    await Book.updateBookCover(book.book_id, coverUrl);
+    // Actualiza la portada en el libro al crear
+    if (coverUrl) {
+      await Book.updateBookCover(book.book_id, coverUrl);
+    }
 
     // Devuelve el libro con todas las imágenes y la portada correcta
     res.status(201).json({ ...book, coverimageurl: coverUrl, images: allImages.map(img => img.image_url) });

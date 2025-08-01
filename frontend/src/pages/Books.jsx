@@ -104,22 +104,20 @@ const Books = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este libro?')) {
-      try {
-        setError(null);
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}`, {
-          method: 'DELETE',
-        });
+    try {
+      setError(null);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}`, {
+        method: 'DELETE',
+      });
 
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-
-        setBooks(prevBooks => prevBooks.filter(book => book.book_id !== id));
-      } catch (error) {
-        console.error('Error deleting book:', error);
-        setError('Error al eliminar el libro. Por favor, intenta de nuevo.');
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
+
+      setBooks(prevBooks => prevBooks.filter(book => book.book_id !== id));
+    } catch (error) {
+      console.error('Error deleting book:', error);
+      setError('Error al eliminar el libro. Por favor, intenta de nuevo.');
     }
   };
 

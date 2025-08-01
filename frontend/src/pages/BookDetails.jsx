@@ -198,32 +198,30 @@ function BookDetails() {
       console.error('ID de libro no encontrado', { book, id });
       return;
     }
-    if (window.confirm('¿Estás seguro que deseas eliminar este libro?')) {
-      try {
-        console.log('Intentando borrar libro con ID:', bookId);
-        const response = await fetch(`${API_URL}/api/books/${bookId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        if (!response.ok) {
-          let backendError = '';
-          try {
-            const data = await response.json();
-            backendError = data.message || data.error || JSON.stringify(data);
-          } catch (e) {
-            backendError = response.statusText;
-          }
-          console.error('Error backend al borrar:', backendError);
-          throw new Error(backendError || 'Error al eliminar el libro');
+    try {
+      console.log('Intentando borrar libro con ID:', bookId);
+      const response = await fetch(`${API_URL}/api/books/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
         }
-        setSuccess('Libro eliminado correctamente');
-        setTimeout(() => navigate('/comprar'), 1500);
-      } catch (err) {
-        setError('Error al eliminar el libro: ' + err.message);
-        console.error('Error al eliminar el libro:', err);
+      });
+      if (!response.ok) {
+        let backendError = '';
+        try {
+          const data = await response.json();
+          backendError = data.message || data.error || JSON.stringify(data);
+        } catch (e) {
+          backendError = response.statusText;
+        }
+        console.error('Error backend al borrar:', backendError);
+        throw new Error(backendError || 'Error al eliminar el libro');
       }
+      setSuccess('Libro eliminado correctamente');
+      setTimeout(() => navigate('/comprar'), 1500);
+    } catch (err) {
+      setError('Error al eliminar el libro: ' + err.message);
+      console.error('Error al eliminar el libro:', err);
     }
   };
 
@@ -590,21 +588,24 @@ function BookDetails() {
       {/* Delete Warning Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6 border-t-8 border-red-600 relative animate-fade-in">
-            <div className="flex items-center mb-4">
-              <svg className="w-7 h-7 text-red-600 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
-              <h3 className="text-xl font-bold text-red-700">Confirmar eliminación</h3>
-            </div>
-            <p className="text-slate-700 mb-5">¿Estás seguro que deseas <span className='font-semibold text-red-700'>eliminar</span> este libro? Esta acción no se puede deshacer.</p>
+          <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6" style={{ border: '1px solid rgb(19, 20, 22)', color: 'rgb(19, 20, 22)' }}>
+            <h3 className="text-xl font-bold mb-4" style={{ color: 'rgb(19, 20, 22)', textAlign: 'center' }}>Confirmar eliminación</h3>
+            <p className="mb-5" style={{ color: 'rgb(19, 20, 22)', textAlign: 'center' }}>¿Estás seguro que deseas eliminar este libro? Esta acción no se puede deshacer.</p>
             <div className="flex gap-3">
               <button
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-md shadow transition-colors text-sm font-semibold"
+                className="flex-1"
+                style={{ color: '#fff', background: 'rgb(19, 20, 22)', border: '1px solid rgb(19, 20, 22)', padding: '8px 20px', borderRadius: '6px', fontWeight: 600, transition: 'background 0.2s' }}
+                onMouseOver={e => (e.currentTarget.style.background = '#23262a')}
+                onMouseOut={e => (e.currentTarget.style.background = 'rgb(19, 20, 22)')}
                 onClick={() => { setShowDeleteModal(false); handleDeleteBook(); }}
               >
                 Sí, eliminar
               </button>
               <button
-                className="flex-1 bg-slate-100 text-slate-800 py-2 px-3 rounded-md hover:bg-slate-200 transition-colors text-sm"
+                className="flex-1"
+                style={{ color: 'rgb(19, 20, 22)', border: '1px solid rgb(19, 20, 22)', background: 'transparent', padding: '8px 20px', borderRadius: '6px', fontWeight: 500, transition: 'background 0.2s' }}
+                onMouseOver={e => (e.currentTarget.style.background = '#f2f2f2')}
+                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
                 onClick={() => setShowDeleteModal(false)}
               >
                 Cancelar

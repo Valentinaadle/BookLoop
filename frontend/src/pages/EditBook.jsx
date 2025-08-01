@@ -52,7 +52,7 @@ function EditBook() {
           price: data.price || '',
           condition: data.condition || '',
           language: data.language || '',
-          pageCount: data.pageCount || '',
+          pageCount: data.pageCount || data.paginas || data.pages || '',
           publication_date: data.publication_date || '',
           publisher: data.publisher || '',
           category_id: data.category_id || data.Category?.category_id || ''
@@ -214,7 +214,8 @@ function EditBook() {
         deletedImageIds,
         coverIndex,
         coverimageurl: finalImages[coverIndex] || finalImages[0] || null,
-        pagecount: form.pageCount,
+        // pageCount debe ir como pageCount (camelCase) para el backend
+        pageCount: form.pageCount,
       };
       const response = await fetch(`${API_URL}/api/books/${id}`, {
         method: 'PUT',
@@ -229,7 +230,7 @@ function EditBook() {
       setNewImages([]);
       setDeletedImageIds([]);
       setTimeout(() => {
-        navigate('/comprar');
+        navigate(`/book/${id}`); // Redirige al detalle del libro editado
       }, 800);
     } catch (err) {
       setError('Error al actualizar el libro: ' + err.message);
@@ -250,7 +251,7 @@ function EditBook() {
           
           {error && <div className="error-message-refined">{error}</div>}
           {success && <div className="error-message-refined" style={{color:'#27ae60',background:'#eafaf1',border:'1px solid #b2f2bb'}}>{success}</div>}
-          <form className="edit-book-form" onSubmit={handleSubmit}>
+          <form className="sell-form" onSubmit={handleSubmit}>
             <div style={{textAlign:'center',marginBottom:16}}>
               <div style={{display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center'}}>
                 {[...bookImages.filter(img => !deletedImageIds.includes(img.image_id)).map(img => ({
@@ -276,79 +277,72 @@ function EditBook() {
                   accept="image/*"
                   multiple
                   onChange={handleAddImages}
-                  className="input-refined"
+                  className="form-group"
                   style={{marginBottom:8,maxWidth:220}}
                 />
               </label>
             </div>
-            <div className="form-group-refined">
-              <label>
-                <i className="fas fa-book"></i> Título
+            <div className="form-group">
+              <label className="form-group label">
+                Título </label>
                 <input
                   type="text"
                   name="title"
                   value={form.title}
                   onChange={handleChange}
-                  required
-                  className="input-refined"
                   placeholder="Título del libro"
                 />
-              </label>
+             
             </div>
-            <div className="form-group-refined">
-              <label>
-                <i className="fas fa-user"></i> Autores
+            <div className="form-group">
+              <label className='form-group label'>
+                 Autores</label>
                 <input
                   type="text"
                   name="authors"
                   value={form.authors}
                   onChange={handleChange}
-                  required
-                  className="input-refined"
                   placeholder="Autores (separados por comas)"
                 />
-              </label>
+              
             </div>
-            <div className="form-group-refined">
-              <label>
-                <i className="fas fa-align-left"></i> Descripción
+            <div className="form-group">
+              <label className='form-group label'>
+                Descripción</label> 
                 <textarea
                   name="description"
                   value={form.description}
                   onChange={handleChange}
-                  className="input-refined"
                   placeholder="Descripción del libro"
                   rows="4"
                 />
-              </label>
+              
             </div>
             <div className="form-row">
-              <div className="form-group-refined">
-                <label>
-                  <i className="fas fa-dollar-sign"></i> Precio
+              <div className="form-group">
+                  <label className='form-group label'>
+                  Precio</label>
                   <input
-                    type="number"
+                    type="number"   
                     name="price"
                     value={form.price}
                     onChange={handleChange}
-                    required
-                    className="input-refined"
                     placeholder="Precio del libro"
                     min="0"
                     step="0.01"
                   />
-                </label>
+                
               </div>
 
-              <div className="form-group-refined">
-                <label>
-                  <i className="fas fa-bookmark"></i> Estado
+              <div className="form-group">
+                <label className='form-group label'>
+                Estado </label>
                   <select
                     name="condition"
                     value={form.condition}
                     onChange={handleChange}
                     required
-                    className="input-refined"
+                    className="form-group"
                   >
                     <option value="">Seleccionar estado</option>
                     <option value="Nuevo">Nuevo</option>
@@ -356,86 +350,79 @@ function EditBook() {
                     <option value="Buen estado">Buen estado</option>
                     <option value="Aceptable">Aceptable</option>
                   </select>
-                </label>
               </div>
             </div>
 
             <div className="form-row">
-              <div className="form-group-refined">
-                <label>
-                  <i className="fas fa-language"></i> Idioma
+              <div className="form-group">
+                <label className='form-group label'>
+                   Idioma</label>
                   <input
                     type="text"
                     name="language"
                     value={form.language}
                     onChange={handleChange}
-                    className="input-refined"
                     placeholder="Idioma del libro"
                   />
-                </label>
               </div>
 
-              <div className="form-group-refined">
-                <label>
-                  <i className="fas fa-file-alt"></i> Número de páginas
+              <div className="form-group">
+              <label className='form-group label'> Número de páginas</label>
                   <input
                     type="number"
                     name="pageCount"
                     value={form.pageCount}
                     onChange={handleChange}
-                    className="input-refined"
+                    className="form-group"
                     placeholder="Número de páginas"
                     min="0"
                   />
-                </label>
               </div>
             </div>
 
             <div className="form-row">
-              <div className="form-group-refined">
-                <label>
-                  <i className="fas fa-calendar"></i> Fecha de publicación
+              <div className="form-group">
+              <label className='form-group label'>
+                  Fecha de publicación</label>
                   <input
-                    type="date"
+                    type="text"
                     name="publication_date"
                     value={form.publication_date}
                     onChange={handleChange}
-                    className="input-refined"
+                    className="form-group"
                   />
-                </label>
               </div>
 
-              <div className="form-group-refined">
-                <label>
-                  <i className="fas fa-building"></i> Editorial
+              <div className="form-group">
+              <label className='form-group label'>
+                   Editorial</label>
                   <input
                     type="text"
                     name="publisher"
                     value={form.publisher}
                     onChange={handleChange}
-                    className="input-refined"
+                    className="form-group"
                     placeholder="Editorial"
                   />
-                </label>
               </div>
             </div>
 
-            <div className="form-group-refined">
-              <label>
-                <i className="fas fa-layer-group"></i> Categoría
+            <div className="form-group">
+              <label className='form-group label'>
+                Categoría</label>
                 <select
                   name="category_id"
                   value={form.category_id}
                   onChange={handleChange}
                   required
-                  className="input-refined"
+                  className="form-group"
                 >
                   <option value="">Selecciona una categoría</option>
                   {categories.map(cat => (
                     <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
                   ))}
                 </select>
-              </label>
+              
             </div>
 
             <div className="form-actions">

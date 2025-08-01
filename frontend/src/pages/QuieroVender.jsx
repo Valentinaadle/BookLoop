@@ -8,22 +8,22 @@ import { useNavigate } from 'react-router-dom';
 const pasos = [
   {
     titulo: 'Registrate en BookLoop.',
-    descripcion: 'Creá tu cuenta y luego iniciá sesión para poder empezar a vender tu libro.',
+    descripcion: 'Crea tu cuenta y luego inicia sesión para poder iniciar la venta de tu libro.',
     icono: '/icons/register.jpg'
   },
   {
-    titulo: 'Ingresá el código ISBN',
-    descripcion: 'Para encontrar el código, buscá en la tapa del libro, junto al código de barras.',
+    titulo: 'Ingresa el codigo ISBN',
+    descripcion: 'Para encontrar el codigo, busca en la tapa del libro, junto al codigo de barras',
     icono: '/icons/images.png'
   },
   {
-    titulo: 'Seleccioná un estado',
-    descripcion: 'Seleccioná el estado de tu libro, desplegá la lista y elegí el estado adecuado.',
+    titulo: 'Selecciona un estado',
+    descripcion: 'Selecciona el estado de tu libro, desplega la lista y elegi el estado indicado.',
     icono: '/icons/estado.png'
   },
   {
-    titulo: 'Elegí un precio razonable',
-    descripcion: 'Por último, poné un precio adecuado a tu libro y publicalo!',
+    titulo: 'Elegi un precio razonable',
+    descripcion: 'Por ultimo, pone un precio adecuado a tu libro y publicalo!',
     icono: '/icons/precio.webp'
   }
 ];
@@ -48,6 +48,7 @@ export default function QuieroVender() {
   const [success, setSuccess] = useState(null);
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [coverIndex, setCoverIndex] = useState(0);
   const { user } = useAuth();
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -62,10 +63,11 @@ export default function QuieroVender() {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages(files);
-    // Previsualización
-    const previews = files.map(file => URL.createObjectURL(file));
-    setImagePreviews(previews);
+    // Concatenar nuevas imágenes con las ya existentes
+    setImages(prev => [...prev, ...files]);
+    // Concatenar previsualizaciones nuevas con las anteriores
+    const newPreviews = files.map(file => URL.createObjectURL(file));
+    setImagePreviews(prev => [...prev, ...newPreviews]);
   };
 
   // Buscar datos del libro por ISBN en Google Books
@@ -122,27 +124,32 @@ export default function QuieroVender() {
     setError(null);
     setSuccess(null);
     try {
-      // Validación: debe haber al menos una imagen antes de crear el libro
-      if (!images || images.length === 0) {
-        setError('Debes agregar por lo menos una imagen');
+      // Validación: debe haber al menos una imagen o una URL de portada
+      if ((!images || images.length === 0) && !formData.imagen) {
+        setError('Debes agregar al menos una imagen o una URL de portada');
         setLoading(false);
         return;
       }
       // Subir imágenes al backend y obtener las URLs
-      const imageUrls = [];
-      for (const file of images) {
-        const formDataImg = new FormData();
-        formDataImg.append('image', file);
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/books/upload-image`, {
-          method: 'POST',
-          body: formDataImg
-        });
-        if (!res.ok) throw new Error('Error al subir la imagen');
-        const data = await res.json();
-        // SOPORTE MULTI-BACKEND: usar data.url o data.imageurl según cuál exista
-        const url = data.url || data.imageurl;
-        if (!url) throw new Error('No se pudo obtener la URL pública de la imagen');
-        imageUrls.push(url);
+      let imageUrls = [];
+      if (images && images.length > 0) {
+        for (const file of images) {
+          const formDataImg = new FormData();
+          formDataImg.append('image', file);
+          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/books/upload-image`, {
+            method: 'POST',
+            body: formDataImg
+          });
+          if (!res.ok) throw new Error('Error al subir la imagen');
+          const data = await res.json();
+          const url = data.url || data.imageurl;
+          if (!url) throw new Error('No se pudo obtener la URL pública de la imagen');
+          imageUrls.push(url);
+        }
+      }
+      // Si no hay imágenes subidas pero sí URL, usar la URL como imagen principal
+      if (imageUrls.length === 0 && formData.imagen) {
+        imageUrls = [formData.imagen];
       }
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
         method: 'POST',
@@ -151,7 +158,7 @@ export default function QuieroVender() {
           title: formData.titulo,
           authors: formData.autor.split(',').map(a => a.trim()),
           description: formData.descripcion,
-          imageUrl: imageUrls[0] || '',
+          imageUrl: imageUrls[coverIndex] || imageUrls[0] || '', // portada
           images: imageUrls,
           isbn_code: formData.isbn,
           language: formData.idioma,
@@ -161,7 +168,8 @@ export default function QuieroVender() {
           condition: formData.estado,
           category_id: formData.categoria,
           seller_id: user?.id,
-          publisher: formData.editorial
+          publisher: formData.editorial,
+          coverimageurl: imageUrls[coverIndex] || imageUrls[0] || '' // <- para backend
         })
       });
       if (!response.ok) throw new Error('Error al crear el libro');
@@ -276,6 +284,7 @@ export default function QuieroVender() {
                   <option value="Como nuevo">Como nuevo</option>
                   <option value="Buen estado">Buen estado</option>
                   <option value="Aceptable">Aceptable</option>
+                  <option value="Usado">Usado</option>
                 </select>
               </div>
               <div className="form-group">
@@ -343,19 +352,19 @@ export default function QuieroVender() {
             </div>
             
             <div className="form-group">
-              <label htmlFor="imagen">URL de la imagen de portada</label>
+              <label htmlFor="imagen">URL de la portada</label>
               <input
                 type="text"
                 id="imagen"
                 name="imagen"
-                placeholder="URL de la portada principal"
+                placeholder="URL de la portada"
                 value={formData.imagen}
                 onChange={handleChange}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="images">Imágenes adicionales del libro</label>
+              <label htmlFor="images">Imágenes del libro</label>
               <input
                 type="file"
                 id="images"
@@ -363,9 +372,19 @@ export default function QuieroVender() {
                 multiple
                 onChange={handleImageChange}
               />
-              <div className="image-previews">
-                {imagePreviews.map((preview, index) => (
-                  <img key={index} src={preview} alt="Previsualización" />
+              <div className="image-previews" style={{display:'flex',gap:10,flexWrap:'wrap',justifyContent:'center',marginTop:10}}>
+                {imagePreviews.map((preview, idx) => (
+                  <div key={idx} style={{position:'relative',display:'inline-block'}}>
+                    <img
+                      src={preview}
+                      alt={`Previsualización ${idx+1}`}
+                      style={{width:70,height:90,objectFit:'cover',border:coverIndex===idx?'2px solid #305681':'2px solid #e9ecef',borderRadius:8,boxShadow:coverIndex===idx?'0 0 8px #305681':'none'}}
+                      onClick={()=>setCoverIndex(idx)}
+                    />
+                    {coverIndex===idx ? (
+                      <span style={{position:'absolute',bottom:2,left:2,background:'#305681',color:'#fff',padding:'2px 6px',borderRadius:4,fontSize:11}}>Portada</span>
+                    ) : null}
+                  </div>
                 ))}
               </div>
             </div>
