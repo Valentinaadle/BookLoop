@@ -121,7 +121,7 @@ const BookCard = ({
             <p className="book-author-modern">de {autor}</p>
           ) : null}
           <div className="book-price-container-modern">
-            <span className="book-price-modern">{precio && !isNaN(parseFloat(precio)) ? `$${parseFloat(precio).toFixed(2)}` : 'Precio no disponible'}</span>
+            <span className="book-price-modern">{precio && !isNaN(parseFloat(precio)) ? `$${Number(precio).toLocaleString('es-AR')}` : 'Precio no disponible'}</span>
           </div>
           {showComprar && !showVerDetalles && (
             <div className="book-actions-modern">

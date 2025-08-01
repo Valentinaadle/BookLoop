@@ -16,3 +16,10 @@
   margin-bottom: 30px;
   font-size: 18px;
 } 
+
+@media (max-width: 768px) {
+  .search-page h1 {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+}
