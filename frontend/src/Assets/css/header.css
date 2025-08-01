@@ -58,6 +58,8 @@
   font-weight: 500;
   padding: 8px 0;
   transition: color 0.3s ease;
+  display: block;
+  text-align: center;
 }
 
 /* Subrayado animado */
