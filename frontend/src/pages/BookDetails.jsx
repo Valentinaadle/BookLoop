@@ -33,6 +33,7 @@ function BookDetails() {
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const [isBookFavorite, setIsBookFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
+  const [contactSuccess, setContactSuccess] = useState(false);
 
   const fetchBookDetails = useCallback(async () => {
     try {
@@ -114,9 +115,9 @@ function BookDetails() {
   };
 
   const handleConfirmContact = async () => {
-    setShowConfirmModal(false);
     setSending(true);
     setEmailStatus(null);
+    setContactSuccess(false); // Estado inicial
 
     try {
       const response = await fetch(`${API_URL}/api/books/notify-seller`, {
@@ -138,17 +139,26 @@ function BookDetails() {
         throw new Error(data.details || data.error || 'Error al enviar el email');
       }
 
+      // Éxito - Actualiza ambos estados
       setEmailStatus('¡Email enviado correctamente!');
-      setTimeout(() => {
-        setEmailStatus(null);
-      }, 2000);
+      setContactSuccess(true); // <-- Nuevo estado de éxito
+      
+     
+
     } catch (error) {
       console.error('Error completo:', error);
       setEmailStatus(`Error: ${error.message}`);
+      setContactSuccess(false); // <-- Asegura que no quede en true
+      
+      // Limpia el error después de 3 segundos
+      setTimeout(() => {
+        setEmailStatus(null);
+      }, 3000);
+      
     } finally {
       setSending(false);
     }
-  };
+};
 
   const handleUpdateBook = async (e) => {
     e.preventDefault();
@@ -550,40 +560,38 @@ function BookDetails() {
 
 
 
-      {/* Modal de contacto vendedor */}
       {showConfirmModal && !isOwner && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-4 max-w-sm w-full">
-            <h3 className="text-xl font-semibold text-slate-800 mb-3">Contactar al vendedor</h3>
-            <p className="text-slate-600 text-sm mb-6">¿Estás seguro de que deseas contactar al vendedor?</p>
-            <div className="flex gap-3">
-              <button
-                className="flex-1 bg-sky-600 text-white py-2 px-3 rounded-md hover:bg-sky-700 transition-colors text-sm"
-                onClick={handleConfirmContact}
-                disabled={sending}
-              >
-                {sending ? 'Enviando...' : 'Sí, contactar'}
+      <div className="modal-overlay">
+        <div className="modal-content">
+          {!contactSuccess ? (
+            <>
+              <h3>Contactar al vendedor</h3>
+              <p>¿Estás seguro de que deseas contactar al vendedor?</p>
+              <div className="modal-buttons">
+                <button 
+                  onClick={handleConfirmContact}
+                  disabled={sending}
+                >
+                  {sending ? 'Enviando...' : 'Sí, contactar'}
+                </button>
+                <button onClick={() => setShowConfirmModal(false)}>Cancelar</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3>¡Solicitud enviada!</h3>
+              <p>Se ha enviado la solicitud correctamente. Pronto el vendedor se comunicará contigo.</p>
+              <button onClick={() => {
+                setShowConfirmModal(false);
+                setContactSuccess(false);
+              }}>
+                Cerrar
               </button>
-              <button
-                className="flex-1 bg-slate-100 text-slate-800 py-2 px-3 rounded-md hover:bg-slate-200 transition-colors text-sm"
-                onClick={() => setShowConfirmModal(false)}
-                disabled={sending}
-              >
-                Cancelar
-              </button>
-            </div>
-            {emailStatus && (
-              <p className={`mt-3 p-2 rounded-md text-center text-sm ${
-                emailStatus.includes('Error') 
-                  ? 'bg-red-50 text-red-700' 
-                  : 'bg-green-50 text-green-700'
-              }`}>
-                {emailStatus}
-              </p>
-            )}
-          </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
+    )}
 
       {/* Delete Warning Modal */}
       {showDeleteModal && (

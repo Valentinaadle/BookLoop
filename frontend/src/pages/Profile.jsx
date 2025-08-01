@@ -886,8 +886,7 @@ function Profile() {
                           });
                         });
                     }} 
-                    className="cancel-btn-minimal"
-                  >
+                    className="cancel-btn-minimal">
                     Cancelar
                   </button>
                 </div>
