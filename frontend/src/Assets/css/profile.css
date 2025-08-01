@@ -1196,6 +1196,7 @@ body {
 .solicitud-card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: #f9fafb;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
@@ -1246,11 +1247,12 @@ body {
   color: #888;
 }
 .solicitud-contact-btn {
+  margin-left: auto;
   background: #f3f4f6;
   color: #222;
   border: 1.5px solid #cbd5e1;
   border-radius: 10px;
-  padding: 0.8rem 1.5rem;
+  padding: 0.5rem;
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
@@ -1277,7 +1279,6 @@ body {
     padding-left: 0;
   }
   .solicitud-contact-btn {
-    width: 100%;
     justify-content: center;
   }
 }

@@ -619,10 +619,10 @@ function Profile() {
                       />
                       <div className="solicitud-info">
                         <span className="solicitud-info-title">{sol.books?.title || 'Sin título'}</span>
-                        <span className="solicitud-info-precio">Precio: <b>${sol.books?.price || '---'}</b></span>
+                        <span className="solicitud-info-precio">Precio: <b>{sol.books?.price ? `$${Number(sol.books.price).toLocaleString('es-AR')}` : '---'}</b></span>
                         <span className="solicitud-info-user">Solicitado por: <Link to={`/usuario/${sol.users?.id || sol.users?.user_id || ''}`} className="solicitud-link">{sol.users?.nombre || sol.users?.username || 'Usuario'}</Link></span>
                       </div>
-                      <button className="solicitud-contact-btn" onClick={() => navigate(`/book/${sol.books?.book_id || sol.books?.id}`)}>Ver libro</button>
+                      <button className="solicitud-contact-btn" onClick={() => navigate(`/book/${sol.books?.book_id || sol.books?.id}`)}>Detalles</button>
                     </div>
                   ))}
                 </div>
