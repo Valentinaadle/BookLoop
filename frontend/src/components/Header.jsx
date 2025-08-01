@@ -9,14 +9,8 @@ import { FaSignOutAlt, FaHeart, FaSearch } from 'react-icons/fa';
 import { CgProfile } from "react-icons/cg";
 
 export default function Header() {
-  const [logoSrc, setLogoSrc] = useState(window.innerWidth <= 700 ? '/logo-solo.png' : '/4.png');
-  React.useEffect(() => {
-    const handleResize = () => {
-      setLogoSrc(window.innerWidth <= 480 ? '/logo-solo.png' : '/4.png');
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  // SIEMPRE usar el mismo logo en todos los tamaños
+  const [logoSrc] = useState('/4.png');
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);

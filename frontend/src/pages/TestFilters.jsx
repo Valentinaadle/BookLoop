@@ -85,11 +85,10 @@ const TestFilters = () => {
                 width: '100%',
                 backgroundColor: '#10B981',
                 color: 'white',
-                padding: '12px',
+                padding: '10px',
                 border: 'none',
                 borderRadius: '6px',
-                fontSize: '16px',
-                fontWeight: 'bold',
+                fontSize: '14px',
                 cursor: 'pointer'
               }}
             >

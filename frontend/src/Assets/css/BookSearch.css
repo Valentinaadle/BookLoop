@@ -182,6 +182,7 @@ html::-webkit-scrollbar,
 @media (max-width: 768px) {
   .book-search .books-grid {
     gap: 1rem;
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .book-search .search-input {

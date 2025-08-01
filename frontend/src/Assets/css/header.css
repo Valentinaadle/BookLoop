@@ -280,7 +280,7 @@
   .logo-icon {
     height: 32px;
     width: auto;
-    transform: scale(2.5);
+    transform: scale(4);
     margin-left: 2rem;
   }
 }

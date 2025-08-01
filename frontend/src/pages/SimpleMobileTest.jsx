@@ -242,12 +242,12 @@ const SimpleMobileTest = () => {
                 }}
                 style={{
                   width: '100%',
-                  padding: '12px',
+                  padding: '10px',
                   backgroundColor: '#10B981',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '14px',
                   fontWeight: 'bold',
                   cursor: 'pointer'
                 }}

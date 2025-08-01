@@ -472,13 +472,12 @@ const Comprar = () => {
                 }}
                 style={{
                   width: '100%',
-                  padding: '12px',
+                  padding: '10px',
+                  fontSize: '14px',
                   backgroundColor: '#353b5fff',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: 'bold',
                   cursor: 'pointer'
                 }}
               >
@@ -540,7 +539,6 @@ const Comprar = () => {
                 borderRadius: '20px',
                 padding: '0.5rem 1rem',
                 fontSize: '14px',
-                fontWeight: '500',
                 cursor: 'pointer',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.07)',
                 transition: 'all 0.2s ease-in-out',
