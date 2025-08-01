@@ -608,7 +608,7 @@ function Profile() {
               ) : (
                 <div style={{padding: '0 0.5rem'}}>
                 
-                  <div className="solicitud-title">Solicitudes de Compra</div>
+                  
                   {solicitudes.map((sol) => (
                     <div className="solicitud-card" key={sol.id}>
                       <img
