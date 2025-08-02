@@ -18,6 +18,27 @@ const DesktopFilters = ({
   },
   conditions = ["Nuevo", "Como Nuevo", "Buen Estado", "Aceptable"]
 }) => {
+  // Géneros por defecto si no hay categorías disponibles
+  const defaultGenres = [
+    "Novela",
+    "Cuento", 
+    "Poesía",
+    "Drama",
+    "Ciencia ficción",
+    "Fantasía",
+    "Misterio",
+    "Terror",
+    "Romance",
+    "Deportes",
+    "Realistas",
+    "Salud",
+    "Tecnología",
+    "Ciencias",
+    "Escolar"
+  ];
+
+  // Siempre usar los géneros por defecto para que coincidan con los filtros responsivos
+  const genresToShow = defaultGenres.map(name => ({ category_id: name, category_name: name }));
   const [collapsed, setCollapsed] = useState({
     genero: false,
     idioma: false,
@@ -42,11 +63,11 @@ const DesktopFilters = ({
           onClick={() => toggle('genero')}
         >
           <span>Género</span>
-          {collapsed.genero ? <FaChevronDown /> : <FaChevronUp />}
+                     {!collapsed.genero ? <FaChevronDown /> : <FaChevronUp />}
         </button>
-        <div className={`filter-content ${collapsed.genero ? 'collapsed' : ''}`}>
+                 <div className={`filter-content ${collapsed.genero ? 'collapsed' : ''}`}>
           <div className="filter-options">
-            {categories.map(category => (
+            {genresToShow.map(category => (
               <label key={category.category_id} className="filter-option">
                 <input
                   type="checkbox"
@@ -68,7 +89,7 @@ const DesktopFilters = ({
           onClick={() => toggle('idioma')}
         >
           <span>Idioma</span>
-          {collapsed.idioma ? <FaChevronDown /> : <FaChevronUp />}
+                     {!collapsed.idioma ? <FaChevronDown /> : <FaChevronUp />}
         </button>
         <div className={`filter-content ${collapsed.idioma ? 'collapsed' : ''}`}>
           <div className="filter-options">
@@ -94,7 +115,7 @@ const DesktopFilters = ({
           onClick={() => toggle('estado')}
         >
           <span>Estado</span>
-          {collapsed.estado ? <FaChevronDown /> : <FaChevronUp />}
+                     {!collapsed.estado ? <FaChevronDown /> : <FaChevronUp />}
         </button>
         <div className={`filter-content ${collapsed.estado ? 'collapsed' : ''}`}>
           <div className="filter-options">
@@ -120,7 +141,7 @@ const DesktopFilters = ({
           onClick={() => toggle('precio')}
         >
           <span>Precio</span>
-          {collapsed.precio ? <FaChevronDown /> : <FaChevronUp />}
+                     {!collapsed.precio ? <FaChevronDown /> : <FaChevronUp />}
         </button>
         <div className={`filter-content ${collapsed.precio ? 'collapsed' : ''}`}>
           <div className="price-range">
