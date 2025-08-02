@@ -13,7 +13,7 @@
   font-size: 2.3rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #000000;
+  color: #1f2d3d;
   margin-bottom: 40px;
   
 }
@@ -64,7 +64,7 @@
   font-family: 'Inter', serif;
   font-size: 23px;
   font-weight: 600;
-  color: #343a40;
+  color: #1f2d3d;
   margin-bottom: 8px;
   transform: translateY(-10px) rotateX(5deg) scale(1.03);
 }
@@ -72,7 +72,7 @@
 .paso-card p {
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
-  color: #394B60;
+  color: #475f7a;
   line-height: 1.5;
   max-width: 200px;
   margin: 0 auto;
@@ -164,7 +164,7 @@
 /* Style for options in dropdown to give them a modern feel */
 .form-group select option {
     background: #ffffff;
-    color: #343a40; /* Softer text color */
+    color: #403434; /* Softer text color */
     font-weight: 500;
     padding: 12px 16px; /* Note: Padding may not work on all browsers */
 }
@@ -282,12 +282,12 @@
 }
 .paso-card:hover h3{
 transform: scale(1.1) perspective(500px) ;
-color:#305681
+color:#2b4058ea
 
 }
 .paso-card:hover p{
 transform: scale(1.1) perspective(500px);
-color:#305681
+color:#475f7a
 }
 
 
@@ -329,8 +329,8 @@ color:#305681
   transform: translateX(5px);
 }
 
-/* 7. Efecto de borde animado para campos requeridos */
-.form-group input:required,
+/* 7. Efecto de borde animado para campos requeridos - REMOVIDO */
+/* .form-group input:required,
 .form-group select:required,
 .form-group textarea:required {
   position: relative;
@@ -346,7 +346,7 @@ color:#305681
 .form-group select:required:invalid,
 .form-group textarea:required:invalid:not(:placeholder-shown) {
   border-left: 4px solid #3360a3 !important;
-}
+} */
 
 /* 8. Animación de zoom sutil al enfocar textarea */
 .form-group textarea {
@@ -362,6 +362,7 @@ color:#305681
 .vender-container > h2 {
   position: relative;
   display: block;
+  text-align: center;
 }
 
 .vender-container > h2:after {
@@ -371,7 +372,7 @@ color:#305681
   height: 3px;
   bottom: -5px;
   left: 0;
-  background-color: #394B60;
+  background-color: #1f2d3d;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -380,8 +381,8 @@ color:#305681
   transform: scaleX(1);
 }
 
-/* 10. Efecto de parpadeo para campos importantes */
-@keyframes pulse {
+/* 10. Efecto de parpadeo para campos importantes - REMOVIDO */
+/* @keyframes pulse {
   0% { box-shadow: 0 0 0 0 rgba(57, 75, 96, 0.4); }
   70% { box-shadow: 0 0 0 10px rgba(57, 75, 96, 0); }
   100% { box-shadow: 0 0 0 0 rgba(57, 75, 96, 0); }
@@ -391,7 +392,7 @@ color:#305681
 .form-group select:focus:required,
 .form-group textarea:focus:required {
   animation: pulse 1.5s infinite;
-}
+} */
 
 
 
