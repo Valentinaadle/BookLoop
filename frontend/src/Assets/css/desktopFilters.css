@@ -1,4 +1,31 @@
-/* Desktop Filters CSS */
+.mobile-filters ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-filters ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.mobile-filters ::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.mobile-filters ::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Mejoras para el overlay */
+.mobile-filters-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 99998;
+}
 .desktop-filters {
   width: 280px;
   background: #ffffff;
@@ -67,7 +94,7 @@
 .filter-content {
   overflow: hidden;
   transition: all 0.3s ease;
-  max-height: 300px;
+  max-height: none;
   opacity: 1;
 }
 
@@ -81,6 +108,8 @@
   padding: 10px 0;
   scrollbar-width: thin;
   scrollbar-color: #c1c1c1 #f1f1f1;
+  max-height: none;
+  overflow: visible;
 }
 
 .filter-options::-webkit-scrollbar {

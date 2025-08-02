@@ -18,7 +18,7 @@ const DesktopFilters = ({
   },
   conditions = ["Nuevo", "Como Nuevo", "Buen Estado", "Aceptable"]
 }) => {
-  // Géneros por defecto si no hay categorías disponibles
+  // Usar las categorías del backend si están disponibles, sino usar géneros por defecto
   const defaultGenres = [
     "Novela",
     "Cuento", 
@@ -37,13 +37,21 @@ const DesktopFilters = ({
     "Escolar"
   ];
 
-  // Siempre usar los géneros por defecto para que coincidan con los filtros responsivos
-  const genresToShow = defaultGenres.map(name => ({ category_id: name, category_name: name }));
+  // Usar categorías del backend si están disponibles, sino usar géneros por defecto
+  const allGenres = categories && categories.length > 0 
+    ? categories 
+    : defaultGenres.map(name => ({ category_id: name, category_name: name }));
+  
+  // Filtrar géneros no deseados
+  const genresToExclude = ['Ciencias', 'Filosofía', 'Fantasía', 'Escolar'];
+  const genresToShow = allGenres.filter(category => 
+    !genresToExclude.includes(category.category_name)
+  );
   const [collapsed, setCollapsed] = useState({
-    genero: false,
-    idioma: false,
-    estado: false,
-    precio: false
+    genero: true,
+    idioma: true,
+    estado: true,
+    precio: true
   });
 
   const toggle = (key) => {
