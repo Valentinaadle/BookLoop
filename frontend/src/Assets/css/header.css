@@ -70,12 +70,12 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #1f2d3d; /* New color for underline */
+  background-color:#344e7e; /* New color for underline */
   transition: width 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #1f2d3d; /* Color al hacer hover */
+  color:#344e7e; /* Color al hacer hover */
 }
 
 .nav-link:hover::after {
