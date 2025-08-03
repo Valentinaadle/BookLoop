@@ -719,15 +719,16 @@ body {
   font-weight: 500;
   align-items: center;
   gap: 0.4rem;
-  transition: background 0.2s;
+ 
   cursor: pointer;
 }
 .save-btn-minimal{
   background: #1f2d3d;
   color: #fff;
 }
+
 .cancel-btn-minimal {
-  background: #e0e7ef;
+  background: #b2bec3;
   color: #222;
 }
 .save-btn-minimal:hover {

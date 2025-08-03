@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ConfirmModal from './ConfirmModal';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
@@ -31,6 +32,7 @@ const BookCard = ({
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null); // 'add' | 'remove'
   const [isBookFavorite, setIsBookFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,18 +46,21 @@ const BookCard = ({
     checkFavorite();
   }, [user, book_id, isFavorite]);
 
-  const handleFavoriteClick = async (e) => {
+  const handleFavoriteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
     if (!user) {
       navigate('/login');
       return;
     }
-
     if (isLoading) return;
-    setIsLoading(true);
+    setConfirmAction(isBookFavorite ? 'remove' : 'add');
+    setShowConfirmModal(true);
+  };
 
+  const handleConfirmFavorite = async () => {
+    setShowConfirmModal(false);
+    setIsLoading(true);
     const bookData = {
       book_id,
       title: titulo,
@@ -63,12 +68,11 @@ const BookCard = ({
       price: precio,
       imageUrl: img
     };
-
     try {
-      if (isBookFavorite) {
+      if (confirmAction === 'remove') {
         await removeFavorite(book_id);
         setIsBookFavorite(false);
-      } else {
+      } else if (confirmAction === 'add') {
         const success = await addFavorite(bookData);
         if (success) {
           setIsBookFavorite(true);
@@ -78,6 +82,7 @@ const BookCard = ({
       console.error('Error al actualizar favoritos:', error);
     } finally {
       setIsLoading(false);
+      setConfirmAction(null);
     }
   };
 
@@ -151,6 +156,17 @@ const BookCard = ({
           )}
         </div>
       </div>
+      {/* Modal de confirmación para favoritos */}
+      <ConfirmModal
+        open={showConfirmModal}
+        title={confirmAction === 'remove' ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+        message={confirmAction === 'remove'
+          ? '¿Seguro que quieres quitar este libro de tus favoritos?'
+          : '¿Seguro que quieres agregar este libro a tus favoritos?'}
+        onCancel={() => { setShowConfirmModal(false); setConfirmAction(null); }}
+        onConfirm={handleConfirmFavorite}
+        confirmButtonText={confirmAction === 'remove' ? 'Sí, quitar' : 'Sí, agregar'}
+      />
     </>
   );
 };

@@ -58,17 +58,7 @@ export function FavoritesProvider({ children }) {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                setFavorites(prev => {
-                    if (!prev.some(b => b.book_id === book.book_id)) {
-                        return [...prev, {
-                            ...book,
-                            autor: book.authors || book.autor,
-                            img: getBookImage(book, API_URL)
-                        }];
-                    }
-                    return prev;
-                });
+                await fetchFavorites();
                 return true;
             } else {
                 console.error('Error al agregar favorito:', await response.text());

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ConfirmModal({ open, title, message, onConfirm, onCancel }) {
+export default function ConfirmModal({ open, title, message, onConfirm, onCancel, confirmButtonText }) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -22,7 +22,7 @@ export default function ConfirmModal({ open, title, message, onConfirm, onCancel
             onMouseOver={e => (e.currentTarget.style.background = '#23262a')}
             onMouseOut={e => (e.currentTarget.style.background = 'rgb(19, 20, 22)')}
           >
-            Sí, eliminar
+            {confirmButtonText || 'Sí, eliminar'}
           </button>
         </div>
       </div>

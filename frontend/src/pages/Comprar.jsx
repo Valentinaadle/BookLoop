@@ -40,6 +40,9 @@ const Comprar = () => {
   const [selectedConditions, setSelectedConditions] = useState([]);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Géneros a excluir del filtro
+  const genresToExclude = ['Ciencias', 'Filosofía', 'Fantasía', 'Escolar'];
+
   // Mapeo de códigos de idioma a nombres completos
   const languageMap = {
     'en': 'Inglés',
@@ -217,6 +220,9 @@ const Comprar = () => {
   return (
     <>
       <Header />
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem', marginBottom: '1.5rem' }}>
+  <h1 className="favoritos-title">Todos nuestros libros</h1>
+</div>
       
 
 
@@ -304,6 +310,7 @@ const Comprar = () => {
             </div>
 
             {/* Filtro de Género */}
+            {/* Filtro de Género */}
             <div style={{ marginBottom: '25px' }}>
               <h3 style={{ 
                 margin: '0 0 15px 0', 
@@ -313,14 +320,16 @@ const Comprar = () => {
               }}>
                 Género
               </h3>
-              <div style={{ 
-                maxHeight: '200px', 
-                overflowY: 'scroll',
-                border: '1px solid #e0e0e0',
-                borderRadius: '6px',
-                padding: '10px'
-              }}>
-                {categories.map(category => (
+              <div style={{
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '6px',
+                  padding: '10px',
+                  maxHeight: 'none',
+                  overflow: 'visible'
+                }}>
+                {categories
+                  .filter(category => !genresToExclude.includes(category.category_name))
+                  .map(category => (
                   <label 
                     key={category.category_id} 
                     style={{ 
@@ -334,7 +343,13 @@ const Comprar = () => {
                       type="checkbox"
                       checked={selectedGenres.includes(category.category_name)}
                       onChange={() => handleGenreChange(category.category_name)}
-                      style={{ marginRight: '10px', cursor: 'pointer' }} 
+                      style={{ 
+                        marginRight: '10px', 
+                        cursor: 'pointer',
+                        width: '16px',  // Añadido
+                        height: '16px',  // Añadido
+                        accentColor: '#1f2d3d'  // Añadido
+                      }} 
                     />
                     {category.category_name}
                   </label>

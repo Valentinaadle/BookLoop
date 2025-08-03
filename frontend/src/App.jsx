@@ -47,11 +47,7 @@ function App() {
             <Route path="/" element={<Portada />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/comprar" element={
-              <ProtectedRoute>
-                <Comprar />
-              </ProtectedRoute>
-            } />
+            <Route path="/comprar" element={<Comprar />} />
             <Route path="/comprar-responsive" element={
               <ProtectedRoute>
                 <ComprarResponsive />
@@ -59,11 +55,7 @@ function App() {
             } />
             <Route path="/test-filters" element={<TestFilters />} />
             <Route path="/mobile-test" element={<SimpleMobileTest />} />
-            <Route path="/search" element={
-              <ProtectedRoute>
-                <Search />
-              </ProtectedRoute>
-            } />
+            <Route path="/search" element={<Search />} />
             <Route path="/books" element={
               <ProtectedRoute>
                 <Books />
@@ -104,11 +96,7 @@ function App() {
                 <FAQQuestions />
               </ProtectedRoute>
             } />
-            <Route path="/nosotros" element={
-              <ProtectedRoute>
-                <About />
-              </ProtectedRoute>
-            } />
+            <Route path="/nosotros" element={<About />} />
             <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
             <Route path="/usuario/:id" element={<PublicProfile />} />
           </Routes>

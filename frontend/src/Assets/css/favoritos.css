@@ -69,13 +69,17 @@
   gap: 1.5rem;
 }
 @media (max-width: 768px) {
-  .favoritos-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
+    .favoritos-header {
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
   .favorites-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
+  }
+  .favoritos-title {
+    font-size: 2rem;
   }
 } 

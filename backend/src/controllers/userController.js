@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const { supabase } = require('../config/supabase');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tu_clave_secreta';
@@ -126,16 +127,16 @@ const uploadProfilePhoto = async (req, res) => {
     // Subir a Supabase Storage
     const fileExt = req.file.originalname.split('.').pop();
     const fileName = `profile_${user.id}_${Date.now()}.${fileExt}`;
-    const fileBuffer = req.file.buffer;
-    const { data, error } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('profile-photos')
-      .upload(fileName, fileBuffer, {
+      .upload(fileName, req.file.buffer, {
         contentType: req.file.mimetype,
         upsert: true
       });
-    if (error) {
-      console.error('Error al subir a Supabase Storage:', error);
-      return res.status(500).json({ message: 'Error al subir imagen a storage' });
+
+    if (uploadError) {
+      console.error(uploadError);
+      return res.status(500).json({ message: 'Error al subir la imagen a Supabase' });
     }
 
     // Obtener URL pública
@@ -145,12 +146,11 @@ const uploadProfilePhoto = async (req, res) => {
     const photoUrl = publicUrlData.publicUrl;
 
     // Actualizar usuario
-    const updated = await User.updateUser(req.params.id, { photo_url: photoUrl });
+    await User.updateUser(req.params.id, { photo_url: photoUrl });
 
     res.json({
       message: 'Foto de perfil actualizada correctamente',
-      photo_url: photoUrl,
-      user: updated
+      photo_url: photoUrl
     });
   } catch (error) {
     console.error('Error al subir foto de perfil:', error);

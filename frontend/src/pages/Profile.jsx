@@ -456,8 +456,9 @@ function Profile() {
                   open={showDeleteUserModal}
                   title="Desactivar usuario"
                   message="¿Estás seguro que deseas desactivar este usuario? Esta acción no se puede deshacer."
-                  onConfirm={() => handleDeleteUser(deletingUserId)}
                   onCancel={() => setShowDeleteUserModal(false)}
+                  onConfirm={() => handleDeleteUser(deletingUserId)}
+                  confirmButtonText="Sí, desactivar"
                 />
               </>
             )}
@@ -886,8 +887,7 @@ function Profile() {
                           });
                         });
                     }} 
-                    className="cancel-btn-minimal"
-                  >
+                    className="cancel-btn-minimal">
                     Cancelar
                   </button>
                 </div>
