@@ -220,12 +220,9 @@ const Comprar = () => {
   return (
     <>
       <Header />
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem', marginBottom: '1.5rem' }}>
-  <h1 className="favoritos-title">Todos nuestros libros</h1>
-</div>
-      
-
-
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem', marginBottom: '0rem' }}>
+        <h1 className="favoritos-title">Todos nuestros libros</h1>
+      </div>
       {/* PANEL DE FILTROS MÓVIL */}
       {showMobileFilters && (
         <>
@@ -308,8 +305,9 @@ const Comprar = () => {
                 ✕
               </button>
             </div>
+            
 
-            {/* Filtro de Género */}
+       
             {/* Filtro de Género */}
             <div style={{ marginBottom: '25px' }}>
               <h3 style={{ 
@@ -575,6 +573,33 @@ const Comprar = () => {
             >
               ☰ Filtros
             </button>
+            {/* CONTADOR DE RESULTADOS */}
+            <div style={{ 
+              textAlign: 'center', 
+              fontWeight: 400,
+              fontSize: '1rem',
+              color: '#555',
+              fontWeight: 'bold',
+               
+              
+            }}>
+              {filteredBooks.length} {/* El número permanece igual */}
+              <span style={{fontWeight: 'normal', marginLeft: '0.3rem' }}>
+                {filteredBooks.length === 1 ? 'Resultado' : 'Resultados'}
+              </span>
+              {selectedGenres.length > 0 && (
+                <span style={{
+                  marginLeft: '0.5rem',
+                  color: '#666',
+                  backgroundColor: '#f5f5f5',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '4px',
+                  fontSize: '0.85rem'
+                }}>
+                  Filtros: {selectedGenres.join(', ')}
+                </span>
+              )}
+            </div>
             
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sort-select filter-sort-button">
               <option value="default">Ordenar por</option>
