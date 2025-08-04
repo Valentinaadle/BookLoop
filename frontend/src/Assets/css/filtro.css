@@ -19,11 +19,39 @@
 @media (max-width: 1023px) {
   .home-container {
     flex-direction: column;
-    gap: 15px;
+    gap: 25px; /* Aumentado de 15px a 25px */
+    padding: 2rem 1rem 1rem; /* Añadido padding-top de 2rem */
+    margin-top: 1rem; /* Espacio adicional */
   }
   
   .main-content {
     width: 100%;
+  }
+  
+  .sort-container {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0.5rem 0;
+  }
+  
+  /* Mueve el contador de resultados debajo de los botones */
+  .sort-container > div[style*="flex-grow: 1"] {
+    order: 1;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 0;
+  }
+  
+  /* Asegura que los botones permanezcan en la misma línea */
+  .mobile-filters,
+  .sort-select {
+    flex: 1;
+    min-width: 120px;
+    margin: 0 4px;
+  }
+  
+  .mobile-filters {
+    margin-left: 0 !important;
   }
 }
 

@@ -220,9 +220,6 @@ const Comprar = () => {
   return (
     <>
       <Header />
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem', marginBottom: '0rem' }}>
-        <h2 className="favoritos-title">Todos nuestros libros</h2>
-      </div>
       {/* PANEL DE FILTROS MÓVIL */}
       {showMobileFilters && (
         <>
@@ -522,7 +519,7 @@ const Comprar = () => {
         </>
       )}
 
-      <main className="home-container">
+      <main className="home-container" style={{ paddingLeft: '0.5rem' }}>
         {/* SIDEBAR CON FILTROS DE DESKTOP */}
         <aside className="hidden lg:block">
           <DesktopFilters
@@ -540,7 +537,7 @@ const Comprar = () => {
         </aside>
         
         <section className="main-content">
-          <div className="sort-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+          <div className="sort-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0 1rem' }}>
             {/* BOTÓN FILTROS MÓVIL */}
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -575,15 +572,16 @@ const Comprar = () => {
             </button>
             {/* CONTADOR DE RESULTADOS */}
             <div style={{ 
-              textAlign: 'center', 
-              fontWeight: 400,
+              textAlign: 'center',
               fontSize: '1rem',
               color: '#555',
               fontWeight: 'bold',
-               
-              
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexGrow: 1
             }}>
-              {filteredBooks.length} {/* El número permanece igual */}
+              {filteredBooks.length}
               <span style={{fontWeight: 'normal', marginLeft: '0.3rem' }}>
                 {filteredBooks.length === 1 ? 'Resultado' : 'Resultados'}
               </span>
@@ -605,7 +603,7 @@ const Comprar = () => {
               <option value="default">Ordenar por</option>
               <option value="price-asc">Menor precio</option>
               <option value="price-desc">Mayor precio</option>
-              <option value="most-sold">Recien ingresados </option>
+              <option value="most-sold">Recién ingresados</option>
             </select>
           </div>
           {error && (
