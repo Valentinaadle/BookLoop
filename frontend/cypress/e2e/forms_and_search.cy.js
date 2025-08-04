@@ -18,7 +18,15 @@ describe('Comprar libro filtrando por categoría', () => {
     // 2. Ir a "Quiero comprar"
     cy.contains('Quiero comprar').click();
 
-    // 3. Filtrar por categoría "Misterio"
+    // 3.1. Hacer clic en el botón de filtro al lado de Género
+    cy.contains('Género')
+      .parent()
+      .find('button')
+      .should('exist')
+      .first()
+      .click();
+
+    // 3.2. Filtrar por categoría "Misterio"
     cy.contains('Misterio').click();
 
     // 4. Verificar que aparece el libro "Crime and Punishment"

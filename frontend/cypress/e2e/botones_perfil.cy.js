@@ -29,8 +29,8 @@ describe('Navegación en perfil BookLoop sin presionar Reseñas', () => {
       // ✅ Hacer clic en "Solicitudes"
       cy.contains('Solicitudes').click();
   
-      // ✅ Hacer clic en "Wishlist"
-      cy.contains('Wishlist').click();
+      // ✅ Hacer clic en "Favoritos"
+      cy.contains('Favoritos').click();
   
       // 🚫 NO hacer clic en "Reseñas"
       cy.contains('Reseñas').should('exist');

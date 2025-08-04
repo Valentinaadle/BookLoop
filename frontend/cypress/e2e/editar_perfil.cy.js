@@ -19,17 +19,17 @@ describe('Editar apellido en el perfil', () => {
       // Hacer clic en "Editar perfil"
       cy.contains('Editar perfil').click();
   
-      // Esperar el campo de apellido y cambiar a "Molina"
-      cy.get('input[name="apellido"]', { timeout: 10000 })
+      // Esperar el campo de nombre y cambiar a "Molina"
+      cy.get('input[name="nombre"]', { timeout: 10000 })
         .should('be.visible')
         .clear()
-        .type('Molina');
+        .type('Valentina');
   
       // Guardar cambios
       cy.contains('button', 'Guardar').click();
   
-      // Verificar que "Molina" se muestra en el perfil
-      cy.contains('Molina').should('exist');
+      // Verificar que "Valentina" se muestra en el perfil
+      cy.contains('Valentina').should('exist');
     });
   });
   
