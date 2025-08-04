@@ -122,7 +122,6 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   transition: border-color 0.2s;
-  min-width: 170px;
 }
 
 .sort-select:focus {

@@ -103,3 +103,14 @@
   justify-content: center;
 }
 
+
+@media (max-width: 768px){
+  .sort-select.filter-sort-button {
+    max-width: calc(100vw - 32px);
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    margin-right: 20px;
+  }
+}
+
