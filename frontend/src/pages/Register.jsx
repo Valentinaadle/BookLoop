@@ -63,7 +63,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/registro', {
+      const response = await axios.post('https://bookloop-s6za.onrender.com/api/users/registro', {
         nombre: formData.nombre,
         apellido: formData.apellido,
         email: formData.email,
