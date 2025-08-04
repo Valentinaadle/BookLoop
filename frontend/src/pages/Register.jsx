@@ -74,9 +74,12 @@ function Register() {
       navigate('/login');
     } catch (error) {
       setError(
-        error.response?.data?.message || 
+        (error.response?.data?.message || 
         error.response?.data?.error || 
-        'Error al registrar usuario. Por favor, intenta de nuevo.'
+        error.message ||
+        'Error al registrar usuario. Por favor, intenta de nuevo.') +
+        (error.response?.data?.details ? ' - ' + JSON.stringify(error.response.data.details) : '') +
+        '\n' + JSON.stringify(error, Object.getOwnPropertyNames(error))
       );
     } finally {
       setLoading(false);
