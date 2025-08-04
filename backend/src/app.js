@@ -9,11 +9,23 @@ const profileRoutes = require('./routes/profile.routes');
 
 const app = express();
 
+// Permitir peticiones de red privada (LAN) para navegadores modernos
+app.use((req, res, next) => {
+  if (req.headers['access-control-request-private-network']) {
+    res.setHeader('Access-Control-Allow-Private-Network', 'true');
+  }
+  next();
+});
+
 // Middleware
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://bookloop-dusky.vercel.app'
+  'https://bookloop-dusky.vercel.app',
+  'https://bookloop.vercel.app', // Variante común de Vercel
+  'https://bookloop-*.vercel.app', // Subdominios de previews de Vercel
+  'https://bookloop.com.ar',
+  'https://www.bookloop.com.ar'
 ];
 app.use(cors({
   origin: allowedOrigins,
