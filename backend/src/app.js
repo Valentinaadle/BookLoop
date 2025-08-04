@@ -22,6 +22,14 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Permitir peticiones de red privada (LAN) para navegadores modernos
+app.use((req, res, next) => {
+  if (req.headers['access-control-request-private-network']) {
+    res.setHeader('Access-Control-Allow-Private-Network', 'true');
+  }
+  next();
+});
+
 // JSON y URL encoded para datos normales
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ limit: '1mb', extended: true }));
