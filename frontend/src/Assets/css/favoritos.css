@@ -6,7 +6,7 @@
 .favoritos-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1.2rem;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
@@ -29,7 +29,13 @@
   font-weight: 700;
   color: #1f2d3d;
   margin: 0;
-  margin-top: 10px;
+  margin-top: -5px;
+  text-align: left;
+  margin-left: 0;
+}
+
+.favoritos-title:after {
+  display: none;
 }
 .favoritos-subtitle {
   font-family: 'Inter', sans-serif;
@@ -81,5 +87,6 @@
   }
   .favoritos-title {
     font-size: 2rem;
+    text-align: center;
   }
 } 

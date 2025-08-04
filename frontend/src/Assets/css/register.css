@@ -38,13 +38,25 @@
   color: #ffffff;
   letter-spacing: 1px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.logo-custom::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: -1px; 
+  width: 20%;
+  height: 4px;
+  padding: 2px;
+  background: #1f2d3d;
 }
 
 .blue-divider {
   width: 100px;
   height: 4px;
   background: #1f2d3d;
-  margin: 10px 0;
+  margin: 100px 0;
 }
 
 .slogan-refined {
@@ -52,6 +64,7 @@
   font-weight: 340;
   font-size: 1.3rem;
   margin-bottom: 15px;
+  margin-top: -10px;
   color: #ffffff;
 }
 
@@ -388,8 +401,9 @@
     white-space: normal;
   }
   
-  .blue-divider {
-    margin: 20px auto;
+  .logo-custom::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
   
   .form-row-refined {

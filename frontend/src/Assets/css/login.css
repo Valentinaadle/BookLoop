@@ -30,6 +30,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
+  margin-top: 2rem;
 }
 
 .logo-custom {
@@ -40,14 +41,19 @@
   color: #ffffff;
   letter-spacing: 1px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.blue-divider {
-  width: 100px;
+.logo-custom::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 60%;
   height: 4px;
   background: #0984e3;
-  margin: 10px 0;
 }
+
 
 .slogan-refined {
   font-family: 'Inter', sans-serif;
@@ -278,36 +284,45 @@
 @media (max-width: 992px) {
   .login-content-wrapper {
     flex-direction: column;
-    padding: 2.5rem 1.5rem;
+    padding: 1rem 1.5rem;
     height: auto;
+    justify-content: flex-start;
+    align-items: center;
   }
   
   .login-text-content-refined {
     padding-right: 0;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    gap: 0.5rem;
   }
   
   .login-form-container-refined {
     width: 100%;
     left: 0;
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
   
   .logo-custom {
-    font-size: 3.5rem;
+    font-size: 3rem;
+    margin-bottom: 10px;
   }
   
   .slogan-refined {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
   }
   
   .subtitle-refined {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin: 0 auto;
   }
   
-  .blue-divider {
-    margin: 20px auto;
+  .logo-custom::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
+
 }
