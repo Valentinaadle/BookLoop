@@ -221,7 +221,7 @@ const Comprar = () => {
     <>
       <Header />
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem', marginBottom: '0rem' }}>
-        <h1 className="favoritos-title">Todos nuestros libros</h1>
+        <h2 className="favoritos-title">Todos nuestros libros</h2>
       </div>
       {/* PANEL DE FILTROS MÓVIL */}
       {showMobileFilters && (
