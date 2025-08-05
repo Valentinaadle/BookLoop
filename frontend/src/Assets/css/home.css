@@ -215,7 +215,7 @@ body {
   color: #6c757d !important;
   font-size: 1.08rem !important;
   font-weight: 500 !important;
-  padding: 0.9rem 1.5rem 0.7rem 1.5rem !important;
+  padding: 0.9rem 1.5rem 0.7rem 0.9rem !important;
   border-bottom: 2px solid transparent !important;
   cursor: pointer !important;
   transition: color 0.18s, border-color 0.18s !important;
