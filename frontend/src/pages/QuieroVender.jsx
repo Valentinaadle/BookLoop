@@ -27,6 +27,8 @@ const pasos = [
     icono: '/icons/precio.webp'
   }
 ];
+const genresToExclude = ['Ciencias', 'Filosofía', 'Fantasía', 'Escolar'];
+
 
 export default function QuieroVender() {
   const [formData, setFormData] = useState({
@@ -284,7 +286,6 @@ export default function QuieroVender() {
                   <option value="Como nuevo">Como nuevo</option>
                   <option value="Buen estado">Buen estado</option>
                   <option value="Aceptable">Aceptable</option>
-                  <option value="Usado">Usado</option>
                 </select>
               </div>
               <div className="form-group">
@@ -334,9 +335,14 @@ export default function QuieroVender() {
                 required
               >
                 <option value="">Selecciona una categoría</option>
-                {categories.map((cat) => (
-                  <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
+                {categories
+                  .filter(cat => !genresToExclude.includes(cat.category_name))
+                  .map(cat => (
+                    <option key={cat.category_id} value={cat.category_id}>
+                      {cat.category_name}
+                    </option>
                 ))}
+                
               </select>
             </div>
             
