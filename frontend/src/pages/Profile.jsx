@@ -13,7 +13,7 @@ import { useFavorites } from '../context/FavoritesContext';
 import { Heart, Star, Plus, Edit3, BookOpen, ShoppingBag, MessageSquare, Eye, Share2, Grid, List } from "lucide-react";
 import ConfirmModal from '../components/ConfirmModal';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000';
 
 // Lista predefinida de intereses
 const INTERESES_PREDEFINIDOS = [

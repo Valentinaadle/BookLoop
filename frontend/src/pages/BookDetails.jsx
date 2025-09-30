@@ -29,7 +29,7 @@ function BookDetails() {
   const [editForm, setEditForm] = useState({ title: '', authors: '', description: '', price: '', stock: '', pagecount: '' });
   const [success, setSuccess] = useState(null);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_URL = 'http://localhost:5000';
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const [isBookFavorite, setIsBookFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);

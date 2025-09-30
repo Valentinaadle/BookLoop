@@ -3,6 +3,8 @@ import '../Assets/css/BookSearch.css';
 import BookCard from './BookCard';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
+const API_URL = 'http://localhost:5000';
+
 const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
   const [query, setQuery] = useState(initialQuery);
   const [books, setBooks] = useState([]);
@@ -24,7 +26,7 @@ const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/search-db?query=${encodeURIComponent(q)}`);
+      const response = await fetch(`${API_URL}/api/books/search-db?query=${encodeURIComponent(q)}`);
       if (!response.ok) {
         throw new Error('Error en la búsqueda');
       }
@@ -73,7 +75,7 @@ const BookSearch = ({ onBookSelect, initialQuery = '' }) => {
             <BookCard
               key={book.book_id || book.id}
               descuento={null}
-              img={getBookImage(book, process.env.REACT_APP_API_URL || 'http://localhost:5000')}
+              img={getBookImage(book, API_URL)}
               titulo={book.title || book.titulo || 'Sin título'}
               autor={getBookAuthor(book)}
               precio={book.price || book.precio}

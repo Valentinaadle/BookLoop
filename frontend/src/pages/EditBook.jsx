@@ -7,7 +7,7 @@ import '../Assets/css/header.css';
 import '../Assets/css/footer.css';
 import '../Assets/css/register.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000';
 
 function EditBook() {
   const { id } = useParams();

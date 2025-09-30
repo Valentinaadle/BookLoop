@@ -15,7 +15,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000';
 const DEFAULT_BOOK_IMAGE = '/icono2.png';
 
 const Comprar = () => {

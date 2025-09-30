@@ -4,6 +4,8 @@ import BookSearch from '../components/BookSearch';
 import Header from '../components/Header';
 import '../Assets/css/Search.css';
 
+const API_URL = 'http://localhost:5000';
+
 const Search = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,7 +22,7 @@ const Search = () => {
   const handleBookSelect = async (book) => {
     try {
       setError(null);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/add`, {
+      const response = await fetch(`${API_URL}/api/books/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

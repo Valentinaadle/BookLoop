@@ -11,7 +11,7 @@ import "../Assets/css/bookcard.css";
 import BookCard from '../components/BookCard';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000';
 const DEFAULT_BOOK_IMAGE = '/icono2.png';
 const DESCUENTOS = ['-10%', '-20%', '-30%', '-40%', '-50%'];
 
@@ -75,7 +75,7 @@ const Books = () => {
     e.preventDefault();
     try {
       setError(null);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${editingBook.book_id}`, {
+      const response = await fetch(`${API_URL}/api/books/${editingBook.book_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ const Books = () => {
   const handleDelete = async (id) => {
     try {
       setError(null);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${id}`, {
+      const response = await fetch(`${API_URL}/api/books/${id}`, {
         method: 'DELETE',
       });
 

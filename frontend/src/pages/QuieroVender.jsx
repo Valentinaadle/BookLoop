@@ -5,6 +5,8 @@ import '../Assets/css/quierovender.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = 'http://localhost:5000';
+
 const pasos = [
   {
     titulo: 'Registrate en BookLoop.',
@@ -78,7 +80,7 @@ export default function QuieroVender() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/search-isbn?isbn=${formData.isbn}`);
+        const response = await fetch(`${API_URL}/api/books/search-isbn?isbn=${formData.isbn}`);
         if (!response.ok) {
           const data = await response.json();
           setError(data.error || 'No se encontró información para ese ISBN.');
@@ -109,7 +111,7 @@ export default function QuieroVender() {
     // Cargar categorías desde la API
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/categories`);
+        const res = await fetch(`${API_URL}/api/categories`);
         const data = await res.json();
         setCategories(data);
       } catch (err) {
@@ -138,7 +140,7 @@ export default function QuieroVender() {
         for (const file of images) {
           const formDataImg = new FormData();
           formDataImg.append('image', file);
-          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/books/upload-image`, {
+          const res = await fetch(`${API_URL}/api/books/upload-image`, {
             method: 'POST',
             body: formDataImg
           });
@@ -153,7 +155,7 @@ export default function QuieroVender() {
       if (imageUrls.length === 0 && formData.imagen) {
         imageUrls = [formData.imagen];
       }
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books`, {
+      const response = await fetch(`${API_URL}/api/books`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

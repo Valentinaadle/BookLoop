@@ -23,7 +23,7 @@ import BookCard from '../components/BookCard';
 import { useAuth } from '../context/AuthContext';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000';
 
 const TypewriterEffect = ({ text, speed = 100, cursorStyle = "|", cursorColor = "#000" }) => {
   const [displayedText, setDisplayedText] = useState('');

@@ -8,6 +8,8 @@ import '../Assets/css/header.css';
 import { FaSignOutAlt, FaHeart, FaSearch } from 'react-icons/fa';
 import { CgProfile } from "react-icons/cg";
 
+const API_URL = 'http://localhost:5000';
+
 export default function Header() {
   // SIEMPRE usar el mismo logo en todos los tamaños
   const [logoSrc] = useState('/4.png');
@@ -29,7 +31,7 @@ export default function Header() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/search?q=${encodeURIComponent(searchQuery)}`);
+      const response = await fetch(`${API_URL}/api/books/search?q=${encodeURIComponent(searchQuery)}`);
       if (!response.ok) {
         throw new Error('Error en la búsqueda');
       }
@@ -60,7 +62,7 @@ export default function Header() {
 
   const renderProfilePicture = () => {
     if (user && user.profile && user.profile.profileImage) {
-      return <img src={`${process.env.REACT_APP_API_URL}/${user.profile.profileImage}`} alt="Perfil" className="profile-pic" />;
+      return <img src={`${API_URL}/${user.profile.profileImage}`} alt="Perfil" className="profile-pic" />;
     }
     return <CgProfile className="icon action-icon" />;
   };

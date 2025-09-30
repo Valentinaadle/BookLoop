@@ -10,7 +10,7 @@ import '../Assets/css/reviews-tailwind.css';
 import { BookOpen } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'http://localhost:5000';
 
 // Helper to get token from localStorage
 function getToken() {
