@@ -1,6 +1,6 @@
 // Función para obtener la URL de la imagen del libro
 // URL base pública del bucket de Supabase (ajustar si cambia el dominio o el bucket)
-const SUPABASE_BOOKS_BASE_URL = "https://pghjljkqjzvfhqjzjvhn.supabase.co/storage/v1/object/public/book-images/";
+const SUPABASE_BOOKS_BASE_URL = "https://fzjcbastovlgughkwqjz.supabase.co/storage/v1/object/public/book-images/";
 
 export function getBookImage(book) {
   const DEFAULT_BOOK_IMAGE = '/Assets/images/default-book.png';

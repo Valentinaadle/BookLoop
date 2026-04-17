@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    image: node:20-alpine
+    working_dir: /app/backend
+    volumes:
+      - ./:/app
+      # Ignoramos mapeo inverso de modulos locales para prevenir conflictos OS/Linux si los hay
+      - /app/node_modules
+      - /app/frontend/node_modules
+      - /app/backend/node_modules
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    command: npm run dev
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app/frontend
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/frontend/node_modules
+      - /app/backend/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    command: npm start

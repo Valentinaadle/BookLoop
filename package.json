@@ -1,37 +1,19 @@
 {
-  "name": "bookloop-backend",
+  "name": "bookloop-monorepo",
   "version": "1.0.0",
-  "description": "Backend para la aplicación BookLoop",
-  "main": "src/index.js",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
-    "test": "npm run test:backend && npm run test:frontend",
-    "test:backend": "cd backend && npm test",
-    "test:frontend": "cd frontend && npm test -- --watchAll=false",
-    "test:e2e": "cd frontend && npm run cypress:run",
-    "cypress:open": "cd frontend && npm run cypress:open",
-    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm start"
-  },
-  "dependencies": {
-    "@tailwindcss/typography": "^0.5.16",
-    "axios": "^1.9.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.18.2",
-    "framer-motion": "^12.15.0",
-    "multer": "^2.0.0",
-    "mysql2": "^3.9.2",
-    "node-fetch": "^2.7.0",
-    "sequelize": "^6.37.1"
+    "install:all": "npm install",
+    "dev": "concurrently \"npm run dev -w bookloop-backend\" \"npm run start -w bookshop\"",
+    "start:all": "concurrently \"npm run start -w bookloop-backend\" \"npm run start -w bookshop\"",
+    "test:all": "npm run test -w bookloop-backend && npm run test -w bookshop"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "nodemon": "^3.1.0",
-    "typescript": "^5.8.3"
+    "prettier": "^3.2.5"
   }
 }
