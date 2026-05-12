@@ -1,13 +1,25 @@
-/* login.css (versión refinada) */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Raleway:wght@400;600&family=Inter:wght@400;600;800&display=swap');
+/* ================================================
+   LOGIN — BookLoop Design System
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@400;600;800&display=swap');
+
+/* ============================
+   PAGE LAYOUT
+   ============================ */
 
 .login-main-container-refined {
   flex: 1;
   display: grid;
   place-items: center;
-  background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), 
-              url('../login.jpg') center/cover no-repeat;
+  background: linear-gradient(
+      135deg,
+      rgba(17, 24, 39, 0.62) 0%,
+      rgba(44, 95, 138, 0.50) 100%
+    ),
+    url('../login.jpg') center / cover no-repeat;
   position: relative;
+  min-height: 100vh;
 }
 
 .login-content-wrapper {
@@ -20,10 +32,14 @@
   box-sizing: border-box;
 }
 
+/* ============================
+   LEFT TEXT SIDE
+   ============================ */
+
 .login-text-content-refined {
   flex: 1;
   padding-right: 80px;
-  color: #2d3436;
+  color: #ffffff;
   position: relative;
   z-index: 2;
   display: flex;
@@ -34,70 +50,74 @@
 }
 
 .logo-custom {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading, 'Playfair Display', serif);
   font-weight: 700;
   font-size: 4.5rem;
   margin-bottom: 20px;
   color: #ffffff;
   letter-spacing: 1px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.25);
   position: relative;
 }
 
 .logo-custom::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: -6px;
   left: 0;
-  width: 60%;
+  width: 55%;
   height: 4px;
-  background: #0984e3;
+  background: var(--bl-brand-accent, #E8A838);
+  border-radius: 2px;
 }
-
 
 .slogan-refined {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 2rem;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-weight: 500;
+  font-size: 1.85rem;
   margin-bottom: 15px;
-  color: #ffffff;
-  max-width: 1000px; /* Aumentamos un poco más el ancho */
-  line-height: 1.6; /* Espaciado entre líneas para mejor legibilidad */
+  color: rgba(255,255,255,0.95);
+  max-width: 900px;
+  line-height: 1.5;
 }
 
+/* ============================
+   FORM CONTAINER (glass card)
+   ============================ */
+
 .login-form-container-refined {
-  width: 550px;
-  padding: 50px 40px;
-  background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  width: 510px;
+  padding: 48px 40px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.18);
   z-index: 2;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
   position: relative;
-  margin-top: 8vh;
-  margin-bottom: 8vh;
-  left: 0;
+  margin-top: 6rem;
+  margin-bottom: 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: unset;
-  max-height: calc(100vh - 16vh);
-  overflow-y: auto;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  margin-top: 6rem;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
 .login-form-container-refined:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.3);
 }
 
 .login-form-container-refined form {
-  width: 100%; /* Hacemos que el form ocupe todo el ancho */
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
+
+/* ============================
+   FORM HEADER
+   ============================ */
 
 .form-header-refined {
   margin-bottom: 2rem;
@@ -105,19 +125,19 @@
 }
 
 .form-header-refined h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading, 'Playfair Display', serif);
   font-weight: 700;
-  font-size: 2.2rem;
-  color: rgb(255, 255, 255);
-  margin-bottom: 10px;
+  font-size: 2.1rem;
+  color: #ffffff;
+  margin-bottom: 8px;
+  border-bottom: none;
 }
 
 .form-header-refined p {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  color: #f5f5f5;
-  
-  font-size: 0.9rem;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.95rem;
 }
 
 .form-subtitle {
@@ -126,37 +146,44 @@
   margin-bottom: 1.5rem !important;
 }
 
+/* ============================
+   FORM INPUTS
+   ============================ */
+
 .form-group-refined {
-  margin-bottom: 25px;
-  width: 100%; /* Aseguramos que el grupo ocupe todo el ancho */
+  margin-bottom: 22px;
+  width: 100%;
 }
 
 .form-group-refined label {
   display: block;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   font-weight: 600;
-  font-size: 0.9rem;
-  color: #2d3436;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.9);
   margin-bottom: 8px;
+  letter-spacing: 0.03em;
 }
 
 .input-refined {
   width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #dfe6e9;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.8);
-  font-family: 'Raleway', sans-serif;
+  padding: 12px 16px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 1rem;
-  transition: all 0.3s ease;
+  color: var(--bl-text-primary);
+  transition: all 0.25s ease;
 }
 
 .input-refined:focus {
   outline: none;
-  border-color: #000000;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  border-color: var(--bl-brand-accent, #E8A838);
+  box-shadow: 0 0 0 3px rgba(232, 168, 56, 0.22);
 }
 
+/* Password wrapper */
 .password-input-wrapper {
   position: relative;
   display: flex;
@@ -165,7 +192,7 @@
 }
 
 .password-input-wrapper .input-refined {
-  padding-right: 80px; 
+  padding-right: 80px;
 }
 
 .toggle-password-btn {
@@ -173,39 +200,44 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
-  border: none;
+  background: none !important;
+  border: none !important;
   cursor: pointer;
-  color: #666;
+  color: var(--bl-text-muted);
   font-size: 0.8rem;
   font-weight: 600;
   padding: 5px;
-  line-height: 1;
+  box-shadow: none !important;
 }
+
+/* ============================
+   SUBMIT BUTTON
+   ============================ */
 
 .submit-btn-refined {
   width: 100%;
-  padding: 15px;
-  background: #0e1a2b;
+  padding: 14px;
+  background: var(--bl-brand-primary, #2C5F8A);
   border: none;
   color: #ffffff;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 600;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-weight: 700;
   font-size: 1rem;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   margin-top: 20px;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  letter-spacing: 0.03em;
 }
 
 .submit-btn-refined:hover:not(:disabled) {
-  background: #1c2b45;
+  background: var(--bl-brand-secondary, #4A9B8E);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(186, 217, 241, 0.3);
+  box-shadow: 0 6px 18px rgba(74, 155, 142, 0.35);
 }
 
 .submit-btn-refined:disabled {
-  background: #b2bec3;
+  background: rgba(255,255,255,0.3);
   cursor: not-allowed;
   transform: none;
 }
@@ -219,110 +251,82 @@
   transform: translateX(5px);
 }
 
+/* ============================
+   LINKS
+   ============================ */
+
 .switch-form-link-refined {
   text-align: center;
-  margin-top: 25px;
-  font-family: 'Raleway', sans-serif;
+  margin-top: 22px;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 0.9rem;
-  color: #fcfeff;
+  color: rgba(255,255,255,0.8);
 }
 
 .register-link-refined {
-  color: #1f2d3d;
-  font-weight: 600;
+  color: var(--bl-brand-accent, #E8A838);
+  font-weight: 700;
   margin-left: 5px;
   text-decoration: none;
   position: relative;
 }
 
-.register-link-refined::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #1f2d3d;
-  transition: width 0.3s ease;
+.register-link-refined:hover {
+  color: #ffffff;
 }
 
-.register-link-refined:hover::after {
-  width: 100%;
-}
-
+/* Error */
 .error-message-refined {
-  color: #d63031;
-  background-color: #ffebee;
-  border: 1px solid #ffcdd2;
+  color: #ffffff;
+  background-color: rgba(197, 48, 48, 0.6);
+  border: 1px solid rgba(255,100,100,0.4);
   padding: 12px 15px;
-  border-radius: 6px;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  margin-bottom: 18px;
   text-align: center;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 0.9rem;
+  backdrop-filter: blur(4px);
 }
 
+/* Loading dots */
 .loading-dots span {
   display: inline-block;
   animation: bounce 1.5s infinite ease-in-out;
 }
-
-.loading-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loading-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes bounce {
   0%, 80%, 100% { transform: translateY(0); }
   40% { transform: translateY(-5px); }
 }
 
-/* Responsive */
+/* ============================
+   RESPONSIVE
+   ============================ */
+
 @media (max-width: 992px) {
   .login-content-wrapper {
     flex-direction: column;
     padding: 1rem 1.5rem;
-    height: auto;
-    justify-content: flex-start;
     align-items: center;
   }
-  
   .login-text-content-refined {
     padding-right: 0;
     text-align: center;
     margin-bottom: 20px;
     gap: 0.5rem;
   }
-  
   .login-form-container-refined {
     width: 100%;
+    max-width: 480px;
     left: 0;
     padding: 2rem 1.5rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     margin-bottom: 2rem;
   }
-  
-  .logo-custom {
-    font-size: 3rem;
-    margin-bottom: 10px;
-  }
-  
-  .slogan-refined {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .subtitle-refined {
-    font-size: 1rem;
-    margin: 0 auto;
-  }
-  
-  .logo-custom::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
+  .logo-custom { font-size: 3rem; margin-bottom: 10px; }
+  .slogan-refined { font-size: 1.4rem; margin-bottom: 10px; }
+  .logo-custom::after { left: 50%; transform: translateX(-50%); }
 }

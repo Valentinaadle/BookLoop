@@ -1,44 +1,48 @@
-/* Newsletter - Final Redesign to match reference image */
+/* ================================================
+   NEWSLETTER — BookLoop Design System
+   ================================================ */
+
 .newsletter-container {
-  background: #fdfbf9; /* Light cream/off-white background */
-  border-radius: 1.25rem;
-  padding: 2.5rem 3rem; /* Generous padding */
+  background: var(--bl-bg-elevated);
+  border: 1px solid var(--bl-border);
+  border-radius: 20px;
+  padding: 2.5rem 3rem;
   display: flex;
-  flex-direction: row; /* Key change: Horizontal layout */
-  justify-content: space-between; /* Pushes text left, form right */
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.07);
-  margin: 4rem auto -40px auto; /* Overlap with footer */
-  max-width: 1050px; /* Wider layout */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  margin: 4rem auto -40px;
+  max-width: 1050px;
   width: calc(100% - 2rem);
   position: relative;
   z-index: 10;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .newsletter-text-content {
-  text-align: left; /* Left-align the text block */
+  text-align: left;
 }
 
 .newsletter-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.55rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
-  color: #1F2937;
+  margin-bottom: 0.3rem;
+  color: var(--bl-text-primary);
 }
 
 .newsletter-desc {
   font-size: 1rem;
-  color: #4B5563;
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
+  color: var(--bl-text-secondary);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   margin: 0;
 }
 
 .newsletter-form {
   flex-shrink: 0;
   width: 100%;
-  max-width: 550px;
+  max-width: 520px;
 }
 
 .newsletter-input-group {
@@ -51,47 +55,49 @@
   flex-grow: 1;
   padding: 0.9rem 1.75rem;
   font-size: 1rem;
-  border-radius: 9999px; /* This is the main pill shape */
-  border: 1px solid #E5E7EB;
-  background-color: #fff;
-  color: #1F2937;
+  border-radius: 9999px;
+  border: 1.5px solid var(--bl-border);
+  background-color: var(--bl-bg);
+  color: var(--bl-text-primary);
   outline: none;
-  font-family: 'Inter', sans-serif;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  padding-right: 180px; /* Make space for the button */
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  padding-right: 175px;
+  width: 100%;
 }
 
 .newsletter-input::placeholder {
-  color: #9CA3AF;
+  color: var(--bl-text-muted);
 }
 
 .newsletter-input:focus {
-  border-color: #2C3E50;
-  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+  border-color: var(--bl-brand-primary);
+  box-shadow: 0 0 0 3px var(--bl-focus-ring);
 }
 
 .newsletter-btn {
-  position: absolute; /* Place the button inside the input area */
+  position: absolute;
   right: 5px;
   top: 5px;
   bottom: 5px;
-  background-color: #2C3E50;
+  background-color: var(--bl-brand-primary);
   color: white;
-  font-weight: 500;
-  padding: 0 2rem;
-  border-radius: 9999px; /* The button is its own pill */
+  font-weight: 600;
+  padding: 0 1.75rem;
+  border-radius: 9999px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 0.025em;
+  transition: background-color 0.2s ease;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  letter-spacing: 0.02em;
   font-size: 0.9rem;
 }
 
 .newsletter-btn:hover {
-  background-color: #34495E;
+  background-color: var(--bl-brand-secondary);
 }
-/* Modal base */
+
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -103,40 +109,49 @@
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
-  background: white;
-  color: black;
+  background: var(--bl-bg-elevated);
+  color: var(--bl-text-primary);
+  border: 1px solid var(--bl-border);
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 16px;
   max-width: 400px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content h3 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-bottom: 1rem;
+  color: var(--bl-text-primary);
+  border-bottom: none;
+}
+
+.modal-content p {
+  color: var(--bl-text-secondary);
 }
 
 .modal-content button {
   margin-top: 1.5rem;
-  background: #34495E; /* azul */
+  background: var(--bl-brand-primary);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
   cursor: pointer;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-weight: 600;
 }
 
 .modal-content button:hover {
-  background: rgb(21, 32, 70);
+  background: var(--bl-brand-secondary);
 }
 
-
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 900px) {
   .newsletter-container {
     flex-direction: column;
@@ -144,33 +159,17 @@
     gap: 1.5rem;
     padding: 2rem;
   }
-  .newsletter-text-content {
-    text-align: center;
-  }
-  .newsletter-form {
-    max-width: 480px;
-  }
+  .newsletter-text-content { text-align: center; }
+  .newsletter-form { max-width: 460px; }
 }
 
 @media (max-width: 600px) {
   .newsletter-container {
     padding: 2rem 1rem;
     margin: 3rem auto;
-    max-width: calc(100% - 2rem); /* Ensure it doesn't touch the edges */
-    width: 100%;
+    max-width: calc(100% - 2rem);
   }
-  .newsletter-input-group {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .newsletter-input {
-    width: 100%;
-    padding-right: 1.5rem; /* Reset padding */
-    text-align: center;
-  }
-  .newsletter-btn {
-    position: static; /* Stack on mobile */
-    padding: 0.9rem;
-    width: 100%;
-  }
-} 
+  .newsletter-input-group { flex-direction: column; gap: 0.75rem; }
+  .newsletter-input { width: 100%; padding-right: 1.5rem; text-align: center; }
+  .newsletter-btn { position: static; padding: 0.9rem; width: 100%; }
+}

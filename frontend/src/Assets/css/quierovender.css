@@ -1,24 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap');
+/* ================================================
+   QUIERO VENDER — BookLoop Design System
+   ================================================ */
 
-/* === General Page Setup === */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+/* ============================
+   PAGE SETUP
+   ============================ */
+
 .vender-container {
-  background-color: #f8f9fa; /* Light gray background for the whole page */
-  font-family: 'Inter', sans-serif;
+  background-color: var(--bl-bg);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   padding: 48px 24px;
+  transition: background-color 0.3s ease;
 }
 
 .vender-container > h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading, 'Playfair Display', serif);
   text-align: center;
-  font-size: 2.3rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  letter-spacing: 1px;
-  color: #1f2d3d;
+  letter-spacing: -0.01em;
+  color: var(--bl-text-primary);
   margin-bottom: 40px;
-  
+  position: relative;
+  display: block;
+  border-bottom: none;
 }
 
-/* === Steps Section (Unchanged) === */
+.vender-container > h2::after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--bl-brand-primary), var(--bl-brand-secondary));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.vender-container > h2:hover::after {
+  width: 120px;
+}
+
+/* ============================
+   STEPS GRID
+   ============================ */
+
 .pasos-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -31,92 +61,102 @@
 }
 
 .paso-card {
-  background-color: #ffffff;
+  background-color: var(--bl-bg-elevated);
+  border: 1px solid var(--bl-border);
   padding: 24px 16px;
-  border-radius: 12px;
+  border-radius: 14px;
   text-align: center;
-  border: 1px solid #e9ecef;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.25s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  /* staggered fade-in */
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
 }
+
+.paso-card:nth-child(1) { animation-delay: 0.1s; }
+.paso-card:nth-child(2) { animation-delay: 0.25s; }
+.paso-card:nth-child(3) { animation-delay: 0.4s; }
+.paso-card:nth-child(4) { animation-delay: 0.55s; }
 
 .paso-card:hover {
- 
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.337);
-  transform: translateY(-10px) rotateX(5deg) scale(1.03);
-  cursor:pointer;
-  
+  box-shadow: 0 8px 28px rgba(44, 95, 138, 0.18);
+  border-color: var(--bl-brand-primary);
+  transform: translateY(-8px);
+  cursor: pointer;
 }
-
 
 .paso-icono {
   width: 48px;
   height: 48px;
-  margin-bottom: 20px;
-  filter: grayscale(1);
-  opacity: 0.8;
+  margin-bottom: 18px;
+  filter: grayscale(0.5);
+  opacity: 0.85;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.paso-card:hover .paso-icono {
+  filter: grayscale(0);
+  opacity: 1;
+  transform: scale(1.12) rotate(5deg);
 }
 
 .paso-card h3 {
-  font-family: 'Inter', serif;
-  font-size: 23px;
-  font-weight: 600;
-  color: #1f2d3d;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--bl-text-primary);
   margin-bottom: 8px;
-  transform: translateY(-10px) rotateX(5deg) scale(1.03);
+  border-bottom: none;
 }
 
 .paso-card p {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 0.875rem;
-  color: #475f7a;
-  line-height: 1.5;
+  color: var(--bl-text-secondary);
+  line-height: 1.55;
   max-width: 200px;
   margin: 0 auto;
-  
 }
 
-
-
-
-/* === MODERNIZED FORM STYLES === */
+/* ============================
+   FORM CONTAINER
+   ============================ */
 
 .quierovender-form-container {
   max-width: 720px;
-  margin: 48px auto 48px;
-  background-color: #ffffff;
+  margin: 48px auto;
+  background-color: var(--bl-bg-elevated);
+  border: 1px solid var(--bl-border);
   padding: 48px;
-  border-radius: 16px;
-  /* Enhanced shadow for a more pronounced "floating" 3D effect */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07), 0 15px 35px rgba(57, 75, 96, 0.1);
-  border: 1px solid #e9ecef;
-  transition: all 0.3s ease-in-out; /* Add transition for the hover effect */
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Make the form lift even more on hover to enhance the 3D feel */
 .quierovender-form-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 20px 45px rgba(57, 75, 96, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 36px rgba(44, 95, 138, 0.14);
 }
 
-.quierovender-form-container h2, h3 {
-  font-family: 'Inter', sans-serif;
-  font-size: 2rem;
+.quierovender-form-container h2,
+.quierovender-form-container h3 {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 1.9rem;
   font-weight: 700;
   text-align: center;
-  color: #121416;
+  color: var(--bl-text-primary);
   margin-bottom: 24px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e9ecef; /* Re-added separator line */
+  border-bottom: 1px solid var(--bl-border);
 }
 
 .sell-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .form-group {
@@ -125,178 +165,126 @@
 }
 
 .form-group label {
-  font-size: 1rem;
-  font-weight: 600; /* Bolder labels */
-  color: #121416;
-  margin-bottom: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bl-text-primary);
+  margin-bottom: 10px;
+  transition: color 0.25s ease;
 }
 
-/* Unified styles for all form inputs to ensure consistency */
+/* ============================
+   FORM INPUTS
+   ============================ */
+
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="file"],
 .form-group select,
 .form-group textarea {
-  background-color: #f1f2f4 !important;
-  border: none !important;
-  border-radius: 16px !important; /* Force rounded corners */
-  padding: 16px !important;
-  font-size: 1rem !important;
-  font-family: 'Inter', sans-serif !important;
-  color: #121416 !important;
-  transition: all 0.2s ease-in-out !important;
+  background-color: var(--bl-bg-sunken) !important;
+  border: 1.5px solid var(--bl-border) !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  font-size: 0.97rem !important;
+  font-family: var(--font-body, 'DM Sans', sans-serif) !important;
+  color: var(--bl-text-primary) !important;
+  transition: all 0.22s ease !important;
   width: 100% !important;
   box-sizing: border-box !important;
 }
 
-/* Modernize select dropdown */
 .form-group select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1em;
-  padding-right: 3rem; /* Make space for arrow */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232C5F8A' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 1em !important;
+  padding-right: 3rem !important;
 }
 
-/* Style for options in dropdown to give them a modern feel */
 .form-group select option {
-    background: #ffffff;
-    color: #403434; /* Softer text color */
-    font-weight: 500;
-    padding: 12px 16px; /* Note: Padding may not work on all browsers */
-}
-
-/* Hover and selected state for dropdown options for better UX */
-/* Note: These styles have limited support across different browsers */
-.form-group select option:checked,
-.form-group select option:hover {
-    background-color: #dce8f3;
-    color: #121416;
+  background: var(--bl-bg-elevated);
+  color: var(--bl-text-primary);
 }
 
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="file"],
 .form-group select {
-    height: 56px;
+  height: 54px;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #6a7681;
+  color: var(--bl-text-muted);
 }
 
-/* Elegant focus state */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: transparent;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(57, 75, 96, 0.15); /* Subtle glow */
+  border-color: var(--bl-brand-primary) !important;
+  box-shadow: 0 0 0 3px var(--bl-focus-ring) !important;
+  background-color: var(--bl-bg-elevated) !important;
 }
 
 .form-group textarea {
-  min-height: 144px;
+  min-height: 140px;
   resize: vertical;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 22px;
 }
 
-/* === DEFINITIVE BUTTON FIX & STYLE === */
+/* ============================
+   SUBMIT BUTTON
+   ============================ */
+
 .quierovender-form-container .submit-btn {
-  background-color: #000000 !important; /* Specific selector + !important to GUARANTEE color */
+  background-color: var(--bl-brand-primary) !important;
   color: #ffffff !important;
-  font-size: 17px;
+  font-size: 1rem;
   border: none;
-  border-radius: 8px;
-  padding: 14px 32px; /* A bit more padding */
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  width:90%;
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  width: 90%;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.22s ease;
   margin-top: 16px;
-  align-self: center; /* Align button to the right */
+  align-self: center;
 }
 
 .quierovender-form-container .submit-btn:hover:not(:disabled) {
-  background-color: #000000 !important; /* Slightly darker on hover */
-  
-  box-shadow: 0 6px 16px rgba(9, 11, 14, 0.636); /* Enhanced shadow on hover */
+  background-color: var(--bl-brand-secondary) !important;
+  box-shadow: 0 6px 20px rgba(74, 155, 142, 0.3) !important;
+  transform: translateY(-2px);
 }
 
 .quierovender-form-container .submit-btn:disabled {
-  background-color: #0000 !important;
+  background-color: var(--bl-text-muted) !important;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.55;
   transform: none;
   box-shadow: none;
 }
 
-/* ==================== */
-/* ANIMACIONES AGREGADAS */
-/* ==================== */
+/* ============================
+   ANIMATIONS
+   ============================ */
 
-/* 1. Animación de aparición suave para las tarjetas de pasos */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.paso-card {
-  animation: fadeInUp 0.6s ease-out forwards;
-  opacity: 0; /* Inicia invisible */
-  transform: scale(1.1) rotate(5deg);
-}
-
-.paso-card:nth-child(1) { animation-delay: 0.1s; }
-.paso-card:nth-child(2) { animation-delay: 0.3s; }
-.paso-card:nth-child(3) { animation-delay: 0.5s; }
-.paso-card:nth-child(4) { animation-delay: 0.7s; }
-
-/* 2. Efecto hover mejorado para iconos */
-.paso-icono {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.paso-card:hover .paso-icono {
-  filter: grayscale(0);
-  opacity: 1;
-  transform: scale(1.1) rotate(5deg);
-  
-}
-.paso-card:hover h3{
-transform: scale(1.1) perspective(500px) ;
-color:#2b4058ea
-
-}
-.paso-card:hover p{
-transform: scale(1.1) perspective(500px);
-color:#475f7a
-}
-
-
-
-
-
-
-
-/* 4. Efecto de carga para formulario */
 @keyframes shimmer {
   0% { background-position: -468px 0 }
   100% { background-position: 468px 0 }
@@ -305,127 +293,25 @@ color:#475f7a
 .form-group input:disabled,
 .form-group select:disabled,
 .form-group textarea:disabled {
-  background: linear-gradient(to right, #f1f2f4 8%, #e9ecef 18%, #f1f2f4 33%) !important;
+  background: linear-gradient(to right, var(--bl-bg-sunken) 8%, var(--bl-bg) 18%, var(--bl-bg-sunken) 33%) !important;
   background-size: 800px 104px !important;
   animation: shimmer 1.5s infinite linear !important;
 }
 
-/* 5. Efecto de flotación para el contenedor del formulario */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-
-/* 6. Transición para labels al enfocar inputs */
-.form-group label {
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus + label,
-.form-group select:focus + label,
-.form-group textarea:focus + label {
-  color: #394B60;
-  transform: translateX(5px);
-}
-
-/* 7. Efecto de borde animado para campos requeridos - REMOVIDO */
-/* .form-group input:required,
-.form-group select:required,
-.form-group textarea:required {
-  position: relative;
-}
-
-.form-group input:required:valid,
-.form-group select:required:valid,
-.form-group textarea:required:valid {
-  border-left: 4px solid #3360a3 !important;
-}
-
-.form-group input:required:invalid:not(:placeholder-shown),
-.form-group select:required:invalid,
-.form-group textarea:required:invalid:not(:placeholder-shown) {
-  border-left: 4px solid #3360a3 !important;
-} */
-
-/* 8. Animación de zoom sutil al enfocar textarea */
-.form-group textarea {
-  transform-origin: center top;
-  transition: transform 0.3s ease;
-}
-
-.form-group textarea:focus {
-  transform: scale(1.02);
-}
-
-/* 9. Efecto de transición para el título principal */
-.vender-container > h2 {
-  position: relative;
-  display: block;
-  text-align: center;
-}
-
-.vender-container > h2:after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  bottom: -5px;
-  left: 0;
-  background-color: #1f2d3d;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.vender-container > h2:hover:after {
-  transform: scaleX(1);
-}
-
-/* 10. Efecto de parpadeo para campos importantes - REMOVIDO */
-/* @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(57, 75, 96, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(57, 75, 96, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(57, 75, 96, 0); }
-}
-
-.form-group input:focus:required,
-.form-group select:focus:required,
-.form-group textarea:focus:required {
-  animation: pulse 1.5s infinite;
-} */
-
-
-
-
-
-
-
-
-
-
-/* === RESPONSIVE ADJUSTMENTS === */
+/* ============================
+   RESPONSIVE
+   ============================ */
 
 @media (max-width: 992px) {
-  .pasos-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0 20px;
-  }
+  .pasos-grid { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
 }
 
 @media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr; /* Stack form rows on smaller screens */
-  }
-  .quierovender-form-container {
-    padding: 24px; /* Less padding on mobile */
-  }
+  .form-row { grid-template-columns: 1fr; }
+  .quierovender-form-container { padding: 24px 18px; }
 }
 
 @media (max-width: 576px) {
-  .vender-container > h2 {
-    font-size: 1.5rem;
-  }
-  .pasos-grid {
-    grid-template-columns: 1fr;
-  }
+  .vender-container > h2 { font-size: 1.6rem; }
+  .pasos-grid { grid-template-columns: 1fr; }
 }

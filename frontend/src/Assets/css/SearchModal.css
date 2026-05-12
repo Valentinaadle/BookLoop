@@ -1,85 +1,79 @@
+/* ================================================
+   SEARCH MODAL — BookLoop Design System
+   ================================================ */
+
 .search-modal {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--bl-bg-elevated);
+  border: 1px solid var(--bl-border);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
   max-height: 400px;
   overflow-y: auto;
   z-index: 1000;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
-.search-results {
-  padding: 8px;
-}
+.search-results { padding: 8px; }
 
 .search-result-item {
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
-  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid var(--bl-border-light);
+  border-radius: 8px;
 }
 
 .search-result-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bl-hover-bg);
 }
 
 .result-book-cover {
-  width: 50px;
-  height: 75px;
+  width: 48px;
+  height: 70px;
   object-fit: cover;
-  margin-right: 12px;
-  border-radius: 4px;
+  margin-right: 14px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.result-book-info {
-  flex: 1;
-}
+.result-book-info { flex: 1; }
 
 .result-book-info h4 {
-  margin: 0 0 4px 0;
-  font-size: 14px;
-  color: #333;
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+  color: var(--bl-text-primary);
+  font-weight: 600;
+  border-bottom: none;
 }
 
 .result-book-info p {
   margin: 0;
-  font-size: 12px;
-  color: #666;
+  font-size: 0.8rem;
+  color: var(--bl-text-muted);
 }
 
-.loading {
-  padding: 16px;
-  text-align: center;
-  color: #666;
-}
-
+.loading,
 .no-results {
   padding: 16px;
   text-align: center;
-  color: #666;
+  color: var(--bl-text-muted);
+  font-size: 0.9rem;
 }
 
-/* Estilos para la barra de desplazamiento */
-.search-modal::-webkit-scrollbar {
-  width: 8px;
-}
-
+/* Scrollbar */
+.search-modal::-webkit-scrollbar { width: 6px; }
 .search-modal::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 8px;
+  background: var(--bl-bg-sunken);
+  border-radius: 6px;
 }
-
 .search-modal::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 8px;
+  background: var(--bl-brand-primary);
+  border-radius: 6px;
 }
-
-.search-modal::-webkit-scrollbar-thumb:hover {
-  background: #555;
-} 
+.search-modal::-webkit-scrollbar-thumb:hover { opacity: 0.8; }

@@ -2,23 +2,14 @@ import React, { useState, useEffect } from 'react';
 import '../Assets/css/portada.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Loader from '../components/Loader.jsx';
-import '../Assets/css/loader.css';
 import FAQQuestions from '../components/FAQQuestion.jsx';
+
 import Newsletter from '../components/Newsletter.jsx';
 import Recomendados from '../components/Recomendados';
 import Cuestionario from '../components/Cuestionario';
-
 import { FaShoppingCart, FaBookOpen, FaChevronLeft, FaChevronRight, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import book12 from '../Assets/book12.webp';
-import book5 from "../Assets/book11.webp";
-import book6 from "../Assets/book6.webp";
-import book9 from "../Assets/book9.webp";
-import book3 from "../Assets/book3.webp";
-import book13 from "../Assets/book13.webp";
-import book14 from "../Assets/book14.webp";
 import BookCard from '../components/BookCard';
 import { useAuth } from '../context/AuthContext';
 import { getBookImage, getBookAuthor } from '../utils/bookUtils';
@@ -190,19 +181,11 @@ export default function Portada() {
       alert('Error al borrar libro');
     }
   }
-  const [loading, setLoading] = useState(true);
-  const [minTimePassed, setMinTimePassed] = useState(false);
   const [booksDB, setBooksDB] = useState([]);
   const [destacados, setDestacados] = useState([]);
   const [masVendidos, setMasVendidos] = useState([]);
   const [preferencias, setPreferencias] = useState([]);
   const [recomendaciones, setRecomendaciones] = useState([]);
-
-  useEffect(() => {
-    // Tiempo mínimo para el loader (3 segundos)
-    const timer = setTimeout(() => setMinTimePassed(true), 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     fetch(`${API_URL}/api/books`)
@@ -223,11 +206,8 @@ export default function Portada() {
           .map(book => ({ ...book, descuento: null }));
         setMasVendidos(masVend);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {});
   }, []);
-
-  // El loader solo desaparece cuando ambos son false
-  const showLoader = loading || !minTimePassed;
 
   const manejarSeleccion = (opcion) => {
     setPreferencias(prev => {
@@ -261,11 +241,8 @@ export default function Portada() {
 
   return (
     <>
-      {showLoader && <Loader />}
-      {!showLoader && (
-        <>
-          <Header />
-          <div className="portada">
+      <Header />
+      <div className="portada">
             <section className="hero">
           <div className="overlay">
             <div className="hero-content">
@@ -338,12 +315,10 @@ export default function Portada() {
             
 
 
-            <FAQQuestions />
-            <Newsletter />
-            <Footer />
-          </div>
-        </>
-      )}
+          <FAQQuestions />
+          <Newsletter />
+          <Footer />
+        </div>
     </>
   );
 }

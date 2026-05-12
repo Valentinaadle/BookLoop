@@ -1,19 +1,25 @@
-/* Estilos para el cuestionario interactivo */
+/* ================================================
+   CUESTIONARIO — BookLoop Design System
+   ================================================ */
+
 .cuestionario {
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   text-align: center;
-  background-color: #F5EFEB;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background-color: var(--bl-bg-sunken);
+  border-radius: 16px;
+  border: 1px solid var(--bl-border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
+  transition: background-color 0.3s ease;
 }
 
 .cuestionario h3 {
-  font-family: var(--heading-font);
-  font-size: 2rem;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.85rem;
   margin-bottom: 1.5rem;
-  color: #394B60;
+  color: var(--bl-text-primary);
   font-weight: 700;
+  border-bottom: none;
 }
 
 .pregunta {
@@ -21,44 +27,59 @@
 }
 
 .pregunta p {
-  font-size: 1.2rem;
-  color: #394B60;
+  font-size: 1.1rem;
+  color: var(--bl-text-secondary);
   margin-bottom: 1rem;
 }
 
 .pregunta button {
-  font-family: var(--heading-font);
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  padding: 0.7rem 1.4rem;
+  font-size: 0.95rem;
+  border-radius: 24px;
+  border: 1.5px solid var(--bl-border);
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #CBd9E6;
-  color: #394B60;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  margin: 0.5rem;
+  transition: all 0.22s ease;
+  background-color: var(--bl-bg-elevated);
+  color: var(--bl-text-secondary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  margin: 0.35rem;
 }
 
 .pregunta button:hover {
-  background-color: #b9c7d4;
+  border-color: var(--bl-brand-primary);
+  color: var(--bl-brand-primary);
+  background: var(--bl-hover-bg);
 }
 
-/* Estilos para el botón de ver recomendaciones */
+.pregunta button.selected {
+  background: var(--bl-brand-primary);
+  border-color: var(--bl-brand-primary);
+  color: #ffffff;
+}
+
+/* Ver recomendaciones */
 .ver-recomendaciones {
-  font-family: var(--heading-font);
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 8px;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  padding: 0.85rem 2.2rem;
+  font-size: 1.05rem;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #394B60;
-  color: #FFFFFF;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.22s ease;
+  background-color: var(--bl-brand-primary);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(44, 95, 138, 0.22);
   margin-top: 1rem;
 }
 
-.ver-recomendaciones:hover {
-  background-color: #2f3c4d;
-} 
+.ver-recomendaciones:hover:not(:disabled) {
+  background-color: var(--bl-brand-secondary);
+  transform: translateY(-2px);
+}
+
+.ver-recomendaciones:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

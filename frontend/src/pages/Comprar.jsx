@@ -245,12 +245,12 @@ const Comprar = () => {
               width: '280px',
               maxWidth: '75vw',
               height: '100vh',
-              backgroundColor: 'white',
+              backgroundColor: 'var(--bl-bg-elevated, #ffffff)',
               zIndex: 99999,
-              padding: '20px',
+              padding: '24px',
               paddingBottom: '40px',
-              overflowY: 'scroll',
-              boxShadow: '2px 0 15px rgba(0,0,0,0.3)',
+              overflowY: 'auto',
+              boxShadow: '4px 0 24px rgba(0,0,0,0.15)',
               display: 'flex',
               flexDirection: 'column'
             }}
@@ -258,12 +258,18 @@ const Comprar = () => {
             <div style={{ 
               marginBottom: '25px',
               paddingBottom: '15px',
-              borderBottom: '2px solid #f0f0f0',
+              borderBottom: '1px solid var(--bl-border-light, #f3f4f6)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center'
             }}>
-              <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', color: '#333' }}>
+              <h2 style={{ 
+                margin: 0, 
+                fontSize: '1.25rem', 
+                fontWeight: '700', 
+                color: 'var(--bl-text-primary, #111827)',
+                fontFamily: "'Playfair Display', serif"
+              }}>
                 Filtros
               </h2>
               <button
@@ -311,44 +317,25 @@ const Comprar = () => {
                 margin: '0 0 15px 0', 
                 fontSize: '16px', 
                 fontWeight: 'bold',
-                color: '#555'
+                color: 'var(--bl-text-primary, #111827)'
               }}>
                 Género
               </h3>
-              <div style={{
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '6px',
-                  padding: '10px',
-                  maxHeight: 'none',
-                  overflow: 'visible'
-                }}>
+              <div className="chips-container" style={{ padding: '4px' }}>
                 {categories
                   .filter(category => !genresToExclude.includes(category.category_name))
-                  .map(category => (
-                  <label 
-                    key={category.category_id} 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '8px',
-                      cursor: 'pointer',
-                      fontSize: '14px'
-                    }}
-                  >
-                    <input 
-                      type="checkbox"
-                      checked={selectedGenres.includes(category.category_name)}
-                      onChange={() => handleGenreChange(category.category_name)}
-                      style={{ 
-                        marginRight: '10px', 
-                        cursor: 'pointer',
-                        width: '16px',  // Añadido
-                        height: '16px',  // Añadido
-                        accentColor: '#1f2d3d'  // Añadido
-                      }} 
-                    />
-                    {category.category_name}
-                  </label>
-                ))}
+                  .map(category => {
+                    const isSelected = selectedGenres.includes(category.category_name);
+                    return (
+                      <button
+                        key={category.category_id}
+                        className={`filter-chip ${isSelected ? 'selected' : ''}`}
+                        onClick={() => handleGenreChange(category.category_name)}
+                      >
+                        {category.category_name}
+                      </button>
+                    );
+                  })}
               </div>
             </div>
 
@@ -358,34 +345,23 @@ const Comprar = () => {
                 margin: '0 0 15px 0', 
                 fontSize: '16px', 
                 fontWeight: 'bold',
-                color: '#555'
+                color: 'var(--bl-text-primary, #111827)'
               }}>
                 Idioma
               </h3>
-              <div style={{ 
-                border: '1px solid #e0e0e0',
-                borderRadius: '6px',
-                padding: '10px'
-              }}>
-                {Object.values(languageMap).map(lang => (
-                  <label 
-                    key={lang} 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '8px',
-                      cursor: 'pointer',
-                      fontSize: '14px'
-                    }}
-                  >
-                    <input 
-                      type="checkbox"
-                      checked={selectedLanguages.includes(lang)}
-                      onChange={() => handleLanguageChange(lang)}
-                      style={{ marginRight: '10px', cursor: 'pointer' }} 
-                    />
-                    {lang}
-                  </label>
-                ))}
+              <div className="chips-container" style={{ padding: '4px' }}>
+                {Object.values(languageMap).map(lang => {
+                  const isSelected = selectedLanguages.includes(lang);
+                  return (
+                    <button
+                      key={lang}
+                      className={`filter-chip ${isSelected ? 'selected' : ''}`}
+                      onClick={() => handleLanguageChange(lang)}
+                    >
+                      {lang}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -395,34 +371,23 @@ const Comprar = () => {
                 margin: '0 0 15px 0', 
                 fontSize: '16px', 
                 fontWeight: 'bold',
-                color: '#555'
+                color: 'var(--bl-text-primary, #111827)'
               }}>
                 Estado
               </h3>
-              <div style={{ 
-                border: '1px solid #e0e0e0',
-                borderRadius: '6px',
-                padding: '10px'
-              }}>
-                {["Nuevo", "Como Nuevo", "Buen Estado", "Aceptable", ].map(condition => (
-                  <label 
-                    key={condition} 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '8px',
-                      cursor: 'pointer',
-                      fontSize: '14px'
-                    }}
-                  >
-                    <input 
-                      type="checkbox"
-                      checked={selectedConditions.includes(condition)}
-                      onChange={() => handleConditionChange(condition)}
-                      style={{ marginRight: '10px', cursor: 'pointer' }} 
-                    />
-                    {condition}
-                  </label>
-                ))}
+              <div className="chips-container" style={{ padding: '4px' }}>
+                {["Nuevo", "Como Nuevo", "Buen Estado", "Aceptable"].map(condition => {
+                  const isSelected = selectedConditions.includes(condition);
+                  return (
+                    <button
+                      key={condition}
+                      className={`filter-chip ${isSelected ? 'selected' : ''}`}
+                      onClick={() => handleConditionChange(condition)}
+                    >
+                      {condition}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -432,46 +397,32 @@ const Comprar = () => {
                 margin: '0 0 15px 0', 
                 fontSize: '16px', 
                 fontWeight: 'bold',
-                color: '#555'
+                color: 'var(--bl-text-primary, #111827)'
               }}>
                 Rango de Precio
               </h3>
-              <div style={{ 
-                border: '1px solid #e0e0e0',
-                borderRadius: '6px',
-                padding: '15px',
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: '12px' 
-              }}>
-                <input 
-                  type="number" 
-                  placeholder="Precio mínimo ($)" 
-                  value={priceRange.min}
-                  onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                  style={{ 
-                    width: '100%', 
-                    padding: '12px', 
-                    border: '1px solid #ddd',
-                    borderRadius: '6px',
-                    fontSize: '14px',
-                    boxSizing: 'border-box'
-                  }} 
-                />
-                <input 
-                  type="number" 
-                  placeholder="Precio máximo ($)" 
-                  value={priceRange.max}
-                  onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                  style={{ 
-                    width: '100%', 
-                    padding: '12px',
-                    border: '1px solid #ddd',
-                    borderRadius: '6px',
-                    fontSize: '14px',
-                    boxSizing: 'border-box'
-                  }} 
-                />
+              <div className="price-inputs-row" style={{ marginTop: '10px' }}>
+                <div className="price-input-wrapper">
+                  <span className="currency-symbol">$</span>
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={priceRange.min}
+                    onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                    className="modern-price-input"
+                  />
+                </div>
+                <span className="price-separator">-</span>
+                <div className="price-input-wrapper">
+                  <span className="currency-symbol">$</span>
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={priceRange.max}
+                    onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                    className="modern-price-input"
+                  />
+                </div>
               </div>
             </div>
 
@@ -482,14 +433,18 @@ const Comprar = () => {
                 }}
                 style={{
                   width: '100%',
-                  padding: '10px',
-                  fontSize: '14px',
-                  backgroundColor: '#353b5fff',
+                  padding: '12px',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  backgroundColor: 'var(--bl-brand-primary, #3b82f6)',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer'
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s'
                 }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--bl-brand-primary-hover, #2563eb)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--bl-brand-primary, #3b82f6)'}
               >
                 Aplicar Filtros
               </button>

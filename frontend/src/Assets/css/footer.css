@@ -1,21 +1,16 @@
-/* Dark Minimalist Footer - v2 */
-
-:root {
-  --footer-bg: #1e293b;
-  --footer-text: #a1a1aa;
-  --footer-heading: #f4f4f5;
-  --footer-border: #334155; /* Un gris más claro para el borde (gray-700) */
-  --footer-hover: #ffffff;
-  --icon-bg: #1e293b;
-  --icon-bg-hover: #334155;
-}
+/* ================================================
+   FOOTER — BookLoop Design System
+   Usa variables --bl-* definidas en index.css
+   ================================================ */
 
 .dark-minimalist-footer {
-  background-color: var(--footer-bg);
-  color: var(--footer-text);
-  font-family: 'Inter', sans-serif;
-  padding: 64px 0 32px; /* Reducido el padding inferior */
+  background-color: var(--bl-bg-sunken);
+  border-top: 1px solid var(--bl-border);
+  color: var(--bl-text-secondary);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  padding: 56px 0 28px;
   margin-top: auto;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .footer-container {
@@ -27,138 +22,142 @@
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 32px; /* Reducido para un look más compacto */
+  gap: 32px;
   margin-bottom: 48px;
 }
 
-/* Columna de la marca (Punto 1 y 3) */
+/* --- Brand column --- */
 .footer-brand {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Alineado al inicio */
+  justify-content: flex-start;
   grid-column: span 1;
 }
 
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 8px; /* Espaciado reducido */
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 14px;
   text-decoration: none;
-  color: var(--footer-heading);
+  color: var(--bl-text-primary);
 }
 
 .brand-logo h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px; /* Un poco más pequeño */
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 22px;
   font-weight: 700;
-  color: var(--footer-heading);
-  border-bottom: none; /* Eliminamos el borde inferior */
+  color: var(--bl-text-primary);
+  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .brand-logo svg {
-  transform: translateY(-15px) !important; /* Mueve el ícono hacia arriba */
+  transform: translateY(-15px) !important;
 }
 
 .brand-description {
-  font-size: 14px;
-  line-height: 1.7; /* leading-relaxed */
-  max-width: 256px; /* max-w-xs */
-  margin-bottom: 24px;
-  margin-top: -40px;
-  color:#a1a1aa;
+  font-size: 13.5px;
+  line-height: 1.7;
+  max-width: 256px;
+  margin-bottom: 20px;
+  margin-top: -36px;
+  color: var(--bl-text-muted);
 }
 
-/* Íconos sociales (Punto 2) */
+/* --- Social links --- */
 .social-links {
   display: flex;
-  gap: 12px; /* gap-3 */
-  margin-top: auto; /* Empuja los íconos hacia abajo */
+  gap: 10px;
+  margin-top: auto;
 }
 
 .social-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: var(--icon-bg);
-  border-radius: 9999px; /* rounded-full */
-  color: var(--footer-text);
-  transition: all 0.2s ease-in-out;
+  width: 38px;
+  height: 38px;
+  background-color: var(--bl-bg-elevated);
+  border: 1px solid var(--bl-border);
+  border-radius: 50%;
+  color: var(--bl-text-muted);
+  transition: all 0.22s ease;
+  text-decoration: none;
 }
 
 .social-link:hover {
-  background-color: var(--icon-bg-hover);
-  color: var(--footer-hover);
+  background-color: var(--bl-brand-primary);
+  border-color: var(--bl-brand-primary);
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
-/* Secciones de enlaces (Punto 7 opcional) */
+/* --- Footer sections --- */
 .footer-section h4 {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 700; /* Bold */
-  letter-spacing: 0.05em;
-  color: var(--footer-heading);
-  margin-bottom: 20px;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--bl-text-primary);
+  margin-bottom: 18px;
 }
 
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .footer-links a {
-  color: var(--footer-text);
+  color: var(--bl-text-muted);
   text-decoration: none;
-  font-size: 14px;
-  transition: color 0.2s ease-in-out;
+  font-size: 13.5px;
+  transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
-  color: var(--footer-hover);
+  color: var(--bl-brand-primary);
 }
 
-/* Parte inferior del footer (Punto 5) */
+/* --- Footer bottom --- */
 .footer-bottom {
-  border-top: 1px solid var(--footer-border);
-  padding-top: 32px; /* mt-8 */
+  border-top: 1px solid var(--bl-border);
+  padding-top: 28px;
   text-align: center;
 }
 
 .footer-bottom p {
   font-size: 12px;
-  color: var(--footer-text);
+  color: var(--bl-text-muted);
 }
 
-/* Diseño responsivo (Punto 6) */
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
 @media (max-width: 1024px) {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
+    gap: 36px;
   }
 }
 
 @media (max-width: 768px) {
   .dark-minimalist-footer {
-    padding: 48px 0 24px;
+    padding: 40px 0 20px;
   }
-
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
-    text-align: left; /* Alineado a la izquierda en mobile */
+    gap: 28px;
+    text-align: left;
   }
-  
-  .footer-brand, .footer-section {
-    align-items: flex-start; /* Alineado a la izquierda */
+  .footer-brand,
+  .footer-section {
+    align-items: flex-start;
   }
-
   .social-links {
-    justify-content: flex-start; /* Alineado a la izquierda */
-    margin-top: 16px;
+    justify-content: flex-start;
+    margin-top: 14px;
   }
 }
-  

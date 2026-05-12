@@ -111,6 +111,7 @@ export default function Header() {
 
         <div className="header-actions">
           <div className="user-actions">
+            <ThemeButton />
             {isAuthenticated ? (
               <>
                 {!isAdmin && (

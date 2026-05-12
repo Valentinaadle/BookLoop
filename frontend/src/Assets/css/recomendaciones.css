@@ -1,40 +1,47 @@
-/* Estilos para la selección de género favorito */
+/* Recomendaciones — BookLoop Design System */
+
 .recomendaciones {
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   text-align: center;
-  background-color: #F5EFEB;
+  background-color: var(--bl-bg-elevated);
+  border-top: 1px solid var(--bl-border);
+  transition: background-color 0.3s ease;
 }
 
 .recomendaciones h3 {
-  font-family: var(--heading-font);
-  font-size: 2rem;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.9rem;
   margin-bottom: 1.5rem;
-  color: #394B60;
+  color: var(--bl-text-primary);
   font-weight: 700;
+  border-bottom: none;
 }
 
 .generos {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .generos button {
-  font-family: var(--heading-font);
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  padding: 0.65rem 1.3rem;
+  font-size: 0.95rem;
+  border-radius: 22px;
+  border: 1.5px solid var(--bl-border);
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #CBd9E6;
-  color: #394B60;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: all 0.22s ease;
+  background-color: var(--bl-bg-elevated);
+  color: var(--bl-text-secondary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .generos button:hover {
-  background-color: #b9c7d4;
+  border-color: var(--bl-brand-primary);
+  color: var(--bl-brand-primary);
+  background: var(--bl-hover-bg);
 }
 
 .recomendaciones-grid {
@@ -42,4 +49,4 @@
   gap: 2rem;
   justify-content: center;
   flex-wrap: wrap;
-} 
+}

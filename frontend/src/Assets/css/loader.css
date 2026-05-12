@@ -15,7 +15,7 @@
   font-family: 'Playfair Display', serif !important;
   font-size: 5rem;
   font-weight: 700;
-  color: #222;
+  color: var(--bl-text-primary);
   letter-spacing: -0.04em;
   text-align: center;
   user-select: none;

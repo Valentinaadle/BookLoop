@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-
+import { ThemeProvider } from './context/ThemeContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
@@ -39,6 +39,7 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
+    <ThemeProvider>
     <AuthProvider>
       <FavoritesProvider>
         
@@ -104,6 +105,7 @@ function App() {
         
       </FavoritesProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 

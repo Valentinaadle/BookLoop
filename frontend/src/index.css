@@ -2,181 +2,402 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
 
+/* ================================================
+   SISTEMA DE TOKENS — BookLoop Design System
+   ================================================ */
+
+/* === MODO CLARO (default) === */
 :root {
-  --white: #FFFFFF;
-  --grey: #F6F6F6;
-  --beige: #F2F0ED;
-  --blue: #DDE7F3;
-  --orange: #FFB22C;
-  --brown: #854836;
-  --black: #2A2A2A;
-  --heading-font: 'Playfair Display', serif;
-  --body-font: 'Ysabeau', sans-serif;
-  --raptures-light: #F6F3E7;
-  --milk-tooth: #FAEBD7;
-  --caramel-essence: #E3AF64;
-  --sapphire-dust: #516AC8;
-  --blue-oblivion: #26428B;
-  --cosmic-odyssey: #0F1939;
+  /* Brand */
+  --bl-brand-primary:   #2C5F8A;   /* Azul mar profundo */
+  --bl-brand-secondary: #4A9B8E;   /* Verde salvia teal */
+  --bl-brand-accent:    #E8A838;   /* Ámbar cálido */
+
+  /* Surfaces */
+  --bl-bg:              #F7F5F0;   /* Crema natural */
+  --bl-bg-elevated:     #FFFFFF;
+  --bl-bg-sunken:       #EDEAE3;
+  --bl-bg-card:         #FFFFFF;
+
+  /* Text */
+  --bl-text-primary:    #1A2332;   /* Azul casi negro */
+  --bl-text-secondary:  #4A5568;
+  --bl-text-muted:      #8A95A3;
+  --bl-text-inverse:    #F7F5F0;
+
+  /* Borders */
+  --bl-border:          #D9D4C7;
+  --bl-border-light:    #EDE8DF;
+
+  /* Interactive */
+  --bl-hover-bg:        #EBF3F9;
+  --bl-focus-ring:      rgba(44, 95, 138, 0.25);
+
+  /* Semantic */
+  --bl-success:         #38A169;
+  --bl-error:           #C53030;
+
+  /* Header */
+  --bl-header-bg:       rgba(247, 245, 240, 0.92);
+  --bl-header-border:   #D9D4C7;
+  --bl-header-text:     #1A2332;
+
+  /* Nav link underline */
+  --bl-nav-accent:      #2C5F8A;
+
+  /* Search */
+  --bl-search-bg:       #EDEAE3;
+  --bl-search-focus-bg: #FFFFFF;
+
+  /* Table */
+  --bl-bg-table:        #FFFFFF;
+  --bl-bg-table-header: #F3F4F8;
+  --bl-bg-table-row-hover: #F6F8FA;
+
+  /* Input */
+  --bl-input-bg:        #FFFFFF;
+  --bl-input-bg-sunken: #F7F8FA;
+
+  /* Scrollbar */
+  --bl-scrollbar-track: #EDEAE3;
+  --bl-scrollbar-thumb: #2C5F8A;
+
+  /* Fonts */
+  --font-heading:       'Playfair Display', Georgia, serif;
+  --font-body:          'DM Sans', 'Inter', system-ui, sans-serif;
+  --font-mono:          'Fira Code', 'Courier New', monospace;
 }
+
+/* === MODO OSCURO === */
+html.dark {
+  --bl-brand-primary:   #5B9DC8;   /* Azul cielo más suave */
+  --bl-brand-secondary: #6BBDB0;   /* Verde menta teal */
+  --bl-brand-accent:    #F0C060;   /* Ámbar más luminoso */
+
+  /* Surfaces */
+  --bl-bg:              #111827;   /* Fondo principal casi negro */
+  --bl-bg-elevated:     #1F2937;   /* Cards y paneles elevados */
+  --bl-bg-sunken:       #0D1421;   /* Zonas hundidas */
+  --bl-bg-card:         #1F2937;
+
+  /* Text */
+  --bl-text-primary:    #F1EDE4;   /* Crema suave */
+  --bl-text-secondary:  #B0BAC8;
+  --bl-text-muted:      #6B7A8D;
+  --bl-text-inverse:    #111827;
+
+  /* Borders */
+  --bl-border:          #2D3748;
+  --bl-border-light:    #1E2A3A;
+
+  /* Interactive */
+  --bl-hover-bg:        #243042;
+  --bl-focus-ring:      rgba(91, 157, 200, 0.3);
+
+  /* Header */
+  --bl-header-bg:       rgba(17, 24, 39, 0.95);
+  --bl-header-border:   #2D3748;
+  --bl-header-text:     #F1EDE4;
+
+  /* Nav link */
+  --bl-nav-accent:      #5B9DC8;
+
+  /* Search */
+  --bl-search-bg:       #243042;
+  --bl-search-focus-bg: #2D3748;
+
+  /* Table */
+  --bl-bg-table:        #1F2937;
+  --bl-bg-table-header: #111827;
+  --bl-bg-table-row-hover: #243042;
+
+  /* Input */
+  --bl-input-bg:        #1F2937;
+  --bl-input-bg-sunken: #111827;
+
+  /* Scrollbar */
+  --bl-scrollbar-track: #1F2937;
+  --bl-scrollbar-thumb: #5B9DC8;
+}
+
+/* ================================================
+   BASE STYLES
+   ================================================ */
 
 @layer base {
   * {
-    @apply m-0 p-0 box-border;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   html {
-    @apply min-h-screen bg-black;
+    scroll-behavior: smooth;
+    min-height: 100%;
   }
 
   body {
-    @apply m-0 font-[var(--body-font)] antialiased bg-gradient-to-br from-cosmic-odyssey to-black text-raptures-light min-h-screen;
-  }
-
-  body.intro-active {
-    @apply overflow-hidden;
-  }
-
-  code {
-    @apply font-mono;
-  }
-
-  .App-link {
-    @apply text-sapphire-dust;
-  }
-
-  :root {
-    --raptures-light: 246 243 231;
-    --milk-tooth: 250 235 215;
-    --caramel-essence: 227 175 100;
-    --sapphire-dust: 81 106 200;
-    --blue-oblivion: 38 66 139;
-    --cosmic-odyssey: 15 25 57;
-  }
-}
-
-@layer components {
-  .container, .card {
-    @apply bg-cosmic-odyssey/70 border border-raptures-light/10 rounded-2xl backdrop-blur-lg shadow-lg;
+    font-family: var(--font-body);
+    background-color: var(--bl-bg);
+    color: var(--bl-text-primary);
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-raptures-light mb-4;
+    font-family: var(--font-heading);
+    color: var(--bl-text-primary);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
   }
 
   p {
-    @apply text-milk-tooth leading-relaxed;
+    color: var(--bl-text-secondary);
+    line-height: 1.7;
   }
 
   a {
-    @apply text-caramel-essence no-underline transition-colors duration-300;
+    color: var(--bl-brand-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
   }
 
-  
-
-  .card-3d {
-    @apply relative w-full transform-gpu transition-all duration-300 will-change-transform;
+  a:hover {
+    color: var(--bl-brand-secondary);
   }
 
-  .btn-primary {
-    @apply bg-caramel-essence text-cosmic-odyssey font-medium py-2 px-4 rounded-lg 
-           hover:bg-opacity-90 transition-all duration-300 
-           transform hover:-translate-y-1 hover:shadow-lg;
-  }
-
-  .glass-effect {
-    @apply bg-opacity-20 backdrop-blur-md border border-white/10 
-           dark:border-white/5 rounded-xl;
-  }
-
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r 
-           from-caramel-essence to-sapphire-dust;
+  code {
+    font-family: var(--font-mono);
   }
 }
+
+/* ================================================
+   COMPONENTS
+   ================================================ */
+
+@layer components {
+
+  /* --- Theme Toggle Button --- */
+  .theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--bl-border);
+    background: var(--bl-bg-elevated);
+    color: var(--bl-brand-primary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle-btn:hover {
+    background: var(--bl-hover-bg);
+    border-color: var(--bl-brand-primary);
+    transform: rotate(15deg) scale(1.05);
+    box-shadow: 0 3px 10px var(--bl-focus-ring);
+  }
+
+  .theme-toggle-icon {
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* --- Cards --- */
+  .bl-card {
+    background: var(--bl-bg-card);
+    border: 1px solid var(--bl-border);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .bl-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+    border-color: var(--bl-brand-primary);
+  }
+
+  /* --- Primary Button --- */
+  .bl-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.75rem;
+    background: var(--bl-brand-primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(44, 95, 138, 0.25);
+  }
+
+  .bl-btn-primary:hover {
+    background: var(--bl-brand-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(44, 95, 138, 0.35);
+    color: #fff;
+  }
+
+  /* --- Secondary Button --- */
+  .bl-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.75rem;
+    background: transparent;
+    color: var(--bl-brand-primary);
+    border: 2px solid var(--bl-brand-primary);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .bl-btn-secondary:hover {
+    background: var(--bl-brand-primary);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* --- Section heading --- */
+  .bl-section-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--bl-text-primary);
+    letter-spacing: -0.03em;
+  }
+}
+
+/* ================================================
+   UTILITIES
+   ================================================ */
 
 @layer utilities {
-  .dark-mode {
-    @apply bg-black text-raptures-light;
-  }
+  .text-brand { color: var(--bl-brand-primary); }
+  .text-accent { color: var(--bl-brand-accent); }
 
-  .text-shadow {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
+  .bg-surface { background-color: var(--bl-bg); }
+  .bg-elevated { background-color: var(--bl-bg-elevated); }
 
-  .text-shadow-lg {
-    text-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
+  .border-theme { border-color: var(--bl-border); }
 }
 
-/* Modern scrollbar */
+/* ================================================
+   SCROLLBAR
+   ================================================ */
+
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: rgb(var(--cosmic-odyssey));
+  background: var(--bl-scrollbar-track);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgb(var(--sapphire-dust));
-  border-radius: 5px;
+  background: var(--bl-scrollbar-thumb);
+  border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--blue-oblivion));
+  opacity: 0.8;
 }
 
-/* Base styles */
-body {
-  @apply bg-black text-raptures-light antialiased;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+/* ================================================
+   TRANSITIONS GLOBALES (para dark mode suave)
+   Solo background-color, border-color y color.
+   NO transform ni box-shadow (causaría jank).
+   ================================================ */
+
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
 }
 
-/* Dark mode styles */
-.dark {
-  @apply bg-black text-raptures-light;
+/* Excluir transiciones de elementos que no lo necesitan */
+.no-transition,
+.no-transition *,
+img, video, svg path, .loader-bg {
+  transition: none !important;
 }
 
-.dark .prose {
-  @apply text-raptures-light;
-}
+/* ================================================
+   TAILWIND DARK MODE OVERRIDES
+   Fuerza que las Tailwind classes hardcodeadas
+   en JSX respondan a html.dark
+   ================================================ */
 
-.dark .prose h1,
-.dark .prose h2,
-.dark .prose h3,
-.dark .prose h4 {
-  @apply text-milk-tooth;
+html.dark .bg-white {
+  background-color: var(--bl-bg-elevated) !important;
 }
-
-.dark .prose a {
-  @apply text-sapphire-dust hover:text-caramel-essence;
+html.dark .bg-gray-50,
+html.dark .bg-gray-100,
+html.dark .bg-slate-50 {
+  background-color: var(--bl-bg-sunken) !important;
 }
-
-/* Modern card styles */
-.modern-card {
-  @apply relative overflow-hidden rounded-xl border border-white/10
-         bg-gradient-to-b from-cosmic-odyssey to-black
-         transition-all duration-300 hover:border-white/20;
+html.dark .bg-gray-200 {
+  background-color: var(--bl-border) !important;
 }
-
-.modern-card:hover {
-  @apply shadow-xl shadow-sapphire-dust/10;
+html.dark .text-gray-900,
+html.dark .text-slate-900,
+html.dark .text-gray-800,
+html.dark .text-slate-800 {
+  color: var(--bl-text-primary) !important;
 }
-
-/* Animation utilities */
-.hover-lift {
-  @apply transition-transform duration-300 hover:-translate-y-1;
+html.dark .text-gray-700,
+html.dark .text-slate-700,
+html.dark .text-gray-600,
+html.dark .text-slate-600 {
+  color: var(--bl-text-secondary) !important;
 }
-
-.hover-scale {
-  @apply transition-transform duration-300 hover:scale-105;
+html.dark .text-gray-500,
+html.dark .text-slate-500,
+html.dark .text-gray-400 {
+  color: var(--bl-text-muted) !important;
 }
-
-/* Typography */
-/** h1, h2, h3, h4, h5, h6 {
- @apply font-semibold tracking-tight text-milk-tooth; 
-}**/
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-slate-100,
+html.dark .border-slate-200 {
+  border-color: var(--bl-border) !important;
+}
+html.dark .border-gray-300,
+html.dark .border-slate-300 {
+  border-color: var(--bl-border) !important;
+}
+html.dark .shadow,
+html.dark .shadow-sm,
+html.dark .shadow-md {
+  --tw-shadow-color: rgba(0, 0, 0, 0.4);
+}
+html.dark .divide-gray-200 > * + * {
+  border-color: var(--bl-border) !important;
+}
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: var(--bl-input-bg) !important;
+  color: var(--bl-text-primary) !important;
+  border-color: var(--bl-border) !important;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--bl-text-muted) !important;
+}

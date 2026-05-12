@@ -1,138 +1,158 @@
-/* Inspired by modern book store UI */
+/* ================================================
+   BOOK DETAILS — BookLoop Design System
+   ================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-/* Set base font and background for the entire page */
+/* Override body for this page */
 body {
-  font-family: 'Inter', sans-serif !important;
-  background-color: #f8f9fa !important;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  background-color: var(--bl-bg) !important;
 }
 
-/* Main container for content, providing space from header/footer */
 .container.mx-auto.p-4 {
   background-color: transparent !important;
   max-width: 1200px;
-  margin-top: 56px !important;
+  margin-top: 48px !important;
   margin-bottom: 56px !important;
   padding: 0 24px !important;
 }
 
-/* Main book title styling */
+/* ============================
+   TITLE
+   ============================ */
+
 h1.text-4xl {
-  font-family: 'Playfair Display', serif !important;
-  font-size: 2.8rem !important;
+  font-family: var(--font-heading, 'Playfair Display', serif) !important;
+  font-size: 2.7rem !important;
   font-weight: 800 !important;
-  color: #1f2d3d !important;
-  margin-bottom: 24px !important;
+  color: var(--bl-text-primary) !important;
+  margin-bottom: 22px !important;
   text-align: left;
 }
 
-/* General card style for all content boxes */
+/* ============================
+   CARDS
+   ============================ */
+
 .lg\:col-span-1 > .bg-white,
 .lg\:col-span-2 > .bg-white {
-  background: #ffffff !important;
-  border-radius: 16px !important;
-  box-shadow: 0 6px 24px rgba(149, 157, 165, 0.15) !important;
-  padding: 32px !important;
-  border: none !important;
+  background: var(--bl-bg-elevated) !important;
+  border: 1px solid var(--bl-border) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07) !important;
+  padding: 30px !important;
 }
 
-/* Left Card: Book Cover styling */
+/* Book cover */
 .book-cover-detail {
-  width: 280px; /* Larger, as requested */
-  display: block; /* Ensure it's treated as a block for centering */
-  margin: 0 auto 24px auto;
-  border-radius: 8px;
+  width: 260px;
+  display: block;
+  margin: 0 auto 22px auto;
+  border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .book-cover-detail img {
   width: 100%;
   height: auto;
   object-fit: cover;
 }
+
 .book-cover-detail:hover {
-  transform: scale(1.04);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  transform: scale(1.03);
+  box-shadow: 0 14px 36px rgba(44, 95, 138, 0.2);
 }
 
-/* Author, Seller, and Price styling */
+/* Author / Seller text */
 .lg\:col-span-1 .text-slate-700 {
   font-size: 1rem !important;
-  color: #6c757d !important;
+  color: var(--bl-text-muted) !important;
 }
+
 .lg\:col-span-1 .text-slate-800 {
-  color: #1f2d3d !important;
+  color: var(--bl-text-primary) !important;
   font-weight: 600 !important;
 }
-.lg\:col-span-1 .text-2xl.font-bold { /* Price */
-  font-family: 'Inter', serif !important;
+
+/* Price */
+.lg\:col-span-1 .text-2xl.font-bold {
+  font-family: var(--font-body, 'DM Sans', sans-serif) !important;
   font-size: 2rem !important;
-  font-weight: 550 !important;
-  color: #1f2d3d !important;
+  font-weight: 700 !important;
+  color: var(--bl-brand-primary) !important;
   margin-top: 16px !important;
 }
 
-/* "Contactar Vendedor" button */
+/* ============================
+   CONTACT BUTTON
+   ============================ */
+
 button.bg-sky-600 {
-  background-color: #1f2d3d !important;
+  background-color: var(--bl-brand-primary) !important;
   color: white !important;
-  border-radius: 10px !important;
-  font-weight: 600 !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
   padding: 14px 0 !important;
-  transition: all 0.25s ease-out;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(44, 95, 138, 0.22);
   border: none;
 }
+
 button.bg-sky-600:hover {
-  background-color: #394B60 !important;
+  background-color: var(--bl-brand-secondary) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(74, 155, 142, 0.3);
 }
 
-/* Right Cards: "Detalles" and "Sinopsis" titles */
+/* ============================
+   RIGHT CARDS — SECTIONS
+   ============================ */
+
 .lg\:col-span-2 h2 {
-  font-family: 'Playfair Display', serif !important;
+  font-family: var(--font-heading, 'Playfair Display', serif) !important;
   font-size: 1.5rem !important;
   font-weight: 700 !important;
-  color: #1f2d3d!important;
-  margin-bottom: 20px !important;
+  color: var(--bl-text-primary) !important;
+  margin-bottom: 18px !important;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--bl-border) !important;
 }
 
-/* Details Grid styling */
-.details-grid {
-  gap: 16px !important;
-}
+/* Details grid */
+.details-grid { gap: 16px !important; }
+
 .details-grid .text-xs.text-slate-500 {
-  color: #475f7a !important;
+  color: var(--bl-text-muted) !important;
   font-size: 0.8rem !important;
   margin-bottom: 2px;
 }
+
 .details-grid .text-sm.text-slate-800 {
-  color: #343a40 !important;
+  color: var(--bl-text-primary) !important;
   font-weight: 500 !important;
   font-size: 0.95rem !important;
 }
 
-/* Synopsis paragraph styling */
+/* Synopsis */
 .prose.prose-sm p {
-  line-height: 1.7 !important;
-  color: #495057 !important;
+  line-height: 1.75 !important;
+  color: var(--bl-text-secondary) !important;
   font-size: 1rem !important;
 }
 
-/* Remove any leftover specific styles that might conflict */
-.book-description, .book-title, .book-details h3, .book-synopsis h3 {
-  /* This block is intentionally left empty to override previous general rules if needed, without using unset */
-}
+/* ============================
+   HEADER ROW / TITLE ROW
+   ============================ */
 
 .book-details-header-row {
   display: flex;
   flex-direction: column;
   position: relative;
 }
+
 .book-details-title-row {
   display: flex;
   align-items: center;
@@ -140,49 +160,66 @@ button.bg-sky-600:hover {
   gap: 1.2rem;
   width: 100%;
 }
+
 .book-details-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading, 'Playfair Display', serif);
   font-weight: 700;
-  color: #1f2d3d;
+  color: var(--bl-text-primary);
   margin: 0;
+  border-bottom: none;
 }
+
+/* ============================
+   FAVORITE BUTTON
+   ============================ */
+
 .favorite-btn {
-  background: none;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   padding: 0;
   margin-left: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: color 0.18s;
-  
+  transition: transform 0.18s ease;
 }
+
+.favorite-btn:hover {
+  transform: scale(1.15);
+}
+
 .heart-icon {
-  font-size: 2.1rem;
-  color: #1f2d3d;
-  transition: color 0.18s;
+  font-size: 2rem;
+  color: var(--bl-text-muted);
+  transition: color 0.18s ease;
 }
+
 .favorite-btn.filled .heart-icon,
 .favorite-btn .heart-icon.filled {
   color: #e53935;
 }
+
 .favorite-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* ============================
+   SELLER LINK
+   ============================ */
+
 .seller-link {
-  color: #475f7a;
+  color: var(--bl-brand-primary);
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .seller-link:hover {
-  color: #1f2d3d; 
+  color: var(--bl-brand-secondary);
 }
 
 .details-header {
@@ -192,44 +229,37 @@ button.bg-sky-600:hover {
   margin-bottom: 1rem;
 }
 
+/* ============================
+   RESPONSIVE
+   ============================ */
+
 @media (max-width: 1023px) {
   .book-details-container {
     flex-direction: column;
     gap: 1.5rem;
   }
-
   .book-main-info,
   .book-secondary-info {
     width: 100%;
     max-width: none;
   }
-
-  .book-main-info .sticky {
-    position: static;
-  }
-
+  .book-main-info .sticky { position: static; }
   .book-details-title-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-
-  /* Improve title appearance on mobile */
   .book-details-title {
-    font-size: 2.2rem !important;
+    font-size: 2rem !important;
     margin-bottom: 0.5rem !important;
     line-height: 1.2 !important;
     width: 100% !important;
   }
-
-  /* Add visual connection between title and content */
   .book-details-header-row {
-    margin-bottom: 2rem !important;
+    margin-bottom: 1.5rem !important;
     padding-bottom: 1rem !important;
-    border-bottom: 2px solid #e9ecef !important;
+    border-bottom: 1px solid var(--bl-border) !important;
   }
-
-  /* Improve button layout on mobile */
   .book-details-title-row > div {
     width: 100% !important;
     justify-content: flex-start !important;
@@ -237,4 +267,3 @@ button.bg-sky-600:hover {
     gap: 0.5rem !important;
   }
 }
-

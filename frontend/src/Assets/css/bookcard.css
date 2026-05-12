@@ -1,19 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
 
-.book-card, .book-info-modern, .book-author-modern, .book-price-modern, .buy-button-modern {
+/* ================================================
+   BOOK CARD — BookLoop
+   Usa variables --bl-* definidas en index.css
+   ================================================ */
+
+.book-card,
+.book-info-modern,
+.book-author-modern,
+.book-price-modern,
+.buy-button-modern {
   font-family: 'Inter', Arial, sans-serif;
   text-align: center;
 }
 
 .book-card {
-  background: #fff;
+  background: var(--bl-bg-card, #fff);
+  border: 1px solid var(--bl-border, #D9D4C7);
   border-radius: 18px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
   position: relative;
   padding: 0 0 24px 0;
   min-width: 260px;
@@ -23,10 +33,12 @@
 }
 
 .book-card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
-  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.14);
+  transform: translateY(-5px) scale(1.015);
+  border-color: var(--bl-brand-primary, #2C5F8A);
 }
 
+/* --- Imagen --- */
 .book-image-container.modern {
   width: 100%;
   display: flex;
@@ -46,16 +58,15 @@
   object-fit: contain;
 }
 
-
-
+/* --- Favorito btn --- */
 .favorite-btn-modern {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid #eee;
+  background: var(--bl-bg-elevated, rgba(255, 255, 255, 0.9));
+  border: 1px solid var(--bl-border, var(--bl-bg-sunken));
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 8px;
   cursor: pointer;
   z-index: 2;
@@ -64,40 +75,37 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  transition: all 0.2s ease-in-out;
-  -webkit-backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
+
 .favorite-btn-modern:hover {
-  transform: scale(1.1);
-  background: #fff;
+  transform: scale(1.12);
+  background: var(--bl-bg-elevated, #fff);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
 }
+
 .favorite-btn-modern .heart-icon {
-  font-size: 22px;
+  font-size: 20px;
   color: #e74c3c;
   transition: color 0.2s;
 }
-.favorite-btn-modern .heart-icon.filled {
-  color: #e74c3c;
-}
+
 .favorite-btn-modern.filled .heart-icon,
 .favorite-btn-modern .heart-icon.filled {
   color: #e74c3c;
 }
-.favorite-btn-modern:hover {
-  box-shadow: 0 4px 16px rgba(31,45,61,0.13);
-}
 
+/* --- Info del libro --- */
 .book-info-modern {
   width: 250px;
-  padding: 0 24px 0 24px;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #fff;
+  background: var(--bl-bg-card, #fff);
   text-align: center;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   height: 214px;
 }
@@ -105,10 +113,10 @@
 .book-title-modern {
   font-family: 'Playfair Display', serif;
   font-weight: 900;
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   line-height: 1.2;
-  margin: 20px 0px 0px 0px;
-  color: #222b3a;
+  margin: 20px 0 0;
+  color: var(--bl-text-primary, #1A2332);
   max-height: 2.5em;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -120,8 +128,8 @@
 }
 
 .book-author-modern {
-  font-size: 1rem;
-  color: #6b7280;
+  font-size: 0.95rem;
+  color: var(--bl-text-muted, #8A95A3);
   margin-top: 0;
 }
 
@@ -130,49 +138,136 @@
   display: flex;
   justify-content: center;
 }
+
 .book-price-modern {
-  font-weight: bold;
-  color: #000000;
-  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--bl-brand-primary, #2C5F8A);
+  font-size: 1.2rem;
 }
 
 .book-actions-modern {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 10px
+  margin-top: 10px;
 }
 
+/* --- Botón Comprar --- */
 .buy-button-modern {
-  background: #1f2d3d;
-  color: #fff;
+  background: var(--bl-brand-primary, #2C5F8A);
+  color: #ffffff;
   border: none;
   border-radius: 12px;
   padding: 0.7rem 0;
-  font-size: 1.08rem;
-  font-weight: 500;
+  font-size: 1.02rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.22s ease, box-shadow 0.22s ease;
   width: 100%;
   max-width: 100%;
-  box-shadow: 0 1px 3px rgba(31,45,61,0.07);
-}
-.buy-button-modern:hover {
-  background: #394B60;
-  box-shadow: 0 4px 16px rgba(31,45,61,0.13);
+  box-shadow: 0 2px 8px rgba(44, 95, 138, 0.15);
 }
 
+.buy-button-modern:hover {
+  background: var(--bl-brand-secondary, #4A9B8E);
+  box-shadow: 0 6px 18px rgba(44, 95, 138, 0.25);
+  transform: translateY(-1px);
+}
+
+/* --- Modal overlay --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: var(--bl-bg-elevated, #fff);
+  border: 1px solid var(--bl-border, #D9D4C7);
+  padding: 32px 32px 24px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.modal-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--bl-text-primary, #1A2332);
+  border-bottom: none;
+}
+
+.modal-content p {
+  color: var(--bl-text-secondary, #4A5568);
+  font-size: 1rem;
+  margin-bottom: 24px;
+  margin-top: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.modal-button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: 'Inter', Arial, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.modal-button.cancel {
+  background: var(--bl-bg-sunken, #f0f0f0);
+  color: var(--bl-text-secondary, #555);
+  border: 1px solid var(--bl-border, #ddd);
+}
+
+.modal-button.cancel:hover {
+  background: var(--bl-border, #e0e0e0);
+}
+
+.modal-button.confirm {
+  background: var(--bl-brand-primary, #2C5F8A);
+  color: #ffffff;
+}
+
+.modal-button.confirm:hover {
+  background: var(--bl-brand-secondary, #4A9B8E);
+}
+
+.discount-badge { display: none !important; }
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
 
 @media (max-width: 600px) {
   .buy-button-modern {
     padding: 0.6rem 0;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
-
   .book-image-modern {
     border-radius: 12px;
   }
@@ -182,122 +277,21 @@
   .book-container {
     display: inline-block;
     flex-wrap: wrap;
-  
-    gap: 10px; /* Espacio entre cards */
+    gap: 10px;
     padding: 5px;
   }
-
   .book-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 18px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.10);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: box-shadow 0.2s, transform 0.2s;
-    position: relative;
-    padding: 0 0 24px 0;
     min-width: 260px;
     max-width: 300px;
     margin-bottom: 15px;
     cursor: pointer;
   }
-  
-
   .book-card p {
     margin: 3px 0;
-    font-size: 1.2rem;
-    color: #555;
+    font-size: 1.1rem;
+    color: var(--bl-text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  .book-card .price {
-    font-weight: bold;
-    font-size: 1rem;
-    margin: 8px 0;
-  }
-
-  .book-card button {
-
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-}
-
-.discount-badge { display: none !important; }
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 32px 32px 24px 32px;
-  border-radius: 16px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 5px 24px rgba(0,0,0,0.13);
-  font-family: 'Inter', Arial, sans-serif;
-}
-
-.modal-content h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  margin-top: 0;
-  margin-bottom: 18px;
-  color: #222b3a;
-}
-
-.modal-content p {
-  font-family: 'Inter', Arial, sans-serif;
-  color: #444a57;
-  font-size: 1.05rem;
-  margin-bottom: 28px;
-  margin-top: 0;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 18px;
-  margin-top: 0;
-}
-
-.modal-button {
-  padding: 8px 22px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: 'Inter', Arial, sans-serif;
-  cursor: pointer;
-  transition: background-color 0.18s, color 0.18s;
-}
-.modal-button.cancel {
-  background-color: #f0f0f0;
-  color: #555;
-}
-.modal-button.cancel:hover {
-  background-color: #e0e0e0;
-}
-.modal-button.confirm {
-  background-color: #1f2d3d;
-  color: #fff;
-}
-.modal-button.confirm:hover {
-  background-color: #394B60;
 }

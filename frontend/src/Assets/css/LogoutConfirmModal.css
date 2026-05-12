@@ -1,70 +1,80 @@
-/* Styles for LogoutConfirmModal */
+/* LogoutConfirmModal — BookLoop Design System */
 
 .logout-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 9000;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
 }
 
 .logout-modal-content {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  background: var(--bl-bg-elevated);
+  border: 1px solid var(--bl-border);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  padding: 28px 32px;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .logout-modal-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #1f2937;
-  letter-spacing: 0.02em;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--bl-text-primary);
+  letter-spacing: -0.01em;
+  border-bottom: none;
 }
 
 .logout-modal-message {
-  margin-bottom: 16px;
-  color: #131416;
+  margin-bottom: 20px;
+  color: var(--bl-text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .logout-modal-actions {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 14px;
+  margin-top: 18px;
 }
 
 .logout-modal-button {
-  padding: 8px 20px;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: background 0.2s;
+  padding: 9px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 0.95rem;
+  transition: all 0.22s ease;
   cursor: pointer;
+  border: none;
 }
 
 .logout-modal-button.cancel {
-  color: #1f2d3d;
-  border: 1px solid #1f2d3d;
+  color: var(--bl-brand-primary);
+  border: 1.5px solid var(--bl-brand-primary);
   background: transparent;
 }
 
 .logout-modal-button.cancel:hover {
-  background: #f2f2f2;
+  background: var(--bl-hover-bg);
 }
 
 .logout-modal-button.confirm {
   color: white;
-  background: #1f2d3d;
-  
+  background: var(--bl-error, #C53030);
+  border: 1.5px solid transparent;
 }
 
 .logout-modal-button.confirm:hover {
-  background: #475f7a;
-} 
+  background: #a02828;
+  transform: translateY(-1px);
+}

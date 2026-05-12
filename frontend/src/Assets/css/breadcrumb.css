@@ -3,17 +3,17 @@
   }
   
   .breadcrumb-link {
-    color: #475f7a ; /* Azul claro */
+    color: var(--bl-text-muted) ; /* Azul claro */
     text-decoration: none;
     transition: color 0.2s ease-in-out;
   }
   
   .breadcrumb-link:hover {
-    color: #1f2d3d ; /* Azul más oscuro para el hover */
+    color: var(--bl-text-primary) ; /* Azul más oscuro para el hover */
   }
   
   .breadcrumb-current {
-    color: #1f2d3d; /* Azul oscuro */
+    color: var(--bl-text-primary); /* Azul oscuro */
     font-weight: 600;
   }
   
